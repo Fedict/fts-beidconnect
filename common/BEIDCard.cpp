@@ -76,7 +76,7 @@ int BEIDCard::readCertificate(int type, int format, int* l_cert, unsigned char**
    
    int sw;
    int cmdlen = 0;
-   char certfilename[128] = "/tmp/";
+   //char certfilename[128] = "/tmp/";
    fstream myFile;
    
    /* select certificate */
@@ -85,22 +85,22 @@ int BEIDCard::readCertificate(int type, int format, int* l_cert, unsigned char**
       case CERT_TYPE_AUTH:
          cmdlen = sizeof(selectAuthenticationCertificateCmd)-1;
          memcpy(cmd, selectAuthenticationCertificateCmd, cmdlen);
-         strcat(certfilename, "auth.der");
+//         strcat(certfilename, "auth.der");
          break;
       case CERT_TYPE_NONREP:
          cmdlen = sizeof(selectNonRepudiationCertificateCmd)-1;
          memcpy(cmd, selectNonRepudiationCertificateCmd, cmdlen);
-         strcat(certfilename, "nonrep.der");
+//         strcat(certfilename, "nonrep.der");
          break;
       case CERT_TYPE_CA:
          cmdlen = sizeof(selectCaCertificateCmd)-1;
          memcpy(cmd, selectCaCertificateCmd, cmdlen);
-         strcat(certfilename, "ca.der");
+//         strcat(certfilename, "ca.der");
          break;
       case CERT_TYPE_ROOT:
          cmdlen = sizeof(selectRootCaCertificateCmd)-1;
          memcpy(cmd, selectRootCaCertificateCmd, cmdlen);
-         strcat(certfilename, "root.der");
+//         strcat(certfilename, "root.der");
          break;
       default:
          log_error("%s: wrong certificate type (bad implementation)", WHERE);

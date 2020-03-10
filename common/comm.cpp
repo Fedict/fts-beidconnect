@@ -5,6 +5,10 @@
 #include "log.hpp"
 #include "util.h"
 
+#ifdef WIN32
+#include <io.h>
+#endif
+
 using namespace std;
 
 #define WHERE "readMessage()"

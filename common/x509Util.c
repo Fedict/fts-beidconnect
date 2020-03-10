@@ -1,4 +1,7 @@
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
 #include "x509Util.h"
 #include "asn1.h"
 #include "log.hpp"

@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <unistd.h>
+#include "util.h"
 
 void do_sleep(int msec) {
 #ifdef WIN32
@@ -21,25 +21,25 @@ int isEqual(const char* str1, int size1, const char* str2, int size2)
 		return 0;
 }
 
-int hex2bin(const char *hex, int l_bin, char* bin)
-{
-	int iRet = 0;
-	unsigned int u;
-	char *end = bin + l_bin;
-
-	if (strlen(hex) != 2*l_bin)
-		return -1;
-
-	while (bin < end) {
-		
-		if (sscanf(hex, "%2x", &u) != 1)
-			return -2;
-  
-        *bin++ = u;
-        hex += 2;
-    }
-	return iRet;
-}
+//int hex2bin(const char *hex, int l_bin, char* bin)
+//{
+//	int iRet = 0;
+//	unsigned int u;
+//	char *end = bin + l_bin;
+//
+//	if (strlen(hex) != 2*l_bin)
+//		return -1;
+//
+//	while (bin < end) {
+//		
+//		if (sscanf(hex, "%2x", &u) != 1)
+//			return -2;
+//  
+//        *bin++ = u;
+//        hex += 2;
+//    }
+//	return iRet;
+//}
 
 void x_bin2hex(const unsigned char *p_bin, int l_bin, char *p_hex)
 {

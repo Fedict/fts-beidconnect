@@ -2,6 +2,7 @@
 #define __REQUEST_HANDLER__
 
 #include <iostream>
+#include <memory>
 
 class RequestHandler
 {
