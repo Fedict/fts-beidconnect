@@ -58,7 +58,7 @@
 		E8AB54AF24110F070051D9A2 /* RequestHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RequestHandler.cpp; sourceTree = "<group>"; };
 		E8AB54B024110F070051D9A2 /* VirtualReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VirtualReader.cpp; sourceTree = "<group>"; };
 		E8AB54B124110F070051D9A2 /* BEIDCard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BEIDCard.cpp; sourceTree = "<group>"; };
-		E8AB54B324110F070051D9A2 /* asn1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = asn1.h; sourceTree = "<group>"; };
+		E8AB54B324110F070051D9A2 /* asn1.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = asn1.hpp; sourceTree = "<group>"; };
 		E8AB54B424110F070051D9A2 /* native.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = native.hpp; sourceTree = "<group>"; };
 		E8AB54B624110F070051D9A2 /* general.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = general.h; sourceTree = "<group>"; };
 		E8AB54B724110F070051D9A2 /* CardReader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CardReader.hpp; sourceTree = "<group>"; };
@@ -140,6 +140,7 @@
 				E89B23CA24112BDC00D800E0 /* RequestHandlers */,
 				E8AB54EF24110F620051D9A2 /* CardLayer */,
 				E8AB54D124110F070051D9A2 /* main.cpp */,
+				E8AB54B624110F070051D9A2 /* general.h */,
 				E8AB54AE24110F070051D9A2 /* main.hpp */,
 				E8AB54C024110F070051D9A2 /* native.cpp */,
 				E8AB54B424110F070051D9A2 /* native.hpp */,
@@ -148,7 +149,6 @@
 				E8AB54A824110F070051D9A2 /* log.cpp */,
 				E8AB54CC24110F070051D9A2 /* log.hpp */,
 				E8AB54A924110F070051D9A2 /* util.cpp */,
-				E8AB54B624110F070051D9A2 /* general.h */,
 				E8AB54C624110F070051D9A2 /* util.h */,
 				E8AB54CA24110F070051D9A2 /* hash.cpp */,
 				E8AB54D324110F070051D9A2 /* hash.h */,
@@ -163,7 +163,7 @@
 			isa = PBXGroup;
 			children = (
 				E8AB54C924110F070051D9A2 /* asn1.cpp */,
-				E8AB54B324110F070051D9A2 /* asn1.h */,
+				E8AB54B324110F070051D9A2 /* asn1.hpp */,
 				E8AB54B124110F070051D9A2 /* BEIDCard.cpp */,
 				E8AB54D624110F070051D9A2 /* BEIDCard.hpp */,
 				E8AB54CB24110F070051D9A2 /* Card.cpp */,
