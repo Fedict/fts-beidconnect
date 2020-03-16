@@ -10,7 +10,7 @@
 
 #define READERS_BUF_SIZE 2000
 
-#ifndef WIN32
+#ifndef _WIN32
 #define lstrlen(s) strlen(s)   // non-Windows wintypes.h: LPTSTR == LPSTR == char*
 #endif
 
@@ -21,7 +21,7 @@
  *
  ******************************************************************************/
 #define CM_IOCTL_GET_FEATURE_REQUEST          SCARD_CTL_CODE(3400)
-#ifdef WIN32
+#ifdef _WIN32
 #define IOCTL_SMARTCARD_VENDOR_IFD_EXCHANGE   SCARD_CTL_CODE(2048)
 #else
 #define SCARD_CTL_CODE(code) (0x42000000 + (code)) // from reader.h in libpcsclite
@@ -162,7 +162,7 @@ int SCard::listReaders(std::vector<CardReader::Ptr> & readers)
    }
    
    log_info("SCardListReaders()");
-#ifdef WIN32
+#ifdef _WIN32
    LPTSTR            szReaders = NULL;
    DWORD             cchReaders = SCARD_AUTOALLOCATE;
    lReturn = SCardListReaders(context->hSC(),
@@ -241,7 +241,7 @@ int SCard::listReaders(std::vector<CardReader::Ptr> & readers)
       }
    }
    
-#ifdef WIN32
+#ifdef _WIN32
    SCardFreeMemory( context->hSC(), szReaders );
 #else
    delete[] szReaders;
@@ -437,7 +437,7 @@ int SCard::getFeatures()
    unsigned char *p;
    DWORD         rcv_len = 512;
    
-#ifdef WIN32
+#ifdef _WIN32
    int      sw;
    unsigned char get_feature_list[] = "\xFF\xC2\x01\x00\x00";
    

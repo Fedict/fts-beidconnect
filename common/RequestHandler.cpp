@@ -18,12 +18,16 @@ std::shared_ptr<RequestHandler> RequestHandler::createRequestHandler(std::shared
    std::shared_ptr<RequestHandler> requestHandler = nullptr;
    std::string operation = pt.get<std::string>("operation");
 
-   if (operation == "version") {
+   if (operation == "VERSION") {
       requestHandler = std::make_shared<VersionRequestHandler>();
    }
-   else if (operation == "info") {
+   else if (operation == "INFO") {
       requestHandler = std::make_shared<InfoRequestHandler>();
    }
+    else {
+        log_error("Unknown operation <%s>", operation.c_str());
+    }
+
    requestHandler->ssRequest = ssRequest;
    
    return (requestHandler);

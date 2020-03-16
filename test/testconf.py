@@ -23,6 +23,7 @@ def get_exe():
     if sys.platform == 'darwin':
          return ['./Build/Release/eIDLink', '-nmhost']
     else:
+        return ['.\VS_2019\Release\eIDLink.exe', '-nmhost']
         print("Unsupported platform: %s" % sys.platform)
         sys.exit(1)
 

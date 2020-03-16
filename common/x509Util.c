@@ -3,7 +3,7 @@
 #include <string.h>
 
 #include "x509Util.h"
-#include "asn1.h"
+#include "asn1.hpp"
 #include "log.hpp"
 #include "memory.h"
 

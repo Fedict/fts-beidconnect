@@ -6,7 +6,7 @@
 #include "general.h"
 #include "comm.hpp"
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <io.h>
 #endif
 
@@ -32,4 +32,5 @@ int runNative(int argc, const char * argv[])
    
    return 0;
 }
+
 

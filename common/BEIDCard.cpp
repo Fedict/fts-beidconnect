@@ -3,7 +3,7 @@
 #include "util.h"
 #include "general.h"
 #include "hash.h"
-#include "asn1.h"
+#include "asn1.hpp"
 #include "x509Util.h"
 
 #define BEID_READ_BINARY_MAX_LEN     250			 /*maximum length to read with single card command*/

@@ -11,7 +11,7 @@
 #include "log.hpp"
 #include "native.hpp"
 
-#ifdef WIN32
+#ifdef _WIN32
 //#define CONFIG_FILE "c:\\tmp\\virtualdevice.cfg"
 #define LOG_FILE  "C:\\tmp\\eIDLink.log"
 #else

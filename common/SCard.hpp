@@ -1,7 +1,7 @@
 #ifndef SCard_hpp
 #define SCard_hpp
 
-#ifndef WIN32
+#ifndef _WIN32
 #include <PCSC/wintypes.h>
 #include <PCSC/winscard.h>
 #else

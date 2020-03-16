@@ -5,7 +5,7 @@
 #include "log.hpp"
 #include "util.h"
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <io.h>
 #endif
 
@@ -18,7 +18,7 @@ int readMessage(std::stringstream &stream)
    int read_char;
    int i;
 
-   #ifdef WIN32
+   #ifdef _WIN32
       _setmode(_fileno(stdin), _O_BINARY);
       _setmode(_fileno(stdout), _O_BINARY);
    #endif
@@ -63,7 +63,7 @@ int sendMessage(const std::string response)
 
    log_info("%s: Response (%i); %s", WHERE, len, response.c_str());
    
-   cout << response;
+   cout << response << "\n";
    // printf("%s\n", pMessage);
 
     return 0;
