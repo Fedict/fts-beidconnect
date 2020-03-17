@@ -17,8 +17,7 @@ using boost::property_tree::ptree;
 
 std::string InfoRequestHandler::process()
 {
-   std::stringstream response;
-   ptree pt;
+   ptree response;
       
    int supportedCardTypes[] = { CARD_TYPE_BEID, /*CARD_TYPE_PKCS15, CARD_TYPE_PKCS11 */};
    Card::Ptr card;
@@ -26,33 +25,35 @@ std::string InfoRequestHandler::process()
    CardReader::Ptr reader = readerList.getFirstReaderWithSupportedCardType(supportedCardTypes, sizeof(supportedCardTypes)/sizeof(int));
    if (reader == nullptr) {
       if (readerList.readers.size() == 0) {
-         pt.put("result", "no_reader");
+         response.put("result", "no_reader");
       }
       else {
-         pt.put("result", "no_card");
+         response.put("result", "no_card");
       }
    }
    else {
       if ( (reader->isPinPad()) ) {
-         pt.put("reader","pinpad");
+         response.put("reader","pinpad");
       }
       else {
-         pt.put("reader","standard");
+         response.put("reader","standard");
       }
-      pt.put("report", reader->name);
+      response.put("report", reader->name);
       
       card = CardFactory::createCard(reader);
       if (card == nullptr) {
-         pt.put("result", "no_card");
-         pt.put("report", "card_type_unsupported");
+         response.put("result", "no_card");
+         response.put("report", "card_type_unsupported");
       }
       else {
-         pt.put("cardtype", card->strType());
-         pt.put("result","OK");
+         response.put("cardtype", card->strType());
+         response.put("result","OK");
       }
       reader->disconnect();
    }
-   
-   boost::property_tree::write_json(response, pt, false);
-   return response.str();
+
+   post_process(response);
+   std::stringstream streamResponse;
+   boost::property_tree::write_json(streamResponse, response, false);
+   return streamResponse.str();
 }
