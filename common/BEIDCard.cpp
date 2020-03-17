@@ -192,7 +192,7 @@ cleanup:
 
 
 
-#define WHERE "BEIDCard::read_certificate"
+#define WHERE "BEIDCard::readUserCertificates"
 int BEIDCard::readUserCertificates(int format, std::vector<std::vector<char>> &certificates)
 {
    int ret;

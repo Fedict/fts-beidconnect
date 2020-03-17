@@ -208,7 +208,7 @@ int base64decode(const unsigned char *bufcoded, unsigned char *bufplain)
 
 int base64encode_len(int len)
 {
-    return ((len + 2) / 3 * 4) + 1;
+    return ((len + 2) / 3 * 4);
 }
 
 int base64encode(const unsigned char *string, int len, unsigned char *encoded)
@@ -240,6 +240,5 @@ int base64encode(const unsigned char *string, int len, unsigned char *encoded)
        *p++ = '=';
     }
 
-    *p++ = '\0';
     return (int) (p - encoded);
 }

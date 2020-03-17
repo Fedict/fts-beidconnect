@@ -63,9 +63,10 @@ class TestLongrunningHost(unittest.TestCase):
          }
          resp = self.transceive(json.dumps(cmd))
 
-    def _est3_read_usercerts(self):
+    def test3_read_usercerts(self):
         cmd = {
-            "operation":"CERT",
+            "operation":"USERCERTS",
+            "type":"NONREPUDIATION",
             "mac":"0123456789ABCDEF0123456789ABCDEF",
             "correlationId":"3daa114f-1ae9-4ae1-ba15-c79f7383ab35",
             "origin":"https://eazysign-qa.zetes.be",

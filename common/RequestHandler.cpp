@@ -1,6 +1,7 @@
 #include "RequestHandler.hpp"
 #include "VersionRequestHandler.hpp"
 #include "InfoRequestHandler.hpp"
+#include "UserCertsRequestHandler.hpp"
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include "log.hpp"
@@ -24,7 +25,10 @@ std::shared_ptr<RequestHandler> RequestHandler::createRequestHandler(std::shared
    else if (operation == "INFO") {
       requestHandler = std::make_shared<InfoRequestHandler>();
    }
-    else {
+   else if (operation == "USERCERTS") {
+      requestHandler = std::make_shared<UserCertsRequestHandler>();
+   }
+   else {
         log_error("Unknown operation <%s>", operation.c_str());
     }
 
@@ -33,3 +37,16 @@ std::shared_ptr<RequestHandler> RequestHandler::createRequestHandler(std::shared
    return (requestHandler);
 }
 
+void RequestHandler::post_process(boost::property_tree::ptree &response)
+{
+   if ( ssRequest) {
+      std::stringstream ss(ssRequest->str());
+      boost::property_tree::ptree pt;
+      boost::property_tree::read_json(ss, pt);
+      std::string correlationId = pt.get<std::string>("correlationId");
+
+      if (correlationId != "") {
+         response.put("correlationId", correlationId);
+      }
+   }
+}

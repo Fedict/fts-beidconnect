@@ -15,41 +15,93 @@
 
 using boost::property_tree::ptree;
 
+#define WHERE "UserCertsRequestHandler::process()"
 std::string UserCertsRequestHandler::process()
 {
-   std::stringstream response;
-   ptree pt;
+   ptree response;
       
-   int supportedCardTypes[] = { CARD_TYPE_BEID, /*CARD_TYPE_PKCS15, CARD_TYPE_PKCS11 */};
    Card::Ptr card;
    ReaderList readerList;
-   CardReader::Ptr reader = readerList.getFirstReaderWithSupportedCardType(supportedCardTypes, sizeof(supportedCardTypes)/sizeof(int));
-   if (reader == nullptr) {
-      if (readerList.readers.size() == 0) {
-         pt.put("result", "no_reader");
-      }
-      else {
-         pt.put("result", "no_card");
-      }
+   CardReader::Ptr reader = readerList.getReaderByIndex(0);
+   size_t count = readerList.readers.size();
+   int countSupportedCards = 0;
+   int countUnsupportedCards = 0;
+   int countErrors = 0;
+
+   if (count == 0) {
+      response.put("result", "no_reader");
    }
    else {
-      pt.put("report", reader->name);
-      
-      card = CardFactory::createCard(reader);
-      if (card == nullptr) {
-         pt.put("result", "no_card");
-         pt.put("report", "card_type_unsupported");
+      int status = 0;
+      ptree readerInfos;
+      for (int i = 0; i < (int)count; i++) {
+         
+         reader = readerList.getReaderByIndex(i);
+         if (reader->atr == "") {
+            continue;
+         }
+         
+         status = reader->connect();
+         if (status)
+         {
+            countErrors++;
+            log_error("%s: E: reader->connect(%s) returned %08X", WHERE, reader->name.c_str(), status);
+            continue;
+         }
+         
+         Card::Ptr card = CardFactory::createCard(reader);
+         if (card == nullptr) {
+            countUnsupportedCards++;
+            continue; //card not supported in this reader, try next reader
+         }
+         
+         //add usercertificates to list
+         std::vector<std::vector<char>> certificates;
+         status = card->readUserCertificates(FORMAT_RADIX64, certificates);
+         if (status) {
+            countErrors++;
+            log_error( "%s: E: card->readUserCertificates() returned %08X", WHERE, status);
+            continue;
+         }
+         countSupportedCards++;
+         ptree readerInfo;
+         readerInfo.put("ReaderName", reader->name);
+         if (reader->isPinPad()) {
+            readerInfo.put("ReaderType", "pinpad");
+         }
+         else {
+            readerInfo.put("ReaderType", "standard");
+         }
+         readerInfo.put("cardType", card->strType());
+         ptree certList;
+         for (auto& cert:certificates) {
+            ptree certEntry;
+            certEntry.put("", std::string(cert.data(), cert.size()));
+            certList.push_back(std::make_pair("", certEntry));
+         }
+         readerInfo.add_child("certificates", certList);
+         readerInfos.push_back(std::make_pair("", readerInfo));
+         for (auto& cert:certificates) {
+            cert.clear();
+         }
       }
-      else {
-         pt.put("cardtype", card->strType());
-         pt.put("result","OK");
-      }
-      reader->disconnect();
+      response.add_child("Readers", readerInfos);
    }
    
-   //read certificates and return in a json array
+   if (countSupportedCards) {
+      response.put("result", "OK");
+   }
+   else {
+      response.put("result", "no_card");
+
+      if (countUnsupportedCards > 0) {
+         response.put("report", "card_type_unsupported");
+      }
+   }
    
-   
-   boost::property_tree::write_json(response, pt, false);
-   return response.str();
+   post_process(response);
+   std::stringstream streamResponse;
+   boost::property_tree::write_json(streamResponse, response, false);
+   return streamResponse.str();
 }
+#undef WHERE
