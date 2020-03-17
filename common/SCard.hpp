@@ -50,8 +50,6 @@ public:
    virtual ~SCard(){};
    typedef std::shared_ptr<SCard> Ptr;
    static int listReaders(std::vector<CardReader::Ptr> &readers);
-   int open() override;
-   int close() override;
    int beginTransaction() override;
    int endTransaction() override;
    int connect() override;

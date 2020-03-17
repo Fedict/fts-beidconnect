@@ -101,20 +101,6 @@ SCard::SCard()
    hCard = 0;
 }
 
-#define WHERE "SCard::open()"
-int SCard::open()
-{
-   int ret = 0;
-   return (ret);
-};
-#undef WHERE
-
-
-int SCard::close()
-{
-   return 0;
-}
-
 int SCard::beginTransaction()
 {
    int ret = 0;

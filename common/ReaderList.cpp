@@ -86,7 +86,6 @@ CardReader::Ptr ReaderList::returnFirstReaderWithSupportedCardType(int supported
          continue;
       }
 
-      ret = reader->open();
       ret = reader->connect();
       if (ret)
          continue;
