@@ -439,7 +439,7 @@ int BEIDCard::readCertificateChain(int format, unsigned char *cert, int l_cert, 
    ret = Card::getFile((unsigned char *)"\x3F\x00\xDF\x00\x50\x3B", 6, &l_lengthbuf, lengthbuf);
    if (ret)
    {
-      log_error("%s GetFile (ca cert) returned 0x%08X", WHERE, ret);
+      log_error("%s GetFile (root cert) returned 0x%08X", WHERE, ret);
       CLEANUP(ret);
    }
    
@@ -450,7 +450,7 @@ int BEIDCard::readCertificateChain(int format, unsigned char *cert, int l_cert, 
    ret = Card::getFile((unsigned char *)"\x3F\x00\xDF\x00\x50\x3B", 6, &l_rawcert, p_rawcert);
    if (ret)
    {
-      log_error("%s GetFile (ca cert) returned 0x%08X", WHERE, ret);
+      log_error("%s GetFile (root cert) returned 0x%08X", WHERE, ret);
       CLEANUP(ret);
    }
    
