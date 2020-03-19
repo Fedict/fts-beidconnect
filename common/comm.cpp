@@ -61,7 +61,7 @@ int sendMessage(const std::string response)
 
    fwrite(&len, 1, 4, stdout);
 
-   log_info("%s: Response (%i); %s", WHERE, len, response.c_str());
+   //log_info("%s: Response (%i); %s", WHERE, len, response.c_str());
    
    cout << response << "\n";
    // printf("%s\n", pMessage);
