@@ -18,4 +18,4 @@ public:
    std::string process() override;
 };
 
-#endif /* InfoRequestHandler */
+#endif

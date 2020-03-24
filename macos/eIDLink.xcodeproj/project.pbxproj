@@ -28,6 +28,8 @@
 		E8AB54EC24110F070051D9A2 /* VersionRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8AB54D024110F070051D9A2 /* VersionRequestHandler.cpp */; };
 		E8AB54ED24110F070051D9A2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8AB54D124110F070051D9A2 /* main.cpp */; };
 		E8EE466A242259580074DC2C /* CertChainRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8EE4669242259580074DC2C /* CertChainRequestHandler.cpp */; };
+		E8EE466D24235D6A0074DC2C /* SignRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8EE466C24235D6A0074DC2C /* SignRequestHandler.cpp */; };
+		E8EE4670242360F30074DC2C /* Request.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8EE466E242360F30074DC2C /* Request.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -90,6 +92,10 @@
 		E8AB54D624110F070051D9A2 /* BEIDCard.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BEIDCard.hpp; sourceTree = "<group>"; };
 		E8EE4668242259580074DC2C /* CertChainRequestHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CertChainRequestHandler.hpp; sourceTree = "<group>"; };
 		E8EE4669242259580074DC2C /* CertChainRequestHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CertChainRequestHandler.cpp; sourceTree = "<group>"; };
+		E8EE466B24235D6A0074DC2C /* SignRequestHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SignRequestHandler.hpp; sourceTree = "<group>"; };
+		E8EE466C24235D6A0074DC2C /* SignRequestHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SignRequestHandler.cpp; sourceTree = "<group>"; };
+		E8EE466E242360F30074DC2C /* Request.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Request.cpp; sourceTree = "<group>"; };
+		E8EE466F242360F30074DC2C /* Request.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Request.hpp; sourceTree = "<group>"; };
 		E8F2140923FAFAAC003768CE /* eIDLink */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = eIDLink; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -133,8 +139,12 @@
 				E85AB667241539CC00BE9F0A /* UserCertsRequestHandler.hpp */,
 				E8EE4669242259580074DC2C /* CertChainRequestHandler.cpp */,
 				E8EE4668242259580074DC2C /* CertChainRequestHandler.hpp */,
+				E8EE466C24235D6A0074DC2C /* SignRequestHandler.cpp */,
+				E8EE466B24235D6A0074DC2C /* SignRequestHandler.hpp */,
 				E8AB54AF24110F070051D9A2 /* RequestHandler.cpp */,
 				E8AB54D424110F070051D9A2 /* RequestHandler.hpp */,
+				E8EE466E242360F30074DC2C /* Request.cpp */,
+				E8EE466F242360F30074DC2C /* Request.hpp */,
 			);
 			name = RequestHandlers;
 			sourceTree = "<group>";
@@ -276,6 +286,7 @@
 				E8AB54DE24110F070051D9A2 /* BEIDCard.cpp in Sources */,
 				E8AB54ED24110F070051D9A2 /* main.cpp in Sources */,
 				E8AB54D924110F070051D9A2 /* log.cpp in Sources */,
+				E8EE4670242360F30074DC2C /* Request.cpp in Sources */,
 				E85AB669241539CC00BE9F0A /* UserCertsRequestHandler.cpp in Sources */,
 				E8AB54DC24110F070051D9A2 /* RequestHandler.cpp in Sources */,
 				E89B23D02412848100D800E0 /* InfoRequestHandler.cpp in Sources */,
@@ -293,6 +304,7 @@
 				E8AB54E724110F070051D9A2 /* ReaderList.cpp in Sources */,
 				E8AB54EC24110F070051D9A2 /* VersionRequestHandler.cpp in Sources */,
 				E8AB54E824110F070051D9A2 /* asn1.cpp in Sources */,
+				E8EE466D24235D6A0074DC2C /* SignRequestHandler.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -3,6 +3,7 @@
 #include "InfoRequestHandler.hpp"
 #include "UserCertsRequestHandler.hpp"
 #include "CertChainRequestHandler.hpp"
+#include "SignRequestHandler.hpp"
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include "log.hpp"
@@ -31,6 +32,9 @@ std::shared_ptr<RequestHandler> RequestHandler::createRequestHandler(std::shared
    }
    else if (operation == "CERTCHAIN") {
       requestHandler = std::make_shared<CertChainRequestHandler>();
+   }
+   else if (operation == "SIGN") {
+      requestHandler = std::make_shared<SignRequestHandler>();
    }
    else {
         log_error("Unknown operation <%s>", operation.c_str());
