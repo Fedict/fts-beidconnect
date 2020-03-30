@@ -26,20 +26,6 @@ VirtualReader::~VirtualReader()
 {
 }
 
-#define WHERE "VirtualReader::open()"
-int VirtualReader::open()
-{
-   int ret = 0;
-   return (ret);
-};
-#undef WHERE
-
-
-int VirtualReader::close()
-{
-   return 0;
-}
-
 #define WHERE "VirtualReader::listReaders()"
 int VirtualReader::listReaders(std::vector<CardReader::Ptr> & readers)
 {
