@@ -7,7 +7,6 @@
 extern "C" {
 #endif
 
-	//int init_SSLKey(TCHAR szPath[]);
    int verifyRSASignature(unsigned char *plain, unsigned int l_plain, const unsigned char* cert, int l_cert, unsigned char *signature, unsigned l_signature);
    int verifyRSASignature2(unsigned char *plain, unsigned int l_plain, const unsigned char* cert, int l_cert, unsigned char *signature, unsigned l_signature);
 

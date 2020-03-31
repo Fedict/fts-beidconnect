@@ -30,7 +30,6 @@
 
 #ifdef __APPLE__
 #define TCHAR     unsigned char
-//#define MAX_PATH  512
 #endif
 
 
@@ -107,7 +106,6 @@ int verifyRSASignature2(unsigned char *plain, unsigned int l_plain, const unsign
    X509_free(x509);
    
 cleanup:
-   // Cleanup
    ;//RSA_free(rsa_pubkey);
    return 0;
 }
