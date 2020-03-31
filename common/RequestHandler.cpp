@@ -36,6 +36,9 @@ std::shared_ptr<RequestHandler> RequestHandler::createRequestHandler(std::shared
    else if (operation == "SIGN") {
       requestHandler = std::make_shared<SignRequestHandler>();
    }
+   else if (operation == "AUTH") {
+      requestHandler = std::make_shared<SignRequestHandler>();
+   }
    else {
         log_error("Unknown operation <%s>", operation.c_str());
     }

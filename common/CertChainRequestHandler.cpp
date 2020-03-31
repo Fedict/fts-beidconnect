@@ -20,9 +20,6 @@ using boost::property_tree::ptree;
 std::string CertChainRequestHandler::process()
 {
    ptree response;
-   
-   Card::Ptr card;
-   ReaderList readerList;
    int chainFound = 0;
    int countUnsupportedCards = 0;
    int countErrors = 0;
@@ -38,6 +35,7 @@ std::string CertChainRequestHandler::process()
    }
    l_cert = base64decode((unsigned char*)certif.c_str(), cert);
    
+   ReaderList readerList;
    CardReader::Ptr reader = readerList.getReaderByIndex(0);
    size_t count = readerList.readers.size();
    if (count == 0) {

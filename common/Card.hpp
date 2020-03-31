@@ -21,6 +21,7 @@
 #define CARD_TYPE_PKCS15        5
 #define CARD_TYPE_PKCS11        6
 #define CARD_TYPE_ISABEL        7
+#define CARD_TYPE_UNKNOWN      -1
 
 #define IDFILE             1
 #define IDSIGFILE          2
