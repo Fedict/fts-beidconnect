@@ -90,6 +90,12 @@
     <ClInclude Include="..\..\common\asn1.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\common\SignRequestHandler.hpp">
+      <Filter>Source Files\RequestHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\CertChainRequestHandler.hpp">
+      <Filter>Source Files\RequestHandlers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\common\asn1.cpp">
@@ -150,6 +156,12 @@
       <Filter>Source Files\CardLayer</Filter>
     </ClCompile>
     <ClCompile Include="..\..\common\VersionRequestHandler.cpp">
+      <Filter>Source Files\RequestHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\SignRequestHandler.cpp">
+      <Filter>Source Files\RequestHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\CertChainRequestHandler.cpp">
       <Filter>Source Files\RequestHandlers</Filter>
     </ClCompile>
   </ItemGroup>
