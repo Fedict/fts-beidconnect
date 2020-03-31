@@ -157,6 +157,7 @@
     <ClInclude Include="..\..\common\CardErrors.h" />
     <ClInclude Include="..\..\common\CardFactory.hpp" />
     <ClInclude Include="..\..\common\CardReader.hpp" />
+    <ClInclude Include="..\..\common\CertChainRequestHandler.hpp" />
     <ClInclude Include="..\..\common\comm.hpp" />
     <ClInclude Include="..\..\common\general.h" />
     <ClInclude Include="..\..\common\hash.h" />
@@ -167,6 +168,7 @@
     <ClInclude Include="..\..\common\ReaderList.hpp" />
     <ClInclude Include="..\..\common\RequestHandler.hpp" />
     <ClInclude Include="..\..\common\SCard.hpp" />
+    <ClInclude Include="..\..\common\SignRequestHandler.hpp" />
     <ClInclude Include="..\..\common\UserCertsRequestHandler.hpp" />
     <ClInclude Include="..\..\common\util.h" />
     <ClInclude Include="..\..\common\VersionRequestHandler.hpp" />
@@ -181,6 +183,7 @@
     <ClCompile Include="..\..\common\Card.cpp" />
     <ClCompile Include="..\..\common\CardFactory.cpp" />
     <ClCompile Include="..\..\common\CardReader.cpp" />
+    <ClCompile Include="..\..\common\CertChainRequestHandler.cpp" />
     <ClCompile Include="..\..\common\comm.cpp" />
     <ClCompile Include="..\..\common\hash.cpp" />
     <ClCompile Include="..\..\common\InfoRequestHandler.cpp" />
@@ -190,6 +193,7 @@
     <ClCompile Include="..\..\common\ReaderList.cpp" />
     <ClCompile Include="..\..\common\RequestHandler.cpp" />
     <ClCompile Include="..\..\common\SCard.cpp" />
+    <ClCompile Include="..\..\common\SignRequestHandler.cpp" />
     <ClCompile Include="..\..\common\UserCertsRequestHandler.cpp" />
     <ClCompile Include="..\..\common\util.cpp" />
     <ClCompile Include="..\..\common\VersionRequestHandler.cpp" />
