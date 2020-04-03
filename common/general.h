@@ -20,10 +20,10 @@
      
 #ifdef WIN32
 #define CONFIG_FILE "c:\\tmp\\virtualdevice.cfg"
-#define LOG_FILE  "C:\\tmp\\eaZyLink.log"
+#define LOG_FILE  "C:\\tmp\\eIDLink.log"
 #else
 #define CONFIG_FILE "/tmp/virtualdevice.cfg"
-#define LOG_FILE  "/tmp/eaZyLink.log"
+#define LOG_FILE  "/tmp/eID.log"
 #endif
      
 #define MAX_READER_NAME			128
