@@ -36,8 +36,6 @@ class TestLongrunningHost(unittest.TestCase):
         response_length, response = struct.unpack_from('=I%is' % (response_length-2), std_output)
         response_print = json.dumps(json.loads(response))
         print('RECV: %s' % response_print)
-        p.terminate()
-        p.wait()
         return json.loads(response)
 
     def complete_msg(self, msg):
