@@ -1,0 +1,9 @@
+To install gulp and some other modules:
+
+npm install gulp del gulp-uglify gulp-jshint gulp-zip run-sequence gulp-replace-task yargs
+
+Then run gulp  (see gulp.js)
+See target folder for output of extension
+This folder can be loaded into Chrome in developer mode for testing
+
+

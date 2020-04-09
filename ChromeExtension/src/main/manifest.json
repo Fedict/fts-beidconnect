@@ -1,0 +1,26 @@
+{
+    "name": "eIDLink",
+    "version": "@@VERSION",
+    "minimum_chrome_version": "40.0",
+    "manifest_version": 2,
+    "description": "Use your your smartcard (e.g. Belgian eID) on DSS secure platforms (DSS, IDP)",
+    "icons": {
+        "48": "icon48.png",
+        "128": "icon128.png"
+    },
+    "content_scripts": [{
+        "matches": ["*://*/*", "file:///*"],
+        "js": ["content.js"],
+        "run_at": "document_start",
+        "all_frames":true
+    }],
+    "browser_action": {
+        "default_popup": "popup.html"
+      },
+    "background": {
+        "scripts": ["background.js"],
+        "persistent": false
+    },
+    "web_accessible_resources": ["page.js"],
+    "permissions": ["nativeMessaging"]
+}
