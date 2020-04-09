@@ -96,6 +96,9 @@
     <ClInclude Include="..\..\common\CertChainRequestHandler.hpp">
       <Filter>Source Files\RequestHandlers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\common\crypto.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\common\asn1.cpp">
@@ -163,6 +166,9 @@
     </ClCompile>
     <ClCompile Include="..\..\common\CertChainRequestHandler.cpp">
       <Filter>Source Files\RequestHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\crypto.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

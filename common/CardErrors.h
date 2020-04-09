@@ -7,7 +7,7 @@
 #define E_SRC_NO_CARD                     0xC002000A
 #define E_SRC_NO_READERS_FOUND            0xC002000B
 #define E_SRC_TYPE_NOTSUPPORTED           0xC002000C
-#define E_SRC_UNSUPPORTED_READER          0xC002000D
+#define E_SRC_SIGNATURE_FAILED            0xC002000D
 #define E_SRC_NO_CONTEXT                  0xC002000E
 #define E_SRC_TRANSMIT                    0xC002000F
 #define E_SRC_FILE_NOT_FOUND              0xC0020010

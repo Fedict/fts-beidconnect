@@ -21,9 +21,9 @@ import os.path
 
 def get_exe():
     if sys.platform == 'darwin':
-         return ['./Build/Release/eIDLink', '-nmhost']
+          return ['./Build/Release/eIDLink', '']
     else:
-        return ['.\VS_2019\Release\eIDLink.exe', '-nmhost']
+        return ['.\VS_2019\Release\eIDLink.exe', '']
         print("Unsupported platform: %s" % sys.platform)
         sys.exit(1)
 

@@ -22,11 +22,10 @@
 int main(int argc, const char * argv[]) {
    
    for (int i = 1; i < argc; i++) {
-      if (strcmp(argv[i], "-nmhost") == 0) {
+      if (strcmp(argv[i], "-service") == 0) {
 
-         log_init(LOG_FILE, 0, 0);
-         log_info("**** eIDLink native ****");
-         runNative(argc, argv);    //run as chrome extension and exit afterwards
+         log_init(LOG_FILE, 1, 1);
+         //runService();
          exit(0);
       }
       else if (strcmp(argv[i], "-test") == 0) {
@@ -35,9 +34,12 @@ int main(int argc, const char * argv[]) {
          //runTest(argc, argv);  //run as test and exit
          exit(0);
       }
-
-      log_init(LOG_FILE, 1, 1);
-      //runService();
+      else {
+         log_init(LOG_FILE, 0, 0);
+         log_info("**** eIDLink native ****");
+         runNative(argc, argv);    //run as chrome extension and exit afterwards
+         exit(0);
+      }
    }
    
    return 0;

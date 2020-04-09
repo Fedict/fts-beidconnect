@@ -96,6 +96,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>..\..\3P\boost\lib\win32;..\..\3P\openssl\lib\win32;</AdditionalLibraryDirectories>
       <AdditionalDependencies>ssleay32.lib;libeay32.lib;winscard.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -111,6 +112,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>..\..\3P\boost\lib\win32;..\..\3P\openssl\lib\win32;</AdditionalLibraryDirectories>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -131,6 +133,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>..\..\3P\boost\lib\win32;..\..\3P\openssl\lib\win32;</AdditionalLibraryDirectories>
       <AdditionalDependencies>ssleay32.lib;libeay32.lib;winscard.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -148,6 +151,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -159,6 +163,7 @@
     <ClInclude Include="..\..\common\CardReader.hpp" />
     <ClInclude Include="..\..\common\CertChainRequestHandler.hpp" />
     <ClInclude Include="..\..\common\comm.hpp" />
+    <ClInclude Include="..\..\common\crypto.h" />
     <ClInclude Include="..\..\common\general.h" />
     <ClInclude Include="..\..\common\hash.h" />
     <ClInclude Include="..\..\common\InfoRequestHandler.hpp" />
@@ -185,6 +190,7 @@
     <ClCompile Include="..\..\common\CardReader.cpp" />
     <ClCompile Include="..\..\common\CertChainRequestHandler.cpp" />
     <ClCompile Include="..\..\common\comm.cpp" />
+    <ClCompile Include="..\..\common\crypto.cpp" />
     <ClCompile Include="..\..\common\hash.cpp" />
     <ClCompile Include="..\..\common\InfoRequestHandler.cpp" />
     <ClCompile Include="..\..\common\log.cpp" />

@@ -122,7 +122,7 @@ std::string SignRequestHandler::process()
                //1. or the certificate linked to the private key on the card does not belong to the private key
                //2. or the reader calculates a faux signature, maybe because the reader does not support extended APDU commands
                //where the signature is incomplete!
-               lasterror = E_SRC_UNSUPPORTED_READER;
+               lasterror = E_SRC_SIGNATURE_FAILED;
             }
          }
          break;
@@ -133,8 +133,8 @@ std::string SignRequestHandler::process()
       case (int) E_SRC_NO_READERS_FOUND:
          response.put("result", "no_reader");
          break;
-      case (int) E_SRC_UNSUPPORTED_READER:
-         response.put("result", "unsupported_reader");
+      case (int) E_SRC_SIGNATURE_FAILED:
+         response.put("result", "signature_failed");
          break;
       case (int) E_SRC_NO_CARD:
          response.put("result", "no_card");
@@ -171,8 +171,8 @@ std::string SignRequestHandler::process()
          break;
       case 0:
       {
-         int l_signB64 =  base64encode_len(l_signature)+1;
-         unsigned char* signB64 = (unsigned char*) malloc(l_signB64);
+         int l_signB64 =  base64encode_len(l_signature);
+         unsigned char* signB64 = (unsigned char*) malloc(l_signB64+1);
          if (signB64 == NULL) {
             log_error("%s mem alloc failed for digest (%d)", WHERE, l_hash);
             //lasterror = E_ALLOC;

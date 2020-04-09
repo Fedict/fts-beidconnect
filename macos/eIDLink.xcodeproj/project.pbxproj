@@ -49,6 +49,16 @@
 
 /* Begin PBXFileReference section */
 		E824FB76240FC263008E0C3D /* PCSC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PCSC.framework; path = System/Library/Frameworks/PCSC.framework; sourceTree = SDKROOT; };
+		E835C9A924376FFA008A17D9 /* package.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = package.json; sourceTree = "<group>"; };
+		E835C9AA24376FFA008A17D9 /* gulpfile.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = gulpfile.js; sourceTree = "<group>"; };
+		E835C9AD24376FFA008A17D9 /* sign.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = sign.js; sourceTree = "<group>"; };
+		E835C9AE24376FFA008A17D9 /* signtest.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = signtest.html; sourceTree = "<group>"; };
+		E835C9B024376FFA008A17D9 /* page.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = page.js; sourceTree = "<group>"; };
+		E835C9B124376FFA008A17D9 /* background.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = background.js; sourceTree = "<group>"; };
+		E835C9B224376FFA008A17D9 /* icon48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon48.png; sourceTree = "<group>"; };
+		E835C9B324376FFA008A17D9 /* icon128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon128.png; sourceTree = "<group>"; };
+		E835C9B424376FFA008A17D9 /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = manifest.json; sourceTree = "<group>"; };
+		E835C9B524376FFA008A17D9 /* content.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = content.js; sourceTree = "<group>"; };
 		E85AB6642413A1CB00BE9F0A /* test.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; name = test.py; path = ../test/test.py; sourceTree = "<group>"; };
 		E85AB6652413A1CB00BE9F0A /* testconf.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; name = testconf.py; path = ../test/testconf.py; sourceTree = "<group>"; };
 		E85AB667241539CC00BE9F0A /* UserCertsRequestHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = UserCertsRequestHandler.hpp; sourceTree = "<group>"; };
@@ -128,6 +138,48 @@
 				E824FB76240FC263008E0C3D /* PCSC.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E835C9A824376FFA008A17D9 /* ChromeExtension */ = {
+			isa = PBXGroup;
+			children = (
+				E835C9A924376FFA008A17D9 /* package.json */,
+				E835C9AA24376FFA008A17D9 /* gulpfile.js */,
+				E835C9AB24376FFA008A17D9 /* src */,
+			);
+			name = ChromeExtension;
+			path = ../ChromeExtension;
+			sourceTree = "<group>";
+		};
+		E835C9AB24376FFA008A17D9 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				E835C9AC24376FFA008A17D9 /* test */,
+				E835C9AF24376FFA008A17D9 /* main */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		E835C9AC24376FFA008A17D9 /* test */ = {
+			isa = PBXGroup;
+			children = (
+				E835C9AD24376FFA008A17D9 /* sign.js */,
+				E835C9AE24376FFA008A17D9 /* signtest.html */,
+			);
+			path = test;
+			sourceTree = "<group>";
+		};
+		E835C9AF24376FFA008A17D9 /* main */ = {
+			isa = PBXGroup;
+			children = (
+				E835C9B024376FFA008A17D9 /* page.js */,
+				E835C9B124376FFA008A17D9 /* background.js */,
+				E835C9B224376FFA008A17D9 /* icon48.png */,
+				E835C9B324376FFA008A17D9 /* icon128.png */,
+				E835C9B424376FFA008A17D9 /* manifest.json */,
+				E835C9B524376FFA008A17D9 /* content.js */,
+			);
+			path = main;
 			sourceTree = "<group>";
 		};
 		E85AB6632413A1B600BE9F0A /* test */ = {
@@ -216,6 +268,7 @@
 		E8F2140023FAFAAC003768CE = {
 			isa = PBXGroup;
 			children = (
+				E835C9A824376FFA008A17D9 /* ChromeExtension */,
 				E85AB6632413A1B600BE9F0A /* test */,
 				E8AB54A524110F070051D9A2 /* common */,
 				E8F2140B23FAFAAC003768CE /* src */,
