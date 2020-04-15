@@ -1,4 +1,5 @@
 {
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0VKd3Y3RnWfFWi8YuiV5rR6qj103pvMMvYnLuV3XoChZWCSOFvDhzRZ3XJkwdYHpN3U3wLfadxUnYkWaH+w1jRZU9opM9WZxJFwor89ajCVK9wJ21cnfVnwWwIZESaEKt7ic2v+96miDzZryHQtVFzqyGr3aF/6SXr9u2iRJuzHlyCnVEuc8NiguYmUKnL5RZuy+z+9sCK+Q1P7bfj4tIIwUGVzC2MpjaSU1NcQCO+Rk23wIcWVmzX5n3EPOx0D8vHHnSTZxA6f9JigqthsHAR3v6c4bHsjpI6GQSX5PtD4Vfy1T7iYMrxi+mZFKd+qSLkWSqssHUnQGxnhEQJvFsQIDAQAB",
     "name": "eIDLink",
     "version": "@@VERSION",
     "minimum_chrome_version": "40.0",
@@ -14,9 +15,6 @@
         "run_at": "document_start",
         "all_frames":true
     }],
-    "browser_action": {
-        "default_popup": "popup.html"
-      },
     "background": {
         "scripts": ["background.js"],
         "persistent": false

@@ -2,8 +2,21 @@ To install gulp and some other modules:
 
 npm install gulp del gulp-uglify gulp-jshint gulp-zip run-sequence gulp-replace-task yargs
 
-Then run gulp  (see gulp.js)
+(see gulp.js)
+
+To make a release package:
+
+> gulp release --extversion O.O.2
+
 See target folder for output of extension
 This folder can be loaded into Chrome in developer mode for testing
+Or uploaded to Chrome webstore for publication
 
 
+For users of DSS and IDP services using this extension:
+
+
+1) install ChromeExtension
+open chrome: https://chrome.google.com/webstore/detail/eazylink/pencgnkbgaekikmiahiaakjdgaibiipp?hl=nl
+
+2) install the NativeHostMessaging app that is used by the extension that talks to the reader and smartcard.
