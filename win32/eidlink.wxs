@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?define Name = "eIDLink" ?>
+<?define Description = "eIDLink Native Application" ?>
+<?define Manufacturer = "BOSA" ?>
+<?define Version = "0.0.1" ?>
+<?define UpgradeCode = "{edda0aaa-708b-4390-95c2-1e560314f26b}" ?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
+  <Product Id="*" Name="$(var.Name)" Manufacturer="$(var.Manufacturer)" UpgradeCode="$(var.UpgradeCode)" Version="$(var.Version)" Codepage="1251" Language="1033">
+
+    <!--Setup or Installer with properties-->
+    <Package InstallerVersion="405" Compressed="yes" InstallScope="perUser" InstallPrivileges="limited" Description="$(var.Name)" />
+    <Condition Message="[ProductName] requires Windows 7 or higher.">
+      <![CDATA[Installed OR (VersionNT >= 601)]]>
+    </Condition>
+    <Icon Id="Logo.ico" SourceFile="install\eidlink.ico" />
+    <Property Id="ARPPRODUCTICON" Value="Logo.ico" />
+    <MediaTemplate EmbedCab="yes" CompressionLevel="high"/>
+    <MajorUpgrade AllowSameVersionUpgrades="yes" DowngradeErrorMessage="A newer version of [ProductName] is already installed. If you are trying to downgrade, please uninstall the newer version first."/>
+    <UIRef Id="WixUI_Minimal" />
+    <Property Id="MsiLogging" Value="voicewarmupx" />
+    <Property Id='ARPNOREPAIR'>1</Property>
+
+    <Feature Id="ProductFeature" Title="$(var.Name)" Level="1">
+      <ComponentGroupRef Id="ProductComponents" />
+    </Feature>
+  </Product>
+
+  <Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="LocalAppDataFolder">
+        <Directory Id="ROOTDIRECTORY" Name="$(var.Manufacturer)">
+          <Directory Id="INSTALLFOLDER" Name="$(var.Name)" />
+        </Directory>
+      </Directory>
+    </Directory>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+      <Component Id="eIDLink.exe" Guid="7A928767-2B74-4A5E-AE2A-0B8C80E282CD">
+        <File Id="eidlinkapp" Name="eIDLink.exe" Source="VS_2019\Release\eIDLink.exe" />
+        <RemoveFile Id="ALLFILES" Name="*.*" On="both" />
+      </Component>
+      <Component Id="com.bosa.eidlink.json" Guid="1878E924-168F-4C3C-88B0-80A71C294E0C">
+        <File Id="com.bosa.eidlink.json" Name="com.bosa.eidlink.json" Source="install\com.bosa.eidlink.json" />
+        <RegistryKey Root="HKCU"
+                     Key="Software\Google\Chrome\Extensions\pencgnkbgaekikmiahiaakjdgaibiipp"
+                     Action="createAndRemoveOnUninstall" >
+            <RegistryValue Type="string" Name="update_url" Value="https://clients2.google.com/service/update2/crx" />
+        </RegistryKey>
+        <RegistryKey Root="HKCU"
+                     Key="Software\Google\Chrome\NativeMessagingHosts\com.bosa.eidlink"
+                     Action="createAndRemoveOnUninstall" >
+            <RegistryValue Type="string" Value="[INSTALLFOLDER]com.bosa.eidlink.json" />
+        </RegistryKey>
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+  
+</Wix>
