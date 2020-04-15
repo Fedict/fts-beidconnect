@@ -26,12 +26,12 @@ virtualcards:
 pkg: binaries
 	$(SIGN) $(PROGRAM)
 	"$(WIX)\bin\candle.exe" eidlink.wxs -dVERSION=$(VERSIONEX) -ext WixUtilExtension
-	"$(WIX)\bin\light.exe" -out eidlink_$(VERSIONEX).msi eidlink.wixobj -v -ext WixUtilExtension -ext WixUIExtension -dWixUILicenseRtf=install/LICENSE.rtf -dWixUIDialogBmp=install/dlgbmp.bmp
+	"$(WIX)\bin\light.exe" -out eidlink_$(VERSIONEX).msi eidlink.wixobj -v -ext WixUtilExtension -ext WixUIExtension -dWixUILicenseRtf=install/LICENSE.rtf -dWixUIDialogBmp=install/install_dlg.bmp
 	$(SIGN) $(INSTALL_PRODUCT)
    
 pkg-unsigned: binaries
 	"$(WIX)\bin\candle.exe" eidlink.wxs -dVERSION=$(VERSIONEX) -ext WixUtilExtension
-	"$(WIX)\bin\light.exe" -out eidlink_$(VERSIONEX).msi eidlink.wixobj -v -ext WixUtilExtension -ext WixUIExtension -dWixUILicenseRtf=install/LICENSE.rtf -dWixUIDialogBmp=install/dlgbmp.bmp
+	"$(WIX)\bin\light.exe" -out eidlink_$(VERSIONEX).msi eidlink.wixobj -v -ext WixUtilExtension -ext WixUIExtension -dWixUILicenseRtf=install/LICENSE.rtf -dWixUIDialogBmp=install/install_dlg.bmp
 	
 clean:
    del /Q $(BINARIES)
