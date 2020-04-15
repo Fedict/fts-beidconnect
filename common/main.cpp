@@ -34,14 +34,11 @@ int main(int argc, const char * argv[]) {
          //runTest(argc, argv);  //run as test and exit
          exit(0);
       }
-      else {
-         log_init(LOG_FILE, 0, 0);
-         log_info("**** eIDLink native ****");
-         runNative(argc, argv);    //run as chrome extension and exit afterwards
-         exit(0);
-      }
    }
-   
+
+   log_init(LOG_FILE, 0, 0);
+   log_info("**** eIDLink native ****");
+   runNative(argc, argv);    //run as chrome extension and exit afterwards
    return 0;
 }
 
