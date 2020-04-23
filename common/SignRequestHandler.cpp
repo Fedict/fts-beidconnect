@@ -66,6 +66,7 @@ std::string SignRequestHandler::process()
       for (auto& reader:readerList.readers) {
          
          if (reader->atr == "") {
+            lasterror = E_SRC_NO_CARD;
             continue;
          }
          
