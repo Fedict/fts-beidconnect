@@ -11,6 +11,10 @@ eidlink: asn1.o BEIDCard.o Card.o CardFactory.o CardReader.o CertChainRequestHan
 install:
 	install -d $(DESTDIR)/usr/bin
 	install -g root -o root -m 755 eidlink $(DESTDIR)/usr/bin/
+	install -d $(DESTDIR)/etc/opt/chrome/native-messaging-hosts
+	install -g root -o root -m 644 be.bosa.eidlink.json /etc/opt/chrome/native-messaging-hosts/
+	install -d $(DESTDIR)/etc/chromium/native-messaging-hosts
+	install -g root -o root -m 644 be.bosa.eidlink.json /etc/chromium/native-messaging-hosts/
 
 clean:
 	rm -f *.o eidlink
