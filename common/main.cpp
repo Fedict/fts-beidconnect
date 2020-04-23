@@ -10,6 +10,7 @@
 #include "main.hpp"
 #include "log.hpp"
 #include "native.hpp"
+#include "setup.hpp"
 
 #ifdef _WIN32
 //#define CONFIG_FILE "c:\\tmp\\virtualdevice.cfg"
@@ -32,6 +33,14 @@ int main(int argc, const char * argv[]) {
 
          log_init(LOG_FILE, 1, 1);
          //runTest(argc, argv);  //run as test and exit
+         exit(0);
+      }
+      else if (strcmp(argv[i], "-setup") == 0) {
+
+         //generate the necessary json file for use with the Chrome extension
+         log_init(LOG_FILE, 1, 1);
+         log_info("eIDLink setup");
+         runSetup(argc, argv);
          exit(0);
       }
    }

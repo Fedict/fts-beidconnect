@@ -2,7 +2,7 @@
 <?define Name = "eIDLink" ?>
 <?define Description = "eIDLink Native Application" ?>
 <?define Manufacturer = "BOSA" ?>
-<?define Version = "0.0.1" ?>
+<?define Version = "$(var.VERSION)" ?>
 <?define UpgradeCode = "{edda0aaa-708b-4390-95c2-1e560314f26b}" ?>
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
@@ -22,12 +22,10 @@
     <Property Id="MsiLogging" Value="voicewarmupx" />
     <Property Id='ARPNOREPAIR'>1</Property>
 
-    <Feature Id="ProductFeature" Title="$(var.Name)" Level="1">
+    <Feature Id="ProductFeature" Title="$(var.Name)" Level="1" ConfigurableDirectory="INSTALLFOLDER">
       <ComponentGroupRef Id="ProductComponents" />
     </Feature>
-  </Product>
-
-  <Fragment>
+  
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="LocalAppDataFolder">
         <Directory Id="ROOTDIRECTORY" Name="$(var.Manufacturer)">
@@ -35,28 +33,43 @@
         </Directory>
       </Directory>
     </Directory>
-  </Fragment>
 
-  <Fragment>
     <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
       <Component Id="eIDLink.exe" Guid="7A928767-2B74-4A5E-AE2A-0B8C80E282CD">
         <File Id="eidlinkapp" Name="eIDLink.exe" Source="VS_2019\Release\eIDLink.exe" />
         <RemoveFile Id="ALLFILES" Name="*.*" On="both" />
       </Component>
-      <Component Id="com.bosa.eidlink.json" Guid="1878E924-168F-4C3C-88B0-80A71C294E0C">
-        <File Id="com.bosa.eidlink.json" Name="com.bosa.eidlink.json" Source="install\com.bosa.eidlink.json" />
+      <Component Id="be.bosa.eidlink.json" Guid="1878E924-168F-4C3C-88B0-80A71C294E0C">
         <RegistryKey Root="HKCU"
                      Key="Software\Google\Chrome\Extensions\pencgnkbgaekikmiahiaakjdgaibiipp"
                      Action="createAndRemoveOnUninstall" >
             <RegistryValue Type="string" Name="update_url" Value="https://clients2.google.com/service/update2/crx" />
         </RegistryKey>
         <RegistryKey Root="HKCU"
-                     Key="Software\Google\Chrome\NativeMessagingHosts\com.bosa.eidlink"
+                     Key="Software\Google\Chrome\NativeMessagingHosts\be.bosa.eidlink"
                      Action="createAndRemoveOnUninstall" >
-            <RegistryValue Type="string" Value="[INSTALLFOLDER]com.bosa.eidlink.json" />
+            <RegistryValue Type="string" Value="[INSTALLFOLDER]be.bosa.eidlink.json" />
+        </RegistryKey>
+        <RegistryKey Root="HKCU"
+                     Key="Software\Microsoft\Edge\NativeMessagingHosts\be.bosa.eidlink"
+                     Action="createAndRemoveOnUninstall" >
+            <RegistryValue Type="string" Value="[INSTALLFOLDER]be.bosa.eidlink.json" />
         </RegistryKey>
       </Component>
     </ComponentGroup>
-  </Fragment>
-  
+
+  <CustomAction Id="setup"
+            FileKey="eidlinkapp"
+            ExeCommand='-setup &quot;[INSTALLFOLDER]'
+            Execute="deferred"
+            Return="check"
+            HideTarget="no"
+            Impersonate="no" />
+
+   <InstallExecuteSequence>
+         <!--Custom Action="cleanff0" Before="InstallFinalize">INSTALL_CU=1 AND NOT Installed</Custom-->
+         <Custom Action="setup" Before="InstallFinalize">NOT Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
+   </InstallExecuteSequence>
+   
+  </Product>
 </Wix>

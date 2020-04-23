@@ -8,7 +8,12 @@
 !IF !DEFINED(BUILD_NUMBER)
 BUILD_NUMBER=0
 !ENDIF
-!include VERSION.mk
+
+MAJOR_VERSION=0
+MINOR_VERSION=0
+RELEASE_VERSION=7
+VERSION=$(MAJOR_VERSION).$(MINOR_VERSION).$(RELEASE_VERSION)
+
 SIGN = signtool sign /v /n "Zetes nv/sa" /fd SHA256 /du http://bosa.be /t http://timestamp.globalsign.com/scripts/timestamp.dll
 WIX = C:\Program Files (x86)\WiX Toolset v3.10
 
@@ -25,13 +30,13 @@ virtualcards:
    
 pkg: binaries
 	$(SIGN) $(PROGRAM)
-	"$(WIX)\bin\candle.exe" eidlink.wxs -dVERSION=$(VERSIONEX) -ext WixUtilExtension
-	"$(WIX)\bin\light.exe" -out eidlink_$(VERSIONEX).msi eidlink.wixobj -v -ext WixUtilExtension -ext WixUIExtension -dWixUILicenseRtf=install/LICENSE.rtf -dWixUIDialogBmp=install/install_dlg.bmp
+	"$(WIX)\bin\candle.exe" eidlink.wxs -dVERSION=$(VERSION) -ext WixUtilExtension
+	"$(WIX)\bin\light.exe" -out eidlink_$(VERSION).msi eidlink.wixobj -v -ext WixUtilExtension -ext WixUIExtension -dWixUILicenseRtf=install/LICENSE.rtf -dWixUIDialogBmp=install/install_dlg.bmp
 	$(SIGN) $(INSTALL_PRODUCT)
    
 pkg-unsigned: binaries
-	"$(WIX)\bin\candle.exe" eidlink.wxs -dVERSION=$(VERSIONEX) -ext WixUtilExtension
-	"$(WIX)\bin\light.exe" -out eidlink_$(VERSIONEX).msi eidlink.wixobj -v -ext WixUtilExtension -ext WixUIExtension -dWixUILicenseRtf=install/LICENSE.rtf -dWixUIDialogBmp=install/install_dlg.bmp
+	"$(WIX)\bin\candle.exe" eidlink.wxs -dVERSION=$(VERSION) -ext WixUtilExtension
+	"$(WIX)\bin\light.exe" -out eidlink_$(VERSION).msi eidlink.wixobj -v -ext WixUtilExtension -ext WixUIExtension -dWixUILicenseRtf=install/LICENSE.rtf -dWixUIDialogBmp=install/install_dlg.bmp
 	
 clean:
    del /Q $(BINARIES)

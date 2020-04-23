@@ -173,6 +173,7 @@
     <ClInclude Include="..\..\common\ReaderList.hpp" />
     <ClInclude Include="..\..\common\RequestHandler.hpp" />
     <ClInclude Include="..\..\common\SCard.hpp" />
+    <ClInclude Include="..\..\common\setup.hpp" />
     <ClInclude Include="..\..\common\SignRequestHandler.hpp" />
     <ClInclude Include="..\..\common\UserCertsRequestHandler.hpp" />
     <ClInclude Include="..\..\common\util.h" />
@@ -199,6 +200,7 @@
     <ClCompile Include="..\..\common\ReaderList.cpp" />
     <ClCompile Include="..\..\common\RequestHandler.cpp" />
     <ClCompile Include="..\..\common\SCard.cpp" />
+    <ClCompile Include="..\..\common\setup.cpp" />
     <ClCompile Include="..\..\common\SignRequestHandler.cpp" />
     <ClCompile Include="..\..\common\UserCertsRequestHandler.cpp" />
     <ClCompile Include="..\..\common\util.cpp" />
