@@ -1,0 +1,9 @@
+{
+  "name":"be.bosa.eidlink",
+  "description":"Native connector for BOSA eIDLink",
+  "path":"/usr/bin/eidlink",
+  "type":"stdio",
+  "allowed_origins": [
+    "chrome-extension://pencgnkbgaekikmiahiaakjdgaibiipp/"
+  ]
+}
