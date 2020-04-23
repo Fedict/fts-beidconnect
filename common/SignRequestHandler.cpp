@@ -116,7 +116,7 @@ std::string SignRequestHandler::process()
          
          //verify the signature if we have a certificate
          if ((l_cert > 0) && (cert != 0)) {
-            lasterror = verifyRSASignature(hash, l_hash, cert, l_cert, signature, l_signature);
+            lasterror = verifySignature(hash, l_hash, "sha256", cert, l_cert, signature, l_signature);
             if (lasterror) {
                //since we verify the signature based on the certificate that was used to do the signature,
                //there can only be two reasons to fail a verification:

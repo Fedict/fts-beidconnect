@@ -5,8 +5,7 @@
 extern "C" {
 #endif
 
-   int verifyRSASignature(unsigned char *plain, unsigned int l_plain, const unsigned char* cert, int l_cert, unsigned char *signature, unsigned l_signature);
-   int verifyRSASignature2(unsigned char *plain, unsigned int l_plain, const unsigned char* cert, int l_cert, unsigned char *signature, unsigned l_signature);
+   int verifySignature(unsigned char *plain, unsigned int l_plain, const char *hashalg, const unsigned char *cert, int l_cert, unsigned char *signature, unsigned l_signature);
 
 #ifdef __cplusplus
    }
