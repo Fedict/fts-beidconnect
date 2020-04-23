@@ -26,7 +26,7 @@ int runSetup(int argc, const char * argv[])
    
    for (int i = 1; i < argc; i++) {
       if (strcmp(argv[i], "-setup") == 0) {
-
+         
          //eidlink -setup installfolder
          if (i < argc) {
             installFolder = argv[i+1];
@@ -37,7 +37,7 @@ int runSetup(int argc, const char * argv[])
    if (installFolder == NULL) {
       return (0);
    }
-
+   
    //log_info("install folder: <%s>", installFolder);
    
 #ifdef _WIN32
@@ -64,6 +64,6 @@ int runSetup(int argc, const char * argv[])
    myfile << "  ]\n";
    myfile << "}\n";
    myfile.close();
-
+   
    return 0;
 }
