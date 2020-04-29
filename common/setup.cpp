@@ -62,6 +62,9 @@ int runSetup(int argc, const char * argv[])
    myfile << "  \"allowed_origins\": [\n";
    myfile << "     \"chrome-extension://pencgnkbgaekikmiahiaakjdgaibiipp/\"\n";
    myfile << "  ]\n";
+   myfile << "  \"allowed_extensions\": [\n";
+   myfile << "     \"eidlink@bosa.be\"\n";
+   myfile << "  ]\n";
    myfile << "}\n";
    myfile.close();
    
