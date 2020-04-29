@@ -16,16 +16,17 @@ var gulp = require('gulp'),
     zip = require('gulp-zip'),
     sequence = require('run-sequence'),
     replace = require('gulp-replace-task'),
+    jeditor = require('gulp-json-editor'),
     argv = require("yargs").string('extversion').argv;
 
 var version = (argv.extversion !== undefined ? argv.extversion : '0');
 
 gulp.task('default', function() {
-    sequence('clean', 'lint', 'copy-all', 'manifest-dev', 'zip');
+    sequence('clean', 'lint', 'copy-all', 'manifest-dev-chrome', 'manifest-dev-firefox', 'zip-chrome', 'zip-firefox');
 });
 
 gulp.task('release', function() {
-   sequence('clean', 'lint', ['minify-js', 'copy-png', 'manifest-release'], 'zip');
+   sequence('clean', 'lint', ['minify-js', 'copy-png', 'manifest-release-chrome', 'manifest-release-firefox', 'zip-chrome', 'zip-firefox']);
 });
 
 gulp.task('clean', function () {
@@ -41,32 +42,48 @@ gulp.task('lint', function () {
 gulp.task('minify-js', function () {
     return gulp.src('./src/main/*.js')
       .pipe(uglify())
-      .pipe(gulp.dest('./target/ext'));
+      .pipe(gulp.dest('./target/chrome'))
+      .pipe(gulp.dest('./target/firefox'));
 });
 
 gulp.task('copy-png', function () {
     return gulp.src(['./src/main/*.png'])
-      .pipe(gulp.dest('./target/ext'))
+      .pipe(gulp.dest('./target/chrome'))
+      .pipe(gulp.dest('./target/firefox'));
 });
 
 gulp.task('copy-all', function () {
     return gulp.src(['./src/main/*.js','./src/main/*.png', './src/main/*.html'])
-      .pipe(gulp.dest('./target/ext'))
+      .pipe(gulp.dest('./target/chrome'))
+      .pipe(gulp.dest('./target/firefox'));
 });
 
-gulp.task('manifest-dev', function () {
-	return gulp.src('./src/main/manifest.json')
+gulp.task('manifest-dev-chrome', function () {
+    return gulp.src('./src/main/manifest.json')
     .pipe(replace({
       patterns: [
         {match: 'VERSION',
          replacement: version}
       ]
     }))
-    .pipe(gulp.dest('./target/ext'));
+    .pipe(gulp.dest('./target/chrome'));
 });
 
-gulp.task('manifest-release', function () {
-	return gulp.src('./src/main/manifest.json')
+gulp.task('manifest-dev-firefox', function() {
+    return gulp.src('./src/main/manifest.json')
+    .pipe(jeditor(function(manifest) {
+	manifest.version = version;
+	delete manifest.key;
+	delete manifest.minimum_chrome_version;
+	delete manifest.background.persistent;
+	manifest.applications = { 'gecko': { 'id':'eidlink@bosa.be','strict_min_version':'57.0' }};
+	return manifest;
+    }))
+    .pipe(gulp.dest('./target/firefox'));
+});
+
+gulp.task('manifest-release-chrome', function () {
+    return gulp.src('./src/main/manifest.json')
     .pipe(replace({
       patterns: [
         {match: /"matches": \[.+\]/g,
@@ -75,11 +92,31 @@ gulp.task('manifest-release', function () {
          replacement: version}
       ]
     }))
-    .pipe(gulp.dest('./target/ext'));
+    .pipe(gulp.dest('./target/chrome'));
 });
 
-gulp.task('zip', function () {
-    return gulp.src('./target/ext/*')
+gulp.task('manifest-release-firefox', function() {
+    return gulp.src('./src/main/manifest.json')
+    .pipe(jeditor(function(manifest) {
+	manifest.version = version;
+	manifest.matches = ['https://*.belgium.be/*','https://*.zetes.be/*'];
+	delete manifest.key;
+	delete manifest.minimum_chrome_version;
+	delete manifest.background.persistent;
+	manifest.applications = { 'gecko': { 'id':'eidlink@bosa.be','strict_min_version':'57.0' }};
+	return manifest;
+    }))
+    .pipe(gulp.dest('./target/firefox'));
+});
+
+gulp.task('zip-chrome', function () {
+    return gulp.src('./target/chrome/*')
       .pipe(zip('eidlink-chrome-ext-' + version + '.zip'))
+      .pipe(gulp.dest('./target'));
+});
+
+gulp.task('zip-firefox', function () {
+    return gulp.src('./target/firefox/*')
+      .pipe(zip('eidlink-firefox-ext-' + version + '.zip'))
       .pipe(gulp.dest('./target'));
 });
