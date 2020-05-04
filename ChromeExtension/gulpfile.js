@@ -99,7 +99,7 @@ gulp.task('manifest-release-firefox', function() {
     return gulp.src('./src/main/manifest.json')
     .pipe(jeditor(function(manifest) {
 	manifest.version = version;
-	manifest.matches = ['https://*.belgium.be/*','https://*.zetes.be/*'];
+	manifest.content_scripts[0].matches = ['https://*.belgium.be/*','https://*.zetes.be/*'];
 	delete manifest.key;
 	delete manifest.minimum_chrome_version;
 	delete manifest.background.persistent;
