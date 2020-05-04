@@ -39,6 +39,13 @@ webbrowser's extension store.
 %clean
 %{__rm} -rf %{buildroot}
 
+%post
+if [ "$1" -gt 0 ]; then
+	for target in /etc/opt/chrome/native-messaging-hosts /etc/chromium/native-messaging-hosts /usr/lib/mozilla/native-messaging-hosts /usr/lib64/mozilla/native-messaging-hosts; do
+		mkdir -p $target
+		/usr/bin/eidlink -setup /usr/bin $target
+	done
+fi
 %files
 %defattr(-, root, root, 0755)
 %{_bindir}/eidlink
