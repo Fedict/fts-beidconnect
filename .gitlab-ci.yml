@@ -1,0 +1,44 @@
+srpm:
+  image: fedora:latest
+  before_script:
+  - dnf -y install rpm-build rpmdevtools git
+  - rpmdev-setuptree
+  - VER=$(git describe)
+  - mkdir -p products/tar
+  - git archive --prefix=eidlink-$VER/ -o products/tar/eidlink-$VER.tar.gz
+  - cp products/tar/eidlink-$VER.tar.gz ~/rpmbuild/SOURCES/
+  script:
+  - rpmbuild --define "version $VER" -bs linux/eidlink.spec
+  after_script:
+  - mkdir -p products/srpm
+  - cp ~/rpmbuild/SRPMS/eidlink.$VER.src.rpm products/srpm/
+  artifacts:
+    paths:
+    - products
+    when:
+      on_success
+
+.build:fedora: &fedbuild
+  image: fedora:latest
+  dependencies: srpm
+  before_script:
+  - dnf -y install mock git
+  script:
+  - mock --dnf --old-chroot --verbose -r fedora-$VERSION-$ARCH --rebuild products/srpm/eidlink-*.src.rpm --resultdir $CI_PROJECT_DIR/products/fedora-$VERSION-$ARCH
+  artifacts:
+    paths:
+    - products/fedora-$VERSION-$ARCH
+    when:
+      on_success
+
+build:fedora-32-64:
+  <<: *fedbuild
+  variables:
+    VERSION: 31
+    ARCH: x86_64
+
+build:fedora-32-32:
+  <<: *fedbuild
+  variables:
+    VERSION: 32
+    ARCH: i686
