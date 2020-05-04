@@ -1,4 +1,9 @@
+stages:
+- source
+- binary
+
 srpm:
+  stage: source
   image: fedora:latest
   before_script:
   - dnf -y install rpm-build rpmdevtools git
@@ -19,8 +24,10 @@ srpm:
       on_success
 
 .build:fedora: &fedbuild
+  stage: binary
   image: fedora:latest
-  dependencies: srpm
+  dependencies:
+  - srpm
   before_script:
   - dnf -y install mock git
   script:
