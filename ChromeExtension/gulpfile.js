@@ -26,7 +26,7 @@ gulp.task('default', function() {
 });
 
 gulp.task('release', function() {
-   sequence('clean', 'lint', ['minify-js', 'copy-png', 'manifest-release-chrome', 'manifest-release-firefox', 'zip-chrome', 'zip-firefox']);
+   sequence('clean', 'lint', 'minify-js', 'copy-png', 'manifest-release-chrome', 'manifest-release-firefox', 'zip-chrome', 'zip-firefox');
 });
 
 gulp.task('clean', function () {
