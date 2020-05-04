@@ -21,7 +21,7 @@ int runSetup(int argc, const char * argv[])
 {
    //generate a json file that is needed for the Chrome Extension to find the Native host application on Windows
    const char* installFolder = NULL;
-   string jsonFilePath;
+   string jsonFilePath = "";
    string exePath;
    
    for (int i = 1; i < argc; i++) {
@@ -29,8 +29,10 @@ int runSetup(int argc, const char * argv[])
          
          //eidlink -setup installfolder
          if (i < argc) {
-            installFolder = argv[i+1];
+            installFolder = argv[i++];
          }
+      } else if (i < argc) {
+         jsonFilePath = string(argv[i]) + "/be.bosa.eidlink.json";
       }
    }
    
@@ -46,10 +48,14 @@ int runSetup(int argc, const char * argv[])
    //escape all \ in json file or exe will not be found on windows
    exePath = std::regex_replace(exePath, std::regex("\\\\"), "\\\\");
    
-   jsonFilePath = string(installFolder) + "\\be.bosa.eidlink.json";
+   if (jsonFilePath == "") {
+      jsonFilePath = string(installFolder) + "\\be.bosa.eidlink.json";
+   }
 #else
    exePath = string(installFolder) + "/eidlink";
-   jsonFilePath = string(installFolder) + "/be.bosa.eidlink.json";
+   if (jsonFilePath == "") {
+      jsonFilePath = string(installFolder) + "/be.bosa.eidlink.json";
+   }
 #endif
    
    ofstream myfile;
