@@ -4,9 +4,7 @@ stages:
 
 srpm:
   stage: source
-  image: fedora:latest
   before_script:
-  - dnf -y install rpm-build rpmdevtools git
   - rpmdev-setuptree
   - VER=$(git describe)
   - mkdir -p products/tar
@@ -25,13 +23,12 @@ srpm:
 
 .build:fedora: &fedbuild
   stage: binary
-  image: fedora:latest
   dependencies:
   - srpm
   before_script:
   - dnf -y install mock git
   script:
-  - mock --dnf --old-chroot --verbose -r fedora-$VERSION-$ARCH --rebuild products/srpm/eidlink-*.src.rpm --resultdir $CI_PROJECT_DIR/products/fedora-$VERSION-$ARCH
+  - mock --old-chroot --verbose -r fedora-$VERSION-$ARCH --rebuild products/srpm/eidlink-*.src.rpm --resultdir $CI_PROJECT_DIR/products/fedora-$VERSION-$ARCH
   artifacts:
     paths:
     - products/fedora-$VERSION-$ARCH
