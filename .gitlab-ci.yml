@@ -5,7 +5,6 @@ stages:
 srpm:
   stage: source
   before_script:
-  - rpmdev-setuptree
   - VER=$(git describe)
   - mkdir -p products/tar
   - git archive --prefix=eidlink-$VER/ -o products/tar/eidlink-$VER.tar.gz
