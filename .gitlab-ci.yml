@@ -5,7 +5,7 @@ stages:
 srpm:
   stage: source
   before_script:
-  - VER=$(git describe)
+  - VER=$(git describe --always)
   - mkdir -p products/tar
   - git archive --prefix=eidlink-$VER/ -o products/tar/eidlink-$VER.tar.gz
   - cp products/tar/eidlink-$VER.tar.gz ~/rpmbuild/SOURCES/
