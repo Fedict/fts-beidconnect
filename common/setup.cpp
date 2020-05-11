@@ -29,7 +29,7 @@ int runSetup(int argc, const char * argv[])
          
          //eidlink -setup installfolder
          if (i < argc) {
-            installFolder = argv[i++];
+            installFolder = argv[++i];
          }
       } else if (i < argc) {
          jsonFilePath = string(argv[i]) + "/be.bosa.eidlink.json";
@@ -67,7 +67,7 @@ int runSetup(int argc, const char * argv[])
    myfile << "  \"type\": \"stdio\",\n";
    myfile << "  \"allowed_origins\": [\n";
    myfile << "     \"chrome-extension://pencgnkbgaekikmiahiaakjdgaibiipp/\"\n";
-   myfile << "  ]\n";
+   myfile << "  ],\n";
    myfile << "  \"allowed_extensions\": [\n";
    myfile << "     \"eidlink@bosa.be\"\n";
    myfile << "  ]\n";
