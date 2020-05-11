@@ -175,6 +175,34 @@ unsigned int getKeyUsage(char* cert, unsigned int l_cert)
    return 0;
 }
 
+unsigned int getRSAKeyLength(char *cert, unsigned int l_cert)
+{
+   int ret = 0;
+   ASN1_ITEM spki, keyalg, key;
+
+   ret = asn1_get_item((unsigned char*) cert, l_cert, "\1\1\7\1", &spki);
+   if (ret == E_ASN_ITEM_NOT_FOUND) {
+      // could not find SubjectPublicKeyInfo
+      return 0;
+   }
+
+   ret = asn1_get_item(spki.p_data, spki.l_data, "\1\1" , &keyalg);
+   if (ret == E_ASN_ITEM_NOT_FOUND) {
+      // key algo not found
+      return 0;
+   }
+
+   if (keyalg.l_data != 9 || memcmp(keyalg.p_data, "\x2a\x86\x48\xf7\x0d\x01\x01\x01", 9) != 0) {
+      // is not an RSA key
+      return 0;
+   }
+   ret = asn1_get_item(spki.p_data, spki.l_data, "\2\1\1", &key);
+   if (ret == E_ASN_ITEM_NOT_FOUND) {
+      // RSA key bits not found
+      return 0;
+   }
+   return key.l_data;
+}
 
 char* getValidUntil(char* cert, unsigned int l_cert)
 {
