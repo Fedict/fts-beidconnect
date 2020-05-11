@@ -175,7 +175,7 @@ unsigned int getKeyUsage(char* cert, unsigned int l_cert)
    return 0;
 }
 
-unsigned int getRSAKeyLength(char *cert, unsigned int l_cert)
+unsigned int getRSAKeyLength(const char *cert, unsigned int l_cert)
 {
    int ret = 0;
    ASN1_ITEM spki, keyalg, key;
