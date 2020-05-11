@@ -11,6 +11,7 @@
 #include "log.hpp"
 #include "native.hpp"
 #include "setup.hpp"
+#include "test.hpp"
 
 #ifdef _WIN32
 //#define CONFIG_FILE "c:\\tmp\\virtualdevice.cfg"
@@ -32,7 +33,7 @@ int main(int argc, const char * argv[]) {
       else if (strcmp(argv[i], "-test") == 0) {
 
          log_init(LOG_FILE, 1, 1);
-         //runTest(argc, argv);  //run as test and exit
+         runTest(argc, argv);  //run as test and exit
          exit(0);
       }
       else if (strcmp(argv[i], "-setup") == 0) {
