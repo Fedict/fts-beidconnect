@@ -60,7 +60,7 @@
 
   <CustomAction Id="setup"
             FileKey="eidlinkapp"
-            ExeCommand='-setup &quot;[INSTALLFOLDER]'
+            ExeCommand='-setup chrome &quot;[INSTALLFOLDER]'
             Execute="deferred"
             Return="check"
             HideTarget="no"
