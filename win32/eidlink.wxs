@@ -82,6 +82,7 @@
    <InstallExecuteSequence>
          <!--Custom Action="cleanff0" Before="InstallFinalize">INSTALL_CU=1 AND NOT Installed</Custom-->
          <Custom Action="setup" Before="InstallFinalize">NOT Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
+         <Custom Action="setupFirefox" Before="InstallFinalize">NOT Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
    </InstallExecuteSequence>
    
   </Product>
