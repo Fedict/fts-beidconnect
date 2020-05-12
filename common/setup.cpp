@@ -46,7 +46,6 @@ int runSetup(int argc, const char * argv[])
    string chromeFilePath = "";
    string firefoxFilePath = "";
    string exePath;
-   const char* type = NULL;
    
    for (int i = 1; i < argc; i++) {
       if (strcmp(argv[i], "-setup") == 0) {
@@ -60,14 +59,14 @@ int runSetup(int argc, const char * argv[])
       }
    }
    
-   if (type == NULL || installFolder == NULL) {
+   if (installFolder == NULL) {
       return (0);
    }
    
    //log_info("install folder: <%s>", installFolder);
    
 #ifdef _WIN32
-   exePath = string(installFolder) + "eidlink.exe";
+   exePath = string(installFolder) + "\\eidlink.exe";
    
    //escape all \ in json file or exe will not be found on windows
    exePath = std::regex_replace(exePath, std::regex("\\\\"), "\\\\");
