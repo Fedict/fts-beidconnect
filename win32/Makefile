@@ -11,7 +11,7 @@ BUILD_NUMBER=0
 
 MAJOR_VERSION=0
 MINOR_VERSION=0
-RELEASE_VERSION=7
+RELEASE_VERSION=8
 VERSION=$(MAJOR_VERSION).$(MINOR_VERSION).$(RELEASE_VERSION)
 
 SIGN = signtool sign /v /n "Zetes nv/sa" /fd SHA256 /du http://bosa.be /t http://timestamp.globalsign.com/scripts/timestamp.dll
