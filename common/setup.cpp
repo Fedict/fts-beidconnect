@@ -17,22 +17,46 @@
 
 using namespace std;
 
+void writeFile(string file, string exePath, bool isChrome) {
+    ofstream myfile;
+    myfile.open(file, std::ofstream::trunc);
+    myfile << "{\n";
+    myfile << "  \"name\": \"be.bosa.eidlink\",\n";
+    myfile << "  \"description\": \"Access your eID in webapps\",\n";
+    myfile << "  \"path\": \"" << exePath << "\",\n";
+    myfile << "  \"type\": \"stdio\",\n";
+    if (isChrome) {
+        myfile << "  \"allowed_origins\": [\n";
+        myfile << "     \"chrome-extension://pencgnkbgaekikmiahiaakjdgaibiipp/\"\n";
+        myfile << "  ]\n";
+    } else {
+        myfile << "  \"allowed_extensions\": [\n";
+        myfile << "     \"eidlink@bosa.be\"\n";
+        myfile << "  ]\n";
+    }
+
+    myfile << "}\n";
+    myfile.close();
+}
+
 int runSetup(int argc, const char * argv[])
 {
    //generate a json file that is needed for the Chrome Extension to find the Native host application on Windows
    const char* installFolder = NULL;
-   string jsonFilePath = "";
+   string chromeFilePath = "";
+   string firefoxFilePath = "";
    string exePath;
    const char* type = NULL;
    
    for (int i = 1; i < argc; i++) {
       if (strcmp(argv[i], "-setup") == 0) {
          
-         //eidlink -setup type installFolder [jsonFilePath]
-         type = argv[++i];
+         //eidlink -setup installFolder [chromeFilePath] [firefoxFilePath]
          installFolder = argv[++i];
-      } else if (i < argc) {
-         jsonFilePath = string(argv[i]) + "/be.bosa.eidlink.json";
+      } else if (i < argc && chromeFilePath=="") {
+         chromeFilePath = string(argv[i]) + "/be.bosa.eidlink.json";
+      } else if (i < argc && firefoxFilePath == "") {
+          firefoxFilePath = string(argv[i]) + "/be.bosa.eidlink.json";
       }
    }
    
@@ -48,8 +72,11 @@ int runSetup(int argc, const char * argv[])
    //escape all \ in json file or exe will not be found on windows
    exePath = std::regex_replace(exePath, std::regex("\\\\"), "\\\\");
    
-   if (jsonFilePath == "") {
-      jsonFilePath = string(installFolder) + "\\be.bosa.eidlink.json";
+   if (chromeFilePath == "") {
+      chromeFilePath = string(installFolder) + "\\chrome.json";
+   }
+   if (firefoxFilePath == "") {
+       firefoxFilePath = string(installFolder) + "\\firefox.json";
    }
 #else
    exePath = string(installFolder) + "/eidlink";
@@ -57,29 +84,7 @@ int runSetup(int argc, const char * argv[])
       jsonFilePath = string(installFolder) + "/be.bosa.eidlink.json";
    }
 #endif
-   
-   if (strcmp(type, "chrome") != 0 && strcmp(type, "firefox") != 0) {
-      log_error("invalid type; expecting 'chrome' or 'firefox'");
-   }
-   ofstream myfile;
-   myfile.open (jsonFilePath, std::ofstream::trunc);
-   myfile << "{\n";
-   myfile << "  \"name\": \"be.bosa.eidlink\",\n";
-   myfile << "  \"description\": \"Access your eID in webapps\",\n";
-   myfile << "  \"path\": \"" << exePath << "\",\n";
-   myfile << "  \"type\": \"stdio\",\n";
-   if (strcmp(type, "chrome") == NULL) {
-      myfile << "  \"allowed_origins\": [\n";
-      myfile << "     \"chrome-extension://pencgnkbgaekikmiahiaakjdgaibiipp/\"\n";
-      myfile << "  ]\n";
-   } else {
-      myfile << "  \"allowed_extensions\": [\n";
-      myfile << "     \"eidlink@bosa.be\"\n";
-      myfile << "  ]\n";
-   }
-
-   myfile << "}\n";
-   myfile.close();
-   
+   writeFile(chromeFilePath, exePath, true);
+   writeFile(firefoxFilePath, exePath, false);
    return 0;
 }
