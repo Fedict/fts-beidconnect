@@ -55,6 +55,11 @@
                      Action="createAndRemoveOnUninstall" >
             <RegistryValue Type="string" Value="[INSTALLFOLDER]be.bosa.eidlink.json" />
         </RegistryKey>
+        <RegistryKey Root="HKCU"
+	             Key="Software\Mozilla\NativeMessagingHosts\be.bosa.eidlink"
+		     Action="createAndRemoveOnUninstall">
+            <RegistryValue Type="string" Value="[INSTALLFOLDER]firefox.json" />
+        </RegistryKey>
       </Component>
     </ComponentGroup>
 
@@ -65,6 +70,14 @@
             Return="check"
             HideTarget="no"
             Impersonate="no" />
+  <CustomAction Id="setupFirefox"
+            FileKey="eidlinkapp"
+            ExeCommand='-setup firefox &quot;[INSTALLFOLDER] &quot;[INSTALLFOLDER]firefox.json'
+            Execute="deferred"
+            Return="check"
+            HideTarget="no"
+            Impersonate="no" />
+
 
    <InstallExecuteSequence>
          <!--Custom Action="cleanff0" Before="InstallFinalize">INSTALL_CU=1 AND NOT Installed</Custom-->
