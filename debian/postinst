@@ -1,0 +1,12 @@
+#!/bin/bash
+
+#DEBHELPER#
+
+case "$1" in
+	configure)
+		for target in /etc/opt/chrome/native-messaging-hosts /etc/chromium/native-messaging-hosts /usr/lib/mozilla/native-messaging-hosts /usr/lib64/mozilla/native-messaging-hosts; do
+			mkdir -p $target
+			/usr/bin/eidlink -setup /usr/bin $target
+		done
+		;;
+esac

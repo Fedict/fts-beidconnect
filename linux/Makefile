@@ -1,5 +1,5 @@
-PLDFLAGS = $(shell pkg-config --libs libpcsclite libcrypto)
-PCFLAGS = $(shell pkg-config --cflags libpcsclite libcrypto)
+PLDFLAGS = $(shell pkg-config --libs libpcsclite)
+PCFLAGS = $(shell pkg-config --cflags libpcsclite)
 eidlink: asn1.o BEIDCard.o Card.o CardFactory.o CardReader.o CertChainRequestHandler.o comm.o hash.o InfoRequestHandler.o log.o main.o native.o ReaderList.o Request.o RequestHandler.o SCard.o SignRequestHandler.o UserCertsRequestHandler.o util.o VersionRequestHandler.o VirtualCard.o VirtualReader.o x509Util.o crypto.o setup.o
 	$(CXX) $(PLDFLAGS) $(LDFLAGS) -o $@ $^
 
@@ -11,14 +11,6 @@ eidlink: asn1.o BEIDCard.o Card.o CardFactory.o CardReader.o CertChainRequestHan
 install:
 	install -d $(DESTDIR)/usr/bin
 	install -g root -o root -m 755 eidlink $(DESTDIR)/usr/bin/
-	install -d $(DESTDIR)/etc/opt/chrome/native-messaging-hosts
-	install -g root -o root -m 644 chrome-native-manifest.json /etc/opt/chrome/native-messaging-hosts/be.bosa.eidlink.json
-	install -d $(DESTDIR)/etc/chromium/native-messaging-hosts
-	install -g root -o root -m 644 chrome-native-manifest.json /etc/chromium/native-messaging-hosts/be.bosa.eidlink.json
-	install -d $(DESTDIR)/usr/lib/mozilla/native-messaging-hosts/
-	install -g root -o root -m 644 firefox-native-manifest.json /usr/lib/mozilla/native-messaging-hosts/be.bosa.eidlink.json
-	install -d $(DESTDIR)/usr/lib64/mozilla/native-messaging-hosts/
-	install -g root -o root -m 644 firefox-native-manifest.json /usr/lib64/mozilla/native-messaging-hosts/be.bosa.eidlink.json
 
 clean:
 	rm -f *.o eidlink

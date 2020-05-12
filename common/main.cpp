@@ -38,7 +38,8 @@ int main(int argc, const char * argv[]) {
       }
       else if (strcmp(argv[i], "-setup") == 0) {
 
-         //generate the necessary json file for use with the Chrome extension
+	 //generate the necessary json file for use with the Chrome/Firefox
+	 //extensions
          log_init(LOG_FILE, 1, 1);
          log_info("eIDLink setup");
          runSetup(argc, argv);

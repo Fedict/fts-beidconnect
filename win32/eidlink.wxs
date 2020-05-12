@@ -48,12 +48,17 @@
         <RegistryKey Root="HKCU"
                      Key="Software\Google\Chrome\NativeMessagingHosts\be.bosa.eidlink"
                      Action="createAndRemoveOnUninstall" >
-            <RegistryValue Type="string" Value="[INSTALLFOLDER]be.bosa.eidlink.json" />
+            <RegistryValue Type="string" Value="[INSTALLFOLDER]chrome.json" />
         </RegistryKey>
         <RegistryKey Root="HKCU"
                      Key="Software\Microsoft\Edge\NativeMessagingHosts\be.bosa.eidlink"
                      Action="createAndRemoveOnUninstall" >
-            <RegistryValue Type="string" Value="[INSTALLFOLDER]be.bosa.eidlink.json" />
+            <RegistryValue Type="string" Value="[INSTALLFOLDER]chrome.json" />
+        </RegistryKey>
+        <RegistryKey Root="HKCU"
+	             Key="Software\Mozilla\NativeMessagingHosts\be.bosa.eidlink"
+		     Action="createAndRemoveOnUninstall">
+            <RegistryValue Type="string" Value="[INSTALLFOLDER]firefox.json" />
         </RegistryKey>
       </Component>
     </ComponentGroup>
@@ -65,7 +70,6 @@
             Return="check"
             HideTarget="no"
             Impersonate="no" />
-
    <InstallExecuteSequence>
          <!--Custom Action="cleanff0" Before="InstallFinalize">INSTALL_CU=1 AND NOT Installed</Custom-->
          <Custom Action="setup" Before="InstallFinalize">NOT Installed AND NOT UPGRADINGPRODUCTCODE</Custom>

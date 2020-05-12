@@ -1,16 +1,9 @@
 /*
 *   some crypto functions
 */
-#include <stdio.h>
-#include <stdlib.h>
-
-#include <openssl/pem.h>
-#include <openssl/conf.h>
 #include "crypto.h"
 #include "log.hpp"
 #include "util.h"
-
-#define LOG_FAIL_IF(cond, msg, rv) if((cond)) { log_error(msg); ret = rv; goto cleanup; }
 
 #ifdef _WIN32
 #include "shlobj.h"
@@ -21,6 +14,11 @@
 #undef OCSP_RESPONSE
 #endif
 
+#if WITH_OPENSSL
+#include <openssl/pem.h>
+#include <openssl/conf.h>
+
+#define LOG_FAIL_IF(cond, msg, rv) if((cond)) { log_error(msg); ret = rv; goto cleanup; }
 
 #include <openssl/x509v3.h>
 #define OPENSSL_NO_ENGINE 1
@@ -56,3 +54,16 @@ cleanup:
    X509_free(x509);
    return ret;
 }
+#else
+#include "x509Util.h"
+int verifySignature(unsigned char *plain, unsigned int l_plain, const char *hashalg, const unsigned char *cert, int l_cert, unsigned char *signature, unsigned l_signature)
+{
+   unsigned int length = getRSAKeyLength((const char*)cert, l_cert);
+
+   if((length != 0) && (length != l_signature)) {
+      log_error("Signature length does not match key length");
+      return -1;
+   }
+   return 0;
+}
+#endif

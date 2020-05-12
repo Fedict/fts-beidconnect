@@ -26,7 +26,7 @@ gulp.task('default', function() {
 });
 
 gulp.task('release', function() {
-   sequence('clean', 'lint', ['minify-js', 'copy-png', 'manifest-release-chrome', 'manifest-release-firefox', 'zip-chrome', 'zip-firefox']);
+   sequence('clean', 'lint', 'minify-js', 'copy-png', 'manifest-release-chrome', 'manifest-release-firefox', 'zip-chrome', 'zip-firefox');
 });
 
 gulp.task('clean', function () {
@@ -99,7 +99,7 @@ gulp.task('manifest-release-firefox', function() {
     return gulp.src('./src/main/manifest.json')
     .pipe(jeditor(function(manifest) {
 	manifest.version = version;
-	manifest.matches = ['https://*.belgium.be/*','https://*.zetes.be/*'];
+	manifest.content_scripts[0].matches = ['https://*.belgium.be/*','https://*.zetes.be/*'];
 	delete manifest.key;
 	delete manifest.minimum_chrome_version;
 	delete manifest.background.persistent;
