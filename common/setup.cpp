@@ -79,8 +79,11 @@ int runSetup(int argc, const char * argv[])
    }
 #else
    exePath = string(installFolder) + "/eidlink";
-   if (jsonFilePath == "") {
-      jsonFilePath = string(installFolder) + "/be.bosa.eidlink.json";
+   if (chromeFilePath == "") {
+      chromeFilePath = string(installFolder) + "/chrome.json";
+   }
+   if (firefoxFilePath == "") {
+      firefoxFilePath = string(installFolder) + "/firefox.json";
    }
 #endif
    writeFile(chromeFilePath, exePath, true);
