@@ -1,6 +1,6 @@
 Summary: eIDlink native messaging component
 Name: eidlink
-Version: 0.1
+Version: 0.0.8
 Release: 1%{?dist}
 License: MIT
 Group: Applications/Communications
