@@ -4,9 +4,9 @@ eidlink: asn1.o BEIDCard.o Card.o CardFactory.o CardReader.o CertChainRequestHan
 	$(CXX) $(PLDFLAGS) $(LDFLAGS) -o $@ $^
 
 %.o: ../common/%.cpp
-	$(CXX) -c -O2 $(CXXFLAGS) $(PCFLAGS) -I../common -o $@ $<
+	$(CXX) -c -O2 -std=gnu++11 $(CXXFLAGS) $(PCFLAGS) -I../common -o $@ $<
 %.o: ../common/%.c
-	$(CC) -c -O2 $(CFLAGS) $(PCFLAGS) -I../common -o $@ $<
+	$(CC) -c -O2 -std=gnu99 $(CFLAGS) $(PCFLAGS) -I../common -o $@ $<
 
 install:
 	install -d $(DESTDIR)/usr/bin
