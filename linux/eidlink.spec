@@ -30,7 +30,7 @@ webbrowser's extension store.
 %setup -n eidlink
 
 %build
-%{__make} %{?_smp_mflags} -C linux CFLAiGS='-g -O2' CXXFLAGS='-g -O2' eidlink
+%{__make} %{?_smp_mflags} -C linux CFLAGS='-g -O2' CXXFLAGS='-g -O2' eidlink
 
 %install
 %{__rm} -rf %{buildroot}
