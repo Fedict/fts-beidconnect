@@ -10,7 +10,7 @@ eidlink: asn1.o BEIDCard.o Card.o CardFactory.o CardReader.o CertChainRequestHan
 
 install:
 	install -d $(DESTDIR)/usr/bin
-	install -g root -o root -m 755 eidlink $(DESTDIR)/usr/bin/
+	install -m 755 eidlink $(DESTDIR)/usr/bin/
 
 clean:
 	rm -f *.o eidlink
