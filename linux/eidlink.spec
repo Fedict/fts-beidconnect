@@ -49,5 +49,3 @@ fi
 %files
 %defattr(-, root, root, 0755)
 %{_bindir}/eidlink
-%{_sysconfdir}/opt/chrome/native-messaging-hosts/be.bosa.eidlink.json
-%{_sysconfdir}/chromium/native-messaging-hosts/be.bosa.eidlink.json
