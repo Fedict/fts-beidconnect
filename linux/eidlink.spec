@@ -41,10 +41,13 @@ webbrowser's extension store.
 
 %post
 if [ "$1" -gt 0 ]; then
-	for target in /etc/opt/chrome/native-messaging-hosts /etc/chromium/native-messaging-hosts /usr/lib/mozilla/native-messaging-hosts /usr/lib64/mozilla/native-messaging-hosts; do
-		mkdir -p $target
-		/usr/bin/eidlink -setup /usr/bin $target
-	done
+        mkdir -p /etc/chromium/native-messaging-hosts
+        mkdir -p /etc/opt/chrome/native-messaging-hosts
+        mkdir -p /usr/lib/mozilla/native-messaging-hosts
+        mkdir -p /usr/lib64/mozilla/native-messaging-hosts
+        /usr/bin/eidlink -setup /etc/chromium/native-messaging-hosts/ /usr/lib/mozilla/native-messaging-hosts/
+        cp /etc/chromium/native-messaging-hosts/be.bosa.eidlink.json /etc/opt/chrome/native-messaging-hosts/
+        cp /usr/lib/mozilla/native-messaging-hosts/be.bosa.eidlink.json /usr/lib64/mozilla/native-messaging-hosts/
 fi
 %files
 %defattr(-, root, root, 0755)
