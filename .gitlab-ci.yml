@@ -4,6 +4,8 @@ stages:
 
 srpm:
   stage: source
+  variables: 
+    ErrorActionPreference: stop 
   before_script:
   - VER=$(git describe --always)
   - mkdir -p products/tar
