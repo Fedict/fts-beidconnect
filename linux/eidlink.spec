@@ -45,7 +45,7 @@ if [ "$1" -gt 0 ]; then
         mkdir -p /etc/opt/chrome/native-messaging-hosts
         mkdir -p /usr/lib/mozilla/native-messaging-hosts
         mkdir -p /usr/lib64/mozilla/native-messaging-hosts
-        /usr/bin/eidlink -setup /etc/chromium/native-messaging-hosts/ /usr/lib/mozilla/native-messaging-hosts/
+        /usr/bin/eidlink -setup /usr/bin/ /etc/chromium/native-messaging-hosts/ /usr/lib/mozilla/native-messaging-hosts/
         cp /etc/chromium/native-messaging-hosts/be.bosa.eidlink.json /etc/opt/chrome/native-messaging-hosts/
         cp /usr/lib/mozilla/native-messaging-hosts/be.bosa.eidlink.json /usr/lib64/mozilla/native-messaging-hosts/
 fi
