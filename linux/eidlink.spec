@@ -1,6 +1,6 @@
 Summary: eIDlink native messaging component
 Name: eidlink
-Version: 0.1
+Version: 0.0.8
 Release: 1%{?dist}
 License: MIT
 Group: Applications/Communications
@@ -30,7 +30,7 @@ webbrowser's extension store.
 %setup -n eidlink
 
 %build
-%{__make} %{?_smp_mflags} -C linux CFLAiGS='-g -O2' CXXFLAGS='-g -O2' eidlink
+%{__make} %{?_smp_mflags} -C linux CFLAGS='-g -O2' CXXFLAGS='-g -O2' eidlink
 
 %install
 %{__rm} -rf %{buildroot}
@@ -41,13 +41,14 @@ webbrowser's extension store.
 
 %post
 if [ "$1" -gt 0 ]; then
-	for target in /etc/opt/chrome/native-messaging-hosts /etc/chromium/native-messaging-hosts /usr/lib/mozilla/native-messaging-hosts /usr/lib64/mozilla/native-messaging-hosts; do
-		mkdir -p $target
-		/usr/bin/eidlink -setup /usr/bin $target
-	done
+        mkdir -p /etc/chromium/native-messaging-hosts
+        mkdir -p /etc/opt/chrome/native-messaging-hosts
+        mkdir -p /usr/lib/mozilla/native-messaging-hosts
+        mkdir -p /usr/lib64/mozilla/native-messaging-hosts
+        /usr/bin/eidlink -setup /usr/bin/ /etc/chromium/native-messaging-hosts/ /usr/lib/mozilla/native-messaging-hosts/
+        cp /etc/chromium/native-messaging-hosts/be.bosa.eidlink.json /etc/opt/chrome/native-messaging-hosts/
+        cp /usr/lib/mozilla/native-messaging-hosts/be.bosa.eidlink.json /usr/lib64/mozilla/native-messaging-hosts/
 fi
 %files
 %defattr(-, root, root, 0755)
 %{_bindir}/eidlink
-%{_sysconfdir}/opt/chrome/native-messaging-hosts/be.bosa.eidlink.json
-%{_sysconfdir}/chromium/native-messaging-hosts/be.bosa.eidlink.json
