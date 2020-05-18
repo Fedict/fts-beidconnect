@@ -9,17 +9,18 @@
 BUILD_NUMBER=0
 !ENDIF
 
-MAJOR_VERSION=0
+MAJOR_VERSION=1
 MINOR_VERSION=0
-RELEASE_VERSION=8
+RELEASE_VERSION=1
 VERSION=$(MAJOR_VERSION).$(MINOR_VERSION).$(RELEASE_VERSION)
 
-SIGN = signtool sign /v /n "Zetes nv/sa" /fd SHA256 /du http://bosa.be /t http://timestamp.globalsign.com/scripts/timestamp.dll
+SIGN = signtool sign /v /n "Zetes nv/sa" /fd SHA256 /du http://eazysign.be /t http://timestamp.globalsign.com/scripts/timestamp.dll
+#SIGN = signtool sign /v /n "Zetes nv/sa" /fd SHA256 /du http://bosa.be /t http://timestamp.globalsign.com/scripts/timestamp.dll
 WIX = C:\Program Files (x86)\WiX Toolset v3.10
 
 PROGRAM = VS_2019\Release\eidlink.exe
 BINARIES = VS_2019\Release
-INSTALL_PRODUCT = eidlink_$(VERSIONEX).msi
+INSTALL_PRODUCT = eidlink_$(VERSION).msi
 BUILDCONSTANTS="LOG_INFO=1;WIN32;_WIN32_WINNT=0x0501;NDEBUG;_CRT_SECURE_NO_WARNINGS;_CONSOLE"
 
 binaries:
@@ -30,13 +31,14 @@ virtualcards:
    
 pkg: binaries
 	$(SIGN) $(PROGRAM)
-	"$(WIX)\bin\candle.exe" eidlink.wxs -dVERSION=$(VERSION) -ext WixUtilExtension
-	"$(WIX)\bin\light.exe" -out eidlink_$(VERSION).msi eidlink.wixobj -v -ext WixUtilExtension -ext WixUIExtension -dWixUILicenseRtf=install/LICENSE.rtf -dWixUIDialogBmp=install/install_dlg.bmp
+	"$(WIX)\bin\candle.exe" eidlink.wxs -dVERSION=$(VERSION)
+	"$(WIX)\bin\light.exe" -out $(INSTALL_PRODUCT) eidlink.wixobj -v -ext WixUIExtension -dWixUILicenseRtf=install/LICENSE.rtf -dWixUIDialogBmp=install/install_dlg.bmp
 	$(SIGN) $(INSTALL_PRODUCT)
+   copy $(INSTALL_PRODUCT) eidlink.msi
    
 pkg-unsigned: binaries
 	"$(WIX)\bin\candle.exe" eidlink.wxs -dVERSION=$(VERSION) -ext WixUtilExtension
-	"$(WIX)\bin\light.exe" -out eidlink_$(VERSION).msi eidlink.wixobj -v -ext WixUtilExtension -ext WixUIExtension -dWixUILicenseRtf=install/LICENSE.rtf -dWixUIDialogBmp=install/install_dlg.bmp
+	"$(WIX)\bin\light.exe" -out INSTALL_PRODUCT eidlink.wixobj -ext WixUIExtension -dWixUILicenseRtf=install/LICENSE.rtf -dWixUIDialogBmp=install/install_dlg.bmp
 	
 clean:
    del /Q $(BINARIES)

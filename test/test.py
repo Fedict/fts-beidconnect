@@ -51,7 +51,7 @@ class TestLongrunningHost(unittest.TestCase):
              "correlationId":"07386ce7-f73e-4e99-dfc3-8d69b6adf33d"
          }
          resp = self.transceive(json.dumps(cmd))
-         self.assertEqual(resp['version'], "1.0.0")
+         self.assertEqual(resp['version'], "1.0.1")
    
     def test2_info(self):
          cmd = {
@@ -91,7 +91,7 @@ class TestLongrunningHost(unittest.TestCase):
             "cert": cert,
             "algo":"SHA-256",
             "digest":"JMRVmmssdqPelSUruIhdDOTGXc2Y2dOq8Bf989ZDPH0=",
-            "pin": "1234",
+            "pin": None,
             "language":"en",
             "mac":"0123456789ABCDEF0123456789ABCDEF",
             "correlationId":"07386ce7-f73e-4e99-dfc3-8d69b6adf33d",

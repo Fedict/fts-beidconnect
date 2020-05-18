@@ -95,7 +95,10 @@ std::string SignRequestHandler::process()
             connected = 0;
             continue; //try next reader to find chain
          }
-         
+  
+         if (pin == "null") {
+            pin = "";
+         }
          //if we get here, we successfully selected the key or found the signing certificate
          lasterror = card->logon((int)pin.size(), (char*) pin.c_str());
          if (lasterror) {

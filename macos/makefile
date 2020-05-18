@@ -1,4 +1,4 @@
-VERSION = 1.0
+VERSION = 1.0.1
 IDENTIFIER = com.bosa.eidlink
 PROGRAM = eidlink
 BUILDDIR = ./build
