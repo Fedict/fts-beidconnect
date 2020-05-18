@@ -10,9 +10,9 @@ BUILD_NUMBER=0
 !ENDIF
 
 MAJOR_VERSION=1
-MINOR_VERSION=0
-RELEASE_VERSION=1
-VERSION=$(MAJOR_VERSION).$(MINOR_VERSION).$(RELEASE_VERSION)
+MINOR_VERSION=1
+#RELEASE_VERSION=1
+VERSION=$(MAJOR_VERSION).$(MINOR_VERSION)
 
 SIGN = signtool sign /v /n "Zetes nv/sa" /fd SHA256 /du http://eazysign.be /t http://timestamp.globalsign.com/scripts/timestamp.dll
 #SIGN = signtool sign /v /n "Zetes nv/sa" /fd SHA256 /du http://bosa.be /t http://timestamp.globalsign.com/scripts/timestamp.dll
@@ -24,7 +24,7 @@ INSTALL_PRODUCT = eidlink_$(VERSION).msi
 BUILDCONSTANTS="LOG_INFO=1;WIN32;_WIN32_WINNT=0x0501;NDEBUG;_CRT_SECURE_NO_WARNINGS;_CONSOLE"
 
 binaries:
-	msbuild -m /p:Configuration=Release;Platform=x86 /property:MAJOR_VERSION=$(MAJOR_VERSION) /property:MINOR_VERSION=$(MINOR_VERSION) /property:RELEASE_VERSION=$(RELEASE_VERSION) /property:BUILD_NUMBER=$(BUILD_NUMBER) VS_2019\eidlink.sln
+	msbuild -m /p:Configuration=Release;Platform=x86 /property:MAJOR_VERSION=$(MAJOR_VERSION) /property:MINOR_VERSION=$(MINOR_VERSION) /property:RELEASE_VERSION=0 /property:BUILD_NUMBER=$(BUILD_NUMBER) VS_2019\eidlink.sln
    
 virtualcards:
    msbuild /p:Configuration=virtual_cards;Platform=x86 /property:MAJOR_VERSION=$(MAJOR_VERSION) /property:MINOR_VERSION=$(MINOR_VERSION) /property:RELEASE_VERSION=$(RELEASE_VERSION) /property:BUILD_NUMBER=$(BUILD_NUMBER) VS_2019\eidlink.sln
