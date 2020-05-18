@@ -15,15 +15,15 @@
  * Definitions
  *
  ******************************************************************************/
-#define EIDLINK_VERSION	"1.0.1"
+#define EIDLINK_VERSION	"1.1"
 #define CLEANUP(a) { ret = a; goto cleanup; }
      
-#ifdef WIN32
+#ifdef _WIN32
 #define CONFIG_FILE "c:\\tmp\\virtualdevice.cfg"
 #define LOG_FILE  "C:\\tmp\\eIDLink.log"
 #else
 #define CONFIG_FILE "/tmp/virtualdevice.cfg"
-#define LOG_FILE  "/tmp/eID.log"
+#define LOG_FILE  "/tmp/eIDLink.log"
 #endif
      
 #define MAX_READER_NAME			128

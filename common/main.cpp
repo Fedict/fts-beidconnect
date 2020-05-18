@@ -7,27 +7,20 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <iostream>
 #include "main.hpp"
 #include "log.hpp"
 #include "native.hpp"
 #include "setup.hpp"
 #include "test.hpp"
-
-#ifdef _WIN32
-//#define CONFIG_FILE "c:\\tmp\\virtualdevice.cfg"
-#define LOG_FILE  "C:\\tmp\\eIDLink.log"
-#else
-//#define CONFIG_FILE "/tmp/virtualdevice.cfg"
-#define LOG_FILE  "/tmp/eIDLink.log"
-#endif
+#include "general.h"
 
 int main(int argc, const char * argv[]) {
    
    for (int i = 1; i < argc; i++) {
-      if (strcmp(argv[i], "-service") == 0) {
+      if (strcmp(argv[i], "-version") == 0) {
 
-         log_init(LOG_FILE, 1, 1);
-         //runService();
+         std::cout << EIDLINK_VERSION;
          exit(0);
       }
       else if (strcmp(argv[i], "-test") == 0) {

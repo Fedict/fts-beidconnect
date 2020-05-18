@@ -1,5 +1,5 @@
 //
-//  VersionRequestHandler.cpp
+//  SignRequestHandler.cpp
 //  eIDLink
 //
 //  Created by Vital Schonkeren on 02/03/2020.

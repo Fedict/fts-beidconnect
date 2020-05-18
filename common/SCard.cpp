@@ -465,7 +465,7 @@ int SCard::getFeatures()
       }
       return (ret);
    }
-#endif  //end #ifdef WIN32
+#endif
    
    
    ret = SCardControl(hCard,        //XXXXX get handle without card if no card present!!!!!

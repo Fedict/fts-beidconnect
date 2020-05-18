@@ -19,4 +19,4 @@ protected:
    void post_process(boost::property_tree::ptree &response);
 };
 
-#endif //__HANDLE_REQUEST_H
+#endif //__REQUEST_HANDLER__

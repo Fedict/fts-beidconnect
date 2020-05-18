@@ -4,7 +4,7 @@
 #include "util.h"
 
 void do_sleep(int msec) {
-#ifdef WIN32
+#ifdef _WIN32
 	Sleep(msec);
 #else
 	usleep(1000 * msec);
