@@ -14,7 +14,7 @@ unittest.TestLoader.sortTestMethodsUsing = None
 # https://developer.chrome.com/extensions/nativeMessaging#native-messaging-host-protocol
 
 def instruct(msg):
-    raw_input('%s\n[press ENTER to continue]' % msg)
+    input('%s\n[press ENTER to continue]' % msg)
 
 class TestLongrunningHost(unittest.TestCase):
 
@@ -29,13 +29,13 @@ class TestLongrunningHost(unittest.TestCase):
     def transceive(self, msg):
         should_close_fds = sys.platform.startswith('win32') == False
         p = subprocess.Popen(testconf.get_exe(), stdin=subprocess.PIPE, stdout=subprocess.PIPE, close_fds=should_close_fds, stderr=None)
-        print('SEND: %s' % msg)
+        print(('SEND: %s' % msg))
         p.stdin.write(struct.pack('=I', len(msg)))
         std_output = p.communicate(input=msg.encode())[0]
         response_length = struct.unpack_from('=I', std_output)[0]
         response_length, response = struct.unpack_from('=I%is' % (response_length-2), std_output)
         response_print = json.dumps(json.loads(response))
-        print('RECV: %s' % response_print)
+        print(('RECV: %s' % response_print))
         return json.loads(response)
 
     def complete_msg(self, msg):

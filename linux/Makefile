@@ -16,4 +16,4 @@ clean:
 	rm -f *.o eidlink
 
 check: eidlink
-	cd ..; python test/test.py
+	cd ..; python3 test/test.py
