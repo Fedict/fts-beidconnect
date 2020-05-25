@@ -65,9 +65,9 @@
 
   <CustomAction Id="setup"
             FileKey="eidlinkapp"
-            ExeCommand='-setup &quot;[INSTALLFOLDER]'
+            ExeCommand='-setup &quot;[INSTALLFOLDER]&quot;'
             Execute="deferred"
-            Return="check"
+            Return="ignore"
             HideTarget="no"
             Impersonate="no" />
    <InstallExecuteSequence>

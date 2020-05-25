@@ -86,7 +86,9 @@ int runSetup(int argc, const char * argv[])
       firefoxFilePath = string(installFolder) + "/firefox.json";
    }
 #endif
+   //log_info("creating %s", chromeFilePath.c_str());
    writeFile(chromeFilePath, exePath, true);
+   //log_info("creating %s", firefoxFilePath.c_str());
    writeFile(firefoxFilePath, exePath, false);
    return 0;
 }

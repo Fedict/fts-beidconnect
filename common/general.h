@@ -15,7 +15,7 @@
  * Definitions
  *
  ******************************************************************************/
-#define EIDLINK_VERSION	"1.1"
+#define EIDLINK_VERSION	"1.2"
 #define CLEANUP(a) { ret = a; goto cleanup; }
      
 #ifdef _WIN32

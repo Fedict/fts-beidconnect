@@ -51,7 +51,7 @@ class TestLongrunningHost(unittest.TestCase):
              "correlationId":"07386ce7-f73e-4e99-dfc3-8d69b6adf33d"
          }
          resp = self.transceive(json.dumps(cmd))
-         self.assertEqual(resp['version'], "1.1")
+         self.assertEqual(resp['version'], "1.2")
    
     def test2_info(self):
          cmd = {
