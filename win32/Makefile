@@ -37,8 +37,8 @@ pkg: binaries
    copy $(INSTALL_PRODUCT) eidlink.msi
    
 pkg-unsigned: binaries
-	"$(WIX)\bin\candle.exe" eidlink.wxs -dVERSION=$(VERSION) -ext WixUtilExtension
-	"$(WIX)\bin\light.exe" -out INSTALL_PRODUCT eidlink.wixobj -ext WixUIExtension -dWixUILicenseRtf=install/LICENSE.rtf -dWixUIDialogBmp=install/install_dlg.bmp
+	"$(WIX)\bin\candle.exe" eidlink.wxs -dVERSION=$(VERSION)
+	"$(WIX)\bin\light.exe" -out $(INSTALL_PRODUCT) eidlink.wixobj -ext WixUIExtension -dWixUILicenseRtf=install/LICENSE.rtf -dWixUIDialogBmp=install/install_dlg.bmp
 	
 clean:
    del /Q $(BINARIES)
