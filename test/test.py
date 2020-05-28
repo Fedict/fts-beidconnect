@@ -67,7 +67,7 @@ class TestLongrunningHost(unittest.TestCase):
             "type":"NONREPUDIATION",
             "mac":"0123456789ABCDEF0123456789ABCDEF",
             "correlationId":"3daa114f-1ae9-4ae1-ba15-c79f7383ab35",
-            "origin":"https://eazysign-qa.zetes.be",
+            "origin":"https://something.belgium.be",
         }
         resp = self.transceive(json.dumps(cmd))
         #self.assertEqual(resp['nonce'], original_nonce)
@@ -79,7 +79,7 @@ class TestLongrunningHost(unittest.TestCase):
             "cert": cert,
             "mac":"0123456789ABCDEF0123456789ABCDEF",
             "correlationId":"3daa114f-1ae9-4ae1-ba15-c79f7383ab35",
-            "origin":"https://eazysign-qa.zetes.be",
+            "origin":"https://something.belgium.be",
         }
         resp = self.transceive(json.dumps(cmd))
         #self.assertEqual(resp['nonce'], original_nonce)
@@ -95,7 +95,7 @@ class TestLongrunningHost(unittest.TestCase):
             "language":"en",
             "mac":"0123456789ABCDEF0123456789ABCDEF",
             "correlationId":"07386ce7-f73e-4e99-dfc3-8d69b6adf33d",
-            "origin":"https://eazysign-qa.zetes.be",
+            "origin":"https://something.belgium.be",
         }
         resp = self.transceive(json.dumps(cmd))
 
