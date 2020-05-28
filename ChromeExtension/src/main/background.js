@@ -31,9 +31,14 @@ function _fail_with(msg, result) {
 
 function _forward(message) {
 	var tabid = message.tab;
-	console.log("SEND " + tabid + ": " + JSON.stringify(message));
+   //this will only copy simple objects,no functions whatsoever, doesn't matter if we filter out here
+   var messageCopy = JSON.parse(JSON.stringify(message));
 
-	chrome.runtime.sendNativeMessage(NATIVE_HOST, message, function(response) {
+   if (message['pin']) {
+      message.pin = "********";
+   }
+	console.log("SEND " + tabid + ": " + JSON.stringify(message));
+	chrome.runtime.sendNativeMessage(NATIVE_HOST, messageCopy, function(response) {
 		if(response) {
 			console.log("RECV " + tabid + ": " + JSON.stringify(response));
 			_reply(tabid, response);
