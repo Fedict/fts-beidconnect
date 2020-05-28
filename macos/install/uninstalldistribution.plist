@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<installer-gui-script minSpecVersion="2">
+    <title>Uninstall eIDLink</title>
+    <pkg-ref id="be.bosa.eidlink"/>
+    <options customize="never" require-scripts="false"/>
+    <readme file="UNINSTALL_README.html"/>
+    <domains enable_localSystem="false" enable_anywhere="false" enable_currentUserHome="true"/>
+    <volume-check>
+    </volume-check>
+    <choices-outline>
+        <line choice="default">
+            <line choice="be.bosa.eidlink"/>
+        </line>
+    </choices-outline>
+    <choice id="default"/>
+    <choice id="be.bosa.eidlink" visible="false">
+        <pkg-ref id="be.bosa.eidlink"/>
+    </choice>
+    <pkg-ref id="be.bosa.eidlink" version="1.0.0" onConclusion="none">eIDLinkUninstallComponent.pkg</pkg-ref>
+</installer-gui-script>
