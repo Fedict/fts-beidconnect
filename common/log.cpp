@@ -47,14 +47,14 @@ void log_info_(const char *string,... )
     goto cleanup;
   
 	va_start(args, string);				              // get args from param-string	
-  #ifdef WIN32
+  #ifdef _WIN32
 	_vsnprintf(buf, sizeof(buf), string, args);	// convert to string	
   #else
    vsnprintf(buf, sizeof(buf), string, args);	// convert to string	
   #endif
 	va_end(args);						                    // free arguments
 
-#ifdef WIN32
+#ifdef _WIN32
 	 fprintf(fp, "%s", buf);
 #else
 	 fprintf(fp, "%s", buf);
@@ -90,14 +90,14 @@ void log_info(const char *string,... )
     goto cleanup;
   
 	va_start(args, string);				              // get args from param-string	
-  #ifdef WIN32
+  #ifdef _WIN32
 	_vsnprintf(buf, sizeof(buf), string, args);	// convert to string	
   #else
    vsnprintf(buf, sizeof(buf), string, args);	// convert to string	
   #endif
 	va_end(args);						                    // free arguments
 
-#ifdef WIN32
+#ifdef _WIN32
 	 fprintf(fp, "%s\n", buf);
 #else
 	 fprintf(fp, "%s\n", buf);
@@ -139,14 +139,14 @@ void log_error(const char *string,... )
     goto cleanup;
   
 	va_start(args, string);				              // get args from param-string	
-  #ifdef WIN32
+  #ifdef _WIN32
 	_vsnprintf(buf, sizeof(buf), string, args);	// convert to string	
   #else
    vsnprintf(buf, sizeof(buf), string, args);	// convert to string	
   #endif
 	va_end(args);						                    // free arguments
 
-#ifdef WIN32
+#ifdef _WIN32
 	 fprintf(fp, "%s%s\n", timestring, buf);
 #else
 	 fprintf(fp, "%s%s\n", timestring, buf);

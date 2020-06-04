@@ -14,7 +14,7 @@ unittest.TestLoader.sortTestMethodsUsing = None
 # https://developer.chrome.com/extensions/nativeMessaging#native-messaging-host-protocol
 
 def instruct(msg):
-    raw_input('%s\n[press ENTER to continue]' % msg)
+    input('%s\n[press ENTER to continue]' % msg)
 
 class TestLongrunningHost(unittest.TestCase):
 
@@ -29,15 +29,13 @@ class TestLongrunningHost(unittest.TestCase):
     def transceive(self, msg):
         should_close_fds = sys.platform.startswith('win32') == False
         p = subprocess.Popen(testconf.get_exe(), stdin=subprocess.PIPE, stdout=subprocess.PIPE, close_fds=should_close_fds, stderr=None)
-        print('SEND: %s' % msg)
+        print(('SEND: %s' % msg))
         p.stdin.write(struct.pack('=I', len(msg)))
         std_output = p.communicate(input=msg.encode())[0]
         response_length = struct.unpack_from('=I', std_output)[0]
         response_length, response = struct.unpack_from('=I%is' % (response_length-2), std_output)
         response_print = json.dumps(json.loads(response))
-        print('RECV: %s' % response_print)
-        p.terminate()
-        p.wait()
+        print(('RECV: %s' % response_print))
         return json.loads(response)
 
     def complete_msg(self, msg):
@@ -48,44 +46,56 @@ class TestLongrunningHost(unittest.TestCase):
 
     def test1_version(self):
          cmd = {
-             "operation":"version",
+             "operation":"VERSION",
              "mac":"0123456789ABCDEF0123456789ABCDEF",
              "correlationId":"07386ce7-f73e-4e99-dfc3-8d69b6adf33d"
          }
          resp = self.transceive(json.dumps(cmd))
-         self.assertEqual(resp['version'], "1.0")
+         self.assertEqual(resp['version'], "1.2")
    
     def test2_info(self):
          cmd = {
-            "operation":"info",
+            "operation":"INFO",
             "mac":"0123456789ABCDEF0123456789ABCDEF",
             "correlationId":"07386ce7-f73e-4e99-dfc3-8d69b6adf33d"
          }
          resp = self.transceive(json.dumps(cmd))
 
-    def _est3_read_usercerts(self):
+    def test3_read_usercerts(self):
         cmd = {
-            "operation":"CERT",
+            "operation":"USERCERTS",
+            "type":"NONREPUDIATION",
             "mac":"0123456789ABCDEF0123456789ABCDEF",
             "correlationId":"3daa114f-1ae9-4ae1-ba15-c79f7383ab35",
-            "origin":"https://eazysign-qa.zetes.be",
+            "origin":"https://something.belgium.be",
         }
         resp = self.transceive(json.dumps(cmd))
         #self.assertEqual(resp['nonce'], original_nonce)
 
-    def est_sign(self):
-        certB64 = "MIIEiDCCA3CgAwIBAgIQAQAAAAABQ6Ge0qIAAM7ABDANBgkqhkiG9w0BAQUFADArMQswCQYDVQQGEwJCRTEcMBoGA1UEAxMTZUlEIHRlc3QgQ2l0aXplbiBDQTAeFw0xNDAxMTcxOTEyNTZaFw0yNDAxMTcxOTEyNTZaMHgxCzAJBgNVBAYTAkJFMSMwIQYDVQQDExpBbGljZSBTUEVDSU1FTiAoU2lnbmF0dXJlKTERMA8GA1UEBBMIU1BFQ0lNRU4xGzAZBgNVBCoTEkFsaWNlIEdlbGRpZ2VrYWFydDEUMBIGA1UEBRMLNzE3MTUxMDAwNzAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDLrHTmOQq61yWzZQZlN1UYfrjWIQFlL7Jc72QSvqOREh/m04rShZfObWinU4RFhEzewIKFe5sQSb/F24WtcLy1eckQPLGjE0Yfx6KjxTal98qTrnd9L17/XiTG6LdS9F6sm9FJSZQxPXjNaboIUa4PpkBmMYn5wOJRAiiTrtujY8kkGoydUTv+9P/Yxen1dltuzk02UCzpt1h4S6pnuOh0VvdnbiAw9ekBL4zWutMK9tNZKEoJCW1DUJ73XGphWzA8AVpijll6WJJyEx2AqyqscMNBRQ3gFtdajJ47wBW7JSoCykXNH0TNW6KU+Epm+1SpGcA0/DCrWrv7XkUS2lepAgMBAAGjggFZMIIBVTAOBgNVHQ8BAf8EBAMCBkAwRwYDVR0gBEAwPjA8BgdgOAEoKCgBMDEwLwYIKwYBBQUHAgEWI2h0dHA6Ly9jZXJ0cy5kZXYuZWlkLmJlbGdpdW0uYmUvY3BzMDoGA1UdHwQzMDEwL6AtoCuGKWh0dHA6Ly9jcmwuZGV2LmVpZC5iZWxnaXVtLmJlL2NpdGl6ZW4uY3JsMBgGCCsGAQUFBwEDBAwwCjAIBgYEAI5GAQEwcAYIKwYBBQUHAQEEZDBiMDQGCCsGAQUFBzAChihodHRwOi8vY2VydHMuZGV2LmVpZC5iZWxnaXVtLmJlL3Jvb3QuY3J0MCoGCCsGAQUFBzABhh5odHRwOi8vb2NzcC5kZXYuZWlkLmJlbGdpdW0uYmUwEQYJYIZIAYb4QgEBBAQDAgUgMB8GA1UdIwQYMBaAFAaLj6IA8bWGg/x7UiXGcTw0JJbCMA0GCSqGSIb3DQEBBQUAA4IBAQBel+5OA/oN2kJh2ocM8zxqNmaSJUcVt0LsdxtI8o5wZFeizhZjOOzjWsJPJ0zVEllJBiFEG0hSgxULpYQDZeR+EABAPb6dfCVFCLKhbm5o3gvp1d7HD6VzClmX7Sx+OqeffM560HtPp+e9s8xMCIYrjN2C5+Yl1/hFwxuol/F7hlRUPH2q30HT5gSkqNA8hPwfvqhCTeBmMm7P9H5Uu7lm438yrdce0udBZSWqlK0SO3dQNL3pummSKZbotlUCPuN8pNLw9OM7VcjoBqL3zjyUccYHSw38Oq0XlvMSTOTn2yMUUVL/uKvL5kV17nj+ztP9HZD31Re1ay5WoG3kmhmH"
+    def test4_read_certificate_chain(self):
+        cert = "MIIF1TCCA72gAwIBAgIQEAAAAAAA8evx4wAAAAGTsTANBgkqhkiG9w0BAQsFADAtMQswCQYDVQQGEwJCRTEeMBwGA1UEAwwVZUlEIFRFU1QgRm9yZWlnbmVyIENBMB4XDTE3MDUyOTIyMDAwMFoXDTIwMDUyOTIyMDAwMFowfTEUMBIGA1UEBRMLOTgwODIxMDAwMjkxEzARBgNVBCoMCkJlcnQgQWxpY2UxGDAWBgNVBAUTD1NwZWNpbWVuIGVWSyAxODEpMCcGA1UEAwwgQmVydCBTcGVjaW1lbiBlVksgMTggKFNpZ25hdHVyZSkxCzAJBgNVBAYTAkJFMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA49oyeB2rwqGNkwENXhBuZzXWKJN4RESxd+oLUb8jliwzb2KWk97nk7FhvBGAM7FFV6EP6lZKXmByMsUrP0f0zYkwsPl2SQVMJRiPpBdbE+ZyJVxersSdaTysDuu2RZKR+F1PbwQMEEfGgH4cJ2UVOb/tV4MjJV5KlnrV13IHFESJh/xbJA//Wphjh5kCNpdnN6TWolN3218hJkAvV+98no3MHg0uzQ01NkBF2U0x5llhlJAVX5ua+IZ6k56BL/Uxo6jMInLxzaNxCcK2glSbPyJMXMj01sNTIW58NBMMTktQkkrTX+DGH8edf38xjmsBBOIBf3VptYdwiwjgEmaAWwIDAQABo4IBnzCCAZswHwYDVR0jBBgwFoAU/TbPuTELnWd7LuET5UCD9wgdjJgwDgYDVR0PAQH/BAQDAgZAMGkGA1UdIARiMGAwXgYHYDgMAQECATBTMDEGCCsGAQUFBwIBFiVodHRwOi8vZWlkZGV2Y2FyZHMuemV0ZXNjYXJkcy5iZS9jZXJ0MB4GCCsGAQUFBwICMBIaEFRFU1QgdXNlciBub3RpY2UwIgYIKwYBBQUHAQMEFjAUMAgGBgQAjkYBATAIBgYEAI5GAQQwRQYDVR0fBD4wPDA6oDigNoY0aHR0cDovL2VpZGRldmNhcmRzLnpldGVzY2FyZHMuYmUvY3JsL2ZvcmVpZ25lcmNhLmNybDB/BggrBgEFBQcBAQRzMHEwPAYIKwYBBQUHMAKGMGh0dHA6Ly9laWRkZXZjYXJkcy56ZXRlc2NhcmRzLmJlL2NlcnQvcm9vdGNhLmNydDAxBggrBgEFBQcwAYYlaHR0cDovL2VpZGRldmNhcmRzLnpldGVzY2FyZHMuYmU6ODg4ODARBglghkgBhvhCAQEEBAMCBSAwDQYJKoZIhvcNAQELBQADggIBABlETs6MUuqAnCU1yQaNkXa+JTNZ02XNOMTbmwhBLTcqnfyM5vxIu4OwBAfThgf735pr3ffe8kXFelypegV9tNufdmRjqAFq9CVcNbMTsViAd3/TaPCIhveicD4a78KBKwMcEXWvmsoHlYAdM5nZokpJg7sX2NhpjVC8JexJLJKiPRNvSzKTmuUZtus0M1f3E4dYGjQMH3UpVp3bE5OAo//2Y29P6O82Nfi2vJjxAE6YBzAQltb+oEuhKiR0HS/YSgXaYPULlRmPyxetd30tZejgufNyZWjl2+v7xvBym+wBf64Vft+pgO0Dxdq6wycjFF+MtdsfhGQ7Fq7KWut8W7sLzhuXTvheFCzxQzsabQG4kqOZtC7cj32usiL8wb82NdonrLXYnze0RBb3S0azcldcQbEwYX/UInFOnHsKOALTR8Ho4uQRVDmT2XZEHlXWCVg5sA3sT0tWZCfDaoTPkjXMZwVVdat8Os/pb7pBrVe7aig36ME0chC3BscToCM2g56hEWxTy28tOR98O0jEfpxmkL4eJRwhkd610LuzwSkRrhUBZZwvc94aD6F3njxbFXB6xGN53qlwsJXPxFLocRP4a57fwaoU8MVYuEkceOdYOR4G/G0Kfm3bIdTEJ44jIha1UATNIQ287it7UfPYdmRAi0X0JaCX9U6DEg0vSUqi"
+        cmd = {
+            "operation":"CERTCHAIN",
+            "cert": cert,
+            "mac":"0123456789ABCDEF0123456789ABCDEF",
+            "correlationId":"3daa114f-1ae9-4ae1-ba15-c79f7383ab35",
+            "origin":"https://something.belgium.be",
+        }
+        resp = self.transceive(json.dumps(cmd))
+        #self.assertEqual(resp['nonce'], original_nonce)
+
+    def test_sign(self):
+        cert = "MIIF1TCCA72gAwIBAgIQEAAAAAAA8evx4wAAAAGTsTANBgkqhkiG9w0BAQsFADAtMQswCQYDVQQGEwJCRTEeMBwGA1UEAwwVZUlEIFRFU1QgRm9yZWlnbmVyIENBMB4XDTE3MDUyOTIyMDAwMFoXDTIwMDUyOTIyMDAwMFowfTEUMBIGA1UEBRMLOTgwODIxMDAwMjkxEzARBgNVBCoMCkJlcnQgQWxpY2UxGDAWBgNVBAUTD1NwZWNpbWVuIGVWSyAxODEpMCcGA1UEAwwgQmVydCBTcGVjaW1lbiBlVksgMTggKFNpZ25hdHVyZSkxCzAJBgNVBAYTAkJFMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA49oyeB2rwqGNkwENXhBuZzXWKJN4RESxd+oLUb8jliwzb2KWk97nk7FhvBGAM7FFV6EP6lZKXmByMsUrP0f0zYkwsPl2SQVMJRiPpBdbE+ZyJVxersSdaTysDuu2RZKR+F1PbwQMEEfGgH4cJ2UVOb/tV4MjJV5KlnrV13IHFESJh/xbJA//Wphjh5kCNpdnN6TWolN3218hJkAvV+98no3MHg0uzQ01NkBF2U0x5llhlJAVX5ua+IZ6k56BL/Uxo6jMInLxzaNxCcK2glSbPyJMXMj01sNTIW58NBMMTktQkkrTX+DGH8edf38xjmsBBOIBf3VptYdwiwjgEmaAWwIDAQABo4IBnzCCAZswHwYDVR0jBBgwFoAU/TbPuTELnWd7LuET5UCD9wgdjJgwDgYDVR0PAQH/BAQDAgZAMGkGA1UdIARiMGAwXgYHYDgMAQECATBTMDEGCCsGAQUFBwIBFiVodHRwOi8vZWlkZGV2Y2FyZHMuemV0ZXNjYXJkcy5iZS9jZXJ0MB4GCCsGAQUFBwICMBIaEFRFU1QgdXNlciBub3RpY2UwIgYIKwYBBQUHAQMEFjAUMAgGBgQAjkYBATAIBgYEAI5GAQQwRQYDVR0fBD4wPDA6oDigNoY0aHR0cDovL2VpZGRldmNhcmRzLnpldGVzY2FyZHMuYmUvY3JsL2ZvcmVpZ25lcmNhLmNybDB/BggrBgEFBQcBAQRzMHEwPAYIKwYBBQUHMAKGMGh0dHA6Ly9laWRkZXZjYXJkcy56ZXRlc2NhcmRzLmJlL2NlcnQvcm9vdGNhLmNydDAxBggrBgEFBQcwAYYlaHR0cDovL2VpZGRldmNhcmRzLnpldGVzY2FyZHMuYmU6ODg4ODARBglghkgBhvhCAQEEBAMCBSAwDQYJKoZIhvcNAQELBQADggIBABlETs6MUuqAnCU1yQaNkXa+JTNZ02XNOMTbmwhBLTcqnfyM5vxIu4OwBAfThgf735pr3ffe8kXFelypegV9tNufdmRjqAFq9CVcNbMTsViAd3/TaPCIhveicD4a78KBKwMcEXWvmsoHlYAdM5nZokpJg7sX2NhpjVC8JexJLJKiPRNvSzKTmuUZtus0M1f3E4dYGjQMH3UpVp3bE5OAo//2Y29P6O82Nfi2vJjxAE6YBzAQltb+oEuhKiR0HS/YSgXaYPULlRmPyxetd30tZejgufNyZWjl2+v7xvBym+wBf64Vft+pgO0Dxdq6wycjFF+MtdsfhGQ7Fq7KWut8W7sLzhuXTvheFCzxQzsabQG4kqOZtC7cj32usiL8wb82NdonrLXYnze0RBb3S0azcldcQbEwYX/UInFOnHsKOALTR8Ho4uQRVDmT2XZEHlXWCVg5sA3sT0tWZCfDaoTPkjXMZwVVdat8Os/pb7pBrVe7aig36ME0chC3BscToCM2g56hEWxTy28tOR98O0jEfpxmkL4eJRwhkd610LuzwSkRrhUBZZwvc94aD6F3njxbFXB6xGN53qlwsJXPxFLocRP4a57fwaoU8MVYuEkceOdYOR4G/G0Kfm3bIdTEJ44jIha1UATNIQ287it7UfPYdmRAi0X0JaCX9U6DEg0vSUqi"
         cmd = {
             "operation":"SIGN",
-            "cert": certB64,
+            "cert": cert,
             "algo":"SHA-256",
             "digest":"JMRVmmssdqPelSUruIhdDOTGXc2Y2dOq8Bf989ZDPH0=",
+            "pin": None,
             "language":"en",
             "mac":"0123456789ABCDEF0123456789ABCDEF",
             "correlationId":"07386ce7-f73e-4e99-dfc3-8d69b6adf33d",
-            "src":"page.js",
-            "origin":"https://eazysign-qa.zetes.be",
-            "tab":4
+            "origin":"https://something.belgium.be",
         }
         resp = self.transceive(json.dumps(cmd))
 

@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <memory.h>
-#include "asn1.h"
+#include "asn1.hpp"
 #include "log.hpp"
 #include "util.h"
 #include <stdarg.h>
@@ -691,4 +691,3 @@ int get_printable_dn(ASN1_ITEM     *p_dn,   //I: points to the DN struct
    
    return(0);
 }
-

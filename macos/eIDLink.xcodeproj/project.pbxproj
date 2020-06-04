@@ -8,10 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		E824FB77240FC263008E0C3D /* PCSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E824FB76240FC263008E0C3D /* PCSC.framework */; };
+		E84BAFE824477C7000D6A178 /* setup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E84BAFE624477C7000D6A178 /* setup.cpp */; };
 		E85AB669241539CC00BE9F0A /* UserCertsRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E85AB668241539CC00BE9F0A /* UserCertsRequestHandler.cpp */; };
 		E85AB66A24166DFB00BE9F0A /* comm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8AB54C724110F070051D9A2 /* comm.cpp */; };
 		E89B23CD24114FBC00D800E0 /* native.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8AB54C024110F070051D9A2 /* native.cpp */; };
 		E89B23D02412848100D800E0 /* InfoRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89B23CF2412848100D800E0 /* InfoRequestHandler.cpp */; };
+		E8A12CE92465C53F00F6C910 /* test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8A12CE82465C53F00F6C910 /* test.cpp */; };
 		E8AB54D924110F070051D9A2 /* log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8AB54A824110F070051D9A2 /* log.cpp */; };
 		E8AB54DA24110F070051D9A2 /* util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8AB54A924110F070051D9A2 /* util.cpp */; };
 		E8AB54DC24110F070051D9A2 /* RequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8AB54AF24110F070051D9A2 /* RequestHandler.cpp */; };
@@ -27,6 +29,10 @@
 		E8AB54EB24110F070051D9A2 /* VirtualCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8AB54CD24110F070051D9A2 /* VirtualCard.cpp */; };
 		E8AB54EC24110F070051D9A2 /* VersionRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8AB54D024110F070051D9A2 /* VersionRequestHandler.cpp */; };
 		E8AB54ED24110F070051D9A2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8AB54D124110F070051D9A2 /* main.cpp */; };
+		E8D0ABC72433C50D00A6FE82 /* crypto.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8D0ABC52433C50D00A6FE82 /* crypto.cpp */; };
+		E8EE466A242259580074DC2C /* CertChainRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8EE4669242259580074DC2C /* CertChainRequestHandler.cpp */; };
+		E8EE466D24235D6A0074DC2C /* SignRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8EE466C24235D6A0074DC2C /* SignRequestHandler.cpp */; };
+		E8EE4670242360F30074DC2C /* Request.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8EE466E242360F30074DC2C /* Request.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -43,12 +49,26 @@
 
 /* Begin PBXFileReference section */
 		E824FB76240FC263008E0C3D /* PCSC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PCSC.framework; path = System/Library/Frameworks/PCSC.framework; sourceTree = SDKROOT; };
+		E835C9A924376FFA008A17D9 /* package.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = package.json; sourceTree = "<group>"; };
+		E835C9AA24376FFA008A17D9 /* gulpfile.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = gulpfile.js; sourceTree = "<group>"; };
+		E835C9AD24376FFA008A17D9 /* sign.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = sign.js; sourceTree = "<group>"; };
+		E835C9AE24376FFA008A17D9 /* signtest.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = signtest.html; sourceTree = "<group>"; };
+		E835C9B024376FFA008A17D9 /* page.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = page.js; sourceTree = "<group>"; };
+		E835C9B124376FFA008A17D9 /* background.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = background.js; sourceTree = "<group>"; };
+		E835C9B224376FFA008A17D9 /* icon48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon48.png; sourceTree = "<group>"; };
+		E835C9B324376FFA008A17D9 /* icon128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon128.png; sourceTree = "<group>"; };
+		E835C9B424376FFA008A17D9 /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = manifest.json; sourceTree = "<group>"; };
+		E835C9B524376FFA008A17D9 /* content.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = content.js; sourceTree = "<group>"; };
+		E84BAFE624477C7000D6A178 /* setup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = setup.cpp; sourceTree = "<group>"; };
+		E84BAFE724477C7000D6A178 /* setup.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = setup.hpp; sourceTree = "<group>"; };
 		E85AB6642413A1CB00BE9F0A /* test.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; name = test.py; path = ../test/test.py; sourceTree = "<group>"; };
 		E85AB6652413A1CB00BE9F0A /* testconf.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; name = testconf.py; path = ../test/testconf.py; sourceTree = "<group>"; };
 		E85AB667241539CC00BE9F0A /* UserCertsRequestHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = UserCertsRequestHandler.hpp; sourceTree = "<group>"; };
 		E85AB668241539CC00BE9F0A /* UserCertsRequestHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UserCertsRequestHandler.cpp; sourceTree = "<group>"; };
 		E89B23CE2412848100D800E0 /* InfoRequestHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = InfoRequestHandler.hpp; sourceTree = "<group>"; };
 		E89B23CF2412848100D800E0 /* InfoRequestHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InfoRequestHandler.cpp; sourceTree = "<group>"; };
+		E8A12CE82465C53F00F6C910 /* test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = test.cpp; sourceTree = "<group>"; };
+		E8A12CEA2465C77400F6C910 /* test.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = test.hpp; sourceTree = "<group>"; };
 		E8AB54A824110F070051D9A2 /* log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = log.cpp; sourceTree = "<group>"; };
 		E8AB54A924110F070051D9A2 /* util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = util.cpp; sourceTree = "<group>"; };
 		E8AB54AA24110F070051D9A2 /* Card.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Card.hpp; sourceTree = "<group>"; };
@@ -58,7 +78,7 @@
 		E8AB54AF24110F070051D9A2 /* RequestHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RequestHandler.cpp; sourceTree = "<group>"; };
 		E8AB54B024110F070051D9A2 /* VirtualReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VirtualReader.cpp; sourceTree = "<group>"; };
 		E8AB54B124110F070051D9A2 /* BEIDCard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BEIDCard.cpp; sourceTree = "<group>"; };
-		E8AB54B324110F070051D9A2 /* asn1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = asn1.h; sourceTree = "<group>"; };
+		E8AB54B324110F070051D9A2 /* asn1.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = asn1.hpp; sourceTree = "<group>"; };
 		E8AB54B424110F070051D9A2 /* native.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = native.hpp; sourceTree = "<group>"; };
 		E8AB54B624110F070051D9A2 /* general.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = general.h; sourceTree = "<group>"; };
 		E8AB54B724110F070051D9A2 /* CardReader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CardReader.hpp; sourceTree = "<group>"; };
@@ -87,6 +107,14 @@
 		E8AB54D424110F070051D9A2 /* RequestHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RequestHandler.hpp; sourceTree = "<group>"; };
 		E8AB54D524110F070051D9A2 /* x509Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = x509Util.h; sourceTree = "<group>"; };
 		E8AB54D624110F070051D9A2 /* BEIDCard.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BEIDCard.hpp; sourceTree = "<group>"; };
+		E8D0ABC52433C50D00A6FE82 /* crypto.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = crypto.cpp; sourceTree = "<group>"; };
+		E8D0ABC62433C50D00A6FE82 /* crypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypto.h; sourceTree = "<group>"; };
+		E8EE4668242259580074DC2C /* CertChainRequestHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CertChainRequestHandler.hpp; sourceTree = "<group>"; };
+		E8EE4669242259580074DC2C /* CertChainRequestHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CertChainRequestHandler.cpp; sourceTree = "<group>"; };
+		E8EE466B24235D6A0074DC2C /* SignRequestHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SignRequestHandler.hpp; sourceTree = "<group>"; };
+		E8EE466C24235D6A0074DC2C /* SignRequestHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SignRequestHandler.cpp; sourceTree = "<group>"; };
+		E8EE466E242360F30074DC2C /* Request.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Request.cpp; sourceTree = "<group>"; };
+		E8EE466F242360F30074DC2C /* Request.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Request.hpp; sourceTree = "<group>"; };
 		E8F2140923FAFAAC003768CE /* eIDLink */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = eIDLink; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -110,6 +138,48 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		E835C9A824376FFA008A17D9 /* ChromeExtension */ = {
+			isa = PBXGroup;
+			children = (
+				E835C9A924376FFA008A17D9 /* package.json */,
+				E835C9AA24376FFA008A17D9 /* gulpfile.js */,
+				E835C9AB24376FFA008A17D9 /* src */,
+			);
+			name = ChromeExtension;
+			path = ../ChromeExtension;
+			sourceTree = "<group>";
+		};
+		E835C9AB24376FFA008A17D9 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				E835C9AC24376FFA008A17D9 /* test */,
+				E835C9AF24376FFA008A17D9 /* main */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		E835C9AC24376FFA008A17D9 /* test */ = {
+			isa = PBXGroup;
+			children = (
+				E835C9AD24376FFA008A17D9 /* sign.js */,
+				E835C9AE24376FFA008A17D9 /* signtest.html */,
+			);
+			path = test;
+			sourceTree = "<group>";
+		};
+		E835C9AF24376FFA008A17D9 /* main */ = {
+			isa = PBXGroup;
+			children = (
+				E835C9B024376FFA008A17D9 /* page.js */,
+				E835C9B124376FFA008A17D9 /* background.js */,
+				E835C9B224376FFA008A17D9 /* icon48.png */,
+				E835C9B324376FFA008A17D9 /* icon128.png */,
+				E835C9B424376FFA008A17D9 /* manifest.json */,
+				E835C9B524376FFA008A17D9 /* content.js */,
+			);
+			path = main;
+			sourceTree = "<group>";
+		};
 		E85AB6632413A1B600BE9F0A /* test */ = {
 			isa = PBXGroup;
 			children = (
@@ -128,8 +198,14 @@
 				E89B23CE2412848100D800E0 /* InfoRequestHandler.hpp */,
 				E85AB668241539CC00BE9F0A /* UserCertsRequestHandler.cpp */,
 				E85AB667241539CC00BE9F0A /* UserCertsRequestHandler.hpp */,
+				E8EE4669242259580074DC2C /* CertChainRequestHandler.cpp */,
+				E8EE4668242259580074DC2C /* CertChainRequestHandler.hpp */,
+				E8EE466C24235D6A0074DC2C /* SignRequestHandler.cpp */,
+				E8EE466B24235D6A0074DC2C /* SignRequestHandler.hpp */,
 				E8AB54AF24110F070051D9A2 /* RequestHandler.cpp */,
 				E8AB54D424110F070051D9A2 /* RequestHandler.hpp */,
+				E8EE466E242360F30074DC2C /* Request.cpp */,
+				E8EE466F242360F30074DC2C /* Request.hpp */,
 			);
 			name = RequestHandlers;
 			sourceTree = "<group>";
@@ -139,20 +215,26 @@
 			children = (
 				E89B23CA24112BDC00D800E0 /* RequestHandlers */,
 				E8AB54EF24110F620051D9A2 /* CardLayer */,
+				E8AB54B624110F070051D9A2 /* general.h */,
 				E8AB54D124110F070051D9A2 /* main.cpp */,
 				E8AB54AE24110F070051D9A2 /* main.hpp */,
+				E84BAFE624477C7000D6A178 /* setup.cpp */,
+				E84BAFE724477C7000D6A178 /* setup.hpp */,
 				E8AB54C024110F070051D9A2 /* native.cpp */,
 				E8AB54B424110F070051D9A2 /* native.hpp */,
+				E8A12CEA2465C77400F6C910 /* test.hpp */,
+				E8A12CE82465C53F00F6C910 /* test.cpp */,
 				E8AB54C724110F070051D9A2 /* comm.cpp */,
 				E8AB54BC24110F070051D9A2 /* comm.hpp */,
+				E8D0ABC52433C50D00A6FE82 /* crypto.cpp */,
+				E8D0ABC62433C50D00A6FE82 /* crypto.h */,
 				E8AB54A824110F070051D9A2 /* log.cpp */,
 				E8AB54CC24110F070051D9A2 /* log.hpp */,
 				E8AB54A924110F070051D9A2 /* util.cpp */,
-				E8AB54B624110F070051D9A2 /* general.h */,
-				E8AB54BD24110F070051D9A2 /* x509Util.c */,
 				E8AB54C624110F070051D9A2 /* util.h */,
 				E8AB54CA24110F070051D9A2 /* hash.cpp */,
 				E8AB54D324110F070051D9A2 /* hash.h */,
+				E8AB54BD24110F070051D9A2 /* x509Util.c */,
 				E8AB54D524110F070051D9A2 /* x509Util.h */,
 			);
 			name = common;
@@ -163,7 +245,7 @@
 			isa = PBXGroup;
 			children = (
 				E8AB54C924110F070051D9A2 /* asn1.cpp */,
-				E8AB54B324110F070051D9A2 /* asn1.h */,
+				E8AB54B324110F070051D9A2 /* asn1.hpp */,
 				E8AB54B124110F070051D9A2 /* BEIDCard.cpp */,
 				E8AB54D624110F070051D9A2 /* BEIDCard.hpp */,
 				E8AB54CB24110F070051D9A2 /* Card.cpp */,
@@ -188,6 +270,7 @@
 		E8F2140023FAFAAC003768CE = {
 			isa = PBXGroup;
 			children = (
+				E835C9A824376FFA008A17D9 /* ChromeExtension */,
 				E85AB6632413A1B600BE9F0A /* test */,
 				E8AB54A524110F070051D9A2 /* common */,
 				E8F2140B23FAFAAC003768CE /* src */,
@@ -271,7 +354,9 @@
 				E8AB54DE24110F070051D9A2 /* BEIDCard.cpp in Sources */,
 				E8AB54ED24110F070051D9A2 /* main.cpp in Sources */,
 				E8AB54D924110F070051D9A2 /* log.cpp in Sources */,
+				E8EE4670242360F30074DC2C /* Request.cpp in Sources */,
 				E85AB669241539CC00BE9F0A /* UserCertsRequestHandler.cpp in Sources */,
+				E8D0ABC72433C50D00A6FE82 /* crypto.cpp in Sources */,
 				E8AB54DC24110F070051D9A2 /* RequestHandler.cpp in Sources */,
 				E89B23D02412848100D800E0 /* InfoRequestHandler.cpp in Sources */,
 				E8AB54DA24110F070051D9A2 /* util.cpp in Sources */,
@@ -284,9 +369,13 @@
 				E85AB66A24166DFB00BE9F0A /* comm.cpp in Sources */,
 				E8AB54E424110F070051D9A2 /* CardFactory.cpp in Sources */,
 				E89B23CD24114FBC00D800E0 /* native.cpp in Sources */,
+				E8EE466A242259580074DC2C /* CertChainRequestHandler.cpp in Sources */,
+				E84BAFE824477C7000D6A178 /* setup.cpp in Sources */,
 				E8AB54E724110F070051D9A2 /* ReaderList.cpp in Sources */,
 				E8AB54EC24110F070051D9A2 /* VersionRequestHandler.cpp in Sources */,
 				E8AB54E824110F070051D9A2 /* asn1.cpp in Sources */,
+				E8A12CE92465C53F00F6C910 /* test.cpp in Sources */,
+				E8EE466D24235D6A0074DC2C /* SignRequestHandler.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -406,11 +495,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LIBRARY = "libc++";
+				CODE_SIGN_ENTITLEMENTS = eIDLink.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEPLOYMENT_LOCATION = YES;
 				DEPLOYMENT_POSTPROCESSING = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = EU27N85PBZ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -422,11 +512,13 @@
 					3P/boost/include,
 					3P/openssl/include,
 				);
-				INSTALL_PATH = /Library/eIDLink;
+				INSTALL_PATH = /Applications;
+				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_BUNDLE_IDENTIFIER = be.bosa.eidlink;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				STRIP_INSTALLED_PRODUCT = NO;
 			};
 			name = Debug;
 		};
@@ -434,11 +526,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LIBRARY = "libc++";
+				CODE_SIGN_ENTITLEMENTS = eIDLink.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEPLOYMENT_LOCATION = YES;
 				DEPLOYMENT_POSTPROCESSING = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = EU27N85PBZ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_PREPROCESSOR_DEFINITIONS = "LOG_INFO=1";
@@ -446,11 +539,13 @@
 					3P/boost/include,
 					3P/openssl/include,
 				);
-				INSTALL_PATH = /Library/eIDLink;
+				INSTALL_PATH = /Applications;
+				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_BUNDLE_IDENTIFIER = be.bosa.eidlink;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				STRIP_INSTALLED_PRODUCT = YES;
 			};
 			name = Release;
 		};

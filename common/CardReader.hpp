@@ -26,8 +26,6 @@ public:
    CardReader(){};
    virtual ~CardReader(){};
    typedef std::shared_ptr <CardReader> Ptr;
-   virtual int open() = 0;
-   virtual int close() = 0;
    virtual int connect() = 0;
    virtual int disconnect() = 0;
    virtual bool isPinPad() = 0;

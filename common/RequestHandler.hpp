@@ -2,6 +2,8 @@
 #define __REQUEST_HANDLER__
 
 #include <iostream>
+#include <memory>
+#include <boost/property_tree/ptree.hpp>
 
 class RequestHandler
 {
@@ -14,6 +16,7 @@ public:
    static std::shared_ptr<RequestHandler> createRequestHandler(std::shared_ptr <std::stringstream> ssRequest);
 protected:
    std::shared_ptr <std::stringstream> ssRequest;
+   void post_process(boost::property_tree::ptree &response);
 };
 
-#endif //__HANDLE_REQUEST_H
+#endif //__REQUEST_HANDLER__

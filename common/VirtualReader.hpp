@@ -4,7 +4,7 @@
 #include "CardReader.hpp"
 #include <vector>
 #include <memory>
-#ifdef WIN32
+#ifdef _WIN32
 #include "windows.h"
 #endif
 
@@ -16,8 +16,6 @@ public:
    virtual ~VirtualReader();
    typedef std::shared_ptr<VirtualReader> Ptr;
    static int listReaders(std::vector<CardReader::Ptr> &readers);
-   int open() override;
-   int close() override;
    int beginTransaction() override { return 0; };
    int endTransaction() override{ return 0; };
    int connect() override;

@@ -6,7 +6,7 @@
 #include <stdlib.h>
 
 // For Sleep() - usleep()
-#ifdef WIN32
+#ifdef _WIN32
 #include "windows.h"
 #else
 #include <unistd.h>
@@ -25,3 +25,4 @@ int base64encode_len(int len);
 int base64encode(const unsigned char *string, int len, unsigned char *encoded);
 
 #endif //
+

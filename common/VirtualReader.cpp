@@ -9,11 +9,11 @@
 #include "boost/property_tree/ini_parser.hpp"
 
 
-#ifndef WIN32
+#ifndef _WIN32
 #define lstrlen(s) strlen(s)   // non-Windows wintypes.h: LPTSTR == LPSTR == char*
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
 #include "windows.h"
 #endif
 
@@ -24,20 +24,6 @@ VirtualReader::VirtualReader()
 
 VirtualReader::~VirtualReader()
 {
-}
-
-#define WHERE "VirtualReader::open()"
-int VirtualReader::open()
-{
-   int ret = 0;
-   return (ret);
-};
-#undef WHERE
-
-
-int VirtualReader::close()
-{
-   return 0;
 }
 
 #define WHERE "VirtualReader::listReaders()"

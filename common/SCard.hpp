@@ -1,7 +1,7 @@
 #ifndef SCard_hpp
 #define SCard_hpp
 
-#ifndef WIN32
+#ifndef _WIN32
 #include <PCSC/wintypes.h>
 #include <PCSC/winscard.h>
 #else
@@ -50,8 +50,6 @@ public:
    virtual ~SCard(){};
    typedef std::shared_ptr<SCard> Ptr;
    static int listReaders(std::vector<CardReader::Ptr> &readers);
-   int open() override;
-   int close() override;
    int beginTransaction() override;
    int endTransaction() override;
    int connect() override;

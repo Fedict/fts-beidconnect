@@ -9,18 +9,19 @@
 #include "VersionRequestHandler.hpp"
 #include "general.h"
 #include <sstream>
+#include "log.hpp"
 
 using boost::property_tree::ptree;
 
 std::string VersionRequestHandler::process()
 {
-   std::stringstream response;
-   ptree pt;
+   ptree response;
       
-   pt.put("result", "OK");
-   pt.put("version", EIDLINK_VERSION);
+   response.put("result", "OK");
+   response.put("version", EIDLINK_VERSION);
 
-   boost::property_tree::write_json(response, pt, false);
-   
-   return response.str();
+   post_process(response);
+   std::stringstream streamResponse;
+   boost::property_tree::write_json(streamResponse, response, false);
+   return streamResponse.str();
 }

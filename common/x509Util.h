@@ -4,7 +4,7 @@
 
 #include "time.h"
 
-#ifdef WIN32
+#ifdef _WIN32
 #define snprintf _snprintf
 #else
 #define strnicmp strncasecmp
@@ -31,6 +31,7 @@ extern "C" {
 char* getCertSubjectName(unsigned char* cert, unsigned int l_cert);
 int isEndEntity(char* cert, unsigned int l_cert);
 unsigned int getKeyUsage(char* cert, unsigned int l_cert);
+unsigned int getRSAKeyLength(const char* cert, unsigned int l_cert);
 char* getValidUntil(char* cert, unsigned int l_cert);
 int isTimeBeforeNow (int len, char *p_atime);
 
