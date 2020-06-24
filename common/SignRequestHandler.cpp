@@ -193,7 +193,7 @@ std::string SignRequestHandler::process()
          response.put("result", "general_error");
          
          std::string report = str(boost::format("signPKCS1 returned 0x%0X") % lasterror);
-         response.put("report", "signPKCS1 returned 0X%0X");
+         response.put("report", report);
    }
    
    if (cert) {
