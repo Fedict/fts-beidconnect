@@ -1,0 +1,784 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		E8110A7B24AA1FC300283393 /* SafariExtensionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E868AAF124A3BC450076AA3D /* SafariExtensionViewController.m */; };
+		E8110A8024AB477B00283393 /* BOSA logo.png in Resources */ = {isa = PBXBuildFile; fileRef = E8110A7F24AB477B00283393 /* BOSA logo.png */; };
+		E822842824AFA79E002CFCBB /* README.TXT in Resources */ = {isa = PBXBuildFile; fileRef = E822842724AFA79E002CFCBB /* README.TXT */; };
+		E868AAD224A3BC430076AA3D /* SafariAppExtension.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = E868AAD124A3BC430076AA3D /* SafariAppExtension.entitlements */; };
+		E868AAD524A3BC430076AA3D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E868AAD424A3BC430076AA3D /* AppDelegate.m */; };
+		E868AAD824A3BC430076AA3D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E868AAD624A3BC430076AA3D /* Main.storyboard */; };
+		E868AADB24A3BC430076AA3D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E868AADA24A3BC430076AA3D /* ViewController.m */; };
+		E868AADD24A3BC450076AA3D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E868AADC24A3BC450076AA3D /* Assets.xcassets */; };
+		E868AAE024A3BC450076AA3D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E868AADF24A3BC450076AA3D /* main.m */; };
+		E868AAE624A3BC450076AA3D /* BOSA eID App Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E868AAE524A3BC450076AA3D /* BOSA eID App Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		E868AAEB24A3BC450076AA3D /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E868AAEA24A3BC450076AA3D /* Cocoa.framework */; };
+		E868AAEF24A3BC450076AA3D /* SafariExtensionHandler.mm in Sources */ = {isa = PBXBuildFile; fileRef = E868AAEE24A3BC450076AA3D /* SafariExtensionHandler.mm */; };
+		E868AAF524A3BC450076AA3D /* SafariExtensionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E868AAF324A3BC450076AA3D /* SafariExtensionViewController.xib */; };
+		E868AAF824A3BC450076AA3D /* content.js in Resources */ = {isa = PBXBuildFile; fileRef = E868AAF724A3BC450076AA3D /* content.js */; };
+		E868AB3D24A3D1CB0076AA3D /* log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB0924A3D1CB0076AA3D /* log.cpp */; };
+		E868AB3E24A3D1CB0076AA3D /* log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB0924A3D1CB0076AA3D /* log.cpp */; };
+		E868AB3F24A3D1CB0076AA3D /* SignRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB0A24A3D1CB0076AA3D /* SignRequestHandler.cpp */; };
+		E868AB4024A3D1CB0076AA3D /* SignRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB0A24A3D1CB0076AA3D /* SignRequestHandler.cpp */; };
+		E868AB4124A3D1CB0076AA3D /* util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB0B24A3D1CB0076AA3D /* util.cpp */; };
+		E868AB4224A3D1CB0076AA3D /* util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB0B24A3D1CB0076AA3D /* util.cpp */; };
+		E868AB4324A3D1CB0076AA3D /* RequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB1024A3D1CB0076AA3D /* RequestHandler.cpp */; };
+		E868AB4424A3D1CB0076AA3D /* RequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB1024A3D1CB0076AA3D /* RequestHandler.cpp */; };
+		E868AB4524A3D1CB0076AA3D /* VirtualReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB1124A3D1CB0076AA3D /* VirtualReader.cpp */; };
+		E868AB4624A3D1CB0076AA3D /* VirtualReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB1124A3D1CB0076AA3D /* VirtualReader.cpp */; };
+		E868AB4724A3D1CB0076AA3D /* BEIDCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB1224A3D1CB0076AA3D /* BEIDCard.cpp */; };
+		E868AB4824A3D1CB0076AA3D /* BEIDCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB1224A3D1CB0076AA3D /* BEIDCard.cpp */; };
+		E868AB4924A3D1CB0076AA3D /* Request.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB1724A3D1CB0076AA3D /* Request.cpp */; };
+		E868AB4A24A3D1CB0076AA3D /* Request.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB1724A3D1CB0076AA3D /* Request.cpp */; };
+		E868AB4D24A3D1CB0076AA3D /* setup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB1B24A3D1CB0076AA3D /* setup.cpp */; };
+		E868AB4E24A3D1CB0076AA3D /* setup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB1B24A3D1CB0076AA3D /* setup.cpp */; };
+		E868AB4F24A3D1CB0076AA3D /* x509Util.c in Sources */ = {isa = PBXBuildFile; fileRef = E868AB1E24A3D1CB0076AA3D /* x509Util.c */; };
+		E868AB5024A3D1CB0076AA3D /* x509Util.c in Sources */ = {isa = PBXBuildFile; fileRef = E868AB1E24A3D1CB0076AA3D /* x509Util.c */; };
+		E868AB5124A3D1CB0076AA3D /* native.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB2224A3D1CB0076AA3D /* native.cpp */; };
+		E868AB5224A3D1CB0076AA3D /* native.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB2224A3D1CB0076AA3D /* native.cpp */; };
+		E868AB5324A3D1CB0076AA3D /* UserCertsRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB2324A3D1CB0076AA3D /* UserCertsRequestHandler.cpp */; };
+		E868AB5424A3D1CB0076AA3D /* UserCertsRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB2324A3D1CB0076AA3D /* UserCertsRequestHandler.cpp */; };
+		E868AB5524A3D1CB0076AA3D /* InfoRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB2424A3D1CB0076AA3D /* InfoRequestHandler.cpp */; };
+		E868AB5624A3D1CB0076AA3D /* InfoRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB2424A3D1CB0076AA3D /* InfoRequestHandler.cpp */; };
+		E868AB5724A3D1CB0076AA3D /* CardReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB2624A3D1CB0076AA3D /* CardReader.cpp */; };
+		E868AB5824A3D1CB0076AA3D /* CardReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB2624A3D1CB0076AA3D /* CardReader.cpp */; };
+		E868AB5924A3D1CB0076AA3D /* CardFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB2924A3D1CB0076AA3D /* CardFactory.cpp */; };
+		E868AB5A24A3D1CB0076AA3D /* CardFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB2924A3D1CB0076AA3D /* CardFactory.cpp */; };
+		E868AB5B24A3D1CB0076AA3D /* SCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB2A24A3D1CB0076AA3D /* SCard.cpp */; };
+		E868AB5C24A3D1CB0076AA3D /* SCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB2A24A3D1CB0076AA3D /* SCard.cpp */; };
+		E868AB5D24A3D1CB0076AA3D /* comm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB2C24A3D1CB0076AA3D /* comm.cpp */; };
+		E868AB5E24A3D1CB0076AA3D /* comm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB2C24A3D1CB0076AA3D /* comm.cpp */; };
+		E868AB5F24A3D1CB0076AA3D /* ReaderList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB2D24A3D1CB0076AA3D /* ReaderList.cpp */; };
+		E868AB6024A3D1CB0076AA3D /* ReaderList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB2D24A3D1CB0076AA3D /* ReaderList.cpp */; };
+		E868AB6124A3D1CB0076AA3D /* crypto.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB2E24A3D1CB0076AA3D /* crypto.cpp */; };
+		E868AB6224A3D1CB0076AA3D /* crypto.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB2E24A3D1CB0076AA3D /* crypto.cpp */; };
+		E868AB6324A3D1CB0076AA3D /* asn1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB2F24A3D1CB0076AA3D /* asn1.cpp */; };
+		E868AB6424A3D1CB0076AA3D /* asn1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB2F24A3D1CB0076AA3D /* asn1.cpp */; };
+		E868AB6524A3D1CB0076AA3D /* hash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB3024A3D1CB0076AA3D /* hash.cpp */; };
+		E868AB6624A3D1CB0076AA3D /* hash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB3024A3D1CB0076AA3D /* hash.cpp */; };
+		E868AB6724A3D1CB0076AA3D /* CertChainRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB3124A3D1CB0076AA3D /* CertChainRequestHandler.cpp */; };
+		E868AB6824A3D1CB0076AA3D /* CertChainRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB3124A3D1CB0076AA3D /* CertChainRequestHandler.cpp */; };
+		E868AB6924A3D1CB0076AA3D /* Card.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB3224A3D1CB0076AA3D /* Card.cpp */; };
+		E868AB6A24A3D1CB0076AA3D /* Card.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB3224A3D1CB0076AA3D /* Card.cpp */; };
+		E868AB6B24A3D1CB0076AA3D /* VirtualCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB3524A3D1CB0076AA3D /* VirtualCard.cpp */; };
+		E868AB6C24A3D1CB0076AA3D /* VirtualCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB3524A3D1CB0076AA3D /* VirtualCard.cpp */; };
+		E868AB6D24A3D1CB0076AA3D /* VersionRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB3624A3D1CB0076AA3D /* VersionRequestHandler.cpp */; };
+		E868AB6E24A3D1CB0076AA3D /* VersionRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB3624A3D1CB0076AA3D /* VersionRequestHandler.cpp */; };
+		E868AB7624A3D80B0076AA3D /* PCSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E868AB7524A3D80B0076AA3D /* PCSC.framework */; };
+		E868AB7724A3D8160076AA3D /* PCSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E868AB7524A3D80B0076AA3D /* PCSC.framework */; };
+		E868AB7924A3D8690076AA3D /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E868AB7824A3D8680076AA3D /* SafariServices.framework */; };
+		E89C811F24A3E05600564BA6 /* page.js in Resources */ = {isa = PBXBuildFile; fileRef = E89C811E24A3E05600564BA6 /* page.js */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		E868AAE724A3BC450076AA3D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E868AAC624A3BC430076AA3D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E868AAE424A3BC450076AA3D;
+			remoteInfo = "SafariAppExtension Extension";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		E868AB0124A3BC450076AA3D /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				E868AAE624A3BC450076AA3D /* BOSA eID App Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		E8110A7F24AB477B00283393 /* BOSA logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "BOSA logo.png"; sourceTree = "<group>"; };
+		E822842724AFA79E002CFCBB /* README.TXT */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.TXT; sourceTree = "<group>"; };
+		E868AACE24A3BC430076AA3D /* Bosa eID App Extension.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Bosa eID App Extension.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E868AAD124A3BC430076AA3D /* SafariAppExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SafariAppExtension.entitlements; sourceTree = "<group>"; };
+		E868AAD324A3BC430076AA3D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		E868AAD424A3BC430076AA3D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		E868AAD724A3BC430076AA3D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		E868AAD924A3BC430076AA3D /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		E868AADA24A3BC430076AA3D /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		E868AADC24A3BC450076AA3D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E868AADE24A3BC450076AA3D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E868AADF24A3BC450076AA3D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		E868AAE524A3BC450076AA3D /* BOSA eID App Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "BOSA eID App Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E868AAEA24A3BC450076AA3D /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		E868AAED24A3BC450076AA3D /* SafariExtensionHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SafariExtensionHandler.h; sourceTree = "<group>"; };
+		E868AAEE24A3BC450076AA3D /* SafariExtensionHandler.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SafariExtensionHandler.mm; sourceTree = "<group>"; };
+		E868AAF024A3BC450076AA3D /* SafariExtensionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SafariExtensionViewController.h; sourceTree = "<group>"; };
+		E868AAF124A3BC450076AA3D /* SafariExtensionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SafariExtensionViewController.m; sourceTree = "<group>"; };
+		E868AAF424A3BC450076AA3D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/SafariExtensionViewController.xib; sourceTree = "<group>"; };
+		E868AAF624A3BC450076AA3D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E868AAF724A3BC450076AA3D /* content.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = content.js; sourceTree = "<group>"; };
+		E868AAF924A3BC450076AA3D /* ToolbarItemIcon.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = ToolbarItemIcon.pdf; sourceTree = "<group>"; };
+		E868AAFB24A3BC450076AA3D /* SafariAppExtension_Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SafariAppExtension_Extension.entitlements; sourceTree = "<group>"; };
+		E868AB0824A3D1CB0076AA3D /* asn1.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = asn1.hpp; sourceTree = "<group>"; };
+		E868AB0924A3D1CB0076AA3D /* log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = log.cpp; sourceTree = "<group>"; };
+		E868AB0A24A3D1CB0076AA3D /* SignRequestHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SignRequestHandler.cpp; sourceTree = "<group>"; };
+		E868AB0B24A3D1CB0076AA3D /* util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = util.cpp; sourceTree = "<group>"; };
+		E868AB0C24A3D1CB0076AA3D /* Card.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Card.hpp; sourceTree = "<group>"; };
+		E868AB0D24A3D1CB0076AA3D /* VirtualCard.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = VirtualCard.hpp; sourceTree = "<group>"; };
+		E868AB0E24A3D1CB0076AA3D /* VersionRequestHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = VersionRequestHandler.hpp; sourceTree = "<group>"; };
+		E868AB0F24A3D1CB0076AA3D /* main.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = main.hpp; sourceTree = "<group>"; };
+		E868AB1024A3D1CB0076AA3D /* RequestHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RequestHandler.cpp; sourceTree = "<group>"; };
+		E868AB1124A3D1CB0076AA3D /* VirtualReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VirtualReader.cpp; sourceTree = "<group>"; };
+		E868AB1224A3D1CB0076AA3D /* BEIDCard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BEIDCard.cpp; sourceTree = "<group>"; };
+		E868AB1324A3D1CB0076AA3D /* native.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = native.hpp; sourceTree = "<group>"; };
+		E868AB1424A3D1CB0076AA3D /* UserCertsRequestHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = UserCertsRequestHandler.hpp; sourceTree = "<group>"; };
+		E868AB1524A3D1CB0076AA3D /* InfoRequestHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = InfoRequestHandler.hpp; sourceTree = "<group>"; };
+		E868AB1624A3D1CB0076AA3D /* general.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = general.h; sourceTree = "<group>"; };
+		E868AB1724A3D1CB0076AA3D /* Request.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Request.cpp; sourceTree = "<group>"; };
+		E868AB1824A3D1CB0076AA3D /* CardReader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CardReader.hpp; sourceTree = "<group>"; };
+		E868AB1A24A3D1CB0076AA3D /* CardFactory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CardFactory.hpp; sourceTree = "<group>"; };
+		E868AB1B24A3D1CB0076AA3D /* setup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = setup.cpp; sourceTree = "<group>"; };
+		E868AB1C24A3D1CB0076AA3D /* SCard.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SCard.hpp; sourceTree = "<group>"; };
+		E868AB1D24A3D1CB0076AA3D /* CardErrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardErrors.h; sourceTree = "<group>"; };
+		E868AB1E24A3D1CB0076AA3D /* x509Util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = x509Util.c; sourceTree = "<group>"; };
+		E868AB1F24A3D1CB0076AA3D /* ReaderList.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ReaderList.hpp; sourceTree = "<group>"; };
+		E868AB2024A3D1CB0076AA3D /* comm.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = comm.hpp; sourceTree = "<group>"; };
+		E868AB2124A3D1CB0076AA3D /* crypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypto.h; sourceTree = "<group>"; };
+		E868AB2224A3D1CB0076AA3D /* native.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = native.cpp; sourceTree = "<group>"; };
+		E868AB2324A3D1CB0076AA3D /* UserCertsRequestHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UserCertsRequestHandler.cpp; sourceTree = "<group>"; };
+		E868AB2424A3D1CB0076AA3D /* InfoRequestHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InfoRequestHandler.cpp; sourceTree = "<group>"; };
+		E868AB2524A3D1CB0076AA3D /* Request.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Request.hpp; sourceTree = "<group>"; };
+		E868AB2624A3D1CB0076AA3D /* CardReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CardReader.cpp; sourceTree = "<group>"; };
+		E868AB2824A3D1CB0076AA3D /* setup.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = setup.hpp; sourceTree = "<group>"; };
+		E868AB2924A3D1CB0076AA3D /* CardFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CardFactory.cpp; sourceTree = "<group>"; };
+		E868AB2A24A3D1CB0076AA3D /* SCard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SCard.cpp; sourceTree = "<group>"; };
+		E868AB2B24A3D1CB0076AA3D /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = util.h; sourceTree = "<group>"; };
+		E868AB2C24A3D1CB0076AA3D /* comm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = comm.cpp; sourceTree = "<group>"; };
+		E868AB2D24A3D1CB0076AA3D /* ReaderList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ReaderList.cpp; sourceTree = "<group>"; };
+		E868AB2E24A3D1CB0076AA3D /* crypto.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = crypto.cpp; sourceTree = "<group>"; };
+		E868AB2F24A3D1CB0076AA3D /* asn1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = asn1.cpp; sourceTree = "<group>"; };
+		E868AB3024A3D1CB0076AA3D /* hash.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = hash.cpp; sourceTree = "<group>"; };
+		E868AB3124A3D1CB0076AA3D /* CertChainRequestHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CertChainRequestHandler.cpp; sourceTree = "<group>"; };
+		E868AB3224A3D1CB0076AA3D /* Card.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Card.cpp; sourceTree = "<group>"; };
+		E868AB3324A3D1CB0076AA3D /* SignRequestHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SignRequestHandler.hpp; sourceTree = "<group>"; };
+		E868AB3424A3D1CB0076AA3D /* log.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = log.hpp; sourceTree = "<group>"; };
+		E868AB3524A3D1CB0076AA3D /* VirtualCard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VirtualCard.cpp; sourceTree = "<group>"; };
+		E868AB3624A3D1CB0076AA3D /* VersionRequestHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VersionRequestHandler.cpp; sourceTree = "<group>"; };
+		E868AB3824A3D1CB0076AA3D /* VirtualReader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = VirtualReader.hpp; sourceTree = "<group>"; };
+		E868AB3924A3D1CB0076AA3D /* hash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hash.h; sourceTree = "<group>"; };
+		E868AB3A24A3D1CB0076AA3D /* RequestHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RequestHandler.hpp; sourceTree = "<group>"; };
+		E868AB3B24A3D1CB0076AA3D /* x509Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = x509Util.h; sourceTree = "<group>"; };
+		E868AB3C24A3D1CB0076AA3D /* BEIDCard.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BEIDCard.hpp; sourceTree = "<group>"; };
+		E868AB7524A3D80B0076AA3D /* PCSC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PCSC.framework; path = System/Library/Frameworks/PCSC.framework; sourceTree = SDKROOT; };
+		E868AB7824A3D8680076AA3D /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
+		E89C811E24A3E05600564BA6 /* page.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = page.js; sourceTree = "<group>"; };
+		E89C812024A3E3AC00564BA6 /* CertChainRequestHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CertChainRequestHandler.hpp; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E868AACB24A3BC430076AA3D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E868AB7924A3D8690076AA3D /* SafariServices.framework in Frameworks */,
+				E868AB7624A3D80B0076AA3D /* PCSC.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E868AAE224A3BC450076AA3D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E868AB7724A3D8160076AA3D /* PCSC.framework in Frameworks */,
+				E868AAEB24A3BC450076AA3D /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		E868AAC524A3BC430076AA3D = {
+			isa = PBXGroup;
+			children = (
+				E868AB0624A3D1CB0076AA3D /* common */,
+				E868AAD024A3BC430076AA3D /* SafariAppExtension */,
+				E868AAEC24A3BC450076AA3D /* SafariAppExtension Extension */,
+				E868AAE924A3BC450076AA3D /* Frameworks */,
+				E868AACF24A3BC430076AA3D /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		E868AACF24A3BC430076AA3D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E868AACE24A3BC430076AA3D /* Bosa eID App Extension.app */,
+				E868AAE524A3BC450076AA3D /* BOSA eID App Extension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E868AAD024A3BC430076AA3D /* SafariAppExtension */ = {
+			isa = PBXGroup;
+			children = (
+				E822842724AFA79E002CFCBB /* README.TXT */,
+				E8110A7F24AB477B00283393 /* BOSA logo.png */,
+				E868AAD124A3BC430076AA3D /* SafariAppExtension.entitlements */,
+				E868AAD324A3BC430076AA3D /* AppDelegate.h */,
+				E868AAD424A3BC430076AA3D /* AppDelegate.m */,
+				E868AAD624A3BC430076AA3D /* Main.storyboard */,
+				E868AAD924A3BC430076AA3D /* ViewController.h */,
+				E868AADA24A3BC430076AA3D /* ViewController.m */,
+				E868AADC24A3BC450076AA3D /* Assets.xcassets */,
+				E868AADE24A3BC450076AA3D /* Info.plist */,
+				E868AADF24A3BC450076AA3D /* main.m */,
+			);
+			path = SafariAppExtension;
+			sourceTree = "<group>";
+		};
+		E868AAE924A3BC450076AA3D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E868AB7824A3D8680076AA3D /* SafariServices.framework */,
+				E868AB7524A3D80B0076AA3D /* PCSC.framework */,
+				E868AAEA24A3BC450076AA3D /* Cocoa.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E868AAEC24A3BC450076AA3D /* SafariAppExtension Extension */ = {
+			isa = PBXGroup;
+			children = (
+				E868AAED24A3BC450076AA3D /* SafariExtensionHandler.h */,
+				E868AAEE24A3BC450076AA3D /* SafariExtensionHandler.mm */,
+				E868AAF024A3BC450076AA3D /* SafariExtensionViewController.h */,
+				E868AAF124A3BC450076AA3D /* SafariExtensionViewController.m */,
+				E868AAF324A3BC450076AA3D /* SafariExtensionViewController.xib */,
+				E868AAF624A3BC450076AA3D /* Info.plist */,
+				E868AAF724A3BC450076AA3D /* content.js */,
+				E89C811E24A3E05600564BA6 /* page.js */,
+				E868AAF924A3BC450076AA3D /* ToolbarItemIcon.pdf */,
+				E868AAFB24A3BC450076AA3D /* SafariAppExtension_Extension.entitlements */,
+			);
+			path = "SafariAppExtension Extension";
+			sourceTree = "<group>";
+		};
+		E868AB0624A3D1CB0076AA3D /* common */ = {
+			isa = PBXGroup;
+			children = (
+				E868AB7424A3D57D0076AA3D /* CardLayer */,
+				E868AB7224A3D2610076AA3D /* RequestHandlers */,
+				E868AB0824A3D1CB0076AA3D /* asn1.hpp */,
+				E868AB2F24A3D1CB0076AA3D /* asn1.cpp */,
+				E868AB0924A3D1CB0076AA3D /* log.cpp */,
+				E868AB0F24A3D1CB0076AA3D /* main.hpp */,
+				E868AB1324A3D1CB0076AA3D /* native.hpp */,
+				E868AB2224A3D1CB0076AA3D /* native.cpp */,
+				E868AB1624A3D1CB0076AA3D /* general.h */,
+				E868AB1B24A3D1CB0076AA3D /* setup.cpp */,
+				E868AB2024A3D1CB0076AA3D /* comm.hpp */,
+				E868AB2C24A3D1CB0076AA3D /* comm.cpp */,
+				E868AB2124A3D1CB0076AA3D /* crypto.h */,
+				E868AB2E24A3D1CB0076AA3D /* crypto.cpp */,
+				E868AB2824A3D1CB0076AA3D /* setup.hpp */,
+				E868AB2B24A3D1CB0076AA3D /* util.h */,
+				E868AB0B24A3D1CB0076AA3D /* util.cpp */,
+				E868AB3924A3D1CB0076AA3D /* hash.h */,
+				E868AB3024A3D1CB0076AA3D /* hash.cpp */,
+				E868AB3424A3D1CB0076AA3D /* log.hpp */,
+				E868AB3B24A3D1CB0076AA3D /* x509Util.h */,
+				E868AB1E24A3D1CB0076AA3D /* x509Util.c */,
+			);
+			name = common;
+			path = ../common;
+			sourceTree = "<group>";
+		};
+		E868AB7224A3D2610076AA3D /* RequestHandlers */ = {
+			isa = PBXGroup;
+			children = (
+				E868AB1524A3D1CB0076AA3D /* InfoRequestHandler.hpp */,
+				E868AB2424A3D1CB0076AA3D /* InfoRequestHandler.cpp */,
+				E868AB0E24A3D1CB0076AA3D /* VersionRequestHandler.hpp */,
+				E868AB3624A3D1CB0076AA3D /* VersionRequestHandler.cpp */,
+				E868AB2324A3D1CB0076AA3D /* UserCertsRequestHandler.cpp */,
+				E868AB1424A3D1CB0076AA3D /* UserCertsRequestHandler.hpp */,
+				E868AB3124A3D1CB0076AA3D /* CertChainRequestHandler.cpp */,
+				E89C812024A3E3AC00564BA6 /* CertChainRequestHandler.hpp */,
+				E868AB3324A3D1CB0076AA3D /* SignRequestHandler.hpp */,
+				E868AB0A24A3D1CB0076AA3D /* SignRequestHandler.cpp */,
+				E868AB1024A3D1CB0076AA3D /* RequestHandler.cpp */,
+				E868AB3A24A3D1CB0076AA3D /* RequestHandler.hpp */,
+				E868AB2524A3D1CB0076AA3D /* Request.hpp */,
+				E868AB1724A3D1CB0076AA3D /* Request.cpp */,
+			);
+			name = RequestHandlers;
+			sourceTree = "<group>";
+		};
+		E868AB7424A3D57D0076AA3D /* CardLayer */ = {
+			isa = PBXGroup;
+			children = (
+				E868AB0C24A3D1CB0076AA3D /* Card.hpp */,
+				E868AB1224A3D1CB0076AA3D /* BEIDCard.cpp */,
+				E868AB1824A3D1CB0076AA3D /* CardReader.hpp */,
+				E868AB1A24A3D1CB0076AA3D /* CardFactory.hpp */,
+				E868AB1C24A3D1CB0076AA3D /* SCard.hpp */,
+				E868AB1D24A3D1CB0076AA3D /* CardErrors.h */,
+				E868AB1F24A3D1CB0076AA3D /* ReaderList.hpp */,
+				E868AB2624A3D1CB0076AA3D /* CardReader.cpp */,
+				E868AB2924A3D1CB0076AA3D /* CardFactory.cpp */,
+				E868AB2A24A3D1CB0076AA3D /* SCard.cpp */,
+				E868AB2D24A3D1CB0076AA3D /* ReaderList.cpp */,
+				E868AB3224A3D1CB0076AA3D /* Card.cpp */,
+				E868AB0D24A3D1CB0076AA3D /* VirtualCard.hpp */,
+				E868AB3524A3D1CB0076AA3D /* VirtualCard.cpp */,
+				E868AB1124A3D1CB0076AA3D /* VirtualReader.cpp */,
+				E868AB3824A3D1CB0076AA3D /* VirtualReader.hpp */,
+				E868AB3C24A3D1CB0076AA3D /* BEIDCard.hpp */,
+			);
+			name = CardLayer;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E868AACD24A3BC430076AA3D /* BOSA eID App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E868AB0224A3BC450076AA3D /* Build configuration list for PBXNativeTarget "BOSA eID App" */;
+			buildPhases = (
+				E868AACA24A3BC430076AA3D /* Sources */,
+				E868AACB24A3BC430076AA3D /* Frameworks */,
+				E868AACC24A3BC430076AA3D /* Resources */,
+				E868AB0124A3BC450076AA3D /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E868AAE824A3BC450076AA3D /* PBXTargetDependency */,
+			);
+			name = "BOSA eID App";
+			productName = SafariAppExtension;
+			productReference = E868AACE24A3BC430076AA3D /* Bosa eID App Extension.app */;
+			productType = "com.apple.product-type.application";
+		};
+		E868AAE424A3BC450076AA3D /* BOSA eID App Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E868AAFE24A3BC450076AA3D /* Build configuration list for PBXNativeTarget "BOSA eID App Extension" */;
+			buildPhases = (
+				E868AAE124A3BC450076AA3D /* Sources */,
+				E868AAE224A3BC450076AA3D /* Frameworks */,
+				E868AAE324A3BC450076AA3D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "BOSA eID App Extension";
+			productName = "SafariAppExtension Extension";
+			productReference = E868AAE524A3BC450076AA3D /* BOSA eID App Extension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E868AAC624A3BC430076AA3D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1150;
+				ORGANIZATIONNAME = Bosa;
+				TargetAttributes = {
+					E868AACD24A3BC430076AA3D = {
+						CreatedOnToolsVersion = 11.5;
+					};
+					E868AAE424A3BC450076AA3D = {
+						CreatedOnToolsVersion = 11.5;
+					};
+				};
+			};
+			buildConfigurationList = E868AAC924A3BC430076AA3D /* Build configuration list for PBXProject "BOSA eID App" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = E868AAC524A3BC430076AA3D;
+			productRefGroup = E868AACF24A3BC430076AA3D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E868AACD24A3BC430076AA3D /* BOSA eID App */,
+				E868AAE424A3BC450076AA3D /* BOSA eID App Extension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E868AACC24A3BC430076AA3D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E868AAD224A3BC430076AA3D /* SafariAppExtension.entitlements in Resources */,
+				E868AADD24A3BC450076AA3D /* Assets.xcassets in Resources */,
+				E8110A8024AB477B00283393 /* BOSA logo.png in Resources */,
+				E868AAD824A3BC430076AA3D /* Main.storyboard in Resources */,
+				E822842824AFA79E002CFCBB /* README.TXT in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E868AAE324A3BC450076AA3D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E868AAF524A3BC450076AA3D /* SafariExtensionViewController.xib in Resources */,
+				E868AAF824A3BC450076AA3D /* content.js in Resources */,
+				E89C811F24A3E05600564BA6 /* page.js in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E868AACA24A3BC430076AA3D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E868AB4324A3D1CB0076AA3D /* RequestHandler.cpp in Sources */,
+				E868AB6724A3D1CB0076AA3D /* CertChainRequestHandler.cpp in Sources */,
+				E868AB4924A3D1CB0076AA3D /* Request.cpp in Sources */,
+				E868AB5F24A3D1CB0076AA3D /* ReaderList.cpp in Sources */,
+				E868AADB24A3BC430076AA3D /* ViewController.m in Sources */,
+				E868AAE024A3BC450076AA3D /* main.m in Sources */,
+				E868AB6524A3D1CB0076AA3D /* hash.cpp in Sources */,
+				E868AB5924A3D1CB0076AA3D /* CardFactory.cpp in Sources */,
+				E868AB6124A3D1CB0076AA3D /* crypto.cpp in Sources */,
+				E868AB4F24A3D1CB0076AA3D /* x509Util.c in Sources */,
+				E868AB3D24A3D1CB0076AA3D /* log.cpp in Sources */,
+				E868AB4524A3D1CB0076AA3D /* VirtualReader.cpp in Sources */,
+				E868AB4D24A3D1CB0076AA3D /* setup.cpp in Sources */,
+				E868AB5B24A3D1CB0076AA3D /* SCard.cpp in Sources */,
+				E868AB4724A3D1CB0076AA3D /* BEIDCard.cpp in Sources */,
+				E868AB6B24A3D1CB0076AA3D /* VirtualCard.cpp in Sources */,
+				E868AB5724A3D1CB0076AA3D /* CardReader.cpp in Sources */,
+				E868AB5D24A3D1CB0076AA3D /* comm.cpp in Sources */,
+				E868AB6D24A3D1CB0076AA3D /* VersionRequestHandler.cpp in Sources */,
+				E868AB5524A3D1CB0076AA3D /* InfoRequestHandler.cpp in Sources */,
+				E868AAD524A3BC430076AA3D /* AppDelegate.m in Sources */,
+				E868AB6324A3D1CB0076AA3D /* asn1.cpp in Sources */,
+				E868AB3F24A3D1CB0076AA3D /* SignRequestHandler.cpp in Sources */,
+				E868AB5124A3D1CB0076AA3D /* native.cpp in Sources */,
+				E868AB4124A3D1CB0076AA3D /* util.cpp in Sources */,
+				E868AB5324A3D1CB0076AA3D /* UserCertsRequestHandler.cpp in Sources */,
+				E868AB6924A3D1CB0076AA3D /* Card.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E868AAE124A3BC450076AA3D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E868AB4A24A3D1CB0076AA3D /* Request.cpp in Sources */,
+				E868AB3E24A3D1CB0076AA3D /* log.cpp in Sources */,
+				E868AB5424A3D1CB0076AA3D /* UserCertsRequestHandler.cpp in Sources */,
+				E868AB6A24A3D1CB0076AA3D /* Card.cpp in Sources */,
+				E8110A7B24AA1FC300283393 /* SafariExtensionViewController.m in Sources */,
+				E868AB4624A3D1CB0076AA3D /* VirtualReader.cpp in Sources */,
+				E868AB6E24A3D1CB0076AA3D /* VersionRequestHandler.cpp in Sources */,
+				E868AB4824A3D1CB0076AA3D /* BEIDCard.cpp in Sources */,
+				E868AAEF24A3BC450076AA3D /* SafariExtensionHandler.mm in Sources */,
+				E868AB6C24A3D1CB0076AA3D /* VirtualCard.cpp in Sources */,
+				E868AB4224A3D1CB0076AA3D /* util.cpp in Sources */,
+				E868AB4424A3D1CB0076AA3D /* RequestHandler.cpp in Sources */,
+				E868AB4024A3D1CB0076AA3D /* SignRequestHandler.cpp in Sources */,
+				E868AB5A24A3D1CB0076AA3D /* CardFactory.cpp in Sources */,
+				E868AB5624A3D1CB0076AA3D /* InfoRequestHandler.cpp in Sources */,
+				E868AB5E24A3D1CB0076AA3D /* comm.cpp in Sources */,
+				E868AB5C24A3D1CB0076AA3D /* SCard.cpp in Sources */,
+				E868AB5824A3D1CB0076AA3D /* CardReader.cpp in Sources */,
+				E868AB6224A3D1CB0076AA3D /* crypto.cpp in Sources */,
+				E868AB4E24A3D1CB0076AA3D /* setup.cpp in Sources */,
+				E868AB5024A3D1CB0076AA3D /* x509Util.c in Sources */,
+				E868AB6024A3D1CB0076AA3D /* ReaderList.cpp in Sources */,
+				E868AB6824A3D1CB0076AA3D /* CertChainRequestHandler.cpp in Sources */,
+				E868AB6424A3D1CB0076AA3D /* asn1.cpp in Sources */,
+				E868AB5224A3D1CB0076AA3D /* native.cpp in Sources */,
+				E868AB6624A3D1CB0076AA3D /* hash.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		E868AAE824A3BC450076AA3D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E868AAE424A3BC450076AA3D /* BOSA eID App Extension */;
+			targetProxy = E868AAE724A3BC450076AA3D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		E868AAD624A3BC430076AA3D /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E868AAD724A3BC430076AA3D /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		E868AAF324A3BC450076AA3D /* SafariExtensionViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E868AAF424A3BC450076AA3D /* Base */,
+			);
+			name = SafariExtensionViewController.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		E868AAFC24A3BC450076AA3D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		E868AAFD24A3BC450076AA3D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		E868AAFF24A3BC450076AA3D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "SafariAppExtension Extension/SafariAppExtension_Extension.entitlements";
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = EU27N85PBZ;
+				ENABLE_HARDENED_RUNTIME = YES;
+				HEADER_SEARCH_PATHS = ../3P/boost/include;
+				INFOPLIST_FILE = "SafariAppExtension Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MARKETING_VERSION = 1.2;
+				PRODUCT_BUNDLE_IDENTIFIER = "be.bosa.eidapp-extension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		E868AB0024A3BC450076AA3D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "SafariAppExtension Extension/SafariAppExtension_Extension.entitlements";
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = EU27N85PBZ;
+				ENABLE_HARDENED_RUNTIME = YES;
+				HEADER_SEARCH_PATHS = ../3P/boost/include;
+				INFOPLIST_FILE = "SafariAppExtension Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MARKETING_VERSION = 1.2;
+				PRODUCT_BUNDLE_IDENTIFIER = "be.bosa.eidapp-extension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		E868AB0324A3BC450076AA3D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = SafariAppExtension/SafariAppExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = EU27N85PBZ;
+				ENABLE_HARDENED_RUNTIME = YES;
+				HEADER_SEARCH_PATHS = ../3P/boost/include;
+				INFOPLIST_FILE = SafariAppExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MARKETING_VERSION = 1.2;
+				PRODUCT_BUNDLE_IDENTIFIER = be.bosa.eidapp;
+				PRODUCT_NAME = "Bosa eID App Extension";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+			};
+			name = Debug;
+		};
+		E868AB0424A3BC450076AA3D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = SafariAppExtension/SafariAppExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = EU27N85PBZ;
+				ENABLE_HARDENED_RUNTIME = YES;
+				HEADER_SEARCH_PATHS = ../3P/boost/include;
+				INFOPLIST_FILE = SafariAppExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MARKETING_VERSION = 1.2;
+				PRODUCT_BUNDLE_IDENTIFIER = be.bosa.eidapp;
+				PRODUCT_NAME = "Bosa eID App Extension";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E868AAC924A3BC430076AA3D /* Build configuration list for PBXProject "BOSA eID App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E868AAFC24A3BC450076AA3D /* Debug */,
+				E868AAFD24A3BC450076AA3D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E868AAFE24A3BC450076AA3D /* Build configuration list for PBXNativeTarget "BOSA eID App Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E868AAFF24A3BC450076AA3D /* Debug */,
+				E868AB0024A3BC450076AA3D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E868AB0224A3BC450076AA3D /* Build configuration list for PBXNativeTarget "BOSA eID App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E868AB0324A3BC450076AA3D /* Debug */,
+				E868AB0424A3BC450076AA3D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E868AAC624A3BC430076AA3D /* Project object */;
+}
