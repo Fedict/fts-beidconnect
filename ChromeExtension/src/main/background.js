@@ -1,10 +1,11 @@
 var NATIVE_HOST = "be.bosa.eidlink";
+var EXTENSION_ID = "pencgnkbgaekikmiahiaakjdgaibiipp";
 
 console.log("eIDLink event page activated");
 
 // When message is received from page send it to native
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-	if(sender.id !== chrome.runtime.id) {
+	if(sender.id !== EXTENSION_ID) {
 		console.log('Ignoring message not originating from our extension');
 		return;
 	}
@@ -17,7 +18,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
 // Send the message back to the originating tab
 function _reply(tab, msg) {
-	msg.src = "background.js";
+	msg.src = "EIDChromeExt.background";
 	msg.extensionVersion = chrome.runtime.getManifest().version;
 	chrome.tabs.sendMessage(tab, msg);
 }
@@ -34,7 +35,7 @@ function _forward(message) {
    //this will only copy simple objects,no functions whatsoever, doesn't matter if we filter out here
    var messageCopy = JSON.parse(JSON.stringify(message));
 
-   if (message['pin']) {
+   if (message.pin) {
       message.pin = "********";
    }
 	console.log("SEND " + tabid + ": " + JSON.stringify(message));
