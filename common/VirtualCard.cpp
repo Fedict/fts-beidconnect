@@ -239,6 +239,12 @@ cleanup:
    return (ret);
 }
 
+
+int VirtualCard::logoff()
+{
+   return 0;
+}
+
 int VirtualCard::sign(unsigned char* in, unsigned int l_in, int hashAlgo, unsigned char *out, unsigned int *l_out, int *sw)
 {
    int ret = 0;

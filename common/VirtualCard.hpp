@@ -22,6 +22,7 @@ class VirtualCard: public Card
       int readUserCertificates(int format, std::vector<std::vector<char>> &certificates) override;
       int selectKey(int type, unsigned char* cert = 0, int l_cert = 0) override;
       int logon(int l_pin, char *pin) override;
+      int logoff() override;
       int sign(unsigned char* in, unsigned int l_in, int hashAlgo, unsigned char *out, unsigned int *l_out, int *sw) override;
    
       int getFile(int fileType, int* l_out, unsigned char* p_out) override;
