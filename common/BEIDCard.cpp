@@ -613,6 +613,42 @@ cleanup:
 }
 #undef WHERE
 
+#define WHERE "BEIDCard::logoff()"
+int BEIDCard::logoff()
+{
+   int ret;
+   unsigned char recv[1024];
+   int recvlen = 1024;
+   unsigned char cmd[255];
+   int cmdlen;
+   int sw = 0;
+   
+   int begintransaction = 1;
+   
+   //begin transaction
+   ret = reader->beginTransaction();
+   if (ret) {
+      log_error("E: Logoff: Could not start transaction");
+      begintransaction = 0;
+      CLEANUP(E_SRC_START_TRANSACTION);
+   }
+   
+   cmdlen = sizeof(logoutApdu)-1;
+   memcpy(cmd, logoutApdu, cmdlen);
+   
+   ret = reader->apdu(cmd, cmdlen, recv, &recvlen, &sw);
+   if (ret) {
+      log_error("%s: reader->apdu(verify) returned 0x%0x", WHERE, ret);
+   }
+
+cleanup:
+   if (begintransaction)
+      reader->endTransaction();
+   
+   return (ret);
+}
+#undef WHERE
+
 #define WHERE "BEIDCard::sign()"
 int BEIDCard::sign(unsigned char* in, unsigned int l_in, int hashAlgo, unsigned char *out, unsigned int *l_out, int *sw)
 {
