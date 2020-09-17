@@ -19,7 +19,7 @@ using namespace std;
     \"language\":\"en\", \
     \"mac\":\"0123456789ABCDEF0123456789ABCDEF\", \
     \"correlationId\":\"07386ce7-f73e-4e99-dfc3-8d69b6adf33d\", \
-    \"origin\":\"https://eazysign-qa.zetes.be\" }"
+    \"origin\":\"https://sign.belgium.be\" }"
 
 
 int runTest(int argc, const char * argv[])
