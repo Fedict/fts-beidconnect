@@ -14,9 +14,14 @@ using namespace boost::property_tree;
 std::shared_ptr<RequestHandler> RequestHandler::createRequestHandler(std::shared_ptr <std::stringstream> ssRequest)
 {
    log_info(ssRequest->str().c_str());
-   //XXXXXX handle security related checks here
    boost::property_tree::ptree pt;
-   boost::property_tree::read_json(*ssRequest, pt);
+   
+   try {
+       boost::property_tree::read_json(*ssRequest, pt);
+   }
+   catch (std::exception &e) {
+       log_error("error: %s", e.what());
+   }
 
    std::shared_ptr<RequestHandler> requestHandler = nullptr;
    std::string operation = pt.get<std::string>("operation");
