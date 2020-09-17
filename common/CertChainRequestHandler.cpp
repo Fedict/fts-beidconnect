@@ -94,6 +94,13 @@ std::string CertChainRequestHandler::process()
          
          response.add_child("certificateChain", certificateChain);
          response.put("cardType", card->strType());
+         if (reader->isPinPad()) {
+            response.put("ReaderType", "pinpad");
+         }
+         else {
+            response.put("ReaderType", "standard");
+         }
+
          break;
       }
       
