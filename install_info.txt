@@ -1,0 +1,54 @@
+PerUser/PerMachine
+
+There's no such thing as "install privileges". 
+The only reason that a non-admin user cannot install a conventional application is that the installer typically 
+(a) wants to put the application files in Program Files which requires admin privilege; and 
+(b) wants to create a registry key in HKEY_LOCAL_MACHINE\Software and write to it. 
+
+[Still older installers may also want to write files into system32, make other global registry changes, and so on, but this is discouraged nowadays.]
+
+A per-user install happens without any administrator privilege. 
+The application files are put in the user's own space, e.g., inside the application data folder, 
+and the application's registry key is created in HKEY_CURRENT_USER\Software instead of HKLM. 
+This means the user can install the application themselves without the admin's assistance or permission. 
+[Actually an administrator can lock down the system in such a way that users can't install their own applications, but this isn't common outside of the stricter enterprise environments.]
+
+If an application only supports per-user installation, there is no way for the administrator to install the application on the user's behalf. 
+Each user has to run the installer themselves. 
+[Of course a skilled administrator could automate this so that, for example, the installer runs automatically when the user logs in.]
+
+Whether per-user installation makes things easier or harder on the IT staff depends entirely on the scenario. 
+However, many enterprise sysadmins are unhappy about per-user applications. 
+There are also scenarios (roaming profiles, for example) where per-user applications may either malfunction or cause other problems such as excessive network load or disk quota issues. 
+[And in some enterprises they will be locked out altogether due to software restriction policy, AppLocker, and/or third-party equivalents.]
+
+It is possible for an installer to support both per-machine and per-user installation, so this is usually the best option; 
+alternatively, like Google Chrome, you could provide separate per-user and a per-machine installers for the same application.
+
+If I understand correctly, Windows Installer makes it particularly easy to provide an installer that can do both per-machine and per-user installations. 
+Most .msi files that support per-user installations will also support per-machine installations via the ALLUSERS property. 
+I'm not sure whether the developer needs to do anything in particular to make this work.
+
+
+Vital
+=======
+https://docs.microsoft.com/en-us/windows/win32/msi/installation-context
+
+PerUser Install (cannot be used by sysadmins, they need a perMachine install)
+------------------------------------------------------------------------------
+=> both on win7 and win10: LocalAppDataFolder (wix) folder points to user/AppData/Local
+=> see with set in environment variable to LOCALAPPDATA
+=> native app eIDLink is same for all browsers (except Safari on Mac where all sources are directly part of the Safari App extension ObjC++ => C/C++
+
+Installation of eIDLink to .../user/AppData/Local/BOSA/eIDLink/
+
+- Internet Explorer ActiveX plugin
+  Installation of ActiveX to same folder: eIDLink.dll
+  In Link.cs activeX looks for Environment.SpecialFolder.LocalApplicationData/ to find native app eIDLink.exe
+
+- Chrome (also Edge based on Chromium, Opera), firefox
+  Json file points to native app eIdLink.exe
+
+- Safari Extension
+  Safari app extension contains all the sources from eIDLink -> common so no link to eIDLink app
+
