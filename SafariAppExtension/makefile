@@ -1,4 +1,4 @@
-VERSION = 1.4.0
+VERSION = 1.5.0
 APPIDENTIFIER = be.bosa.eidapp
 APPEXIDENTIFIER = be.bosa.eidapp-extension
 PROGRAM = Bosa\ eID\ App\ Extension
@@ -24,7 +24,8 @@ all: $(DISTDIR) $(DEPSDIR) $(DMGFILE)
 
 $(DISTDIR):
 	mkdir $(DISTDIR)
-	cp ./install/install_resources/README.html $(DISTDIR)/
+	cp $(INSTALL_RESOURCES)/README.html $(DISTDIR)/
+	cp $(INSTALL_RESOURCES)/LICENSE.html $(DISTDIR)/
 
 $(DEPSDIR) :
 	mkdir $(DEPSDIR)

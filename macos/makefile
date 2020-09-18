@@ -1,4 +1,4 @@
-VERSION = 1.4
+VERSION = 1.5
 IDENTIFIER = be.bosa.eidlink
 PROGRAM = eidlink
 DISTDIR = ./install/dist
@@ -26,7 +26,8 @@ all: $(DISTDIR) $(DEPSDIR) $(INSTALL_PRODUCT) $(UNINSTALL_PRODUCT) $(DMGFILE)
 
 $(DISTDIR):
 	mkdir $(DISTDIR)
-	cp ./install/install_resources/README.html $(DISTDIR)/
+	cp $(INSTALL_RESOURCES)/README.html $(DISTDIR)/
+	cp $(INSTALL_RESOURCES)/LICENSE.html $(DISTDIR)
 
 $(DEPSDIR) :
 	mkdir $(DEPSDIR)
