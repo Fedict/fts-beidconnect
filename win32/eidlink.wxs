@@ -5,7 +5,7 @@
 <?define Version = "$(var.VERSION)" ?>
 <?define UpgradeCode = "{edda0aaa-708b-4390-95c2-1e560314f26b}" ?>
 
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
   <Product Id="*" Name="$(var.Name)" Manufacturer="$(var.Manufacturer)" UpgradeCode="$(var.UpgradeCode)" Version="$(var.Version)" Codepage="1251" Language="1033">
 
@@ -27,7 +27,6 @@
     <Feature Id="ProductFeature" Title="$(var.Name)" Level="1" ConfigurableDirectory="INSTALLFOLDER">
       <ComponentGroupRef Id="ProductComponents" />
     </Feature>
-  
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="LocalAppDataFolder">
         <Directory Id="ROOTDIRECTORY" Name="$(var.Manufacturer)">
@@ -39,38 +38,73 @@
 
     <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
       <Component Id="eIDLink.exe" Guid="7A928767-2B74-4A5E-AE2A-0B8C80E282CD">
+         <File Id="eidlinkapp" Name="eIDLink.exe" Source="VS_2019\Release\eIDLink.exe" />
          <RegistryValue Root='HKCU' Key='Software\BOSA\eidlink'
-                     Name='(I like to use InstallFolder)'
-                     Value='(I like to use [INSTALLFOLDER]'
-                     Type='string'
-                     KeyPath='yes' />
-        <File Id="eidlinkapp" Name="eIDLink.exe" Source="VS_2019\Release\eIDLink.exe" />
-        <RemoveFile Id="ALLFILES" Name="*.*" On="both" />
-          <RemoveFolder Id='INSTALLFOLDER' On='uninstall' />
-          <RemoveFolder Id='RemoveRootDirectory' Directory='ROOTDIRECTORY' On='uninstall' />        
+                     Name="eidlink.exe" Value="1" Type="integer" KeyPath='yes' />
+         <RemoveFile Id="eidlinkexe" Name="*.*" On="both" />
+         <RemoveFolder Id='INSTALLFOLDER' On='uninstall' />
+         <RemoveFolder Id='RemoveRootDirectory' Directory='ROOTDIRECTORY' On='uninstall' />        
       </Component>
+
+      <Component Id="eidlink.dll" Guid="{93DAB2A6-1558-4DEC-9A6F-38557C975953}">
+         <File Id="eidlink.dll" Name="eidlink.dll" Source="..\ActiveX\eIDLinkX\Release\eidlink.dll" />
+         <RegistryValue Root='HKCU' Key='Software\BOSA\eidlink'
+                     Name='eidlink.dll' Value="1" Type="integer" KeyPath="yes" />
+         <RemoveFile Id="eidlinkdll" Name="*.*" On="both" />
+ 
+         <Class Id="{2FB7B773-F043-3DA3-92A8-C683DC72EDFB}" Context="InprocServer32" Description="eIDLinkX.IObjectSafetyImpl" ThreadingModel="both" ForeignServer="mscoree.dll">
+           <ProgId Id="eIDLinkX.IObjectSafetyImpl" Description="eIDLinkX.IObjectSafetyImpl" />
+         </Class>
+         <Class Id="{B08A638E-66C3-4586-823A-5B89A0301920}" Context="InprocServer32" Description="eIDLinkX.Link" ThreadingModel="both" ForeignServer="mscoree.dll">
+           <ProgId Id="be.bosa.eidlink" Description="eIDLinkX.Link" />
+         </Class>
+         <ProgId Id="Record" />
+         <RegistryValue Root="HKCU" Key="Software\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\Domains\belgium.be" Name="https" Value="2" Type="integer" />
+         <RegistryValue Root="HKCR" Key="CLSID\{2FB7B773-F043-3DA3-92A8-C683DC72EDFB}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" Action="write" />
+         <RegistryValue Root="HKCR" Key="CLSID\{2FB7B773-F043-3DA3-92A8-C683DC72EDFB}\InprocServer32\0.0.4.0" Name="Class" Value="eIDLinkX.IObjectSafetyImpl" Type="string" Action="write" />
+         <RegistryValue Root="HKCR" Key="CLSID\{2FB7B773-F043-3DA3-92A8-C683DC72EDFB}\InprocServer32\0.0.4.0" Name="Assembly" Value="eIDLink, Version=0.0.4.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
+         <RegistryValue Root="HKCR" Key="CLSID\{2FB7B773-F043-3DA3-92A8-C683DC72EDFB}\InprocServer32\0.0.4.0" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
+         <RegistryValue Root="HKCR" Key="CLSID\{2FB7B773-F043-3DA3-92A8-C683DC72EDFB}\InprocServer32\0.0.4.0" Name="CodeBase" Value="file:///[#eidlink.dll]" Type="string" Action="write" />
+         <RegistryValue Root="HKCR" Key="CLSID\{2FB7B773-F043-3DA3-92A8-C683DC72EDFB}\InprocServer32" Name="Class" Value="eIDLinkX.IObjectSafetyImpl" Type="string" Action="write" />
+         <RegistryValue Root="HKCR" Key="CLSID\{2FB7B773-F043-3DA3-92A8-C683DC72EDFB}\InprocServer32" Name="Assembly" Value="eIDLink, Version=0.0.4.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
+         <RegistryValue Root="HKCR" Key="CLSID\{2FB7B773-F043-3DA3-92A8-C683DC72EDFB}\InprocServer32" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
+         <RegistryValue Root="HKCR" Key="CLSID\{2FB7B773-F043-3DA3-92A8-C683DC72EDFB}\InprocServer32" Name="CodeBase" Value="file:///[#eidlink.dll]" Type="string" Action="write" />
+         <RegistryValue Root="HKCR" Key="CLSID\{B08A638E-66C3-4586-823A-5B89A0301920}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" Action="write" />
+         <RegistryValue Root="HKCR" Key="CLSID\{B08A638E-66C3-4586-823A-5B89A0301920}\InprocServer32\0.0.4.0" Name="Class" Value="eIDLinkX.Link" Type="string" Action="write" />
+         <RegistryValue Root="HKCR" Key="CLSID\{B08A638E-66C3-4586-823A-5B89A0301920}\InprocServer32\0.0.4.0" Name="Assembly" Value="eIDLink, Version=0.0.4.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
+         <RegistryValue Root="HKCR" Key="CLSID\{B08A638E-66C3-4586-823A-5B89A0301920}\InprocServer32\0.0.4.0" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
+         <RegistryValue Root="HKCR" Key="CLSID\{B08A638E-66C3-4586-823A-5B89A0301920}\InprocServer32\0.0.4.0" Name="CodeBase" Value="file:///[#eidlink.dll]" Type="string" Action="write" />
+         <RegistryValue Root="HKCR" Key="CLSID\{B08A638E-66C3-4586-823A-5B89A0301920}\InprocServer32" Name="Class" Value="eIDLinkX.Link" Type="string" Action="write" />
+         <RegistryValue Root="HKCR" Key="CLSID\{B08A638E-66C3-4586-823A-5B89A0301920}\InprocServer32" Name="Assembly" Value="eIDLink, Version=0.0.4.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
+         <RegistryValue Root="HKCR" Key="CLSID\{B08A638E-66C3-4586-823A-5B89A0301920}\InprocServer32" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
+         <RegistryValue Root="HKCR" Key="CLSID\{B08A638E-66C3-4586-823A-5B89A0301920}\InprocServer32" Name="CodeBase" Value="file:///[#eidlink.dll]" Type="string" Action="write" />
+         <RegistryValue Root="HKCR" Key="Record\{9BD7AE07-D27B-3707-B65B-3B04A169B13E}\0.0.4.0" Name="Class" Value="eIDLinkX.ObjectSafetyOptions" Type="string" Action="write" />
+         <RegistryValue Root="HKCR" Key="Record\{9BD7AE07-D27B-3707-B65B-3B04A169B13E}\0.0.4.0" Name="Assembly" Value="eIDLink, Version=0.0.4.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
+         <RegistryValue Root="HKCR" Key="Record\{9BD7AE07-D27B-3707-B65B-3B04A169B13E}\0.0.4.0" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
+         <RegistryValue Root="HKCR" Key="Record\{9BD7AE07-D27B-3707-B65B-3B04A169B13E}\0.0.4.0" Name="CodeBase" Value="file:///[#eidlink.dll]" Type="string" Action="write" />
+      </Component>
+      
       <Component Id="be.bosa.eidlink.json" Guid="1878E924-168F-4C3C-88B0-80A71C294E0C">
-        <RegistryKey Root="HKCU"
+         <RegistryKey Root="HKCU"
                      Key="Software\Google\Chrome\Extensions\pencgnkbgaekikmiahiaakjdgaibiipp"
                      ForceDeleteOnUninstall="yes" >
             <RegistryValue Type="string" Name="update_url" Value="https://clients2.google.com/service/update2/crx" />
-        </RegistryKey>
-        <RegistryKey Root="HKCU"
-                     Key="Software\Google\Chrome\NativeMessagingHosts\be.bosa.eidlink"
-                     
+         </RegistryKey>
+         <RegistryKey Root="HKCU"
+                     Key="Software\Google\Chrome\NativeMessagingHosts\be.bosa.eidlink"              
                      ForceDeleteOnUninstall="yes" >
             <RegistryValue Type="string" Value="[INSTALLFOLDER]chrome.json" />
-        </RegistryKey>
-        <RegistryKey Root="HKCU"
+         </RegistryKey>
+         <RegistryKey Root="HKCU"
                      Key="Software\Microsoft\Edge\NativeMessagingHosts\be.bosa.eidlink"
                      ForceDeleteOnUninstall="yes" >
             <RegistryValue Type="string" Value="[INSTALLFOLDER]chrome.json" />
-        </RegistryKey>
-        <RegistryKey Root="HKCU"
+         </RegistryKey>
+         <RegistryKey Root="HKCU"
                   Key="Software\Mozilla\NativeMessagingHosts\be.bosa.eidlink"
                   ForceDeleteOnUninstall="yes">
             <RegistryValue Type="string" Value="[INSTALLFOLDER]firefox.json" />
-        </RegistryKey>
+         </RegistryKey>
       </Component>
     </ComponentGroup>
 
@@ -81,10 +115,18 @@
             Return="ignore"
             HideTarget="no"
             Impersonate="no" />
+            
+    <util:CloseApplication Id="CloseIE" CloseMessage="yes" PromptToContinue="yes" Description="Internet Explorer needs to be closed to complete installation" Target="iexplore.exe" ElevatedCloseMessage="no" RebootPrompt="no" /> 
+
+   <!--InstallUISequence>
+      <Custom Action="WixCloseApplications" Before="LaunchConditions" /> 
+   </InstallUISequence-->
    <InstallExecuteSequence>
          <!--Custom Action="cleanff0" Before="InstallFinalize">INSTALL_CU=1 AND NOT Installed</Custom-->
+         <Custom Action="WixCloseApplications" Before="InstallValidate" /> 
          <Custom Action="setup" Before="InstallFinalize">NOT Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
    </InstallExecuteSequence>
+
    
   </Product>
 </Wix>
