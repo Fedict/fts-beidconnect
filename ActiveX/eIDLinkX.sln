@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2009
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eIDLinkX", "eIDLinkX\eIDLinkX.csproj", "{EDA4C316-4006-446A-8BA9-71D0A6816884}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+		ReleaseAdmin|Any CPU = ReleaseAdmin|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EDA4C316-4006-446A-8BA9-71D0A6816884}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDA4C316-4006-446A-8BA9-71D0A6816884}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDA4C316-4006-446A-8BA9-71D0A6816884}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDA4C316-4006-446A-8BA9-71D0A6816884}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDA4C316-4006-446A-8BA9-71D0A6816884}.ReleaseAdmin|Any CPU.ActiveCfg = ReleaseAdmin|Any CPU
+		{EDA4C316-4006-446A-8BA9-71D0A6816884}.ReleaseAdmin|Any CPU.Build.0 = ReleaseAdmin|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B43E66B6-DDDD-43A7-8A81-41156379F130}
+	EndGlobalSection
+EndGlobal
