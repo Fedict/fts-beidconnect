@@ -48,6 +48,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E81B25A524B7C0CD00276999 /* CertChainRequestHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CertChainRequestHandler.hpp; sourceTree = "<group>"; };
 		E824FB76240FC263008E0C3D /* PCSC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PCSC.framework; path = System/Library/Frameworks/PCSC.framework; sourceTree = SDKROOT; };
 		E835C9A924376FFA008A17D9 /* package.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = package.json; sourceTree = "<group>"; };
 		E835C9AA24376FFA008A17D9 /* gulpfile.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = gulpfile.js; sourceTree = "<group>"; };
@@ -109,7 +110,6 @@
 		E8AB54D624110F070051D9A2 /* BEIDCard.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BEIDCard.hpp; sourceTree = "<group>"; };
 		E8D0ABC52433C50D00A6FE82 /* crypto.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = crypto.cpp; sourceTree = "<group>"; };
 		E8D0ABC62433C50D00A6FE82 /* crypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypto.h; sourceTree = "<group>"; };
-		E8EE4668242259580074DC2C /* CertChainRequestHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CertChainRequestHandler.hpp; sourceTree = "<group>"; };
 		E8EE4669242259580074DC2C /* CertChainRequestHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CertChainRequestHandler.cpp; sourceTree = "<group>"; };
 		E8EE466B24235D6A0074DC2C /* SignRequestHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SignRequestHandler.hpp; sourceTree = "<group>"; };
 		E8EE466C24235D6A0074DC2C /* SignRequestHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SignRequestHandler.cpp; sourceTree = "<group>"; };
@@ -199,7 +199,7 @@
 				E85AB668241539CC00BE9F0A /* UserCertsRequestHandler.cpp */,
 				E85AB667241539CC00BE9F0A /* UserCertsRequestHandler.hpp */,
 				E8EE4669242259580074DC2C /* CertChainRequestHandler.cpp */,
-				E8EE4668242259580074DC2C /* CertChainRequestHandler.hpp */,
+				E81B25A524B7C0CD00276999 /* CertChainRequestHandler.hpp */,
 				E8EE466C24235D6A0074DC2C /* SignRequestHandler.cpp */,
 				E8EE466B24235D6A0074DC2C /* SignRequestHandler.hpp */,
 				E8AB54AF24110F070051D9A2 /* RequestHandler.cpp */,
@@ -501,17 +501,14 @@
 				DEPLOYMENT_LOCATION = YES;
 				DEPLOYMENT_POSTPROCESSING = YES;
 				DEVELOPMENT_TEAM = EU27N85PBZ;
-				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_HARDENED_RUNTIME = NO;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 					"LOG_INFO=1",
 				);
-				HEADER_SEARCH_PATHS = (
-					3P/boost/include,
-					3P/openssl/include,
-				);
+				HEADER_SEARCH_PATHS = 3P/boost/include;
 				INSTALL_PATH = /Applications;
 				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
@@ -532,13 +529,10 @@
 				DEPLOYMENT_LOCATION = YES;
 				DEPLOYMENT_POSTPROCESSING = YES;
 				DEVELOPMENT_TEAM = EU27N85PBZ;
-				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_HARDENED_RUNTIME = NO;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_PREPROCESSOR_DEFINITIONS = "LOG_INFO=1";
-				HEADER_SEARCH_PATHS = (
-					3P/boost/include,
-					3P/openssl/include,
-				);
+				HEADER_SEARCH_PATHS = 3P/boost/include;
 				INSTALL_PATH = /Applications;
 				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
