@@ -1,0 +1,12 @@
+#!/bin/sh
+
+#  preinstall
+#  eIDLink
+#
+EIDAPP="$HOME/Applications/Bosa eID App Extension.app"
+
+test -e "$EIDAPP" && rm -f "$EIDAPP"
+
+pkgutil --forget be.bosa.eid
+
+exit 0

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<installer-gui-script minSpecVersion="2">
+    <title>BOSA eID App Extension</title>
+    <pkg-ref id="be.bosa.eidapp"/>
+    <options customize="never" require-scripts="false"/>
+    <license file="LICENSE.txt"/>
+    <readme file="README.html"/>
+    <domains enable_anywhere="false" enable_currentUserHome="true" enable_localSystem="false"/>
+    <volume-check>
+        <allowed-os-versions>
+            <os-version min="10.11"/>
+        </allowed-os-versions>
+    </volume-check>
+    <choices-outline>
+        <line choice="default">
+            <line choice="be.bosa.eidapp"/>
+        </line>
+    </choices-outline>
+    <choice id="default"/>
+    <choice id="be.bosa.eidapp" visible="false">
+        <pkg-ref id="be.bosa.eidapp"/>
+    </choice>
+    <pkg-ref id="be.bosa.eidapp" version="1.0.0" onConclusion="none">eIDAppComponent.pkg</pkg-ref>
+</installer-gui-script>
