@@ -1,4 +1,4 @@
-VERSION = 1.2
+VERSION = 1.4
 IDENTIFIER = be.bosa.eidlink
 PROGRAM = eidlink
 DISTDIR = ./install/dist
@@ -13,7 +13,7 @@ UNINSTALL_PRODUCT = $(DISTDIR)/$(PROGRAM)-uninstall.pkg
 UNINSTALL_RESOURCES = ./install/uninstall_resources
 INSTALL_COMPONENT = $(DEPSDIR)/$(PROGRAM)Component.pkg
 UNINSTALL_COMPONENT = $(DEPSDIR)/$(PROGRAM)UninstallComponent.pkg
-COMPONENT_PFILE = ./install/$(PROGRAM)Component.plist
+COMPONENT_PFILE = ./install/eIDlinkComponent.plist
 SCRIPTS = ./install/scripts
 UNINSTALLSCRIPTS = ./install/uninstallscripts
 INSTALL_DISTRIBUTION_FILE = ./install/distribution.plist
@@ -38,7 +38,7 @@ $(DMGFILE): $(INSTALL_PRODUCT) $(UNINSTALL_PRODUCT)
 
 $(INSTALL_PRODUCT) : $(BINARIES) $(REQUIREMENTS) $(DEPENDENCY) $(COMPONENT_PFILE) $(INSTALL_COMPONENT) $(INSTALL_DISTRIBUTION_FILE)
 	productbuild --distribution $(INSTALL_DISTRIBUTION_FILE) \
-	--sign "Zetes Sa" \
+	--sign "Developer ID Installer: Zetes Sa" \
 	--timestamp \
 	--resources $(INSTALL_RESOURCES) \
 	--package-path $(DEPSDIR) \
@@ -46,7 +46,7 @@ $(INSTALL_PRODUCT) : $(BINARIES) $(REQUIREMENTS) $(DEPENDENCY) $(COMPONENT_PFILE
 
 $(UNINSTALL_PRODUCT): $(COMPONENT_PFILE) $(UNINSTALL_COMPONENT) $(UNINSTALL_DISTRIBUTION_FILE)
 	productbuild --distribution $(UNINSTALL_DISTRIBUTION_FILE) \
-	--sign "Zetes Sa" \
+	--sign "Developer ID Installer: Zetes Sa" \
 	--timestamp \
 	--resources $(UNINSTALL_RESOURCES) \
 	--package-path $(DEPSDIR) \
