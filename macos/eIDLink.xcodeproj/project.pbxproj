@@ -273,7 +273,6 @@
 				E835C9A824376FFA008A17D9 /* ChromeExtension */,
 				E85AB6632413A1B600BE9F0A /* test */,
 				E8AB54A524110F070051D9A2 /* common */,
-				E8F2140B23FAFAAC003768CE /* src */,
 				E8F2140A23FAFAAC003768CE /* Products */,
 				E824FB75240FC263008E0C3D /* Frameworks */,
 			);
@@ -285,13 +284,6 @@
 				E8F2140923FAFAAC003768CE /* eIDLink */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		E8F2140B23FAFAAC003768CE /* src */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = src;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
