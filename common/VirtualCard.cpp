@@ -104,11 +104,12 @@ int VirtualCard::readUserCertificates(int format, std::vector<std::vector<char>>
 {
    int ret = 0;
    if (format == FORMAT_RADIX64) {
-
-      std::vector<char> buf1(auth_cert, auth_cert + sizeof(auth_cert)-1);
+      char auth_cert_[] = auth_cert;
+      std::vector<char> buf1(auth_cert_, auth_cert_ + sizeof(auth_cert_)-1);
       certificates.push_back(buf1);
 
-      std::vector<char> buf2(nonrep_cert, nonrep_cert + sizeof(nonrep_cert)-1);
+      char nonrep_cert_[] = nonrep_cert;
+      std::vector<char> buf2(nonrep_cert_, nonrep_cert_ + sizeof(nonrep_cert_)-1);
       certificates.push_back(buf2);
    }
    else if (format == FORMAT_HEX) {
@@ -154,10 +155,12 @@ int VirtualCard::readCertificateChain(int format, unsigned char *cert, int l_cer
    int ret = 0;
    if (format == FORMAT_RADIX64) {
       
-      std::vector<char> buf1(ca_cert, ca_cert + sizeof(ca_cert)-1);
+      char ca_cert_[] = ca_cert;
+      std::vector<char> buf1(ca_cert_, ca_cert_ + sizeof(ca_cert_)-1);
       subCerts.push_back(buf1);
       
-      std::vector<char> buf2(root_cert, root_cert + sizeof(root_cert)-1);
+      char root_cert_[] = root_cert;
+      std::vector<char> buf2(root_cert_, root_cert_ + sizeof(root_cert_)-1);
       root = buf2;
    }
    else if (format == FORMAT_HEX) {
