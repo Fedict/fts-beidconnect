@@ -388,75 +388,6 @@ return(len);
 
 
 
-//void asn_clear_list(ASN1_LIST *list)
-//{
-//if (list->item != 0)
-//  free(list->item);
-//list->item = NULL;
-//list->nitems = 0;
-//list->size = 0;
-//}
-//
-//
-//
-//int get_item_length(ASN1_LIST *list, unsigned int n, unsigned int *l, unsigned int *nsubitems)
-//{
-//int ret = 0;
-//unsigned int i;
-//ASN1_ITEM *item;
-//unsigned int len = 0;
-//unsigned int nsubs = 0;
-//unsigned int lenbytes = 0;
-////unsigned int taglen = 0;
-//
-//*nsubitems = 0;
-//
-//if ( n > list->nitems)
-//   return (E_ASN_LIST);
-//
-//item = &list->item[n];
-//*l = item->l_data;
-//
-////if there are childs here, we search recursively and add extra bytes for length and tag
-//for (i=1; i <= item->nsubitems; i++)
-//   {
-//   ret = get_item_length(list, n+i+*nsubitems, &len, &nsubs);
-//   if (ret)
-//      return (ret);
-//   *l += len;
-//
-//   //experimental
-//   //for ASN_ANY no tag nor lengthbytes are added
-//      if (list->item[n+i+*nsubitems].tag == ASN_ANY) {
-//         //don't add length bytes for ASN_ANY nor a tag
-//         continue;
-//      }
-//   *nsubitems += nsubs;
-//
-//   if (len >= 0xFFFFFFFF)
-//     return (E_ASN_BAD_LEN);
-//   else if (len <= 0x7F)
-//     lenbytes = 1;       /* short form */
-//   else
-//     {
-//     lenbytes = 1;   //first byte = 0x80 + lenbytes
-//      while (len) {
-//        lenbytes++;
-//        len = len >> 8;
-//        }
-//     }
-//
-//   /* add length length bytes */
-//   *l += lenbytes;
-//   /* tag 1 byte for now */
-//   *l += 1;
-//   }
-//
-//*nsubitems += item->nsubitems;
-//
-//return (0);
-//}
-
 
 
 unsigned int asn_bitstring2ui(unsigned char *in, unsigned int l_in)
@@ -480,8 +411,6 @@ for (i=0; i < (int)(l_in-1); p++, i++)
   }
 return(bits);
 }
-
-
 
 
 void asn_decode_dn(unsigned char* in, unsigned int l_in, char* dn_keys[], char* dn_values[])
@@ -690,4 +619,183 @@ int get_printable_dn(ASN1_ITEM     *p_dn,   //I: points to the DN struct
       free(p_buf);
    
    return(0);
+}
+
+int asn1_add_item(ASN1_LIST *list, unsigned int tag, unsigned char *p_data, unsigned int l_data, unsigned int nsubitems)
+{
+/* allocate more mem if necessary */
+if (list->size == list->nitems)
+   {
+   list->item = (struct ASN1_ITEM *)realloc(list->item, (list->size+10)*sizeof(ASN1_ITEM));
+   if (list->item == NULL)
+      return (E_ASN_ALLOC);
+   list->size += 10;
+   }
+
+/* add element*/
+list->item[list->nitems].tag = tag;
+list->item[list->nitems].p_data = p_data;
+list->item[list->nitems].l_data = l_data;
+list->item[list->nitems].nsubitems = nsubitems;
+
+list->nitems += 1;
+
+return (0);
+}
+
+
+void asn_clear_list(ASN1_LIST *list)
+{
+if (list->item != 0)
+  free(list->item);
+list->item = NULL;
+list->nitems = 0;
+list->size = 0;
+}
+
+
+int asn1_encode_list(ASN1_LIST *list, unsigned char *buf, unsigned int *l_buf)
+{
+int ret = 0;
+unsigned int  classtag, type, tagnum, tag = 0;
+unsigned char *p = buf;
+unsigned int l, len = 0;
+unsigned char lenbytes = 0;
+unsigned int nsubitems = 0;
+unsigned int i;
+int j; // signed int!!!
+unsigned int l_max = *l_buf;
+
+*l_buf = 0;
+
+for (i=0; i < list->nitems; i++)
+   {
+   /* calculate add tag */
+   classtag = (list->item[i].tag & 0x3) << 6;
+   type = (list->item[i].tag & 0x4) << 3;
+   tagnum = (list->item[i].tag & ~0x7) >> 3;
+
+   if (tagnum < 0x1F) {
+      tag = classtag | type | tagnum;
+      *p++ = tag;
+   }
+   else if (tagnum == 0xFFFFF) {
+      //experimental sept 2015 to encode ASN_ANY
+      /* add data */
+      if (*l_buf + list->item[i].l_data <= l_max) {
+         memcpy(p, list->item[i].p_data, list->item[i].l_data);
+         p += list->item[i].l_data;
+         continue;
+      }
+      else {
+         return(E_ASN_OUTBUF_TOO_SMALL);
+      }
+   }
+   else {
+      return E_ASN_EXTENDED_TAG;
+   }
+
+   /* calculate length and */
+   ret = get_item_length(list, i, &len, &nsubitems);
+   if (ret)
+      return (ret);
+   l=len;
+
+   /* add length */
+   if (len >= 0xFFFFFFFF)
+      return (E_ASN_BAD_LEN);
+   else if (len <= 0x7F)
+      lenbytes = 1;       /* short form */
+   else
+      {
+      lenbytes = 0;
+      while (l)
+         {
+         lenbytes += 1;
+         l >>= 8;
+         }
+      *p++ = 0x80 + lenbytes;
+      }
+   
+   for (j=lenbytes-1; j >= 0;j--)
+      {
+      *p++ = (len >> (j*8)) & 0xFF;
+      }
+
+   /* add data */
+   if (*l_buf + list->item[i].l_data <= l_max)
+      {
+      memcpy(p, list->item[i].p_data, list->item[i].l_data);
+      p += list->item[i].l_data;
+      }
+   else
+      {
+      return(E_ASN_OUTBUF_TOO_SMALL);
+      }
+   }
+
+*l_buf = (unsigned int) (p-buf);
+
+return (ret);
+}
+
+
+
+
+int get_item_length(ASN1_LIST *list, unsigned int n, unsigned int *l, unsigned int *nsubitems)
+{
+int ret = 0;
+unsigned int i;
+ASN1_ITEM *item;
+unsigned int len = 0;
+unsigned int nsubs = 0;
+unsigned int lenbytes = 0;
+//unsigned int taglen = 0;
+
+*nsubitems = 0;
+
+if ( n > list->nitems)
+   return (E_ASN_LIST);
+
+item = &list->item[n];
+*l = item->l_data;
+
+//if there are childs here, we search recursively and add extra bytes for length and tag
+for (i=1; i <= item->nsubitems; i++)
+   {
+   ret = get_item_length(list, n+i+*nsubitems, &len, &nsubs);
+   if (ret)
+      return (ret);
+   *l += len;
+
+   //experimental
+   //for ASN_ANY no tag nor lengthbytes are added
+      if (list->item[n+i+*nsubitems].tag == ASN_ANY) {
+         //don't add length bytes for ASN_ANY nor a tag
+         continue;
+      }
+   *nsubitems += nsubs;
+      
+   if (len >= 0xFFFFFFFF)
+     return (E_ASN_BAD_LEN);
+   else if (len <= 0x7F)
+     lenbytes = 1;       /* short form */
+   else
+     {
+     lenbytes = 1;   //first byte = 0x80 + lenbytes
+      while (len) {
+        lenbytes++;
+        len = len >> 8;
+        }
+     }
+
+   /* add length length bytes */
+   *l += lenbytes;
+   /* tag 1 byte for now */
+   *l += 1;
+   }
+
+*nsubitems += item->nsubitems;
+
+return (0);
 }

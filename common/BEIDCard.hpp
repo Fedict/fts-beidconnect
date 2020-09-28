@@ -31,6 +31,8 @@ class BEIDCard: public Card
       int readFile2(unsigned int offset, int* p_len, unsigned char* p_out) override;
 
    private:
+      int currentSelectedKeyType;
+      int currentSelectedKeyLength;
 };
 
 

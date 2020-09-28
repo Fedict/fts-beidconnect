@@ -489,7 +489,21 @@ int BEIDCard::selectKey(int pintype, unsigned char* cert, int l_cert)
    int ret = 0;
    int cmdlen, recvlen;
    unsigned char cmd[512], recv[512];
+   int l_cardcert;
+   unsigned char* cardcert = NULL;
    int sw;
+
+   ret = readCertificate(pintype, FORMAT_RAW, &l_cardcert, &cardcert);
+   if (ret) {
+      log_error("E: could not read certificate from eID card");
+      goto cleanup;
+   }
+
+   ret = getKeyInfo(cardcert, l_cardcert, &currentSelectedKeyType, &currentSelectedKeyLength);
+   if (ret) {
+      log_error("E: getKeyInfo(type,size) returned %0X (%d)", ret);
+      goto cleanup;
+   }
 
    if (pintype == CERT_TYPE_NONREP)
    {
@@ -656,9 +670,14 @@ int BEIDCard::sign(unsigned char* in, unsigned int l_in, int hashAlgo, unsigned 
    unsigned char recv[1024];
    int recvlen = 1024;
    unsigned char cmd[255];
+   int sign_lg = currentSelectedKeyLength;
    int cmdlen;
    int begintransaction = 1;
-   
+
+   if (sign_lg > *l_out) {
+      return (-1);
+   }
+
    //begin transaction
    ret = reader->beginTransaction();
    if (ret) {
@@ -672,17 +691,28 @@ int BEIDCard::sign(unsigned char* in, unsigned int l_in, int hashAlgo, unsigned 
       CLEANUP(E_DIGEST_LEN);
    }
    
+   memset(cmd, 0xFF, sizeof(cmd));
+   
    /* sign */
    cmdlen = sizeof(generateSignatureCmd)-1;
    memcpy(cmd, generateSignatureCmd, cmdlen);
    
-   cmd[cmdlen] = hash_length_for_algoheader(hashAlgo) + l_in;
-   cmdlen++;
-   memcpy(&cmd[cmdlen], hash_header_for_algo(hashAlgo), hash_length_for_algoheader(hashAlgo));
-   cmdlen += hash_length_for_algoheader(hashAlgo);
-   memcpy(&cmd[cmdlen], in, l_in);
-   cmdlen += l_in;
-   cmd[cmdlen] = 0x00;		/* append Le */
+   if (currentSelectedKeyType == X509_KEYTYPE_RSA) {
+      cmd[cmdlen] = hash_length_for_algoheader(hashAlgo) + l_in;
+      cmdlen++;
+      memcpy(&cmd[cmdlen], hash_header_for_algo(hashAlgo), hash_length_for_algoheader(hashAlgo));
+      cmdlen += hash_length_for_algoheader(hashAlgo);
+      memcpy(&cmd[cmdlen], in, l_in);
+      cmdlen += l_in;
+      cmd[cmdlen] = 0x00;      /* append Le */
+   }
+   else {
+      //EC
+      cmd[cmdlen] = l_in; cmdlen++;
+      memcpy(&cmd[cmdlen], in, l_in);
+      cmdlen += l_in;
+      cmd[cmdlen] = (unsigned char) sign_lg; cmdlen++; //384/8*2
+   }
    
    recvlen = (int) sizeof(recv);
    
@@ -696,6 +726,9 @@ int BEIDCard::sign(unsigned char* in, unsigned int l_in, int hashAlgo, unsigned 
    memcpy(cmd, retrieveSignatureCmd, cmdlen);
    
    switch (*sw) {
+      case 0x6160:
+         cmd[4] = 0x60;
+         break;
       case 0x6180:
          cmd[4] = 0x80;
          break;
@@ -722,6 +755,50 @@ int BEIDCard::sign(unsigned char* in, unsigned int l_in, int hashAlgo, unsigned 
       CLEANUP(-1);
    }
    
+   if (currentSelectedKeyType == X509_KEYTYPE_EC) {
+      //signature is a concatenation of 2 values, so we encode these in ASN1 to return the ASN1 format
+      ASN1_LIST     asn1_list;
+      memset(&asn1_list, 0, sizeof(asn1_list));
+      unsigned char part1[256]; //arbitrary length...
+      unsigned char part2[256]; //arbitrary length...
+      unsigned int size1 = *l_out/2;
+      unsigned int size2 = *l_out/2;
+      unsigned char *p = 0;
+      memset(part1, 0, sizeof(part1));
+      memset(part2, 0, sizeof(part2));
+      //normalize as ASN_INTEGER (leading 0 if first byte > 0x7F)
+      p = part1;
+      if (out[0] > 0x7f) {
+         p++;
+         size1 += 1;
+      }
+      memcpy(p, out, *l_out/2);
+
+      p = part2;
+      if (out[*l_out/2] > 0x7f) {
+         p++;
+         size2 += 1;
+      }
+      memcpy(p, &out[*l_out/2], *l_out/2);
+      
+      asn1_add_item(&asn1_list, ASN_SEQUENCE, 0, 0, 2);
+      {
+         asn1_add_item(&asn1_list, ASN_INTEGER, part1, size1, 0);
+         asn1_add_item(&asn1_list, ASN_INTEGER, part2, size2, 0);
+      }
+ 
+      unsigned char asn1_signature[512];
+      unsigned int l_asn1_signature = 512;
+      if ((ret = asn1_encode_list(&asn1_list, asn1_signature, &l_asn1_signature)) != 0)
+      {
+         log_error("asn1_encode returned 0x%08x (%d)", ret, ret);
+         goto cleanup;
+      }
+      if (l_asn1_signature)
+         memcpy(out, asn1_signature, l_asn1_signature);
+      *l_out = l_asn1_signature;
+   }
+
 cleanup:
    
    if (begintransaction)
