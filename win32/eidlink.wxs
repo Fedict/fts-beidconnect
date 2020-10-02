@@ -118,11 +118,7 @@
             
     <util:CloseApplication Id="CloseIE" CloseMessage="yes" PromptToContinue="yes" Description="Internet Explorer needs to be closed to complete installation" Target="iexplore.exe" ElevatedCloseMessage="no" RebootPrompt="no" /> 
 
-   <!--InstallUISequence>
-      <Custom Action="WixCloseApplications" Before="LaunchConditions" /> 
-   </InstallUISequence-->
    <InstallExecuteSequence>
-         <!--Custom Action="cleanff0" Before="InstallFinalize">INSTALL_CU=1 AND NOT Installed</Custom-->
          <Custom Action="WixCloseApplications" Before="InstallValidate" /> 
          <Custom Action="setup" Before="InstallFinalize">NOT Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
    </InstallExecuteSequence>
