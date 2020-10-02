@@ -47,7 +47,7 @@ pkg: binaries
 	"$(WIX)\bin\light.exe" -out $(INSTALL_PRODUCT) eidlink.wixobj -v -ext WixUtilExtension -ext WixUIExtension -dWixUILicenseRtf=install/LICENSE.rtf -dWixUIDialogBmp=install/install_dlg.bmp
 	$(SIGN) $(INSTALL_PRODUCT)
    copy $(INSTALL_PRODUCT) eidlink.msi
-   
+    
 pkgadmin: binaries
    $(SIGN) $(PROGRAM_X_ADMIN)
 	$(SIGN) $(PROGRAM)
@@ -75,3 +75,10 @@ clean:
 
 test: binaries
 	python ../test/test.py
+
+install:
+	msiexec /i $(INSTALL_PRODUCT) /qn /L*V install.log
+	
+installadmin:
+	msiexec /i $(INSTALL_ADMIN_PRODUCT) /qn /L*V installadmin.log
+	
