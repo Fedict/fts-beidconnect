@@ -53,7 +53,7 @@
          </Class>
          <File Id="eidlinkA.dll" KeyPath="yes" Source="..\ActiveX\eIDLinkX\Release\eidlinkA.dll" />
          <ProgId Id="Record" />
-         <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\Domains\belgium.be" Name="https" Value="2" Type="integer" />
+         <RegistryValue Root="HKLM" Key="Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\Domains\belgium.be" Name="https" Value="2" Type="integer" />
          <RegistryValue Root="HKCR" Key="CLSID\{96F3D7AF-C671-36EA-A6C1-A62330A009BA}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" Action="write" />
          <RegistryValue Root="HKCR" Key="CLSID\{96F3D7AF-C671-36EA-A6C1-A62330A009BA}\InprocServer32\0.0.4.0" Name="Class" Value="eIDLinkX.IObjectSafetyImpl" Type="string" Action="write" />
          <RegistryValue Root="HKCR" Key="CLSID\{96F3D7AF-C671-36EA-A6C1-A62330A009BA}\InprocServer32\0.0.4.0" Name="Assembly" Value="eIDLinkA, Version=0.0.4.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />

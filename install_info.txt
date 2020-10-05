@@ -52,3 +52,37 @@ Installation of eIDLink to .../user/AppData/Local/BOSA/eIDLink/
 - Safari Extension
   Safari app extension contains all the sources from eIDLink -> common so no link to eIDLink app
 
+
+Internet explorer ActiveX
+==============================
+For the ActiveX control to be allowed, a trusted site domain needs to be added to the security settings of Internet Explorer
+https://support.microsoft.com/nl-be/help/182569/internet-explorer-security-zones-registry-entries-for-advanced-users
+
+
+PerUser install
+----------------
+\HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\Domains\belgium.be
+	=> key "https" value: 2 (DWORD)
+
+PerMachine install
+------------------
+\HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\Domains\belgium.be
+	=> key "https" value: 2 (DWORD)
+(Wow6432 is the key for 32bit apps on a 64bit system)
+
+***  \HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\Domains\belgium.be
+
+Group Policies
+-----------------
+If group-policies are set or regkey HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings -> Security_HKLM_only (DWORD:1)
+Then current user settings are not active (although still displayed in internet settings)
+(Internet settings show that settings are managed by admin) 
+=>use Group policies to set registry settings for current users
+
+https://www.grouppolicy.biz/2012/07/how-to-configuring-ie-site-zone-mapping-using-group-policy-without-locking-out-the-user/
+https://serverfault.com/questions/788463/why-is-sitetozoneassignment-gpo-applying-but-sites-not-appearing-in-ie
+https://getadmx.com/?Category=Windows_7_2008R2&Policy=Microsoft.Policies.InternetExplorer::IZ_Zonemaps_2
+
+
+
+
