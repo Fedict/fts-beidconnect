@@ -1,4 +1,4 @@
-VERSION = 1.5.0
+VERSION = 1.7.0
 APPIDENTIFIER = be.bosa.eidapp
 APPEXIDENTIFIER = be.bosa.eidapp-extension
 PROGRAM = Bosa\ eID\ App\ Extension
@@ -32,7 +32,7 @@ $(DEPSDIR) :
 
 $(DMGFILE): $(INSTALL_PRODUCT)
 	hdiutil create -fs JHFS+ -volname "Bosa eID App Extension Installer" -srcfolder $(DISTDIR) -ov $(DMGFILE)
-	codesign -s "Zetes Sa" --timestamp -i $(APPIDENTIFIER) $(DMGFILE)
+	codesign -s "Developer ID Application: Zetes Sa" --timestamp -i $(APPIDENTIFIER) $(DMGFILE)
 	cp $(DMGFILE) $(PROGRAM).dmg
 
 $(INSTALL_PRODUCT) : $(BINARIES) $(REQUIREMENTS) $(DEPENDENCY) $(COMPONENT_PFILE) $(INSTALL_COMPONENT) $(INSTALL_DISTRIBUTION_FILE)
@@ -45,8 +45,8 @@ $(INSTALL_PRODUCT) : $(BINARIES) $(REQUIREMENTS) $(DEPENDENCY) $(COMPONENT_PFILE
 
 $(BINARIES):
 	xcodebuild install -project "BOSA eID App.xcodeproj"
-#	codesign -f --options=runtime -s "Zetes Sa" -v ./Build/Release/Bosa\ eID\ App\ Extension.app
-#	codesign -f --options=runtime -s "Zetes Sa" --identifier -v ./Build/Release/Bosa\ eID\ App\ Extension.app/Contents/PlugIns/BOSA\ eID\ App\ Extension.appex/Contents/MacOS/BOSA\ eID\ App\ Extension
+	codesign -f --options=runtime -s "Developer ID Application: Zetes Sa" --identifier -v ./Build/Release/Bosa\ eID\ App\ Extension.app/Contents/PlugIns/BOSA\ eID\ App\ Extension.appex/Contents/MacOS/BOSA\ eID\ App\ Extension
+	codesign -f --options=runtime -s "Developer ID Application: Zetes Sa" -v ./Build/Release/Bosa\ eID\ App\ Extension.app
 	
 $(COMPONENT_PFILE) :
 	@echo "Error: Missing component pfile."
@@ -78,6 +78,13 @@ distfiles : $(INSTALL_COMPONENT)
 compfiles : $(BINARIES)
 	pkgbuild --analyze --root $(BINARIES) $(COMPONENT_PFILE).new
 	@echo "Edit the $(COMPONENT_PFILE).new template to create a suitable $(COMPONENT_PFILE) file."
+
+notarise: $(DMGFILE)
+	xcrun altool --notarize-app --primary-bundle-id $(APPIDENTIFIER) --username "@keychain:AC_USER" --password "@keychain:AC_PASSWORD" --asc-provider ZetesSa --file $(PROGRAM).dmg
+
+staple: 
+	xcrun stapler staple $(PROGRAM).dmg
+
 
 
 .PHONY : clean

@@ -1,4 +1,4 @@
-VERSION = 1.5
+VERSION = 1.6
 IDENTIFIER = be.bosa.eidlink
 PROGRAM = eidlink
 DISTDIR = ./install/dist
@@ -101,6 +101,11 @@ compfiles : $(BINARIES)
 	pkgbuild --analyze --root $(BINARIES) $(COMPONENT_PFILE).new
 	@echo "Edit the $(COMPONENT_PFILE).new template to create a suitable $(COMPONENT_PFILE) file."
 
+notarise: $(DMGFILE)
+	xcrun altool --notarize-app --primary-bundle-id $(IDENTIFIER) --username "@keychain:AC_USER" --password "@keychain:AC_PASSWORD" --asc-provider ZetesSa --file $(PROGRAM).dmg
+
+staple: 
+	xcrun stapler staple $(PROGRAM).dmg
 
 .PHONY : clean
 clean:
