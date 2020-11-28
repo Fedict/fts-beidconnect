@@ -30,7 +30,8 @@
                              NSAlert *alert = [[NSAlert alloc] init];
                              [alert addButtonWithTitle:@"Close"];
                              [alert setMessageText:@"Could not open Safari Preferences"/*error.localizedDescription*/];
-                             [alert setInformativeText:@"Please try installing again."];
+                              NSString *text = [NSString stringWithFormat:@"Please try installing again.\n (%@)", error.localizedDescription];
+                             [alert setInformativeText:text];
                              [alert setAlertStyle:NSWarningAlertStyle];
                              if ([alert runModal] == NSAlertFirstButtonReturn) {
                              }
