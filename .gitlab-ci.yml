@@ -8,7 +8,7 @@ srpm:
   before_script:
   - yum install -y git rpm-build rpmdevtools
   - rpmdev-setuptree
-  - VER=$(git describe --always)
+  - VER=$(git describe --always | sed -e 's/-/./g')
   - mkdir -p products/tar
   - git archive --prefix=eidlink-$VER/ -o products/tar/eidlink-$VER.tar.gz origin/$CI_COMMIT_REF_NAME
   - cp products/tar/eidlink-$VER.tar.gz ~/rpmbuild/SOURCES/
