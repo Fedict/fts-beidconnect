@@ -4,7 +4,9 @@ stages:
 
 srpm:
   stage: source
+  image: centos:7
   before_script:
+  - yum install -y git rpm-build
   - VER=$(git describe --always)
   - mkdir -p products/tar
   - git archive --prefix=eidlink-$VER/ -o products/tar/eidlink-$VER.tar.gz $CI_COMMIT_REF_NAME
@@ -22,26 +24,57 @@ srpm:
 
 .build:fedora: &fedbuild
   stage: binary
+  image: fedora:latest
   dependencies:
   - srpm
   before_script:
-  - dnf -y install mock git
+  - dnf -y install mock git rpm-build rpmdevtools
   script:
-  - mock --old-chroot --verbose -r fedora-$VERSION-$ARCH --rebuild products/srpm/eidlink-*.src.rpm --resultdir $CI_PROJECT_DIR/products/fedora-$VERSION-$ARCH
+  - mock --old-chroot --verbose -r $DIST-$VERSION-$ARCH --rebuild products/srpm/eidlink-*.src.rpm --resultdir $CI_PROJECT_DIR/products/$DIST-$VERSION-$ARCH
   artifacts:
     paths:
-    - products/fedora-$VERSION-$ARCH
+    - products/$DIST-$VERSION-$ARCH
     when:
       on_success
 
 build:fedora-32-64:
   <<: *fedbuild
   variables:
-    VERSION: 31
+    VERSION: 32
     ARCH: x86_64
+    DIST: fedora
 
 build:fedora-32-32:
   <<: *fedbuild
   variables:
     VERSION: 32
     ARCH: i686
+    DIST: fedora
+
+build:fedora-33-64:
+  <<: *fedbuild
+  variables:
+    VERSION: 33
+    ARCH: x86_64
+    DIST: fedora
+
+build:fedora-33-32:
+  <<: *fedbuild
+  variables:
+    VERSION: 33
+    ARCH: i686
+    DIST: fedora
+
+build:centos-8-64:
+  <<: *fedbuild
+  variables:
+    VERSION: 8
+    ARCH: x86_64
+    DIST: centos
+
+build:centos-7-64:
+  <<: *fedbuild
+  variables:
+    VERSION: 8
+    ARCH: x86_64
+    DIST: centos
