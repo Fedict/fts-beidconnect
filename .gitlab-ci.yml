@@ -6,7 +6,8 @@ srpm:
   stage: source
   image: centos:7
   before_script:
-  - yum install -y git rpm-build
+  - yum install -y git rpm-build rpmdevtools
+  - rpmdev-setuptree
   - VER=$(git describe --always)
   - mkdir -p products/tar
   - git archive --prefix=eidlink-$VER/ -o products/tar/eidlink-$VER.tar.gz origin/$CI_COMMIT_REF_NAME
