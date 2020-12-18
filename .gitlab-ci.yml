@@ -78,7 +78,7 @@ build:fedora-32-32:
   <<: *fedbuild
   variables:
     VERSION: 32
-    ARCH: i686
+    ARCH: i386
     DIST: fedora
 
 build:fedora-33-64:
@@ -92,7 +92,7 @@ build:fedora-33-32:
   <<: *fedbuild
   variables:
     VERSION: 33
-    ARCH: i686
+    ARCH: i386
     DIST: fedora
 
 build:centos-8-64:
