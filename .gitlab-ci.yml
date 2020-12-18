@@ -31,7 +31,7 @@ srpm:
   before_script:
   - dnf -y install mock git rpm-build rpmdevtools
   script:
-  - mock --old-chroot --verbose -r $DIST-$VERSION-$ARCH --rebuild products/srpm/eidlink-*.src.rpm --resultdir $CI_PROJECT_DIR/products/$DIST-$VERSION-$ARCH
+  - mock --old-chroot --verbose -r $DIST-$VERSION-$ARCH --define "version $VER" --rebuild products/srpm/eidlink-*.src.rpm --resultdir $CI_PROJECT_DIR/products/$DIST-$VERSION-$ARCH
   artifacts:
     paths:
     - products/$DIST-$VERSION-$ARCH
