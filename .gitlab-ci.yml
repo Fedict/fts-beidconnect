@@ -16,7 +16,7 @@ srpm:
   - rpmbuild --define "version $VER" -bs linux/eidlink.spec
   after_script:
   - mkdir -p products/srpm
-  - cp ~/rpmbuild/SRPMS/eidlink.*.src.rpm products/srpm/
+  - cp ~/rpmbuild/SRPMS/eidlink-*.src.rpm products/srpm/
   artifacts:
     paths:
     - products
