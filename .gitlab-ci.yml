@@ -9,7 +9,7 @@ srpm:
   - yum install -y git rpm-build
   - VER=$(git describe --always)
   - mkdir -p products/tar
-  - git pull $CI_COMMIT_REF_NAME
+  - git fetch --all
   - git archive --prefix=eidlink-$VER/ -o products/tar/eidlink-$VER.tar.gz $CI_COMMIT_REF_NAME
   - cp products/tar/eidlink-$VER.tar.gz ~/rpmbuild/SOURCES/
   script:
