@@ -4,7 +4,7 @@ stages:
 
 srpm:
   stage: source
-  image: centos:7
+  image: fedora:latest
   before_script:
   - yum install -y git rpm-build rpmdevtools
   - rpmdev-setuptree
@@ -15,6 +15,7 @@ srpm:
   script:
   - rpmbuild --define "version $VER" -bs linux/eidlink.spec
   after_script:
+  - VER=$(git describe --always)
   - mkdir -p products/srpm
   - cp ~/rpmbuild/SRPMS/eidlink.$VER.src.rpm products/srpm/
   artifacts:
