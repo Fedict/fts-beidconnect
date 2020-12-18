@@ -12,6 +12,9 @@ srpm:
   - mkdir -p products/tar
   - git archive --prefix=eidlink-$VER/ -o products/tar/eidlink-$VER.tar.gz origin/$CI_COMMIT_REF_NAME
   - cp products/tar/eidlink-$VER.tar.gz ~/rpmbuild/SOURCES/
+  - echo $VER > products/version
+  - COMMIT_DATE=$(git log --date=rfc HEAD^..HEAD|grep ^Date|cut -d ' ' -f 2-|sed -e 's/^\s*//')
+  - echo $COMMIT_DATE > products/date
   script:
   - rpmbuild --define "version $VER" -bs linux/eidlink.spec
   after_script:
@@ -35,6 +38,31 @@ srpm:
   artifacts:
     paths:
     - products/$DIST-$VERSION-$ARCH
+    when:
+      on_success
+
+.build:deb: &debuild
+  stage: binary
+  image: tianon/sbuild:latest
+  dependencies:
+  # We don't actually need the srpms, but we do need the version file. Although that could be done in a separate job, having them together seems easier.
+  - srpm
+  before_script:
+  - apt-get update; apt-get install devscripts dpkg-dev
+  - sbuild-createchroot --arch=$ARCH $CODE /srv/chroot/$CODE $MIRROR $SCRIPT
+  - VER=$(cat products/version)
+  - COMMIT_DATE=$(cat products/date)
+  - if [ $ARCH = "i386" ]; then DASHA="-A -s"; else DASHA="--no-arch-all --no-source"; fi
+  - export DASHA
+  - ./linux/deb-cl.pl debian/changelog "$COMMITDATE" "$VER"
+  script:
+  - sbuild -n $DASHA -c $CODE-$ARCH-sbuild --arch=$ARCH
+  after_script:
+  - mkdir -p products/deb/$CODE/$ARCH
+  - dcmd cp *ges products/deb/$CODE/$ARCH
+  artifacts:
+    paths:
+    - products/deb
     when:
       on_success
 
@@ -79,3 +107,18 @@ build:centos-7-64:
     VERSION: 7
     ARCH: x86_64
     DIST: centos
+
+build:debian-10-32:
+  <<: *debuild
+  variables:
+    CODE: buster
+    ARCH: i386
+    MIRROR: http://deb.debian.org/debian
+
+build:ubuntu-2010-32:
+  <<: *debuild
+  variables:
+    CODE: groovy
+    ARCH: i386
+    MIRROR: http://archive.ubuntu.com/ubuntu
+    SCRIPT: /usr/share/debootstrap/scripts/gutsy
