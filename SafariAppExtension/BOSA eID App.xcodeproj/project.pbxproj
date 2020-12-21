@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E80C8D7F2572FD8300F93C9A /* BOSA eID App Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E868AAE524A3BC450076AA3D /* BOSA eID App Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		E80C8D842572FD8A00F93C9A /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E868AB7824A3D8680076AA3D /* SafariServices.framework */; };
+		E80C8D892572FDE900F93C9A /* PCSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E868AB7524A3D80B0076AA3D /* PCSC.framework */; };
 		E8110A7B24AA1FC300283393 /* SafariExtensionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E868AAF124A3BC450076AA3D /* SafariExtensionViewController.m */; };
 		E8110A8024AB477B00283393 /* BOSA logo.png in Resources */ = {isa = PBXBuildFile; fileRef = E8110A7F24AB477B00283393 /* BOSA logo.png */; };
 		E822842824AFA79E002CFCBB /* README.TXT in Resources */ = {isa = PBXBuildFile; fileRef = E822842724AFA79E002CFCBB /* README.TXT */; };
@@ -16,7 +19,6 @@
 		E868AADB24A3BC430076AA3D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E868AADA24A3BC430076AA3D /* ViewController.m */; };
 		E868AADD24A3BC450076AA3D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E868AADC24A3BC450076AA3D /* Assets.xcassets */; };
 		E868AAE024A3BC450076AA3D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E868AADF24A3BC450076AA3D /* main.m */; };
-		E868AAE624A3BC450076AA3D /* BOSA eID App Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E868AAE524A3BC450076AA3D /* BOSA eID App Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E868AAEB24A3BC450076AA3D /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E868AAEA24A3BC450076AA3D /* Cocoa.framework */; };
 		E868AAEF24A3BC450076AA3D /* SafariExtensionHandler.mm in Sources */ = {isa = PBXBuildFile; fileRef = E868AAEE24A3BC450076AA3D /* SafariExtensionHandler.mm */; };
 		E868AAF524A3BC450076AA3D /* SafariExtensionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E868AAF324A3BC450076AA3D /* SafariExtensionViewController.xib */; };
@@ -69,30 +71,28 @@
 		E868AB6C24A3D1CB0076AA3D /* VirtualCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB3524A3D1CB0076AA3D /* VirtualCard.cpp */; };
 		E868AB6D24A3D1CB0076AA3D /* VersionRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB3624A3D1CB0076AA3D /* VersionRequestHandler.cpp */; };
 		E868AB6E24A3D1CB0076AA3D /* VersionRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB3624A3D1CB0076AA3D /* VersionRequestHandler.cpp */; };
-		E868AB7624A3D80B0076AA3D /* PCSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E868AB7524A3D80B0076AA3D /* PCSC.framework */; };
 		E868AB7724A3D8160076AA3D /* PCSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E868AB7524A3D80B0076AA3D /* PCSC.framework */; };
-		E868AB7924A3D8690076AA3D /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E868AB7824A3D8680076AA3D /* SafariServices.framework */; };
 		E89C811F24A3E05600564BA6 /* page.js in Resources */ = {isa = PBXBuildFile; fileRef = E89C811E24A3E05600564BA6 /* page.js */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		E868AAE724A3BC450076AA3D /* PBXContainerItemProxy */ = {
+		E80C8D802572FD8300F93C9A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E868AAC624A3BC430076AA3D /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = E868AAE424A3BC450076AA3D;
-			remoteInfo = "SafariAppExtension Extension";
+			remoteInfo = "BOSA eID App Extension";
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		E868AB0124A3BC450076AA3D /* Embed App Extensions */ = {
+		E80C8D822572FD8300F93C9A /* Embed App Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 12;
+			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				E868AAE624A3BC450076AA3D /* BOSA eID App Extension.appex in Embed App Extensions */,
+				E80C8D7F2572FD8300F93C9A /* BOSA eID App Extension.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -184,8 +184,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E868AB7924A3D8690076AA3D /* SafariServices.framework in Frameworks */,
-				E868AB7624A3D80B0076AA3D /* PCSC.framework in Frameworks */,
+				E80C8D842572FD8A00F93C9A /* SafariServices.framework in Frameworks */,
+				E80C8D892572FDE900F93C9A /* PCSC.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -351,12 +351,12 @@
 				E868AACA24A3BC430076AA3D /* Sources */,
 				E868AACB24A3BC430076AA3D /* Frameworks */,
 				E868AACC24A3BC430076AA3D /* Resources */,
-				E868AB0124A3BC450076AA3D /* Embed App Extensions */,
+				E80C8D822572FD8300F93C9A /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				E868AAE824A3BC450076AA3D /* PBXTargetDependency */,
+				E80C8D812572FD8300F93C9A /* PBXTargetDependency */,
 			);
 			name = "BOSA eID App";
 			productName = SafariAppExtension;
@@ -512,10 +512,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		E868AAE824A3BC450076AA3D /* PBXTargetDependency */ = {
+		E80C8D812572FD8300F93C9A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = E868AAE424A3BC450076AA3D /* BOSA eID App Extension */;
-			targetProxy = E868AAE724A3BC450076AA3D /* PBXContainerItemProxy */;
+			targetProxy = E80C8D802572FD8300F93C9A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -667,7 +667,7 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.6;
 				PRODUCT_BUNDLE_IDENTIFIER = "be.bosa.eidapp-extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -692,7 +692,7 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.6;
 				PRODUCT_BUNDLE_IDENTIFIER = "be.bosa.eidapp-extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -708,7 +708,7 @@
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = EU27N85PBZ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				HEADER_SEARCH_PATHS = ../3P/boost/include;
@@ -718,7 +718,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.6;
 				PRODUCT_BUNDLE_IDENTIFIER = be.bosa.eidapp;
 				PRODUCT_NAME = "Bosa eID App Extension";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -733,7 +733,7 @@
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = EU27N85PBZ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				HEADER_SEARCH_PATHS = ../3P/boost/include;
@@ -743,7 +743,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.6;
 				PRODUCT_BUNDLE_IDENTIFIER = be.bosa.eidapp;
 				PRODUCT_NAME = "Bosa eID App Extension";
 				PROVISIONING_PROFILE_SPECIFIER = "";

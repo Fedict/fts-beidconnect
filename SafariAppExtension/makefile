@@ -1,4 +1,4 @@
-VERSION = 1.7.0
+VERSION = 1.6.0
 APPIDENTIFIER = be.bosa.eidapp
 APPEXIDENTIFIER = be.bosa.eidapp-extension
 PROGRAM = Bosa\ eID\ App\ Extension
@@ -45,8 +45,8 @@ $(INSTALL_PRODUCT) : $(BINARIES) $(REQUIREMENTS) $(DEPENDENCY) $(COMPONENT_PFILE
 
 $(BINARIES):
 	xcodebuild install -project "BOSA eID App.xcodeproj"
-	codesign -f --options=runtime -s "Developer ID Application: Zetes Sa" --identifier -v ./Build/Release/Bosa\ eID\ App\ Extension.app/Contents/PlugIns/BOSA\ eID\ App\ Extension.appex/Contents/MacOS/BOSA\ eID\ App\ Extension
-	codesign -f --options=runtime -s "Developer ID Application: Zetes Sa" -v ./Build/Release/Bosa\ eID\ App\ Extension.app
+#	codesign -f --options=runtime -s "Developer ID Application: Zetes Sa" --identifier -v ./Build/Release/Bosa\ eID\ App\ Extension.app/Contents/XPCServices/BOSA\ eID\ App\ Extension.appex/Contents/MacOS/BOSA\ eID\ App\ Extension
+#	codesign -f --options=runtime -s "Developer ID Application: Zetes Sa" -v ./Build/Release/Bosa\ eID\ App\ Extension.app
 	
 $(COMPONENT_PFILE) :
 	@echo "Error: Missing component pfile."
@@ -80,7 +80,7 @@ compfiles : $(BINARIES)
 	@echo "Edit the $(COMPONENT_PFILE).new template to create a suitable $(COMPONENT_PFILE) file."
 
 notarise: $(DMGFILE)
-	xcrun altool --notarize-app --primary-bundle-id $(APPIDENTIFIER) --username "@keychain:AC_USER" --password "@keychain:AC_PASSWORD" --asc-provider ZetesSa --file $(PROGRAM).dmg
+	xcrun altool --notarize-app --primary-bundle-id $(APPIDENTIFIER) --username vital.schonkeren@be.zetes.com --password "@keychain:AC_PASSWORD" --asc-provider ZetesSa --file $(PROGRAM).dmg
 
 staple: 
 	xcrun stapler staple $(PROGRAM).dmg
