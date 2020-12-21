@@ -47,11 +47,10 @@ class TestLongrunningHost(unittest.TestCase):
     def test1_version(self):
          cmd = {
              "operation":"VERSION",
-             "mac":"0123456789ABCDEF0123456789ABCDEF",
              "correlationId":"07386ce7-f73e-4e99-dfc3-8d69b6adf33d"
          }
-         resp = self.transceive(json.dumps(cmd))
-         self.assertEqual(resp['version'], "1.2")
+         resp = self.transceive("{\"operation\":\"VERSION\",\"correlationId\":\"07386ce7-f73e-4e99-dfc3-8d69b6adf33d\"}")
+         self.assertEqual(resp['version'], "1.5")
    
     def test2_info(self):
          cmd = {
@@ -64,7 +63,6 @@ class TestLongrunningHost(unittest.TestCase):
     def test3_read_usercerts(self):
         cmd = {
             "operation":"USERCERTS",
-            "type":"NONREPUDIATION",
             "mac":"0123456789ABCDEF0123456789ABCDEF",
             "correlationId":"3daa114f-1ae9-4ae1-ba15-c79f7383ab35",
             "origin":"https://something.belgium.be",
@@ -91,7 +89,7 @@ class TestLongrunningHost(unittest.TestCase):
             "cert": cert,
             "algo":"SHA-256",
             "digest":"JMRVmmssdqPelSUruIhdDOTGXc2Y2dOq8Bf989ZDPH0=",
-            "pin": None,
+            "pin": "1234",
             "language":"en",
             "mac":"0123456789ABCDEF0123456789ABCDEF",
             "correlationId":"07386ce7-f73e-4e99-dfc3-8d69b6adf33d",

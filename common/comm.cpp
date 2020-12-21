@@ -43,7 +43,8 @@ int readMessage(std::stringstream &stream)
 
    for (i = 0; i < length; i++) {
       read_char = getchar();
-      stream << (unsigned char)read_char;
+      if (read_char != '\0')
+         stream << (unsigned char)read_char;
    }
 
    return 0;

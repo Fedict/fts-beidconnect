@@ -105,6 +105,13 @@ int asn1_find_item_simple(const unsigned char *content, unsigned int len, unsign
 int asn1_dec_oid( unsigned char *p_data, int l_data, unsigned int *oid, int *l_oid);
 char* oid2str(unsigned char* p_data, int l_data);
    
+/* ASN1 encoding functions */
+/* !!!! asn1_add_item adds the pointer to a list of elements to encode, but does not copy the data */
+int asn1_add_item(ASN1_LIST *list, unsigned int tag, unsigned char *p_data, unsigned int l_data, unsigned int nsubitems);
+int get_item_length(ASN1_LIST *list, unsigned int n, unsigned int *l, unsigned int *nsubitems);
+int asn1_encode_list(ASN1_LIST *list, unsigned char *buf, unsigned int *l_buf);
+void asn_clear_list(ASN1_LIST *list);
+
 /* Helper functions: decode - encode bitstrings
  * LSB of the unsigned int corresponds to most left bit in the bitstring. 
  * Unused bits are added in front of bitstring

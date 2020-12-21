@@ -1,0 +1,12 @@
+#!/bin/sh
+
+#  postinstall
+#  eidlink
+#
+EIDAPP=$HOME/Applications/Bosa\ eID\ App\ Extension.app
+
+#start eID App Extension for user to accept in Safari 
+#echo "$EIDAPP"
+test -e "$EIDAPP" && open "$EIDAPP"
+
+exit 0

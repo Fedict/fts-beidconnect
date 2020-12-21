@@ -33,6 +33,7 @@ std::string SignRequestHandler::process()
    int foundKey = 0;
    unsigned char signature[512];
    unsigned int l_signature = 512;
+   bool loggedON = false;
    
    std::stringstream ss(ssRequest->str());
    boost::property_tree::ptree pt;
@@ -105,6 +106,7 @@ std::string SignRequestHandler::process()
             log_info("%s: E: card->logon returned %d (0x%0X)", WHERE, lasterror, lasterror);
             break;
          }
+         loggedON = true;
          
          algo = algo2str((char*)digestAlgo.c_str());
          
@@ -113,9 +115,16 @@ std::string SignRequestHandler::process()
          if (lasterror)
          {
             log_error( "%s: E: card->sign returned %08X", WHERE, lasterror);
+            if (loggedON) {
+               card->logoff();
+            }
             break;
          }
          foundKey = 1;
+         
+         if (loggedON) {
+            card->logoff();
+         }
          
          //verify the signature if we have a certificate
          if ((l_cert > 0) && (cert != 0)) {
@@ -132,7 +141,7 @@ std::string SignRequestHandler::process()
          break;
       }
    }
-   
+      
    switch (lasterror) {
       case (int) E_SRC_NO_READERS_FOUND:
          response.put("result", "no_reader");
@@ -193,8 +202,9 @@ std::string SignRequestHandler::process()
          response.put("result", "general_error");
          
          std::string report = str(boost::format("signPKCS1 returned 0x%0X") % lasterror);
-         response.put("report", "signPKCS1 returned 0X%0X");
+         response.put("report", report);
    }
+   
    
    if (cert) {
       free (cert);

@@ -334,3 +334,46 @@ int isTimeBeforeNow (int len, char *p_atime)
    }
    return -1;
 }
+
+int getKeyInfo(unsigned char *cert, unsigned int l_cert, int *keyType, int *keySize)
+{
+   int ret = 0;
+   ASN1_ITEM keyinfo, keyalg, key;
+
+   ret = asn1_get_item((unsigned char*) cert, l_cert, X509_KEYINFO, &keyinfo);
+   if (ret == E_ASN_ITEM_NOT_FOUND) {
+      // could not find SubjectPublicKeyInfo
+      return ret;
+   }
+
+   ret = asn1_get_item(keyinfo.p_data, keyinfo.l_data, "\1\1" , &keyalg);
+   if (ret == E_ASN_ITEM_NOT_FOUND) {
+      return ret;
+   }
+
+   if (keyalg.tag != ASN_OID) {
+      return E_ASN_ITEM_NOT_FOUND;
+   }
+ 
+   char *oid = oid2str(keyalg.p_data, keyalg.l_data);
+   if (strcmp(oid, "1.2.840.113549.1.1.1") == 0) {
+      *keyType = X509_KEYTYPE_RSA;
+
+      ret = asn1_get_item(keyinfo.p_data, keyinfo.l_data, "\2\1\1", &key);
+      if (ret == E_ASN_ITEM_NOT_FOUND) {
+         return ret;
+      }
+      *keySize = key.l_data;
+   }
+   else if (strcmp(oid, "1.2.840.10045.2.1") == 0) {
+      *keyType = X509_KEYTYPE_EC;
+      ret = asn1_get_item(keyinfo.p_data, keyinfo.l_data, "\2", &key);
+      if (ret == E_ASN_ITEM_NOT_FOUND) {
+         return ret;
+      }
+#pragma message "review this since this might not be 100% correct XXXXXX"
+      *keySize = key.l_data - 1; // -1 byte for unused bits in BITSRING
+   }
+   
+   return ret;
+}

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" 
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+   <Product Name="eIDLinkX" UpgradeCode="B08A0a1e-708b-4390-95c2-1e560314f26b"
+         Id="*" Language="1033" Version="$(var.VERSION)" Codepage="1251" Manufacturer="BOSA">
+      <Package Keywords="Installer" InstallerVersion="405" Compressed="yes" InstallScope="perMachine"/>
+      <MediaTemplate EmbedCab="yes" CompressionLevel="high"/>
+      <Icon Id="Icon.ico" SourceFile="eIDLinkX\install\eidlink.ico"/>
+      <Property Id="ARPPRODUCTICON" Value="Icon.ico"/>
+      <MajorUpgrade AllowSameVersionUpgrades="yes" DowngradeErrorMessage=
+            "A newer version of [ProductName] is already installed. If you are trying to downgrade, please uninstall the newer version first."/>
+      <Condition Message="[ProductName] requires Windows 7 or higher.">
+         <![CDATA[Installed OR (VersionNT >= 601)]]>
+      </Condition>
+      <UIRef Id="WixUI_Minimal" />
+
+      <Property Id="MsiLogging" Value="voicewarmupx"/>
+      <Property Id='ARPNOREPAIR'>1</Property>
+      <!--<Property Id="ALLUSERS"><![CDATA[1]]></Property> => replaced by installscope per machine sept 2017 -->
+      <Directory Id="TARGETDIR" Name="SourceDir">
+         <Directory Id='ProgramFilesFolder'>
+            <Directory Id="APPLICATIONFOLDER" Name="BOSA">
+               <!--ComponentGroup Id="CoreCmpGroup"-->
+                  <Component Id="Application" Guid="B08A31b9-149a-4953-aca4-8bd21b78ca07">
+                     <File Id="eIDLinkapp" Source="eIDLinkX/install/eIDLink.exe"/>
+                     <Class Id="{2FB7B773-F043-3DA3-92A8-C683DC72EDFB}" Context="InprocServer32" Description="eIDLinkX.IObjectSafetyImpl" ThreadingModel="both" ForeignServer="mscoree.dll">
+                        <ProgId Id="eIDLinkX.IObjectSafetyImpl" Description="eIDLinkX.IObjectSafetyImpl" />
+                     </Class>
+                     <Class Id="{B08A638E-66C3-4586-823A-5B89A0301920}" Context="InprocServer32" Description="eIDLinkX.Link" ThreadingModel="both" ForeignServer="mscoree.dll">
+                        <ProgId Id="be.bosa.eidlink" Description="eIDLinkX.Link" />
+                     </Class>
+                     <File Id="eidlink.dll" KeyPath="yes" Source="eIDLinkX\bin\Release\eidlink.dll" />
+                     <ProgId Id="Record" />
+                     <RegistryValue Root="HKCR" Key="CLSID\{2FB7B773-F043-3DA3-92A8-C683DC72EDFB}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" Action="write" />
+                     <RegistryValue Root="HKCR" Key="CLSID\{2FB7B773-F043-3DA3-92A8-C683DC72EDFB}\InprocServer32\0.0.4.0" Name="Class" Value="eIDLinkX.IObjectSafetyImpl" Type="string" Action="write" />
+                     <RegistryValue Root="HKCR" Key="CLSID\{2FB7B773-F043-3DA3-92A8-C683DC72EDFB}\InprocServer32\0.0.4.0" Name="Assembly" Value="eIDLink, Version=0.0.4.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
+                      <RegistryValue Root="HKCR" Key="CLSID\{2FB7B773-F043-3DA3-92A8-C683DC72EDFB}\InprocServer32\0.0.4.0" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
+                      <RegistryValue Root="HKCR" Key="CLSID\{2FB7B773-F043-3DA3-92A8-C683DC72EDFB}\InprocServer32\0.0.4.0" Name="CodeBase" Value="file:///[#eidlink.dll]" Type="string" Action="write" />
+                      <RegistryValue Root="HKCR" Key="CLSID\{2FB7B773-F043-3DA3-92A8-C683DC72EDFB}\InprocServer32" Name="Class" Value="eIDLinkX.IObjectSafetyImpl" Type="string" Action="write" />
+                      <RegistryValue Root="HKCR" Key="CLSID\{2FB7B773-F043-3DA3-92A8-C683DC72EDFB}\InprocServer32" Name="Assembly" Value="eIDLink, Version=0.0.4.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
+                      <RegistryValue Root="HKCR" Key="CLSID\{2FB7B773-F043-3DA3-92A8-C683DC72EDFB}\InprocServer32" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
+                      <RegistryValue Root="HKCR" Key="CLSID\{2FB7B773-F043-3DA3-92A8-C683DC72EDFB}\InprocServer32" Name="CodeBase" Value="file:///[#eidlink.dll]" Type="string" Action="write" />
+                      <RegistryValue Root="HKCR" Key="CLSID\{B08A638E-66C3-4586-823A-5B89A0301920}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" Action="write" />
+                      <RegistryValue Root="HKCR" Key="CLSID\{B08A638E-66C3-4586-823A-5B89A0301920}\InprocServer32\0.0.4.0" Name="Class" Value="eIDLinkX.Link" Type="string" Action="write" />
+                      <RegistryValue Root="HKCR" Key="CLSID\{B08A638E-66C3-4586-823A-5B89A0301920}\InprocServer32\0.0.4.0" Name="Assembly" Value="eIDLink, Version=0.0.4.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
+                      <RegistryValue Root="HKCR" Key="CLSID\{B08A638E-66C3-4586-823A-5B89A0301920}\InprocServer32\0.0.4.0" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
+                      <RegistryValue Root="HKCR" Key="CLSID\{B08A638E-66C3-4586-823A-5B89A0301920}\InprocServer32\0.0.4.0" Name="CodeBase" Value="file:///[#eidlink.dll]" Type="string" Action="write" />
+                      <RegistryValue Root="HKCR" Key="CLSID\{B08A638E-66C3-4586-823A-5B89A0301920}\InprocServer32" Name="Class" Value="eIDLinkX.Link" Type="string" Action="write" />
+                      <RegistryValue Root="HKCR" Key="CLSID\{B08A638E-66C3-4586-823A-5B89A0301920}\InprocServer32" Name="Assembly" Value="eIDLink, Version=0.0.4.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
+                      <RegistryValue Root="HKCR" Key="CLSID\{B08A638E-66C3-4586-823A-5B89A0301920}\InprocServer32" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
+                      <RegistryValue Root="HKCR" Key="CLSID\{B08A638E-66C3-4586-823A-5B89A0301920}\InprocServer32" Name="CodeBase" Value="file:///[#eidlink.dll]" Type="string" Action="write" />
+                      <RegistryValue Root="HKCR" Key="Record\{9BD7AE07-D27B-3707-B65B-3B04A169B13E}\0.0.4.0" Name="Class" Value="eIDLinkX.ObjectSafetyOptions" Type="string" Action="write" />
+                      <RegistryValue Root="HKCR" Key="Record\{9BD7AE07-D27B-3707-B65B-3B04A169B13E}\0.0.4.0" Name="Assembly" Value="eIDLink, Version=0.0.4.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
+                      <RegistryValue Root="HKCR" Key="Record\{9BD7AE07-D27B-3707-B65B-3B04A169B13E}\0.0.4.0" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
+                      <RegistryValue Root="HKCR" Key="Record\{9BD7AE07-D27B-3707-B65B-3B04A169B13E}\0.0.4.0" Name="CodeBase" Value="file:///[#eidlink.dll]" Type="string" Action="write" />
+                  </Component>
+               <!--/ComponentGroup-->
+            </Directory>
+         </Directory>
+      </Directory>
+      <Feature Id="Install" Level="1" Title="eIDLink" Display="expand" ConfigurableDirectory="APPLICATIONFOLDER">
+         <ComponentRef Id="Application"/>
+      </Feature>
+   </Product>
+</Wix>

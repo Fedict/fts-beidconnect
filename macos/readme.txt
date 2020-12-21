@@ -44,3 +44,8 @@ Also for existing applications (and installed versions) the notarisation can sti
 
 	xcrun stapler staple "eidlink_1.1.dmg"
 
+
+
+For distributing outside of Apple store, packages need to be signed by a "Developer ID installer" certificte and not another type of Mac or apple installer certificate.
+(Agent has the ability to create one)
+Notarising will return ok, but as soon as the dmg is downloaded from the internet, macOS will show a warning that the source is not trusted, if no developer ID Installer certificate was used to sign the software.

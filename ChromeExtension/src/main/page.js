@@ -23,7 +23,7 @@ function EIDChromeExt() {
     function messagePromise(msg) {
         return new Promise(function(resolve, reject) {
             msg.correlationId = guid();
-            msg.src = 'page.js';
+            msg.src = 'EIDChromeExt.page';
 
             window.postMessage(msg, "*");
 
@@ -36,7 +36,7 @@ function EIDChromeExt() {
 
 	window.addEventListener("message", function(event) {
 		if(event.source !== window) return;
-		if(event.data.src && (event.data.src === "background.js")) {
+		if(event.data.src && (event.data.src === "EIDChromeExt.background")) {
 			console.log("Page received: ");
 			console.log(event.data);
 
