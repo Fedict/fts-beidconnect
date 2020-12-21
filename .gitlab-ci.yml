@@ -4,16 +4,22 @@ stages:
 
 srpm:
   stage: source
+  image: fedora:latest
   before_script:
-  - VER=$(git describe --always)
+  - yum install -y git rpm-build rpmdevtools
+  - rpmdev-setuptree
+  - VER=$(git describe --always | sed -e 's/-/./g')
   - mkdir -p products/tar
-  - git archive --prefix=eidlink-$VER/ -o products/tar/eidlink-$VER.tar.gz $CI_COMMIT_REF_NAME
+  - git archive --prefix=eidlink-$VER/ -o products/tar/eidlink-$VER.tar.gz origin/$CI_COMMIT_REF_NAME
   - cp products/tar/eidlink-$VER.tar.gz ~/rpmbuild/SOURCES/
+  - echo $VER > products/version
+  - COMMIT_DATE=$(git log --date=rfc HEAD^..HEAD|grep ^Date|cut -d ' ' -f 2-|sed -e 's/^\s*//')
+  - echo $COMMIT_DATE > products/date
   script:
   - rpmbuild --define "version $VER" -bs linux/eidlink.spec
   after_script:
   - mkdir -p products/srpm
-  - cp ~/rpmbuild/SRPMS/eidlink.$VER.src.rpm products/srpm/
+  - cp ~/rpmbuild/SRPMS/eidlink-*.src.rpm products/srpm/
   artifacts:
     paths:
     - products
@@ -22,26 +28,98 @@ srpm:
 
 .build:fedora: &fedbuild
   stage: binary
+  image: fedora:latest
   dependencies:
   - srpm
   before_script:
-  - dnf -y install mock git
+  - dnf -y install mock git rpm-build rpmdevtools
+  - VER=$(cat products/version)
   script:
-  - mock --old-chroot --verbose -r fedora-$VERSION-$ARCH --rebuild products/srpm/eidlink-*.src.rpm --resultdir $CI_PROJECT_DIR/products/fedora-$VERSION-$ARCH
+  - mock --old-chroot --verbose -r $DIST-$VERSION-$ARCH --define "version $VER" --rebuild products/srpm/eidlink-*.src.rpm --resultdir $CI_PROJECT_DIR/products/$DIST-$VERSION-$ARCH
   artifacts:
     paths:
-    - products/fedora-$VERSION-$ARCH
+    - products/$DIST-$VERSION-$ARCH
+    when:
+      on_success
+
+.build:deb: &debuild
+  stage: binary
+  image: tianon/sbuild:latest
+  dependencies:
+  # We don't actually need the srpms, but we do need the version file. Although that could be done in a separate job, having them together seems easier.
+  - srpm
+  before_script:
+  - apt-get update; apt-get install devscripts dpkg-dev
+  - sbuild-createchroot --arch=$ARCH $CODE /srv/chroot/$CODE $MIRROR $SCRIPT
+  - VER=$(cat products/version)
+  - COMMIT_DATE=$(cat products/date)
+  - if [ $ARCH = "i386" ]; then DASHA="-A -s"; else DASHA="--no-arch-all --no-source"; fi
+  - export DASHA
+  - ./linux/deb-cl.pl debian/changelog "$COMMITDATE" "$VER"
+  script:
+  - sbuild -n $DASHA -c $CODE-$ARCH-sbuild --arch=$ARCH
+  after_script:
+  - mkdir -p products/deb/$CODE/$ARCH
+  - dcmd cp *ges products/deb/$CODE/$ARCH
+  artifacts:
+    paths:
+    - products/deb
     when:
       on_success
 
 build:fedora-32-64:
   <<: *fedbuild
   variables:
-    VERSION: 31
+    VERSION: 32
     ARCH: x86_64
+    DIST: fedora
 
 build:fedora-32-32:
   <<: *fedbuild
   variables:
     VERSION: 32
-    ARCH: i686
+    ARCH: i386
+    DIST: fedora
+
+build:fedora-33-64:
+  <<: *fedbuild
+  variables:
+    VERSION: 33
+    ARCH: x86_64
+    DIST: fedora
+
+build:fedora-33-32:
+  <<: *fedbuild
+  variables:
+    VERSION: 33
+    ARCH: i386
+    DIST: fedora
+
+build:centos-8-64:
+  <<: *fedbuild
+  variables:
+    VERSION: 8
+    ARCH: x86_64
+    DIST: centos
+
+build:centos-7-64:
+  <<: *fedbuild
+  variables:
+    VERSION: 7
+    ARCH: x86_64
+    DIST: centos
+
+build:debian-10-32:
+  <<: *debuild
+  variables:
+    CODE: buster
+    ARCH: i386
+    MIRROR: http://deb.debian.org/debian
+
+build:ubuntu-2010-32:
+  <<: *debuild
+  variables:
+    CODE: groovy
+    ARCH: i386
+    MIRROR: http://archive.ubuntu.com/ubuntu
+    SCRIPT: /usr/share/debootstrap/scripts/gutsy

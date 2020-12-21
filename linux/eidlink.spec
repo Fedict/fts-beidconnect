@@ -27,7 +27,7 @@ This package contains the native code. For the WebExtension, see your
 webbrowser's extension store.
 
 %prep
-%setup -n eidlink
+%setup
 
 %build
 %{__make} %{?_smp_mflags} -C linux CFLAGS='-g -O2' CXXFLAGS='-g -O2' eidlink
