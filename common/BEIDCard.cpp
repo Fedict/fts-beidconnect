@@ -711,7 +711,7 @@ int BEIDCard::sign(unsigned char* in, unsigned int l_in, int hashAlgo, unsigned 
       cmd[cmdlen] = l_in; cmdlen++;
       memcpy(&cmd[cmdlen], in, l_in);
       cmdlen += l_in;
-      cmd[cmdlen] = (unsigned char) sign_lg; cmdlen++; //384/8*2
+      cmd[cmdlen] = 0;     /* Le should be 0 */
    }
    
    recvlen = (int) sizeof(recv);
