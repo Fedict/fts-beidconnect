@@ -1,6 +1,6 @@
 The MIT License
 
-Copyright (c) 2020 Zetes NV/SA 
+Copyright (c) 2020 FOD/SPF BOSA
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
