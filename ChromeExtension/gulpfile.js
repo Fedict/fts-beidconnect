@@ -87,7 +87,7 @@ gulp.task('manifest-release-chrome', function () {
     .pipe(replace({
       patterns: [
         {match: /"matches": \[.+\]/g,
-                 replacement: '"matches": ["https://*.belgium.be/*", "https://*.zetes.be/*"]'},
+                 replacement: '"matches": ["https://*.belgium.be/*"]'},
         {match: 'VERSION',
          replacement: version}
       ]
@@ -99,7 +99,7 @@ gulp.task('manifest-release-firefox', function() {
     return gulp.src('./src/main/manifest.json')
     .pipe(jeditor(function(manifest) {
 	manifest.version = version;
-	manifest.content_scripts[0].matches = ['https://*.belgium.be/*','https://*.zetes.be/*'];
+	manifest.content_scripts[0].matches = ['https://*.belgium.be/*'];
 	delete manifest.key;
 	delete manifest.minimum_chrome_version;
 	delete manifest.background.persistent;
