@@ -1,15 +1,15 @@
-Source: eidlink
+Source: beidconnect
 Section: libs
 Priority: optional
 Maintainer: Wouter Verhelst <wouter.verhelst@zetes.com>
 Build-Depends: debhelper (>= 9), libboost-dev, libpcsclite-dev, pkg-config, python3
 Standards-Version: 4.1.3
 
-Package: eidlink
+Package: beidconnect
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, pcscd
 Description: native messaging component for DSS signing services
- The eIDlink is a program to help implementing digital signing services
+ BeIDConnect is a program to help implementing digital signing services
  and/or an identity service using the Belgian eID card. It provides
  services to webbrowsers to read data from cards, and is intended to
  work together with a WebExtension in the browser.
