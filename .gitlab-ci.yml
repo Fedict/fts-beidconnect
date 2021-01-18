@@ -10,16 +10,16 @@ srpm:
   - rpmdev-setuptree
   - VER=$(git describe --always | sed -e 's/-/./g')
   - mkdir -p products/tar
-  - git archive --prefix=eidlink-$VER/ -o products/tar/eidlink-$VER.tar.gz origin/$CI_COMMIT_REF_NAME
-  - cp products/tar/eidlink-$VER.tar.gz ~/rpmbuild/SOURCES/
+  - git archive --prefix=beidconnect-$VER/ -o products/tar/beidconnect-$VER.tar.gz origin/$CI_COMMIT_REF_NAME
+  - cp products/tar/beidconnect-$VER.tar.gz ~/rpmbuild/SOURCES/
   - echo $VER > products/version
   - COMMIT_DATE=$(git log --date=rfc HEAD^..HEAD|grep ^Date|cut -d ' ' -f 2-|sed -e 's/^\s*//')
   - echo $COMMIT_DATE > products/date
   script:
-  - rpmbuild --define "version $VER" -bs linux/eidlink.spec
+  - rpmbuild --define "version $VER" -bs linux/beidconnect.spec
   after_script:
   - mkdir -p products/srpm
-  - cp ~/rpmbuild/SRPMS/eidlink-*.src.rpm products/srpm/
+  - cp ~/rpmbuild/SRPMS/beidconnect-*.src.rpm products/srpm/
   artifacts:
     paths:
     - products
@@ -35,7 +35,7 @@ srpm:
   - dnf -y install mock git rpm-build rpmdevtools
   - VER=$(cat products/version)
   script:
-  - mock --old-chroot --verbose -r $DIST-$VERSION-$ARCH --define "version $VER" --rebuild products/srpm/eidlink-*.src.rpm --resultdir $CI_PROJECT_DIR/products/$DIST-$VERSION-$ARCH
+  - mock --old-chroot --verbose -r $DIST-$VERSION-$ARCH --define "version $VER" --rebuild products/srpm/beidconnect-*.src.rpm --resultdir $CI_PROJECT_DIR/products/$DIST-$VERSION-$ARCH
   artifacts:
     paths:
     - products/$DIST-$VERSION-$ARCH
