@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:eIDLink.xcodeproj">
+      location = "self:/Users/vital/Develop/proj/BOSA/eidlink/macos/eIDLink.xcodeproj">
    </FileRef>
 </Workspace>

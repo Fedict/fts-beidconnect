@@ -1,4 +1,4 @@
-VERSION = 1.6
+VERSION = 1.7
 IDENTIFIER = be.bosa.eidlink
 PROGRAM = eidlink
 DISTDIR = ./install/dist
@@ -34,7 +34,7 @@ $(DEPSDIR) :
 
 $(DMGFILE): $(INSTALL_PRODUCT) $(UNINSTALL_PRODUCT)
 	hdiutil create -fs JHFS+ -volname “eIDLink_Installer” -srcfolder $(DISTDIR) -ov $(DMGFILE)
-	codesign -s "Zetes Sa" --timestamp -i $(IDENTIFIER) $(DMGFILE)
+	codesign -s "Developer ID Application: Zetes Sa" --timestamp -i $(IDENTIFIER) $(DMGFILE)
 	cp $(DMGFILE) $(PROGRAM).dmg
 
 $(INSTALL_PRODUCT) : $(BINARIES) $(REQUIREMENTS) $(DEPENDENCY) $(COMPONENT_PFILE) $(INSTALL_COMPONENT) $(INSTALL_DISTRIBUTION_FILE)
@@ -55,7 +55,7 @@ $(UNINSTALL_PRODUCT): $(COMPONENT_PFILE) $(UNINSTALL_COMPONENT) $(UNINSTALL_DIST
 
 $(BINARIES):
 	xcodebuild install -project eIDLink.xcodeproj
-	codesign -f --options=runtime -s "Zetes Sa" -v $(EXE)
+	codesign -f --options=runtime -s "Developer ID Application: Zetes Sa" -v $(EXE)
 	
 $(COMPONENT_PFILE) :
 	@echo "Error: Missing component pfile."
