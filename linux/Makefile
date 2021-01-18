@@ -1,6 +1,6 @@
 PLDFLAGS = $(shell pkg-config --libs libpcsclite)
 PCFLAGS = $(shell pkg-config --cflags libpcsclite)
-eidlink: asn1.o BEIDCard.o Card.o CardFactory.o CardReader.o CertChainRequestHandler.o comm.o hash.o InfoRequestHandler.o log.o main.o native.o ReaderList.o Request.o RequestHandler.o SCard.o SignRequestHandler.o UserCertsRequestHandler.o util.o VersionRequestHandler.o VirtualCard.o VirtualReader.o x509Util.o crypto.o setup.o test.o
+beidconnect: asn1.o BEIDCard.o Card.o CardFactory.o CardReader.o CertChainRequestHandler.o comm.o hash.o InfoRequestHandler.o log.o main.o native.o ReaderList.o Request.o RequestHandler.o SCard.o SignRequestHandler.o UserCertsRequestHandler.o util.o VersionRequestHandler.o VirtualCard.o VirtualReader.o x509Util.o crypto.o setup.o test.o
 	$(CXX) $^ $(PLDFLAGS) $(LDFLAGS) -o $@
 
 %.o: ../common/%.cpp
@@ -10,10 +10,10 @@ eidlink: asn1.o BEIDCard.o Card.o CardFactory.o CardReader.o CertChainRequestHan
 
 install:
 	install -d $(DESTDIR)/usr/bin
-	install -m 755 eidlink $(DESTDIR)/usr/bin/
+	install -m 755 beidconnect $(DESTDIR)/usr/bin/
 
 clean:
-	rm -f *.o eidlink
+	rm -f *.o beidconnect
 
-check: eidlink
+check: beidconnect
 	cd ..; python3 test/test.py
