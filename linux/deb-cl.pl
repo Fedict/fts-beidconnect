@@ -29,7 +29,7 @@ while(<GIT>) {
 }
 close GIT;
 
-$entry->{header} = "eidlink ($version-0" . $short . "-1) $dist; urgency=low";
+$entry->{header} = "beidconnect ($version-0" . $short . "-1) $dist; urgency=low";
 $entry->{changes} = ["  * built from commit $commit"];
 $entry->{trailer} = " -- BOSA servicedesk <servicedesk\@bosa.fgov.be>  $date";
 $entry->normalize;
