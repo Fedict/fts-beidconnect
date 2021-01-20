@@ -49,7 +49,7 @@ srpm:
   # We don't actually need the srpms, but we do need the version file. Although that could be done in a separate job, having them together seems easier.
   - srpm
   before_script:
-  - apt-get update; apt-get install devscripts dpkg-dev git
+  - apt-get update; apt-get -y install devscripts dpkg-dev git
   - sbuild-createchroot --arch=$ARCH $CODE /srv/chroot/$CODE $MIRROR $SCRIPT
   - VER=$(cat products/version)
   - COMMIT_DATE=$(cat products/date)
