@@ -17,6 +17,8 @@ my $short = shift;
 my $date;
 my $commit;
 
+$version =~ s/^v//;
+
 open GIT, "git log --date=rfc HEAD^..HEAD|";
 while(<GIT>) {
 	chomp;
