@@ -49,7 +49,7 @@ srpm:
   # We don't actually need the srpms, but we do need the version file. Although that could be done in a separate job, having them together seems easier.
   - srpm
   before_script:
-  - apt-get update; apt-get -y install devscripts dpkg-dev git
+  - apt-get update; apt-get -y install devscripts dpkg-dev git debhelper
   - sbuild-createchroot --arch=$ARCH $CODE /srv/chroot/$CODE $MIRROR $SCRIPT
   - VER=$(cat products/version)
   - if [ $ARCH = "i386" ]; then DASHA="-A -s"; else DASHA="--no-arch-all --no-source"; fi
