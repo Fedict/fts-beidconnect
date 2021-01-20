@@ -23,5 +23,5 @@ def get_exe():
     return {
         'darwin': ['./Build/Release/eIDLink', ''],
         'win32':['.\VS_2019\Release\eIDLink.exe', ''],
-        'linux':  ['./linux/eidlink', '']
+        'linux':  ['./linux/beidconnect', '']
     }.get(sys.platform, '')
