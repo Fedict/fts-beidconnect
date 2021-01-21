@@ -109,6 +109,22 @@ build:centos-7-64:
     ARCH: x86_64
     DIST: centos
 
+build:debian-9-32:
+  <<: *debuild
+  variables:
+    CODE: stretch
+    SHORT: deb9
+    ARCH: i386
+    MIRROR: http://deb.debian.org/debian
+
+build:debian-9-64:
+  <<: *debuild
+  variables:
+    CODE: stretch
+    SHORT: deb9
+    ARCH: amd64
+    MIRROR: http://deb.debian.org/debian
+
 build:debian-10-32:
   <<: *debuild
   variables:
@@ -117,11 +133,64 @@ build:debian-10-32:
     ARCH: i386
     MIRROR: http://deb.debian.org/debian
 
+build:debian-10-64:
+  <<: *debuild
+  variables:
+    CODE: buster
+    SHORT: deb10
+    ARCH: amd64
+    MIRROR: http://deb.debian.org/debian
+
+build:ubuntu-2010-64:
+  <<: *debuild
+  variables:
+    CODE: groovy
+    ARCH: amd64
+    SHORT: u2010
+    MIRROR: http://archive.ubuntu.com/ubuntu
+    SCRIPT: /usr/share/debootstrap/scripts/gutsy
+
 build:ubuntu-2010-32:
   <<: *debuild
   variables:
     CODE: groovy
     ARCH: i386
     SHORT: u2010
+    MIRROR: http://archive.ubuntu.com/ubuntu
+    SCRIPT: /usr/share/debootstrap/scripts/gutsy
+
+build:ubuntu-2004-64:
+  <<: *debuild
+  variables:
+    CODE: focal
+    ARCH: amd64
+    SHORT: u2004
+    MIRROR: http://archive.ubuntu.com/ubuntu
+    SCRIPT: /usr/share/debootstrap/scripts/gutsy
+
+build:ubuntu-2004-32:
+  <<: *debuild
+  variables:
+    CODE: focal
+    ARCH: i386
+    SHORT: u2004
+    MIRROR: http://archive.ubuntu.com/ubuntu
+    SCRIPT: /usr/share/debootstrap/scripts/gutsy
+
+build:ubuntu-1804-64:
+  <<: *debuild
+  variables:
+    CODE: bionic
+    ARCH: amd64
+    SHORT: u1804
+    MIRROR: http://archive.ubuntu.com/ubuntu
+    SCRIPT: /usr/share/debootstrap/scripts/gutsy
+
+build:ubuntu-1804-32:
+  <<: *debuild
+  variables:
+    CODE: bionic
+    ARCH: i386
+    SHORT: u1804
     MIRROR: http://archive.ubuntu.com/ubuntu
     SCRIPT: /usr/share/debootstrap/scripts/gutsy
