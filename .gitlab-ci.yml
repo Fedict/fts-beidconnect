@@ -54,6 +54,7 @@ srpm:
   - VER=$(cat products/version)
   - if [ $ARCH = "i386" ]; then DASHA="-A -s"; else DASHA="--no-arch-all --no-source"; fi
   - export DASHA
+  - if [ ! -z "$http_proxy" ]; then echo "Acquire::http::Proxy \"$http_proxy\";" > /srv/chroot/$CODE/etc/apt/apt.conf.d/99proxy; fi
   - ./linux/deb-cl.pl "$VER" "$CODE" "$SHORT"
   script:
   - sbuild -n $DASHA -c $CODE-$ARCH-sbuild --arch=$ARCH
