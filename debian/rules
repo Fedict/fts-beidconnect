@@ -18,7 +18,7 @@ export DEB_LDFLAGS_MAINT_APPEND = -Wl,--as-needed
 	dh $@ --parallel
 
 override_dh_auto_configure:
-	echo 'eidlink:\n\t$$(MAKE) -C linux eidlink\n%:\n\t$$(MAKE) -C linux $$@' > Makefile
+	echo 'beidconnect:\n\t$$(MAKE) -C linux beidconnect\n%:\n\t$$(MAKE) -C linux $$@' > Makefile
 
 override_dh_auto_clean:
 	dh_auto_clean
