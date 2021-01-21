@@ -50,7 +50,7 @@ class TestLongrunningHost(unittest.TestCase):
              "correlationId":"07386ce7-f73e-4e99-dfc3-8d69b6adf33d"
          }
          resp = self.transceive("{\"operation\":\"VERSION\",\"correlationId\":\"07386ce7-f73e-4e99-dfc3-8d69b6adf33d\"}")
-         self.assertEqual(resp['version'], "1.5")
+         self.assertEqual(resp['version'], "1.6")
    
     def test2_info(self):
          cmd = {
