@@ -4,7 +4,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
 
-namespace eIDLinkX
+namespace BeIDConnectX
 {
     //
     // MS IObjectSafety Interface definition

@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("eIDLinkX")]
-[assembly: AssemblyDescription("Active X component of eIDLink")]
+[assembly: AssemblyTitle("BeIDConnectX")]
+[assembly: AssemblyDescription("Active X component of BeIDConnect")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Zetes NV/SA")]
-[assembly: AssemblyProduct("eIDLinkX")]
+[assembly: AssemblyCompany("Bosa")]
+[assembly: AssemblyProduct("BeIDConnectX")]
 [assembly: AssemblyCopyright("Bosa")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -31,5 +31,5 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
-[assembly: AssemblyVersion("0.0.4")]
-[assembly: AssemblyFileVersion("0.0.4")]
+[assembly: AssemblyVersion("1.0.0")]
+[assembly: AssemblyFileVersion("1.0.0")]

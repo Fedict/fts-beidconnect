@@ -7,9 +7,9 @@ using System.IO;
 using System.Net;
 
 
-namespace eIDLinkX
+namespace BeIDConnectX
 {
-    [ProgId("be.bosa.eidlink")]
+    [ProgId("be.bosa.beidconnect")]
     [ClassInterface(ClassInterfaceType.AutoDual)]
     [Guid("B08A638E-66C3-4586-823A-5B89A0301920")]
     [ComVisible(true)]
@@ -30,7 +30,7 @@ namespace eIDLinkX
             string programFilesfolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 #endif            
 
-            process.StartInfo.FileName = programFilesfolder + "\\BOSA\\eidlink\\eidLink.exe";
+            process.StartInfo.FileName = programFilesfolder + "\\BOSA\\BeIDConnect\\beidconnect.exe";
 
             process.StartInfo.Arguments = "";
             process.StartInfo.UseShellExecute = false;
