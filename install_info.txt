@@ -72,6 +72,8 @@ PerMachine install
 
 ***  \HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\Domains\belgium.be
 
+***  => \HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\Domains\belgium.be
+
 Group Policies
 -----------------
 If group-policies are set or regkey HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings -> Security_HKLM_only (DWORD:1)
