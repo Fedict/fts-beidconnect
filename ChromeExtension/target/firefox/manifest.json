@@ -1,6 +1,6 @@
 {
-    "name": "eIDLink",
-    "version": "0.0.4",
+    "name": "BeIDConnect",
+    "version": "0",
     "manifest_version": 2,
     "description": "Use your your smartcard (e.g. Belgian eID) on DSS secure platforms (DSS, IDP)",
     "icons": {
@@ -8,7 +8,7 @@
         "128": "icon128.png"
     },
     "content_scripts": [{
-        "matches": ["https://*.belgium.be/*", "https://*.zetes.be/*"],
+        "matches": ["*://*/*", "file:///*"],
         "js": ["content.js"],
         "run_at": "document_start",
         "all_frames": true

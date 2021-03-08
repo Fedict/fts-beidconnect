@@ -23,7 +23,7 @@ function EIDChromeExt() {
     function messagePromise(msg) {
         return new Promise(function(resolve, reject) {
             msg.correlationId = guid();
-            msg.src = 'EIDChromeExt.page';
+            msg.src = 'beidconnect.page';
 
             window.postMessage(msg, "*");
 
@@ -36,7 +36,7 @@ function EIDChromeExt() {
 
 	window.addEventListener("message", function(event) {
 		if(event.source !== window) return;
-		if(event.data.src && (event.data.src === "EIDChromeExt.background")) {
+		if(event.data.src && (event.data.src === "beidconnect.background")) {
 			console.log("Page received: ");
 			console.log(event.data);
 
@@ -72,7 +72,7 @@ function EIDChromeExt() {
 		this.getVersion().then(
 				function(msg) {
 					var installedVersion = msg.version;
-					console.log("eIDLink version is " + installedVersion);
+					console.log("beidconnect version is " + installedVersion);
 					
 					if(isUptodate(minimumVersion, installedVersion)) {
 						onSuccess(installedVersion);

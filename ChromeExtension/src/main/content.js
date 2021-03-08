@@ -4,7 +4,7 @@ window.addEventListener("message", function(event) {
       return;
     }
 
-    if (event.data.src && (event.data.src === "EIDChromeExt.page")) {
+    if (event.data.src && (event.data.src === "beidconnect.page")) {
         event.data.origin = location.origin;
         chrome.runtime.sendMessage(event.data, function(response) {});
     }

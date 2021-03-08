@@ -3,8 +3,8 @@
 #  postinstall
 #  eidlink
 #
-EIDLINKPATH="$HOME/Applications"
-EIDLINK="$EIDLINKPATH/eIDLink"
+APPLICATIONPATH="$HOME/Applications"
+BEIDCONNECT="$APPLICATIONPATH/BeIDConnect"
 
 CHROME_EXTENSION_PATH="$HOME/Library/Application Support/Google/Chrome/NativeMessagingHosts"
 CHROME_BETA_EXTENSION_PATH="$HOME/Library/Application Support/Google/Chrome Beta/NativeMessagingHosts"
@@ -16,8 +16,8 @@ test -e "$HOME/Library/Application Support/Google/Chrome Beta" && mkdir "$CHROME
 test -e "$HOME/Library/Application Support/Chromium" && mkdir "$CHROMIUM_EXTENSION_PATH"
 test -e "$HOME/Library/Application Support/Mozilla" && mkdir "$FIREFOX_EXTENSION_PATH"
 
-test -e $EIDLINK && $EIDLINK -setup "$EIDLINKPATH" "$CHROME_EXTENSION_PATH" "$FIREFOX_EXTENSION_PATH"
-test -e "$CHROMIUM_EXTENSION_PATH" && test -e "$CHROME_EXTENSION_PATH/be.bosa.eidlink.json" && cp "$CHROME_EXTENSION_PATH/be.bosa.eidlink.json" "$CHROMIUM_EXTENSION_PATH/"
-test -e "$CHROME_BETA_EXTENSION_PATH" && test -e "$CHROME_EXTENSION_PATH/be.bosa.eidlink.json" && cp "$CHROME_EXTENSION_PATH/be.bosa.eidlink.json" "$CHROME_BETA_EXTENSION_PATH/"
+test -e $BEIDCONNECT && $BEIDCONNECT -setup "$APPLICATIONPATH" "$CHROME_EXTENSION_PATH" "$FIREFOX_EXTENSION_PATH"
+test -e "$CHROMIUM_EXTENSION_PATH" && test -e "$CHROME_EXTENSION_PATH/be.bosa.beidconnect.json" && cp "$CHROME_EXTENSION_PATH/be.bosa.beidconnect.json" "$CHROMIUM_EXTENSION_PATH/"
+test -e "$CHROME_BETA_EXTENSION_PATH" && test -e "$CHROME_EXTENSION_PATH/be.bosa.beidconnect.json" && cp "$CHROME_EXTENSION_PATH/be.bosa.beidconnect.json" "$CHROME_BETA_EXTENSION_PATH/"
 
 exit 0

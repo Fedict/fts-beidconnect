@@ -1,11 +1,11 @@
-VERSION = 1.7
-IDENTIFIER = be.bosa.eidlink
-PROGRAM = eidlink
+VERSION = 2.0
+IDENTIFIER = be.bosa.beidconnect
+PROGRAM = beidconnect
 DISTDIR = ./install/dist
 DEPSDIR = ./install/deps
 BUILDDIR = ./build
-EXE = ./Build/Release/eIDLink
-BINARIES = /tmp/eIDLink.dst
+EXE = ./Build/Release/BeIDConnect
+BINARIES = /tmp/BeIDConnect.dst
 DMGFILE = $(PROGRAM)_$(VERSION).dmg
 INSTALL_PRODUCT = $(DISTDIR)/1.$(PROGRAM)-install.pkg
 INSTALL_RESOURCES = ./install/install_resources
@@ -13,7 +13,7 @@ UNINSTALL_PRODUCT = $(DISTDIR)/$(PROGRAM)-uninstall.pkg
 UNINSTALL_RESOURCES = ./install/uninstall_resources
 INSTALL_COMPONENT = $(DEPSDIR)/$(PROGRAM)Component.pkg
 UNINSTALL_COMPONENT = $(DEPSDIR)/$(PROGRAM)UninstallComponent.pkg
-COMPONENT_PFILE = ./install/eIDlinkComponent.plist
+COMPONENT_PFILE = ./install/BeIDConnectComponent.plist
 SCRIPTS = ./install/scripts
 UNINSTALLSCRIPTS = ./install/uninstallscripts
 INSTALL_DISTRIBUTION_FILE = ./install/distribution.plist
@@ -33,7 +33,7 @@ $(DEPSDIR) :
 	mkdir $(DEPSDIR)
 
 $(DMGFILE): $(INSTALL_PRODUCT) $(UNINSTALL_PRODUCT)
-	hdiutil create -fs JHFS+ -volname “eIDLink_Installer” -srcfolder $(DISTDIR) -ov $(DMGFILE)
+	hdiutil create -fs JHFS+ -volname “BeIDConnect_Installer” -srcfolder $(DISTDIR) -ov $(DMGFILE)
 	codesign -s "Developer ID Application: Zetes Sa" --timestamp -i $(IDENTIFIER) $(DMGFILE)
 	cp $(DMGFILE) $(PROGRAM).dmg
 
@@ -54,7 +54,7 @@ $(UNINSTALL_PRODUCT): $(COMPONENT_PFILE) $(UNINSTALL_COMPONENT) $(UNINSTALL_DIST
 	$(UNINSTALL_PRODUCT)
 
 $(BINARIES):
-	xcodebuild install -project eIDLink.xcodeproj
+	xcodebuild install -project BeIDConnect.xcodeproj
 	codesign -f --options=runtime -s "Developer ID Application: Zetes Sa" -v $(EXE)
 	
 $(COMPONENT_PFILE) :
@@ -102,7 +102,7 @@ compfiles : $(BINARIES)
 	@echo "Edit the $(COMPONENT_PFILE).new template to create a suitable $(COMPONENT_PFILE) file."
 
 notarise: $(DMGFILE)
-	xcrun altool --notarize-app --primary-bundle-id $(IDENTIFIER) --username "@keychain:AC_USER" --password "@keychain:AC_PASSWORD" --asc-provider ZetesSa --file $(PROGRAM).dmg
+	xcrun altool --notarize-app --primary-bundle-id $(IDENTIFIER) --username vital.schonkeren@be.zetes.com --password "@keychain:AC_PASSWORD" --asc-provider ZetesSa --file $(PROGRAM).dmg
 
 staple: 
 	xcrun stapler staple $(PROGRAM).dmg

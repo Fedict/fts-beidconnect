@@ -63,11 +63,11 @@ function success(signature) {
 }
 
 function showExtensionLink() {
-   $("#feedback").append(" <a href='#' onclick='chrome.webstore.install()' title='Install eIDLink Extension'><span class='glyphicon glyphicon-download-alt'></span></a>");
+   $("#feedback").append(" <a href='#' onclick='chrome.webstore.install()' title='Install BeIDConnect Extension'><span class='glyphicon glyphicon-download-alt'></span></a>");
 }
 
 function showExtensionHostLink() {
-   $("#feedback").append(" <a href='#' onclick=window.open('https://www.eazysign.be/chrome-2') title='Install eIDLink Extension Host app'><span class='glyphicon glyphicon-download-alt'></span></a>");
+   $("#feedback").append(" <a href='#' onclick=window.open('https://www.eazysign.be/chrome') title='Install BeIDConnect Extension Host app'><span class='glyphicon glyphicon-download-alt'></span></a>");
 }
 
 $("#sign-btn").on("click", sign);

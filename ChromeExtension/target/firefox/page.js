@@ -1,1 +1,135 @@
-function EIDChromeExt(){function e(){function e(){return Math.floor(65536*(1+Math.random())).toString(16).substring(1)}return e()+e()+"-"+e()+"-"+e()+"-"+e()+"-"+e()+e()+e()}function n(n){return new Promise(function(t,i){n.correlationId=e(),n.src="EIDChromeExt.page",window.postMessage(n,"*"),o[n.correlationId]={resolve:t,reject:i}})}function t(e,n){var t=e.split("."),o=n.split(".");return o[0]>t[0]||o[0]===t[0]&&o[1]>=t[1]}var o={},i=function(e){this.message=e.result,this.report=e.report};i.prototype.toString=function(){return JSON.stringify(this)},window.addEventListener("message",function(e){if(e.source===window&&e.data.src&&"EIDChromeExt.background"===e.data.src)if(console.log("Page received: "),console.log(e.data),e.data.correlationId){var n=o[e.data.correlationId];if(void 0===n)return void console.log("No pending promise found, ignoring native reply");delete o[e.data.correlationId],"OK"===e.data.result?n.resolve(e.data):n.reject(new i(e.data))}else console.log("No correlationId in event msg")},!1),this.checkVersion=function(e,n,o,i){this.getVersion().then(function(o){var r=o.version;console.log("eIDLink version is "+r),t(e,r)?n(r):i(r)},function(e){o()})},this.getVersion=function(){return console.log("Getting version"),n({operation:"VERSION"})},this.sign=function(e,t,o,i,r,a){return console.log("Signing"),n({operation:"SIGN",cert:o,algo:i,digest:r,pin:a,language:e,mac:t})},this.auth=function(e,t,o,i,r,a){return console.log("Authentication"),n({operation:"AUTH",cert:o,algo:i,digest:r,language:e,mac:t,pin:a})},this.getUserCertificates=function(e,t){return console.log("Reading user certificates"),n({operation:"USERCERTS",language:e,mac:t})},this.getUserCertificateChain=function(e,t,o){return console.log("Getting certificate chain for specific cert"),n({operation:"CERTCHAIN",language:e,mac:t,cert:o})},this.getId=function(e,t,o){return console.log("ID"),n({operation:"ID",idflags:o.toString(),language:e,mac:t})},this.suspend=function(){console.log("Suspending pending promises"),o={}},console.log("EIDChromeExt interface initialized")}
+function EIDChromeExt() {
+	var pendingPromises = {};
+
+	var ExtensionError = function(eventData) {
+	  this.message = eventData.result;
+	  this.report = eventData.report;
+	};
+
+	ExtensionError.prototype.toString = function() {
+	  return JSON.stringify(this);  
+	};
+
+    function guid() {
+      function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+          .toString(16)
+          .substring(1);
+      }
+      return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+        s4() + '-' + s4() + s4() + s4();
+    }
+
+    function messagePromise(msg) {
+        return new Promise(function(resolve, reject) {
+            msg.correlationId = guid();
+            msg.src = 'beidconnect.page';
+
+            window.postMessage(msg, "*");
+
+            pendingPromises[msg.correlationId] = {
+                resolve: resolve,
+                reject: reject
+            };
+        });
+    }
+
+	window.addEventListener("message", function(event) {
+		if(event.source !== window) return;
+		if(event.data.src && (event.data.src === "beidconnect.background")) {
+			console.log("Page received: ");
+			console.log(event.data);
+
+			if(event.data.correlationId) {
+				var p = pendingPromises[event.data.correlationId];
+				if(p === undefined) {
+				  console.log("No pending promise found, ignoring native reply");
+				  return;
+				} 
+
+				delete pendingPromises[event.data.correlationId];
+
+				if(event.data.result === "OK") {
+					p.resolve(event.data);
+				} else {
+					p.reject(new ExtensionError(event.data));
+				}
+			} else {
+				console.log("No correlationId in event msg");
+			}
+		}
+	}, false);
+
+	function isUptodate(minimumVersion, installedVersion) {
+		var expected = minimumVersion.split(".");
+		var actual = installedVersion.split(".");
+		return  (actual[0] > expected[0]) || (actual[0] === expected[0] && actual[1] >= expected[1]);
+	}
+
+	// [API]
+	this.checkVersion = function(minimumVersion, onSuccess, onNotInstalled, onNeedsUpdate) {
+		var currentInstance = this;
+		this.getVersion().then(
+				function(msg) {
+					var installedVersion = msg.version;
+					console.log("beidconnect version is " + installedVersion);
+					
+					if(isUptodate(minimumVersion, installedVersion)) {
+						onSuccess(installedVersion);
+					} else {
+						onNeedsUpdate(installedVersion);
+					}
+				},
+				function(err) {
+            		onNotInstalled();
+				});
+   };
+
+    this.getVersion = function() {
+        console.log("Getting version");
+        return messagePromise({operation: 'VERSION'});
+    };
+
+//    this.getInfo = function() {
+//        console.log("Getting info");
+//        return messagePromise({operation: 'INFO'});
+//    };
+    
+//    this.getCertificateChain = function(language, mac) {
+//        console.log("Getting certificate chain");
+//        return messagePromise({operation: 'CERT', mac: mac});
+//    };
+    
+    this.sign = function(language, mac, cert, algo, digest, pin) {
+        console.log("Signing");
+        return messagePromise({operation: 'SIGN', cert: cert, algo: algo, digest: digest, pin: pin, language: language, mac: mac});
+    };
+   
+    this.auth = function(language, mac, cert, algo, digest, pin) {
+        console.log("Authentication");
+        return messagePromise({operation: 'AUTH', cert: cert, algo: algo, digest: digest, language: language, mac: mac, pin: pin});
+    };
+
+    this.getUserCertificates = function(language, mac) {
+    	console.log("Reading user certificates");
+    	return messagePromise({operation: 'USERCERTS', language: language, mac: mac});
+    };
+
+    this.getUserCertificateChain = function(language, mac, cert) {
+    	console.log("Getting certificate chain for specific cert");
+    	return messagePromise({operation: 'CERTCHAIN', language: language, mac: mac, cert: cert});
+    };
+
+    this.getId = function(language, mac, idflags) {
+        console.log("ID");
+        return messagePromise({operation: 'ID', idflags: idflags.toString(), language: language, mac: mac});
+    };
+
+    this.suspend = function() {
+        console.log("Suspending pending promises");
+        pendingPromises = {};
+    };
+	// [/API]
+
+	console.log("EIDChromeExt interface initialized");
+}

@@ -20,11 +20,11 @@ class TestLongrunningHost(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        print(' *** Testing eIDLink as native messaging host *** ')
+        print(' *** Testing BeIDConnect as native messaging host *** ')
 
     @classmethod
     def tearDownClass(cls):
-        print(' *** Finished testing eIDLink *** ')
+        print(' *** Finished testing BeIDConnect *** ')
 
     def transceive(self, msg):
         should_close_fds = sys.platform.startswith('win32') == False
@@ -50,7 +50,7 @@ class TestLongrunningHost(unittest.TestCase):
              "correlationId":"07386ce7-f73e-4e99-dfc3-8d69b6adf33d"
          }
          resp = self.transceive("{\"operation\":\"VERSION\",\"correlationId\":\"07386ce7-f73e-4e99-dfc3-8d69b6adf33d\"}")
-         self.assertEqual(resp['version'], "1.5")
+         self.assertEqual(resp['version'], "2.0")
    
     def test2_info(self):
          cmd = {

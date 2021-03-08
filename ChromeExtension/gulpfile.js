@@ -1,5 +1,5 @@
 /*
-  Gulp build file for eIDLink Chrome Extension.
+  Gulp build file for BeIDConnect Chrome Extension.
 
   To install Node modules: run "npm install"
   To build: run "gulp [--extversion X]"
@@ -111,12 +111,12 @@ gulp.task('manifest-release-firefox', function() {
 
 gulp.task('zip-chrome', function () {
     return gulp.src('./target/chrome/*')
-      .pipe(zip('eidlink-chrome-ext-' + version + '.zip'))
+      .pipe(zip('beidconnect-chrome-ext-' + version + '.zip'))
       .pipe(gulp.dest('./target'));
 });
 
 gulp.task('zip-firefox', function () {
     return gulp.src('./target/firefox/*')
-      .pipe(zip('eidlink-firefox-ext-' + version + '.zip'))
+      .pipe(zip('beidconnect-firefox-ext-' + version + '.zip'))
       .pipe(gulp.dest('./target'));
 });

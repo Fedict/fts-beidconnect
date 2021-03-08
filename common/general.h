@@ -15,15 +15,15 @@
  * Definitions
  *
  ******************************************************************************/
-#define EIDLINK_VERSION	"1.7"
+#define BEIDCONNECT_VERSION	"2.0"
 #define CLEANUP(a) { ret = a; goto cleanup; }
      
 #ifdef _WIN32
 #define CONFIG_FILE "c:\\tmp\\virtualdevice.cfg"
-#define LOG_FILE  "C:\\tmp\\eIDLink.log"
+#define LOG_FILE  "C:\\tmp\\beidconnect.log"
 #else
 #define CONFIG_FILE "/tmp/virtualdevice.cfg"
-#define LOG_FILE  "/tmp/eIDLink.log"
+#define LOG_FILE  "/tmp/beidconnect.log"
 #endif
      
 #define MAX_READER_NAME			128

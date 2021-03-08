@@ -115,7 +115,7 @@
 		E8EE466C24235D6A0074DC2C /* SignRequestHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SignRequestHandler.cpp; sourceTree = "<group>"; };
 		E8EE466E242360F30074DC2C /* Request.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Request.cpp; sourceTree = "<group>"; };
 		E8EE466F242360F30074DC2C /* Request.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Request.hpp; sourceTree = "<group>"; };
-		E8F2140923FAFAAC003768CE /* eIDLink */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = eIDLink; sourceTree = BUILT_PRODUCTS_DIR; };
+		E8F2140923FAFAAC003768CE /* BeIDConnect */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = BeIDConnect; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,6 +187,13 @@
 				E85AB6652413A1CB00BE9F0A /* testconf.py */,
 			);
 			name = test;
+			sourceTree = "<group>";
+		};
+		E864546F25F260900098E299 /* installation */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = installation;
 			sourceTree = "<group>";
 		};
 		E89B23CA24112BDC00D800E0 /* RequestHandlers */ = {
@@ -270,6 +277,7 @@
 		E8F2140023FAFAAC003768CE = {
 			isa = PBXGroup;
 			children = (
+				E864546F25F260900098E299 /* installation */,
 				E835C9A824376FFA008A17D9 /* ChromeExtension */,
 				E85AB6632413A1B600BE9F0A /* test */,
 				E8AB54A524110F070051D9A2 /* common */,
@@ -281,7 +289,7 @@
 		E8F2140A23FAFAAC003768CE /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E8F2140923FAFAAC003768CE /* eIDLink */,
+				E8F2140923FAFAAC003768CE /* BeIDConnect */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -289,9 +297,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E8F2140823FAFAAC003768CE /* eIDLink */ = {
+		E8F2140823FAFAAC003768CE /* BeIDConnect */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E8F2141023FAFAAC003768CE /* Build configuration list for PBXNativeTarget "eIDLink" */;
+			buildConfigurationList = E8F2141023FAFAAC003768CE /* Build configuration list for PBXNativeTarget "BeIDConnect" */;
 			buildPhases = (
 				E8F2140523FAFAAC003768CE /* Sources */,
 				E8F2140623FAFAAC003768CE /* Frameworks */,
@@ -301,9 +309,9 @@
 			);
 			dependencies = (
 			);
-			name = eIDLink;
+			name = BeIDConnect;
 			productName = eIDLink;
-			productReference = E8F2140923FAFAAC003768CE /* eIDLink */;
+			productReference = E8F2140923FAFAAC003768CE /* BeIDConnect */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -320,7 +328,7 @@
 					};
 				};
 			};
-			buildConfigurationList = E8F2140423FAFAAC003768CE /* Build configuration list for PBXProject "eIDLink" */;
+			buildConfigurationList = E8F2140423FAFAAC003768CE /* Build configuration list for PBXProject "BeIDConnect" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -333,7 +341,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				E8F2140823FAFAAC003768CE /* eIDLink */,
+				E8F2140823FAFAAC003768CE /* BeIDConnect */,
 			);
 		};
 /* End PBXProject section */
@@ -489,7 +497,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LIBRARY = "libc++";
-				CODE_SIGN_ENTITLEMENTS = eIDLink.entitlements;
+				CODE_SIGN_ENTITLEMENTS = BeIDConnect.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEPLOYMENT_LOCATION = YES;
@@ -506,7 +514,7 @@
 				INSTALL_PATH = /Applications;
 				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				PRODUCT_BUNDLE_IDENTIFIER = be.bosa.eidlink;
+				PRODUCT_BUNDLE_IDENTIFIER = be.bosa.beidconnect;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -517,7 +525,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LIBRARY = "libc++";
-				CODE_SIGN_ENTITLEMENTS = eIDLink.entitlements;
+				CODE_SIGN_ENTITLEMENTS = BeIDConnect.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEPLOYMENT_LOCATION = YES;
@@ -530,7 +538,7 @@
 				INSTALL_PATH = /Applications;
 				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				PRODUCT_BUNDLE_IDENTIFIER = be.bosa.eidlink;
+				PRODUCT_BUNDLE_IDENTIFIER = be.bosa.beidconnect;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRIP_INSTALLED_PRODUCT = YES;
@@ -540,7 +548,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E8F2140423FAFAAC003768CE /* Build configuration list for PBXProject "eIDLink" */ = {
+		E8F2140423FAFAAC003768CE /* Build configuration list for PBXProject "BeIDConnect" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E8F2140E23FAFAAC003768CE /* Debug */,
@@ -549,7 +557,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E8F2141023FAFAAC003768CE /* Build configuration list for PBXNativeTarget "eIDLink" */ = {
+		E8F2141023FAFAAC003768CE /* Build configuration list for PBXNativeTarget "BeIDConnect" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E8F2141123FAFAAC003768CE /* Debug */,
