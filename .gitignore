@@ -15,6 +15,9 @@ __pycache__
 *.VC.db
 *.VC.opendb
 *.pkg
+*.dmg
+*.msi
+*.zip
 
 testconf.pyc
 xcuserdata/
