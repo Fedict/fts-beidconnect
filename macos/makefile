@@ -13,7 +13,7 @@ UNINSTALL_PRODUCT = $(DISTDIR)/$(PROGRAM)-uninstall.pkg
 UNINSTALL_RESOURCES = ./install/uninstall_resources
 INSTALL_COMPONENT = $(DEPSDIR)/$(PROGRAM)Component.pkg
 UNINSTALL_COMPONENT = $(DEPSDIR)/$(PROGRAM)UninstallComponent.pkg
-COMPONENT_PFILE = ./install/BeIDConnectComponent.plist
+COMPONENT_PFILE = ./install/$(PROGRAM)Component.plist
 SCRIPTS = ./install/scripts
 UNINSTALLSCRIPTS = ./install/uninstallscripts
 INSTALL_DISTRIBUTION_FILE = ./install/distribution.plist
@@ -110,6 +110,7 @@ staple:
 .PHONY : clean
 clean:
 	-rm -f $(DMGFILE) $(INSTALL_PRODUCT) $(UNINSTALL_PRODUCT) $(INSTALL_COMPONENT) $(UNINSTALL_COMPONENT)
+	-rm -f $(PROGRAM).dmg
 	-rm -rf $(BINARIES)
 	-rm -rf $(DISTDIR)
 	-rm -rf $(BUILDDIR)
