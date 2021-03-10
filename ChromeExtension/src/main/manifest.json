@@ -4,7 +4,7 @@
     "version": "@@VERSION",
     "minimum_chrome_version": "40.0",
     "manifest_version": 2,
-    "description": "Use your your smartcard (e.g. Belgian eID) on DSS secure platforms (DSS, IDP)",
+    "description": "Use your Belgian eID on DSS secure platforms (DSS, IDP)",
     "icons": {
         "48": "icon48.png",
         "128": "icon128.png"

@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E80C8D7F2572FD8300F93C9A /* BOSA eID App Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E868AAE524A3BC450076AA3D /* BOSA eID App Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		E80C8D7F2572FD8300F93C9A /* BeIdConnect Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E868AAE524A3BC450076AA3D /* BeIdConnect Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E80C8D842572FD8A00F93C9A /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E868AB7824A3D8680076AA3D /* SafariServices.framework */; };
 		E80C8D892572FDE900F93C9A /* PCSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E868AB7524A3D80B0076AA3D /* PCSC.framework */; };
 		E8110A7B24AA1FC300283393 /* SafariExtensionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E868AAF124A3BC450076AA3D /* SafariExtensionViewController.m */; };
@@ -92,7 +92,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				E80C8D7F2572FD8300F93C9A /* BOSA eID App Extension.appex in Embed App Extensions */,
+				E80C8D7F2572FD8300F93C9A /* BeIdConnect Extension.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -102,7 +102,7 @@
 /* Begin PBXFileReference section */
 		E8110A7F24AB477B00283393 /* BOSA logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "BOSA logo.png"; sourceTree = "<group>"; };
 		E822842724AFA79E002CFCBB /* README.TXT */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.TXT; sourceTree = "<group>"; };
-		E868AACE24A3BC430076AA3D /* Bosa eID App Extension.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Bosa eID App Extension.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E868AACE24A3BC430076AA3D /* BeIDConnect Extension.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BeIDConnect Extension.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E868AAD124A3BC430076AA3D /* SafariAppExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SafariAppExtension.entitlements; sourceTree = "<group>"; };
 		E868AAD324A3BC430076AA3D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		E868AAD424A3BC430076AA3D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -112,7 +112,7 @@
 		E868AADC24A3BC450076AA3D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E868AADE24A3BC450076AA3D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E868AADF24A3BC450076AA3D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		E868AAE524A3BC450076AA3D /* BOSA eID App Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "BOSA eID App Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E868AAE524A3BC450076AA3D /* BeIdConnect Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "BeIdConnect Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E868AAEA24A3BC450076AA3D /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		E868AAED24A3BC450076AA3D /* SafariExtensionHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SafariExtensionHandler.h; sourceTree = "<group>"; };
 		E868AAEE24A3BC450076AA3D /* SafariExtensionHandler.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SafariExtensionHandler.mm; sourceTree = "<group>"; };
@@ -215,8 +215,8 @@
 		E868AACF24A3BC430076AA3D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E868AACE24A3BC430076AA3D /* Bosa eID App Extension.app */,
-				E868AAE524A3BC450076AA3D /* BOSA eID App Extension.appex */,
+				E868AACE24A3BC430076AA3D /* BeIDConnect Extension.app */,
+				E868AAE524A3BC450076AA3D /* BeIdConnect Extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -344,9 +344,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E868AACD24A3BC430076AA3D /* BOSA eID App */ = {
+		E868AACD24A3BC430076AA3D /* BeIDConnect App */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E868AB0224A3BC450076AA3D /* Build configuration list for PBXNativeTarget "BOSA eID App" */;
+			buildConfigurationList = E868AB0224A3BC450076AA3D /* Build configuration list for PBXNativeTarget "BeIDConnect App" */;
 			buildPhases = (
 				E868AACA24A3BC430076AA3D /* Sources */,
 				E868AACB24A3BC430076AA3D /* Frameworks */,
@@ -358,14 +358,14 @@
 			dependencies = (
 				E80C8D812572FD8300F93C9A /* PBXTargetDependency */,
 			);
-			name = "BOSA eID App";
+			name = "BeIDConnect App";
 			productName = SafariAppExtension;
-			productReference = E868AACE24A3BC430076AA3D /* Bosa eID App Extension.app */;
+			productReference = E868AACE24A3BC430076AA3D /* BeIDConnect Extension.app */;
 			productType = "com.apple.product-type.application";
 		};
-		E868AAE424A3BC450076AA3D /* BOSA eID App Extension */ = {
+		E868AAE424A3BC450076AA3D /* BeIdConnect Extension */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E868AAFE24A3BC450076AA3D /* Build configuration list for PBXNativeTarget "BOSA eID App Extension" */;
+			buildConfigurationList = E868AAFE24A3BC450076AA3D /* Build configuration list for PBXNativeTarget "BeIdConnect Extension" */;
 			buildPhases = (
 				E868AAE124A3BC450076AA3D /* Sources */,
 				E868AAE224A3BC450076AA3D /* Frameworks */,
@@ -375,9 +375,9 @@
 			);
 			dependencies = (
 			);
-			name = "BOSA eID App Extension";
+			name = "BeIdConnect Extension";
 			productName = "SafariAppExtension Extension";
-			productReference = E868AAE524A3BC450076AA3D /* BOSA eID App Extension.appex */;
+			productReference = E868AAE524A3BC450076AA3D /* BeIdConnect Extension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
@@ -397,7 +397,7 @@
 					};
 				};
 			};
-			buildConfigurationList = E868AAC924A3BC430076AA3D /* Build configuration list for PBXProject "BOSA eID App" */;
+			buildConfigurationList = E868AAC924A3BC430076AA3D /* Build configuration list for PBXProject "BeIDConnect" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -410,8 +410,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				E868AACD24A3BC430076AA3D /* BOSA eID App */,
-				E868AAE424A3BC450076AA3D /* BOSA eID App Extension */,
+				E868AACD24A3BC430076AA3D /* BeIDConnect App */,
+				E868AAE424A3BC450076AA3D /* BeIdConnect Extension */,
 			);
 		};
 /* End PBXProject section */
@@ -514,7 +514,7 @@
 /* Begin PBXTargetDependency section */
 		E80C8D812572FD8300F93C9A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = E868AAE424A3BC450076AA3D /* BOSA eID App Extension */;
+			target = E868AAE424A3BC450076AA3D /* BeIdConnect Extension */;
 			targetProxy = E80C8D802572FD8300F93C9A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -656,7 +656,7 @@
 				CODE_SIGN_ENTITLEMENTS = "SafariAppExtension Extension/SafariAppExtension_Extension.entitlements";
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = EU27N85PBZ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				HEADER_SEARCH_PATHS = ../3P/boost/include;
@@ -667,8 +667,8 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MARKETING_VERSION = 1.6;
-				PRODUCT_BUNDLE_IDENTIFIER = "be.bosa.eidapp-extension";
+				MARKETING_VERSION = 1.7;
+				PRODUCT_BUNDLE_IDENTIFIER = "be.bosa.beidconnect-extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
@@ -681,7 +681,7 @@
 				CODE_SIGN_ENTITLEMENTS = "SafariAppExtension Extension/SafariAppExtension_Extension.entitlements";
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = EU27N85PBZ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				HEADER_SEARCH_PATHS = ../3P/boost/include;
@@ -692,8 +692,8 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MARKETING_VERSION = 1.6;
-				PRODUCT_BUNDLE_IDENTIFIER = "be.bosa.eidapp-extension";
+				MARKETING_VERSION = 1.7;
+				PRODUCT_BUNDLE_IDENTIFIER = "be.bosa.beidconnect-extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
@@ -708,7 +708,7 @@
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = EU27N85PBZ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				HEADER_SEARCH_PATHS = ../3P/boost/include;
@@ -718,9 +718,9 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MARKETING_VERSION = 1.6;
-				PRODUCT_BUNDLE_IDENTIFIER = be.bosa.eidapp;
-				PRODUCT_NAME = "Bosa eID App Extension";
+				MARKETING_VERSION = 1.7;
+				PRODUCT_BUNDLE_IDENTIFIER = be.bosa.beidconnect;
+				PRODUCT_NAME = "BeIDConnect Extension";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
@@ -733,7 +733,7 @@
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = EU27N85PBZ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				HEADER_SEARCH_PATHS = ../3P/boost/include;
@@ -743,9 +743,9 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MARKETING_VERSION = 1.6;
-				PRODUCT_BUNDLE_IDENTIFIER = be.bosa.eidapp;
-				PRODUCT_NAME = "Bosa eID App Extension";
+				MARKETING_VERSION = 1.7;
+				PRODUCT_BUNDLE_IDENTIFIER = be.bosa.beidconnect;
+				PRODUCT_NAME = "BeIDConnect Extension";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
@@ -753,7 +753,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E868AAC924A3BC430076AA3D /* Build configuration list for PBXProject "BOSA eID App" */ = {
+		E868AAC924A3BC430076AA3D /* Build configuration list for PBXProject "BeIDConnect" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E868AAFC24A3BC450076AA3D /* Debug */,
@@ -762,7 +762,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E868AAFE24A3BC450076AA3D /* Build configuration list for PBXNativeTarget "BOSA eID App Extension" */ = {
+		E868AAFE24A3BC450076AA3D /* Build configuration list for PBXNativeTarget "BeIdConnect Extension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E868AAFF24A3BC450076AA3D /* Debug */,
@@ -771,7 +771,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E868AB0224A3BC450076AA3D /* Build configuration list for PBXNativeTarget "BOSA eID App" */ = {
+		E868AB0224A3BC450076AA3D /* Build configuration list for PBXNativeTarget "BeIDConnect App" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E868AB0324A3BC450076AA3D /* Debug */,

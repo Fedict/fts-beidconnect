@@ -1,16 +1,16 @@
 {
    "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0VKd3Y3RnWfFWi8YuiV5rR6qj103pvMMvYnLuV3XoChZWCSOFvDhzRZ3XJkwdYHpN3U3wLfadxUnYkWaH+w1jRZU9opM9WZxJFwor89ajCVK9wJ21cnfVnwWwIZESaEKt7ic2v+96miDzZryHQtVFzqyGr3aF/6SXr9u2iRJuzHlyCnVEuc8NiguYmUKnL5RZuy+z+9sCK+Q1P7bfj4tIIwUGVzC2MpjaSU1NcQCO+Rk23wIcWVmzX5n3EPOx0D8vHHnSTZxA6f9JigqthsHAR3v6c4bHsjpI6GQSX5PtD4Vfy1T7iYMrxi+mZFKd+qSLkWSqssHUnQGxnhEQJvFsQIDAQAB",
     "name": "BeIDConnect",
-    "version": "0",
+    "version": "0.0.5",
     "minimum_chrome_version": "40.0",
     "manifest_version": 2,
-    "description": "Use your your smartcard (e.g. Belgian eID) on DSS secure platforms (DSS, IDP)",
+    "description": "Use your Belgian eID on DSS secure platforms (DSS, IDP)",
     "icons": {
         "48": "icon48.png",
         "128": "icon128.png"
     },
     "content_scripts": [{
-        "matches": ["*://*/*", "file:///*"],
+        "matches": ["https://*.belgium.be/*"],
         "js": ["content.js"],
         "run_at": "document_start",
         "all_frames":true

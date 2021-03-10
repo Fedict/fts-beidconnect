@@ -76,7 +76,7 @@ function EIDChromeExt() {
       this.getVersion().then(
             function(msg) {
                var installedVersion = msg.version;
-               console.log("eIDLink version is " + installedVersion);
+               console.log("BeIdConnect version is " + installedVersion);
                
                if(isUptodate(minimumVersion, installedVersion)) {
                   onSuccess(installedVersion);

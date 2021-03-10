@@ -20,5 +20,5 @@
     <choice id="be.bosa.beidconnect" visible="false">
         <pkg-ref id="be.bosa.beidconnect"/>
     </choice>
-    <pkg-ref id="be.bosa.beidconnect" version="1.0.0" onConclusion="none">BeIDConnectComponent.pkg</pkg-ref>
+    <pkg-ref id="be.bosa.beidconnect" version="1.0.0" onConclusion="none">beidconnectComponent.pkg</pkg-ref>
 </installer-gui-script>
