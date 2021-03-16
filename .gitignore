@@ -102,6 +102,7 @@ ipch/
 *.opensdf
 *.sdf
 *.cachefile
+Thumbs.db
 
 # Visual Studio profiler
 *.psess
