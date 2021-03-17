@@ -1,6 +1,6 @@
 {
     "name": "BeIDConnect",
-    "version": "0.0.5",
+    "version": "0.0.8",
     "manifest_version": 2,
     "description": "Use your Belgian eID on DSS secure platforms (DSS, IDP)",
     "icons": {
@@ -20,7 +20,7 @@
     "permissions": ["nativeMessaging"],
     "applications": {
         "gecko": {
-            "id": "eidlink@bosa.be",
+            "id": "beidconnect@bosa.be",
             "strict_min_version": "57.0"
         }
     }
