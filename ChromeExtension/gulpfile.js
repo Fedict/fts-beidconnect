@@ -76,7 +76,7 @@ gulp.task('manifest-dev-firefox', function() {
 	delete manifest.key;
 	delete manifest.minimum_chrome_version;
 	delete manifest.background.persistent;
-	manifest.applications = { 'gecko': { 'id':'eidlink@bosa.be','strict_min_version':'57.0' }};
+	manifest.applications = { 'gecko': { 'id':'beidconnect@bosa.be','strict_min_version':'57.0' }};
 	return manifest;
     }))
     .pipe(gulp.dest('./target/firefox'));
@@ -103,7 +103,7 @@ gulp.task('manifest-release-firefox', function() {
 	delete manifest.key;
 	delete manifest.minimum_chrome_version;
 	delete manifest.background.persistent;
-	manifest.applications = { 'gecko': { 'id':'eidlink@bosa.be','strict_min_version':'57.0' }};
+	manifest.applications = { 'gecko': { 'id':'beidconnect@bosa.be','strict_min_version':'57.0' }};
 	return manifest;
     }))
     .pipe(gulp.dest('./target/firefox'));
