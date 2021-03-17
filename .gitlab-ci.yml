@@ -10,7 +10,7 @@ srpm:
   - sed -i -e 's,^metalink=.*repo=fedora-.releasever.arch=.basearch$,baseurl=https://fedora.cu.be/linux/releases/$releasever/Everything/$basearch/os/,g' /etc/yum.repos.d/fedora.repo; cat /etc/yum.repos.d/fedora.repo
   - sed -i -e 's,^metalink=.*repo=updates-released-f.releasever.arch=.basearch$,baseurl=https://fedora.cu.be/linux/updates/$releasever/Everything/$basearch/,g' /etc/yum.repos.d/fedora-updates.repo; cat /etc/yum.repos.d/fedora-updates.repo
   - sed -i -e 's,^metalink=.*repo=fedora-modular-.releasever.arch=.basearch$,baseurl=https://fedora.cu.be/linux/releases/$releasever/Modular/$basearch/os/,g' /etc/yum.repos.d/fedora-modular.repo; cat /etc/yum.repos.d/fedora-modular.repo
-  - sed -i -e 's,^metalink=.*repo=updates-released--modular-f.releasever.arch=.basearch$,baseurl=https://fedora.cu.be/linux/updates/$releasever/Modular/$basearch/,g' /etc/yum.repos.d/fedora-updates-modular.repo; cat /etc/yum.repos.d/fedora-updates-modular.repo
+  - sed -i -e 's,^metalink=.*repo=updates-released-modular-f.releasever.arch=.basearch$,baseurl=https://fedora.cu.be/linux/updates/$releasever/Modular/$basearch/,g' /etc/yum.repos.d/fedora-updates-modular.repo; cat /etc/yum.repos.d/fedora-updates-modular.repo
   - dnf install -y git rpm-build rpmdevtools
   - rpmdev-setuptree
   - VER=$(git describe --always | sed -e 's/-/./g')
