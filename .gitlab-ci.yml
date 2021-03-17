@@ -60,7 +60,7 @@ srpm:
   - sbuild -n $DASHA -c $CODE-$ARCH-sbuild --arch=$ARCH
   after_script:
   - mkdir -p products/deb/$CODE/$ARCH
-  - dcmd cp *ges products/deb/$CODE/$ARCH
+  - dcmd cp ../*ges products/deb/$CODE/$ARCH
   artifacts:
     paths:
     - products/deb
