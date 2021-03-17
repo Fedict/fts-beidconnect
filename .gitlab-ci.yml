@@ -16,8 +16,9 @@ srpm:
   - COMMIT_DATE=$(git log --date=rfc HEAD^..HEAD|grep ^Date|cut -d ' ' -f 2-|sed -e 's/^\s*//')
   - echo $COMMIT_DATE > products/date
   # Fedora decided that restricting mirrors don't exist :-/
-  - sed -i -e 's,^metalink=.*repo=fedora-.releasever.arch=.basearch$,baseurl=https://fedora.cu.be/linux/releases/$releasever/Everything/$basearch/os/,g' /etc/yum.repos.d/fedora.repo
-  - sed -i -e 's,^metalink=.*repo=updates-released-f.releasever.arch=.basearch$,https://fedora.cu.be/linux/updates/$releasever/Everything/$basearch/,g' /etc/yum.repos.d/fedora-updates.repo
+  - sed -i -e 's,^metalink=.*repo=fedora-.releasever.arch=.basearch$,baseurl=https://fedora.cu.be/linux/releases/$releasever/Everything/$basearch/os/,g' /etc/yum.repos.d/fedora.repo; cat /etc/yum.repos.d/fedora.repo
+  - sed -i -e 's,^metalink=.*repo=updates-released-f.releasever.arch=.basearch$,https://fedora.cu.be/linux/updates/$releasever/Everything/$basearch/,g' /etc/yum.repos.d/fedora-updates.repo; cat /etc/yum.repos.d/fedora-updates.repo
+  - sed -i -e 's,^metalink=.*repo=fedora-modular-.releasever.arch=.basearch$,baseurl=https://fedora.cu.be/linux/releases/$releasever/Modular/$basearch/os/,g' /etc/yum.repos.d/fedora-modular.repo; cat /etc/yum.repos.d/fedora-modular.repo
   script:
   - rpmbuild --define "version $VER" -bs linux/beidconnect.spec
   after_script:
