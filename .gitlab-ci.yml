@@ -45,9 +45,9 @@ srpm:
   - dnf -y install mock git rpm-build rpmdevtools
   - VER=$(cat products/version)
   - sed -i -e 's,^metalink=.*repo=fedora-.releasever.arch=.basearch$,baseurl=https://fedora.cu.be/linux/releases/$releasever/Everything/$basearch/os/,g' /etc/mock/templates/fedora-branched.tpl
-  - sed -i -e 's,^metalink=.*repo=updates-released-f.releasever.arch=.basearch$,https://fedora.cu.be/linux/updates/$releasever/Everything/$basearch/,g' /etc/mock/templates/fedora-branched.tpl
-  - sed -i -e 's,^mirrorlist=.*repo=epel-7.arch=.basearch,baseurl=https://fedora.cu.be/epel/$releasever/$basearch/,g' /etc/mock/templates/epel-7.tpl
-  - sed -i -e 's,^mirrorlist=.*repo=epel-8.arch=.basearch,baseurl=https://fedora.cu.be/epel/$releasever/$basearch/,g' /etc/mock/templates/epel-8.tpl
+  - sed -i -e 's,^metalink=.*repo=updates-released-f.releasever.arch=.basearch$,baseurl=https://fedora.cu.be/linux/updates/$releasever/Everything/$basearch/,g' /etc/mock/templates/fedora-branched.tpl; cat /etc/mock/templates/fedora-branched.tpl
+  - sed -i -e 's,^mirrorlist=.*repo=epel-7.arch=.basearch,baseurl=https://fedora.cu.be/epel/$releasever/$basearch/,g' /etc/mock/templates/epel-7.tpl; cat /etc/mock/templates/epel-7.tpl
+  - sed -i -e 's,^mirrorlist=.*repo=epel-8.arch=.basearch,baseurl=https://fedora.cu.be/epel/$releasever/$basearch/,g' /etc/mock/templates/epel-8.tpl; cat /etc/mock/templates/epel-8.tpl
   script:
   - mock --old-chroot --verbose -r $DIST-$VERSION-$ARCH --define "version $VER" --rebuild products/srpm/beidconnect-*.src.rpm --resultdir $CI_PROJECT_DIR/products/$DIST-$VERSION-$ARCH
   artifacts:
