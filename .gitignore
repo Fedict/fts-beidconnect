@@ -4,7 +4,6 @@
 *.wixpdb
 *.wixobj
 .DS_Store
-ChromeExtension/target/
 macos/3P
 boost/
 openssl/
@@ -253,3 +252,6 @@ _Pvt_Extensions
 # FAKE - F# Make
 .fake/
 *.xcuserstate
+
+# gulp output (browser extensions)
+ChromeExtension/target
