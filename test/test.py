@@ -18,9 +18,24 @@ def instruct(msg):
 
 class TestLongrunningHost(unittest.TestCase):
 
+    _pin = 0
+     
+    @property
+    def pin(self):
+        print("Getting pin...")
+        return self._pin
+
+    @pin.setter
+    def pin(self, value):
+        print("Setting pin...")
+        self._pin = value
+
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(self):
         print(' *** Testing BeIDConnect as native messaging host *** ')
+        print('this test also needs a pin for testing dummy signatures')
+        print ()
+        self.pin = input("Enter Pin: ")
 
     @classmethod
     def tearDownClass(cls):
@@ -29,6 +44,7 @@ class TestLongrunningHost(unittest.TestCase):
     def transceive(self, msg):
         should_close_fds = sys.platform.startswith('win32') == False
         p = subprocess.Popen(testconf.get_exe(), stdin=subprocess.PIPE, stdout=subprocess.PIPE, close_fds=should_close_fds, stderr=None)
+        print()
         print(('SEND: %s' % msg))
         p.stdin.write(struct.pack('=I', len(msg)))
         std_output = p.communicate(input=msg.encode())[0]
@@ -50,15 +66,8 @@ class TestLongrunningHost(unittest.TestCase):
              "correlationId":"07386ce7-f73e-4e99-dfc3-8d69b6adf33d"
          }
          resp = self.transceive("{\"operation\":\"VERSION\",\"correlationId\":\"07386ce7-f73e-4e99-dfc3-8d69b6adf33d\"}")
-         self.assertEqual(resp['version'], "2.0")
-   
-    def test2_info(self):
-         cmd = {
-            "operation":"INFO",
-            "mac":"0123456789ABCDEF0123456789ABCDEF",
-            "correlationId":"07386ce7-f73e-4e99-dfc3-8d69b6adf33d"
-         }
-         resp = self.transceive(json.dumps(cmd))
+         self.assertEqual(resp['version'], "2.1")
+         self.pin = 1234
 
     def test3_read_usercerts(self):
         cmd = {
@@ -68,10 +77,21 @@ class TestLongrunningHost(unittest.TestCase):
             "origin":"https://something.belgium.be",
         }
         resp = self.transceive(json.dumps(cmd))
-        #self.assertEqual(resp['nonce'], original_nonce)
+        self.assertEqual(resp['result'], "OK")
 
-    def test4_read_certificate_chain(self):
-        cert = "MIIF1TCCA72gAwIBAgIQEAAAAAAA8evx4wAAAAGTsTANBgkqhkiG9w0BAQsFADAtMQswCQYDVQQGEwJCRTEeMBwGA1UEAwwVZUlEIFRFU1QgRm9yZWlnbmVyIENBMB4XDTE3MDUyOTIyMDAwMFoXDTIwMDUyOTIyMDAwMFowfTEUMBIGA1UEBRMLOTgwODIxMDAwMjkxEzARBgNVBCoMCkJlcnQgQWxpY2UxGDAWBgNVBAUTD1NwZWNpbWVuIGVWSyAxODEpMCcGA1UEAwwgQmVydCBTcGVjaW1lbiBlVksgMTggKFNpZ25hdHVyZSkxCzAJBgNVBAYTAkJFMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA49oyeB2rwqGNkwENXhBuZzXWKJN4RESxd+oLUb8jliwzb2KWk97nk7FhvBGAM7FFV6EP6lZKXmByMsUrP0f0zYkwsPl2SQVMJRiPpBdbE+ZyJVxersSdaTysDuu2RZKR+F1PbwQMEEfGgH4cJ2UVOb/tV4MjJV5KlnrV13IHFESJh/xbJA//Wphjh5kCNpdnN6TWolN3218hJkAvV+98no3MHg0uzQ01NkBF2U0x5llhlJAVX5ua+IZ6k56BL/Uxo6jMInLxzaNxCcK2glSbPyJMXMj01sNTIW58NBMMTktQkkrTX+DGH8edf38xjmsBBOIBf3VptYdwiwjgEmaAWwIDAQABo4IBnzCCAZswHwYDVR0jBBgwFoAU/TbPuTELnWd7LuET5UCD9wgdjJgwDgYDVR0PAQH/BAQDAgZAMGkGA1UdIARiMGAwXgYHYDgMAQECATBTMDEGCCsGAQUFBwIBFiVodHRwOi8vZWlkZGV2Y2FyZHMuemV0ZXNjYXJkcy5iZS9jZXJ0MB4GCCsGAQUFBwICMBIaEFRFU1QgdXNlciBub3RpY2UwIgYIKwYBBQUHAQMEFjAUMAgGBgQAjkYBATAIBgYEAI5GAQQwRQYDVR0fBD4wPDA6oDigNoY0aHR0cDovL2VpZGRldmNhcmRzLnpldGVzY2FyZHMuYmUvY3JsL2ZvcmVpZ25lcmNhLmNybDB/BggrBgEFBQcBAQRzMHEwPAYIKwYBBQUHMAKGMGh0dHA6Ly9laWRkZXZjYXJkcy56ZXRlc2NhcmRzLmJlL2NlcnQvcm9vdGNhLmNydDAxBggrBgEFBQcwAYYlaHR0cDovL2VpZGRldmNhcmRzLnpldGVzY2FyZHMuYmU6ODg4ODARBglghkgBhvhCAQEEBAMCBSAwDQYJKoZIhvcNAQELBQADggIBABlETs6MUuqAnCU1yQaNkXa+JTNZ02XNOMTbmwhBLTcqnfyM5vxIu4OwBAfThgf735pr3ffe8kXFelypegV9tNufdmRjqAFq9CVcNbMTsViAd3/TaPCIhveicD4a78KBKwMcEXWvmsoHlYAdM5nZokpJg7sX2NhpjVC8JexJLJKiPRNvSzKTmuUZtus0M1f3E4dYGjQMH3UpVp3bE5OAo//2Y29P6O82Nfi2vJjxAE6YBzAQltb+oEuhKiR0HS/YSgXaYPULlRmPyxetd30tZejgufNyZWjl2+v7xvBym+wBf64Vft+pgO0Dxdq6wycjFF+MtdsfhGQ7Fq7KWut8W7sLzhuXTvheFCzxQzsabQG4kqOZtC7cj32usiL8wb82NdonrLXYnze0RBb3S0azcldcQbEwYX/UInFOnHsKOALTR8Ho4uQRVDmT2XZEHlXWCVg5sA3sT0tWZCfDaoTPkjXMZwVVdat8Os/pb7pBrVe7aig36ME0chC3BscToCM2g56hEWxTy28tOR98O0jEfpxmkL4eJRwhkd610LuzwSkRrhUBZZwvc94aD6F3njxbFXB6xGN53qlwsJXPxFLocRP4a57fwaoU8MVYuEkceOdYOR4G/G0Kfm3bIdTEJ44jIha1UATNIQ287it7UfPYdmRAi0X0JaCX9U6DEg0vSUqi"
+    def test4a_read_certificate_chain_nonrep(self):
+        cmd = {
+            "operation":"USERCERTS",
+            "keyusage":"NONREPUDIATION",
+            "mac":"0123456789ABCDEF0123456789ABCDEF",
+            "correlationId":"3daa114f-1ae9-4ae1-ba15-c79f7383ab35",
+            "origin":"https://something.belgium.be",
+        }
+        resp = self.transceive(json.dumps(cmd))
+        reader = (resp)['Readers'][0]
+        cert = (reader)['certificates'][0]
+        self.assertEqual(resp['result'], "OK")
+
         cmd = {
             "operation":"CERTCHAIN",
             "cert": cert,
@@ -80,22 +100,58 @@ class TestLongrunningHost(unittest.TestCase):
             "origin":"https://something.belgium.be",
         }
         resp = self.transceive(json.dumps(cmd))
-        #self.assertEqual(resp['nonce'], original_nonce)
+        self.assertEqual(resp['result'], "OK")
+
+    def test4b_read_certificate_chain_aut(self):
+        cmd = {
+            "operation":"USERCERTS",
+            "keyusage":"DIGITALSIGNATURE",
+            "mac":"0123456789ABCDEF0123456789ABCDEF",
+            "correlationId":"3daa114f-1ae9-4ae1-ba15-c79f7383ab35",
+            "origin":"https://something.belgium.be",
+        }
+        resp = self.transceive(json.dumps(cmd))
+        self.assertEqual(resp['result'], "OK")
+
+        reader = (resp)['Readers'][0]
+        cert = (reader)['certificates'][0]
+        cmd = {
+            "operation":"CERTCHAIN",
+            "cert": cert,
+            "mac":"0123456789ABCDEF0123456789ABCDEF",
+            "correlationId":"3daa114f-1ae9-4ae1-ba15-c79f7383ab35",
+            "origin":"https://something.belgium.be",
+        }
+        resp = self.transceive(json.dumps(cmd))
+        self.assertEqual(resp['result'], "OK")
 
     def test_sign(self):
-        cert = "MIIF1TCCA72gAwIBAgIQEAAAAAAA8evx4wAAAAGTsTANBgkqhkiG9w0BAQsFADAtMQswCQYDVQQGEwJCRTEeMBwGA1UEAwwVZUlEIFRFU1QgRm9yZWlnbmVyIENBMB4XDTE3MDUyOTIyMDAwMFoXDTIwMDUyOTIyMDAwMFowfTEUMBIGA1UEBRMLOTgwODIxMDAwMjkxEzARBgNVBCoMCkJlcnQgQWxpY2UxGDAWBgNVBAUTD1NwZWNpbWVuIGVWSyAxODEpMCcGA1UEAwwgQmVydCBTcGVjaW1lbiBlVksgMTggKFNpZ25hdHVyZSkxCzAJBgNVBAYTAkJFMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA49oyeB2rwqGNkwENXhBuZzXWKJN4RESxd+oLUb8jliwzb2KWk97nk7FhvBGAM7FFV6EP6lZKXmByMsUrP0f0zYkwsPl2SQVMJRiPpBdbE+ZyJVxersSdaTysDuu2RZKR+F1PbwQMEEfGgH4cJ2UVOb/tV4MjJV5KlnrV13IHFESJh/xbJA//Wphjh5kCNpdnN6TWolN3218hJkAvV+98no3MHg0uzQ01NkBF2U0x5llhlJAVX5ua+IZ6k56BL/Uxo6jMInLxzaNxCcK2glSbPyJMXMj01sNTIW58NBMMTktQkkrTX+DGH8edf38xjmsBBOIBf3VptYdwiwjgEmaAWwIDAQABo4IBnzCCAZswHwYDVR0jBBgwFoAU/TbPuTELnWd7LuET5UCD9wgdjJgwDgYDVR0PAQH/BAQDAgZAMGkGA1UdIARiMGAwXgYHYDgMAQECATBTMDEGCCsGAQUFBwIBFiVodHRwOi8vZWlkZGV2Y2FyZHMuemV0ZXNjYXJkcy5iZS9jZXJ0MB4GCCsGAQUFBwICMBIaEFRFU1QgdXNlciBub3RpY2UwIgYIKwYBBQUHAQMEFjAUMAgGBgQAjkYBATAIBgYEAI5GAQQwRQYDVR0fBD4wPDA6oDigNoY0aHR0cDovL2VpZGRldmNhcmRzLnpldGVzY2FyZHMuYmUvY3JsL2ZvcmVpZ25lcmNhLmNybDB/BggrBgEFBQcBAQRzMHEwPAYIKwYBBQUHMAKGMGh0dHA6Ly9laWRkZXZjYXJkcy56ZXRlc2NhcmRzLmJlL2NlcnQvcm9vdGNhLmNydDAxBggrBgEFBQcwAYYlaHR0cDovL2VpZGRldmNhcmRzLnpldGVzY2FyZHMuYmU6ODg4ODARBglghkgBhvhCAQEEBAMCBSAwDQYJKoZIhvcNAQELBQADggIBABlETs6MUuqAnCU1yQaNkXa+JTNZ02XNOMTbmwhBLTcqnfyM5vxIu4OwBAfThgf735pr3ffe8kXFelypegV9tNufdmRjqAFq9CVcNbMTsViAd3/TaPCIhveicD4a78KBKwMcEXWvmsoHlYAdM5nZokpJg7sX2NhpjVC8JexJLJKiPRNvSzKTmuUZtus0M1f3E4dYGjQMH3UpVp3bE5OAo//2Y29P6O82Nfi2vJjxAE6YBzAQltb+oEuhKiR0HS/YSgXaYPULlRmPyxetd30tZejgufNyZWjl2+v7xvBym+wBf64Vft+pgO0Dxdq6wycjFF+MtdsfhGQ7Fq7KWut8W7sLzhuXTvheFCzxQzsabQG4kqOZtC7cj32usiL8wb82NdonrLXYnze0RBb3S0azcldcQbEwYX/UInFOnHsKOALTR8Ho4uQRVDmT2XZEHlXWCVg5sA3sT0tWZCfDaoTPkjXMZwVVdat8Os/pb7pBrVe7aig36ME0chC3BscToCM2g56hEWxTy28tOR98O0jEfpxmkL4eJRwhkd610LuzwSkRrhUBZZwvc94aD6F3njxbFXB6xGN53qlwsJXPxFLocRP4a57fwaoU8MVYuEkceOdYOR4G/G0Kfm3bIdTEJ44jIha1UATNIQ287it7UfPYdmRAi0X0JaCX9U6DEg0vSUqi"
+        cmd = {
+            "operation":"USERCERTS",
+            "keyusage":"NONREPUDIATION",
+            "mac":"0123456789ABCDEF0123456789ABCDEF",
+            "correlationId":"3daa114f-1ae9-4ae1-ba15-c79f7383ab35",
+            "origin":"https://something.belgium.be",
+        }
+        resp = self.transceive(json.dumps(cmd))
+        reader = (resp)['Readers'][0]
+        cert = (reader)['certificates'][0]
+
+        instruct
+
         cmd = {
             "operation":"SIGN",
             "cert": cert,
             "algo":"SHA-256",
             "digest":"JMRVmmssdqPelSUruIhdDOTGXc2Y2dOq8Bf989ZDPH0=",
-            "pin": "1234",
+            "pin": self.pin,
             "language":"en",
             "mac":"0123456789ABCDEF0123456789ABCDEF",
             "correlationId":"07386ce7-f73e-4e99-dfc3-8d69b6adf33d",
             "origin":"https://something.belgium.be",
         }
         resp = self.transceive(json.dumps(cmd))
+        self.assertEqual(resp['result'], "OK")
 
 
 if __name__ == '__main__':
