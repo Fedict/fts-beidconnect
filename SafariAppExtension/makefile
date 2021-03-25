@@ -1,6 +1,6 @@
-VERSION = 2.0.0
-APPIDENTIFIER = be.bosa.beidconnect
-APPEXIDENTIFIER = be.bosa.beidconnect-extension
+VERSION = 2.1.0
+APPIDENTIFIER = be.bosa.beidconnect.safari
+APPEXIDENTIFIER = be.bosa.beidconnect.safari-extension
 PROGRAM = BeIDConnect\ Extension
 DISTDIR = ./install/dist
 DEPSDIR = ./install/deps

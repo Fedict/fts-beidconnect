@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <installer-gui-script minSpecVersion="2">
     <title>BeIDConnect Extension</title>
-    <pkg-ref id="be.bosa.beidconnect"/>
+    <pkg-ref id="be.bosa.beidconnect.safari"/>
     <options customize="never" require-scripts="false"/>
     <license file="LICENSE.txt"/>
     <readme file="README.html"/>
@@ -13,12 +13,12 @@
     </volume-check>
     <choices-outline>
         <line choice="default">
-            <line choice="be.bosa.beidconnect"/>
+            <line choice="be.bosa.beidconnect.safari"/>
         </line>
     </choices-outline>
     <choice id="default"/>
-    <choice id="be.bosa.beidconnect" visible="false">
-        <pkg-ref id="be.bosa.beidconnect"/>
+    <choice id="be.bosa.beidconnect.safari" visible="false">
+        <pkg-ref id="be.bosa.beidconnect.safari"/>
     </choice>
-    <pkg-ref id="be.bosa.beidconnect" version="1.0.0" onConclusion="none">BeIDConnectComponent.pkg</pkg-ref>
+    <pkg-ref id="be.bosa.beidconnect.safari" version="2.1.0" onConclusion="none">BeIDConnectComponent.pkg</pkg-ref>
 </installer-gui-script>
