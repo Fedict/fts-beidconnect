@@ -90,16 +90,6 @@ function EIDChromeExt() {
         return messagePromise({operation: 'VERSION'});
     };
 
-//    this.getInfo = function() {
-//        console.log("Getting info");
-//        return messagePromise({operation: 'INFO'});
-//    };
-    
-//    this.getCertificateChain = function(language, mac) {
-//        console.log("Getting certificate chain");
-//        return messagePromise({operation: 'CERT', mac: mac});
-//    };
-    
     this.sign = function(language, mac, cert, algo, digest, pin) {
         console.log("Signing");
         return messagePromise({operation: 'SIGN', cert: cert, algo: algo, digest: digest, pin: pin, language: language, mac: mac});
@@ -110,9 +100,10 @@ function EIDChromeExt() {
         return messagePromise({operation: 'AUTH', cert: cert, algo: algo, digest: digest, language: language, mac: mac, pin: pin});
     };
 
-    this.getUserCertificates = function(language, mac) {
+    this.getUserCertificates = function(language, mac, keyusage) {
     	console.log("Reading user certificates");
-    	return messagePromise({operation: 'USERCERTS', language: language, mac: mac});
+      keyusage = typeof keyusage  === 'undefined' ? "" : keyusage;
+    	return messagePromise({operation: 'USERCERTS', keyusage: keyusage, language: language, mac: mac});
     };
 
     this.getUserCertificateChain = function(language, mac, cert) {
@@ -133,3 +124,4 @@ function EIDChromeExt() {
 
 	console.log("EIDChromeExt interface initialized");
 }
+
