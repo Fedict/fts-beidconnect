@@ -4,6 +4,7 @@
 *.wixpdb
 *.wixobj
 .DS_Store
+ChromeExtension/target/
 macos/3P
 boost/
 openssl/
