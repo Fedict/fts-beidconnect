@@ -48,7 +48,7 @@ public:
    virtual std::string strType() { return "NOT DEFINED"; };
    virtual int type() { return -1; };
    virtual int readCertificate(int type, int format, int *l_cert, unsigned char **pp_cert) = 0; //pure virtual
-   virtual int readUserCertificates(int format, std::vector<std::vector<char>> &certificates){ return -1; };
+   virtual int readUserCertificates(int format, int certType, std::vector<std::vector<char>> &certificates){ return -1; };
    virtual int readCertificateChain(int format, unsigned char *cert, int l_cert, std::vector<std::vector<char>> &subCerts, std::vector<char> &root){ return -1; };
    virtual int selectKey(int type, unsigned char* cert = 0, int l_cert = 0) = 0;
    virtual int logon(int l_pin, char *pin) = 0;

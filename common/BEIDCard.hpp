@@ -19,7 +19,7 @@ class BEIDCard: public Card
       int readCertificate(int type, int format, int *l_cert, unsigned char **pp_cert) override;
       int readCertificateChain(int format, unsigned char *cert, int l_cert, std::vector<std::vector<char>>  &subCerts, std::vector<char> &root) override;
 
-   int readUserCertificates(int format, std::vector<std::vector<char>> &certificates) override;
+      int readUserCertificates(int format, int certType, std::vector<std::vector<char>> &certificates) override;
       int selectKey(int type, unsigned char* cert = 0, int l_cert = 0) override;
       int logon(int l_pin, char *pin) override;
       int logoff() override;

@@ -15,7 +15,7 @@
  * Definitions
  *
  ******************************************************************************/
-#define BEIDCONNECT_VERSION	"2.0"
+#define BEIDCONNECT_VERSION	"2.1"
 #define CLEANUP(a) { ret = a; goto cleanup; }
      
 #ifdef _WIN32
