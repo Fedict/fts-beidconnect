@@ -29,9 +29,6 @@ std::shared_ptr<RequestHandler> RequestHandler::createRequestHandler(std::shared
    if (operation == "VERSION") {
       requestHandler = std::make_shared<VersionRequestHandler>();
    }
-   else if (operation == "INFO") {
-      requestHandler = std::make_shared<InfoRequestHandler>();
-   }
    else if (operation == "USERCERTS") {
       requestHandler = std::make_shared<UserCertsRequestHandler>();
    }

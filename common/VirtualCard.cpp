@@ -100,7 +100,7 @@ cleanup:
 
 
 #define WHERE "VirtualCard::readUserCertificates"
-int VirtualCard::readUserCertificates(int format, std::vector<std::vector<char>> &certificates)
+int VirtualCard::readUserCertificates(int format, int certType, std::vector<std::vector<char>> &certificates)
 {
    int ret = 0;
    if (format == FORMAT_RADIX64) {

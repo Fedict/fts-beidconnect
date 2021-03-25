@@ -45,8 +45,6 @@
 		E868AB5224A3D1CB0076AA3D /* native.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB2224A3D1CB0076AA3D /* native.cpp */; };
 		E868AB5324A3D1CB0076AA3D /* UserCertsRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB2324A3D1CB0076AA3D /* UserCertsRequestHandler.cpp */; };
 		E868AB5424A3D1CB0076AA3D /* UserCertsRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB2324A3D1CB0076AA3D /* UserCertsRequestHandler.cpp */; };
-		E868AB5524A3D1CB0076AA3D /* InfoRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB2424A3D1CB0076AA3D /* InfoRequestHandler.cpp */; };
-		E868AB5624A3D1CB0076AA3D /* InfoRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB2424A3D1CB0076AA3D /* InfoRequestHandler.cpp */; };
 		E868AB5724A3D1CB0076AA3D /* CardReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB2624A3D1CB0076AA3D /* CardReader.cpp */; };
 		E868AB5824A3D1CB0076AA3D /* CardReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB2624A3D1CB0076AA3D /* CardReader.cpp */; };
 		E868AB5924A3D1CB0076AA3D /* CardFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB2924A3D1CB0076AA3D /* CardFactory.cpp */; };
@@ -136,7 +134,6 @@
 		E868AB1224A3D1CB0076AA3D /* BEIDCard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BEIDCard.cpp; sourceTree = "<group>"; };
 		E868AB1324A3D1CB0076AA3D /* native.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = native.hpp; sourceTree = "<group>"; };
 		E868AB1424A3D1CB0076AA3D /* UserCertsRequestHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = UserCertsRequestHandler.hpp; sourceTree = "<group>"; };
-		E868AB1524A3D1CB0076AA3D /* InfoRequestHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = InfoRequestHandler.hpp; sourceTree = "<group>"; };
 		E868AB1624A3D1CB0076AA3D /* general.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = general.h; sourceTree = "<group>"; };
 		E868AB1724A3D1CB0076AA3D /* Request.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Request.cpp; sourceTree = "<group>"; };
 		E868AB1824A3D1CB0076AA3D /* CardReader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CardReader.hpp; sourceTree = "<group>"; };
@@ -150,7 +147,6 @@
 		E868AB2124A3D1CB0076AA3D /* crypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypto.h; sourceTree = "<group>"; };
 		E868AB2224A3D1CB0076AA3D /* native.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = native.cpp; sourceTree = "<group>"; };
 		E868AB2324A3D1CB0076AA3D /* UserCertsRequestHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UserCertsRequestHandler.cpp; sourceTree = "<group>"; };
-		E868AB2424A3D1CB0076AA3D /* InfoRequestHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InfoRequestHandler.cpp; sourceTree = "<group>"; };
 		E868AB2524A3D1CB0076AA3D /* Request.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Request.hpp; sourceTree = "<group>"; };
 		E868AB2624A3D1CB0076AA3D /* CardReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CardReader.cpp; sourceTree = "<group>"; };
 		E868AB2824A3D1CB0076AA3D /* setup.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = setup.hpp; sourceTree = "<group>"; };
@@ -299,8 +295,6 @@
 		E868AB7224A3D2610076AA3D /* RequestHandlers */ = {
 			isa = PBXGroup;
 			children = (
-				E868AB1524A3D1CB0076AA3D /* InfoRequestHandler.hpp */,
-				E868AB2424A3D1CB0076AA3D /* InfoRequestHandler.cpp */,
 				E868AB0E24A3D1CB0076AA3D /* VersionRequestHandler.hpp */,
 				E868AB3624A3D1CB0076AA3D /* VersionRequestHandler.cpp */,
 				E868AB2324A3D1CB0076AA3D /* UserCertsRequestHandler.cpp */,
@@ -465,7 +459,6 @@
 				E868AB5724A3D1CB0076AA3D /* CardReader.cpp in Sources */,
 				E868AB5D24A3D1CB0076AA3D /* comm.cpp in Sources */,
 				E868AB6D24A3D1CB0076AA3D /* VersionRequestHandler.cpp in Sources */,
-				E868AB5524A3D1CB0076AA3D /* InfoRequestHandler.cpp in Sources */,
 				E868AAD524A3BC430076AA3D /* AppDelegate.m in Sources */,
 				E868AB6324A3D1CB0076AA3D /* asn1.cpp in Sources */,
 				E868AB3F24A3D1CB0076AA3D /* SignRequestHandler.cpp in Sources */,
@@ -494,7 +487,6 @@
 				E868AB4424A3D1CB0076AA3D /* RequestHandler.cpp in Sources */,
 				E868AB4024A3D1CB0076AA3D /* SignRequestHandler.cpp in Sources */,
 				E868AB5A24A3D1CB0076AA3D /* CardFactory.cpp in Sources */,
-				E868AB5624A3D1CB0076AA3D /* InfoRequestHandler.cpp in Sources */,
 				E868AB5E24A3D1CB0076AA3D /* comm.cpp in Sources */,
 				E868AB5C24A3D1CB0076AA3D /* SCard.cpp in Sources */,
 				E868AB5824A3D1CB0076AA3D /* CardReader.cpp in Sources */,
@@ -656,7 +648,7 @@
 				CODE_SIGN_ENTITLEMENTS = "SafariAppExtension Extension/SafariAppExtension_Extension.entitlements";
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = EU27N85PBZ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				HEADER_SEARCH_PATHS = ../3P/boost/include;
@@ -667,8 +659,8 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MARKETING_VERSION = 1.7;
-				PRODUCT_BUNDLE_IDENTIFIER = "be.bosa.beidconnect-extension";
+				MARKETING_VERSION = 2.1;
+				PRODUCT_BUNDLE_IDENTIFIER = "be.bosa.beidconnect.safari-extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
@@ -681,7 +673,7 @@
 				CODE_SIGN_ENTITLEMENTS = "SafariAppExtension Extension/SafariAppExtension_Extension.entitlements";
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = EU27N85PBZ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				HEADER_SEARCH_PATHS = ../3P/boost/include;
@@ -692,8 +684,8 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MARKETING_VERSION = 1.7;
-				PRODUCT_BUNDLE_IDENTIFIER = "be.bosa.beidconnect-extension";
+				MARKETING_VERSION = 2.1;
+				PRODUCT_BUNDLE_IDENTIFIER = "be.bosa.beidconnect.safari-extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
@@ -708,7 +700,7 @@
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = EU27N85PBZ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				HEADER_SEARCH_PATHS = ../3P/boost/include;
@@ -718,8 +710,8 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MARKETING_VERSION = 1.7;
-				PRODUCT_BUNDLE_IDENTIFIER = be.bosa.beidconnect;
+				MARKETING_VERSION = 2.1;
+				PRODUCT_BUNDLE_IDENTIFIER = be.bosa.beidconnect.safari;
 				PRODUCT_NAME = "BeIDConnect Extension";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
@@ -733,7 +725,7 @@
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = EU27N85PBZ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				HEADER_SEARCH_PATHS = ../3P/boost/include;
@@ -743,8 +735,8 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MARKETING_VERSION = 1.7;
-				PRODUCT_BUNDLE_IDENTIFIER = be.bosa.beidconnect;
+				MARKETING_VERSION = 2.1;
+				PRODUCT_BUNDLE_IDENTIFIER = be.bosa.beidconnect.safari;
 				PRODUCT_NAME = "BeIDConnect Extension";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 			};

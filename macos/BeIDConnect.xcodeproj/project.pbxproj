@@ -12,7 +12,6 @@
 		E85AB669241539CC00BE9F0A /* UserCertsRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E85AB668241539CC00BE9F0A /* UserCertsRequestHandler.cpp */; };
 		E85AB66A24166DFB00BE9F0A /* comm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8AB54C724110F070051D9A2 /* comm.cpp */; };
 		E89B23CD24114FBC00D800E0 /* native.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8AB54C024110F070051D9A2 /* native.cpp */; };
-		E89B23D02412848100D800E0 /* InfoRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E89B23CF2412848100D800E0 /* InfoRequestHandler.cpp */; };
 		E8A12CE92465C53F00F6C910 /* test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8A12CE82465C53F00F6C910 /* test.cpp */; };
 		E8AB54D924110F070051D9A2 /* log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8AB54A824110F070051D9A2 /* log.cpp */; };
 		E8AB54DA24110F070051D9A2 /* util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8AB54A924110F070051D9A2 /* util.cpp */; };
@@ -66,8 +65,6 @@
 		E85AB6652413A1CB00BE9F0A /* testconf.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; name = testconf.py; path = ../test/testconf.py; sourceTree = "<group>"; };
 		E85AB667241539CC00BE9F0A /* UserCertsRequestHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = UserCertsRequestHandler.hpp; sourceTree = "<group>"; };
 		E85AB668241539CC00BE9F0A /* UserCertsRequestHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UserCertsRequestHandler.cpp; sourceTree = "<group>"; };
-		E89B23CE2412848100D800E0 /* InfoRequestHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = InfoRequestHandler.hpp; sourceTree = "<group>"; };
-		E89B23CF2412848100D800E0 /* InfoRequestHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InfoRequestHandler.cpp; sourceTree = "<group>"; };
 		E8A12CE82465C53F00F6C910 /* test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = test.cpp; sourceTree = "<group>"; };
 		E8A12CEA2465C77400F6C910 /* test.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = test.hpp; sourceTree = "<group>"; };
 		E8AB54A824110F070051D9A2 /* log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = log.cpp; sourceTree = "<group>"; };
@@ -201,8 +198,6 @@
 			children = (
 				E8AB54D024110F070051D9A2 /* VersionRequestHandler.cpp */,
 				E8AB54AD24110F070051D9A2 /* VersionRequestHandler.hpp */,
-				E89B23CF2412848100D800E0 /* InfoRequestHandler.cpp */,
-				E89B23CE2412848100D800E0 /* InfoRequestHandler.hpp */,
 				E85AB668241539CC00BE9F0A /* UserCertsRequestHandler.cpp */,
 				E85AB667241539CC00BE9F0A /* UserCertsRequestHandler.hpp */,
 				E8EE4669242259580074DC2C /* CertChainRequestHandler.cpp */,
@@ -358,7 +353,6 @@
 				E85AB669241539CC00BE9F0A /* UserCertsRequestHandler.cpp in Sources */,
 				E8D0ABC72433C50D00A6FE82 /* crypto.cpp in Sources */,
 				E8AB54DC24110F070051D9A2 /* RequestHandler.cpp in Sources */,
-				E89B23D02412848100D800E0 /* InfoRequestHandler.cpp in Sources */,
 				E8AB54DA24110F070051D9A2 /* util.cpp in Sources */,
 				E8AB54E324110F070051D9A2 /* CardReader.cpp in Sources */,
 				E8AB54E524110F070051D9A2 /* SCard.cpp in Sources */,
