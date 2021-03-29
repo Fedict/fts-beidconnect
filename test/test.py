@@ -35,7 +35,8 @@ class TestLongrunningHost(unittest.TestCase):
         print(' *** Testing BeIDConnect as native messaging host *** ')
         print('this test also needs a pin for testing dummy signatures')
         print ()
-        self.pin = input("Enter Pin: ")
+        #self.pin = input("Enter Pin: ")
+        self.pin = "1234"
 
     @classmethod
     def tearDownClass(cls):
