@@ -76,7 +76,7 @@ gulp.task('manifest-dev-firefox', function() {
 	delete manifest.key;
 	delete manifest.minimum_chrome_version;
 	delete manifest.background.persistent;
-	manifest.applications = { 'gecko': { 'id':'beidconnect@bosa.be','strict_min_version':'57.0' }};
+	manifest.applications = { 'gecko': { 'id':'beidconnect@bosa.be','strict_min_version':'57.0', "update_url": "https://eid.static.bosa.fgov.be/ffupdate-manifest.json" }};
 	return manifest;
     }))
     .pipe(gulp.dest('./target/firefox'));
