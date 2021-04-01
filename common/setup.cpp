@@ -31,7 +31,7 @@ void writeFile(string file, string exePath, bool isChrome) {
         myfile << "  ]\n";
     } else {
         myfile << "  \"allowed_extensions\": [\n";
-        myfile << "     \"eidlink@bosa.be\"\n";
+        myfile << "     \"beidconnect@bosa.be\"\n";
         myfile << "  ]\n";
     }
 
