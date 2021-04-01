@@ -7,10 +7,10 @@ srpm:
   image: fedora:latest
   before_script:
   # Fedora decided that restricting mirrors don't exist :-/
-  - sed -i -e 's,^metalink=.*repo=fedora-.releasever.arch=.basearch$,baseurl=https://fedora.cu.be/linux/releases/$releasever/Everything/$basearch/os/,g' /etc/yum.repos.d/fedora.repo; cat /etc/yum.repos.d/fedora.repo
-  - sed -i -e 's,^metalink=.*repo=updates-released-f.releasever.arch=.basearch$,baseurl=https://fedora.cu.be/linux/updates/$releasever/Everything/$basearch/,g' /etc/yum.repos.d/fedora-updates.repo; cat /etc/yum.repos.d/fedora-updates.repo
-  - sed -i -e 's,^metalink=.*repo=fedora-modular-.releasever.arch=.basearch$,baseurl=https://fedora.cu.be/linux/releases/$releasever/Modular/$basearch/os/,g' /etc/yum.repos.d/fedora-modular.repo; cat /etc/yum.repos.d/fedora-modular.repo
-  - sed -i -e 's,^metalink=.*repo=updates-released-modular-f.releasever.arch=.basearch$,baseurl=https://fedora.cu.be/linux/updates/$releasever/Modular/$basearch/,g' /etc/yum.repos.d/fedora-updates-modular.repo; cat /etc/yum.repos.d/fedora-updates-modular.repo
+  - sed -i -e 's,^metalink=.*repo=fedora-.releasever.arch=.basearch$,baseurl=https://ftp.halifax.rwth-aachen.de/fedora/linux/releases/$releasever/Everything/$basearch/os/,g' /etc/yum.repos.d/fedora.repo; cat /etc/yum.repos.d/fedora.repo
+  - sed -i -e 's,^metalink=.*repo=updates-released-f.releasever.arch=.basearch$,baseurl=https://ftp.halifax.rwth-aachen.de/fedora/linux/updates/$releasever/Everything/$basearch/,g' /etc/yum.repos.d/fedora-updates.repo; cat /etc/yum.repos.d/fedora-updates.repo
+  - sed -i -e 's,^metalink=.*repo=fedora-modular-.releasever.arch=.basearch$,baseurl=https://ftp.halifax.rwth-aachen.de/fedora/linux/releases/$releasever/Modular/$basearch/os/,g' /etc/yum.repos.d/fedora-modular.repo; cat /etc/yum.repos.d/fedora-modular.repo
+  - sed -i -e 's,^metalink=.*repo=updates-released-modular-f.releasever.arch=.basearch$,baseurl=https://ftp.halifax.rwth-aachen.de/fedora/linux/updates/$releasever/Modular/$basearch/,g' /etc/yum.repos.d/fedora-updates-modular.repo; cat /etc/yum.repos.d/fedora-updates-modular.repo
   - dnf install -y git rpm-build rpmdevtools
   - rpmdev-setuptree
   - VER=$(git describe --always | sed -e 's/-/./g')
@@ -38,16 +38,16 @@ srpm:
   - srpm
   before_script:
   # Fedora decided that restricting mirrors don't exist :-/
-  - sed -i -e 's,^metalink=.*repo=fedora-.releasever.arch=.basearch$,baseurl=https://fedora.cu.be/linux/releases/$releasever/Everything/$basearch/os/,g' /etc/yum.repos.d/fedora.repo; cat /etc/yum.repos.d/fedora.repo
-  - sed -i -e 's,^metalink=.*repo=updates-released-f.releasever.arch=.basearch$,baseurl=https://fedora.cu.be/linux/updates/$releasever/Everything/$basearch/,g' /etc/yum.repos.d/fedora-updates.repo; cat /etc/yum.repos.d/fedora-updates.repo
-  - sed -i -e 's,^metalink=.*repo=fedora-modular-.releasever.arch=.basearch$,baseurl=https://fedora.cu.be/linux/releases/$releasever/Modular/$basearch/os/,g' /etc/yum.repos.d/fedora-modular.repo; cat /etc/yum.repos.d/fedora-modular.repo
-  - sed -i -e 's,^metalink=.*repo=updates-released-modular-f.releasever.arch=.basearch$,baseurl=https://fedora.cu.be/linux/updates/$releasever/Modular/$basearch/,g' /etc/yum.repos.d/fedora-updates-modular.repo; cat /etc/yum.repos.d/fedora-updates-modular.repo
+  - sed -i -e 's,^metalink=.*repo=fedora-.releasever.arch=.basearch$,baseurl=https://ftp.halifax.rwth-aachen.de/fedora/linux/releases/$releasever/Everything/$basearch/os/,g' /etc/yum.repos.d/fedora.repo; cat /etc/yum.repos.d/fedora.repo
+  - sed -i -e 's,^metalink=.*repo=updates-released-f.releasever.arch=.basearch$,baseurl=https://ftp.halifax.rwth-aachen.de/fedora/linux/updates/$releasever/Everything/$basearch/,g' /etc/yum.repos.d/fedora-updates.repo; cat /etc/yum.repos.d/fedora-updates.repo
+  - sed -i -e 's,^metalink=.*repo=fedora-modular-.releasever.arch=.basearch$,baseurl=https://ftp.halifax.rwth-aachen.de/fedora/linux/releases/$releasever/Modular/$basearch/os/,g' /etc/yum.repos.d/fedora-modular.repo; cat /etc/yum.repos.d/fedora-modular.repo
+  - sed -i -e 's,^metalink=.*repo=updates-released-modular-f.releasever.arch=.basearch$,baseurl=https://ftp.halifax.rwth-aachen.de/fedora/linux/updates/$releasever/Modular/$basearch/,g' /etc/yum.repos.d/fedora-updates-modular.repo; cat /etc/yum.repos.d/fedora-updates-modular.repo
   - dnf -y install mock git rpm-build rpmdevtools
   - VER=$(cat products/version)
-  - sed -i -e 's,^metalink=.*repo=fedora-.releasever.arch=.basearch$,baseurl=https://fedora.cu.be/linux/releases/$releasever/Everything/$basearch/os/,g' /etc/mock/templates/fedora-branched.tpl
-  - sed -i -e 's,^metalink=.*repo=updates-released-f.releasever.arch=.basearch$,baseurl=https://fedora.cu.be/linux/updates/$releasever/Everything/$basearch/,g' /etc/mock/templates/fedora-branched.tpl; cat /etc/mock/templates/fedora-branched.tpl
-  - sed -i -e 's,^mirrorlist=.*repo=epel-7.arch=.basearch,baseurl=https://fedora.cu.be/epel/$releasever/$basearch/,g' /etc/mock/templates/epel-7.tpl; cat /etc/mock/templates/epel-7.tpl
-  - sed -i -e 's,^mirrorlist=.*repo=epel-8.arch=.basearch,baseurl=https://fedora.cu.be/epel/$releasever/$basearch/,g' /etc/mock/templates/epel-8.tpl; cat /etc/mock/templates/epel-8.tpl
+  - sed -i -e 's,^metalink=.*repo=fedora-.releasever.arch=.basearch$,baseurl=https://ftp.halifax.rwth-aachen.de/fedora/linux/releases/$releasever/Everything/$basearch/os/,g' /etc/mock/templates/fedora-branched.tpl
+  - sed -i -e 's,^metalink=.*repo=updates-released-f.releasever.arch=.basearch$,baseurl=https://ftp.halifax.rwth-aachen.de/fedora/linux/updates/$releasever/Everything/$basearch/,g' /etc/mock/templates/fedora-branched.tpl; cat /etc/mock/templates/fedora-branched.tpl
+  - sed -i -e 's,^mirrorlist=.*repo=epel-7.arch=.basearch,baseurl=https://ftp.halifax.rwth-aachen.de/fedora-epel/$releasever/$basearch/,g' /etc/mock/templates/epel-7.tpl; cat /etc/mock/templates/epel-7.tpl
+  - sed -i -e 's,^mirrorlist=.*repo=epel-8.arch=.basearch,baseurl=https://ftp.halifax.rwth-aachen.de/fedora-epel/$releasever/$basearch/,g' /etc/mock/templates/epel-8.tpl; cat /etc/mock/templates/epel-8.tpl
   script:
   - mock --old-chroot --verbose -r $DIST-$VERSION-$ARCH --define "version $VER" --rebuild products/srpm/beidconnect-*.src.rpm --resultdir $CI_PROJECT_DIR/products/$DIST-$VERSION-$ARCH
   artifacts:

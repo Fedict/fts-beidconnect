@@ -15,5 +15,5 @@ install:
 clean:
 	rm -f *.o beidconnect
 
-check: beidconnect
-	cd ..; python3 test/test.py
+#check: beidconnect
+#	cd ..; python3 test/test.py
