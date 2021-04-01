@@ -1,11 +1,10 @@
 var NATIVE_HOST = "be.bosa.beidconnect";
-var EXTENSION_ID = "pencgnkbgaekikmiahiaakjdgaibiipp";
 
 console.log("BeIDConnect event page activated");
 
 // When message is received from page send it to native
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-	if(sender.id !== EXTENSION_ID) {
+	if(sender.id !== chrome.runtime.id) {
 		console.log('Ignoring message not originating from our extension');
 		return;
 	}
