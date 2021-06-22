@@ -5,6 +5,7 @@
 #include "hash.h"
 #include "asn1.hpp"
 #include "x509Util.h"
+#include <unordered_map>
 
 #define BEID_READ_BINARY_MAX_LEN     250			 /*maximum length to read with single card command*/
 
@@ -59,177 +60,237 @@ std::string* BEIDCard::valueForKey(std::string* key)
    return nullptr;
 }
 
+//#define WHERE "BEIDCard::read_certificate"
+//int BEIDCard::readCertificate(int type, int format, int* l_cert, unsigned char** pp_cert)
+//{
+//   int ret;
+//   
+//   /*BYTE*/unsigned char recv[1024];
+//   int recvlen = 1024;
+//   /*BYTE*/unsigned char cmd[255];
+//   unsigned char buf[8000];
+//   
+//   unsigned char *p_rawcert = NULL;
+//   int l_rawcert = 0;
+//   int begintransaction = 1;
+//   
+//   int sw;
+//   int cmdlen = 0;
+//   //char certfilename[128] = "/tmp/";
+//   fstream myFile;
+//   
+//   /* select certificate */
+//   switch (type)
+//   {
+//      case CERT_TYPE_AUTH:
+//         cmdlen = sizeof(selectAuthenticationCertificateCmd)-1;
+//         memcpy(cmd, selectAuthenticationCertificateCmd, cmdlen);
+////         strcat(certfilename, "auth.der");
+//         break;
+//      case CERT_TYPE_NONREP:
+//         cmdlen = sizeof(selectNonRepudiationCertificateCmd)-1;
+//         memcpy(cmd, selectNonRepudiationCertificateCmd, cmdlen);
+////         strcat(certfilename, "nonrep.der");
+//         break;
+//      case CERT_TYPE_CA:
+//         cmdlen = sizeof(selectCaCertificateCmd)-1;
+//         memcpy(cmd, selectCaCertificateCmd, cmdlen);
+////         strcat(certfilename, "ca.der");
+//         break;
+//      case CERT_TYPE_ROOT:
+//         cmdlen = sizeof(selectRootCaCertificateCmd)-1;
+//         memcpy(cmd, selectRootCaCertificateCmd, cmdlen);
+////         strcat(certfilename, "root.der");
+//         break;
+//      default:
+//         log_error("%s: wrong certificate type (bad implementation)", WHERE);
+//         CLEANUP(-1);
+//   }
+//   
+//   //begin transaction
+//   ret = reader->beginTransaction();
+//   if (ret) {
+//      log_error("E: ReadCert: Could not start transaction");
+//      begintransaction = 0;
+//      CLEANUP(E_SRC_START_TRANSACTION);
+//   }
+//   
+//   ret = reader->apdu(cmd, cmdlen, recv, &recvlen, &sw);
+//   if (ret)
+//   {
+//      log_error("%s SCardTransmit (select certificate) returned 0x%08X", WHERE, ret);
+//      CLEANUP(ret);
+//   }
+//   
+//   if (sw != 0x9000)
+//   {
+//      log_error("%s SCardTransmit (select certificate) returned sw=%04", WHERE, sw);
+//      CLEANUP(E_SRC_TRANSMIT);
+//   }
+//   
+//   //-----------------------------------------------------------------------------
+//   // read certificate
+//   //-----------------------------------------------------------------------------
+//   l_rawcert = 4;
+//   ret = readFile2(0, &l_rawcert, buf);
+//   if(ret) {
+//      log_error("%s beid_read_file(cert_length) (cert_type=%d) returned 0x%08X", WHERE, type, ret);
+//      CLEANUP(ret);
+//   }
+//   
+//   l_rawcert = (buf[2] << 8) + buf[3];
+//   if (l_rawcert == 0) {
+//      pp_cert = 0;
+//      l_cert = 0;
+//      CLEANUP(0);
+//   }
+//   l_rawcert += 4; //read first 4 bytes again
+//   
+//   if((p_rawcert = (unsigned char*) malloc(l_rawcert)) == NULL) {
+//      CLEANUP(E_ALLOC_ERR);
+//   }
+//   
+//   ret = readFile2(0, &l_rawcert, p_rawcert);
+//   if(ret) {
+//      log_error("%s beid_read_file(cert_type=%d) returned 0x%08X", WHERE, type, ret);
+//      CLEANUP(ret);
+//   }
+//
+////   if (DEBUG) {
+// //     myFile.open (certfilename, ios::in | ios::out | ios::binary);
+// //     myFile.write ((char*)p_rawcert, l_rawcert);
+// //     myFile.close();
+// //  }
+//   
+//   if (format == FORMAT_RADIX64) {
+//      *l_cert =  base64encode_len(l_rawcert);
+//      
+//      if ((*pp_cert = (unsigned char*) malloc(*l_cert)) == NULL) {
+//         CLEANUP(E_ALLOC_ERR);
+//      }
+//      
+//      base64encode(p_rawcert, l_rawcert, *pp_cert);
+//   }
+//   else if (format == FORMAT_HEX) {
+//      ret = -1; //not supported since we don't need it so far
+//   }
+//   else {
+//      *l_cert =  l_rawcert;
+//      
+//      if ((*pp_cert = (unsigned char*) malloc(*l_cert)) == NULL) {
+//         CLEANUP(E_ALLOC_ERR);
+//      }
+//      
+//      memcpy(*pp_cert, p_rawcert, *l_cert);
+//   }
+//   
+//cleanup:
+//   
+//   if (begintransaction)
+//      reader->endTransaction();
+//   
+//   if (p_rawcert)
+//      free(p_rawcert);
+//   
+//   return (ret);
+//}
+//#undef WHERE
+
 #define WHERE "BEIDCard::read_certificate"
-int BEIDCard::readCertificate(int type, int format, int* l_cert, unsigned char** pp_cert)
+int BEIDCard::readCertificate(int format, int type, std::vector<char> &cert)
 {
    int ret;
-   
-   /*BYTE*/unsigned char recv[1024];
-   int recvlen = 1024;
-   /*BYTE*/unsigned char cmd[255];
-   unsigned char buf[8000];
-   
-   unsigned char *p_rawcert = NULL;
-   int l_rawcert = 0;
-   int begintransaction = 1;
-   
-   int sw;
-   int cmdlen = 0;
-   //char certfilename[128] = "/tmp/";
+   int l_lengthbuf = 4;
+   unsigned char lengthbuf[5];
+   int l_rawcert, l_cert = 0;
+   unsigned char *p_rawcert=0, *p_cert = 0;
    fstream myFile;
-   
-   /* select certificate */
-   switch (type)
-   {
-      case CERT_TYPE_AUTH:
-         cmdlen = sizeof(selectAuthenticationCertificateCmd)-1;
-         memcpy(cmd, selectAuthenticationCertificateCmd, cmdlen);
-//         strcat(certfilename, "auth.der");
-         break;
-      case CERT_TYPE_NONREP:
-         cmdlen = sizeof(selectNonRepudiationCertificateCmd)-1;
-         memcpy(cmd, selectNonRepudiationCertificateCmd, cmdlen);
-//         strcat(certfilename, "nonrep.der");
-         break;
-      case CERT_TYPE_CA:
-         cmdlen = sizeof(selectCaCertificateCmd)-1;
-         memcpy(cmd, selectCaCertificateCmd, cmdlen);
-//         strcat(certfilename, "ca.der");
-         break;
-      case CERT_TYPE_ROOT:
-         cmdlen = sizeof(selectRootCaCertificateCmd)-1;
-         memcpy(cmd, selectRootCaCertificateCmd, cmdlen);
-//         strcat(certfilename, "root.der");
-         break;
-      default:
-         log_error("%s: wrong certificate type (bad implementation)", WHERE);
-         CLEANUP(-1);
-   }
-   
-   //begin transaction
-   ret = reader->beginTransaction();
-   if (ret) {
-      log_error("E: ReadCert: Could not start transaction");
-      begintransaction = 0;
-      CLEANUP(E_SRC_START_TRANSACTION);
-   }
-   
-   ret = reader->apdu(cmd, cmdlen, recv, &recvlen, &sw);
-   if (ret)
-   {
-      log_error("%s SCardTransmit (select certificate) returned 0x%08X", WHERE, ret);
-      CLEANUP(ret);
-   }
-   
-   if (sw != 0x9000)
-   {
-      log_error("%s SCardTransmit (select certificate) returned sw=%04", WHERE, sw);
-      CLEANUP(E_SRC_TRANSMIT);
-   }
-   
-   //-----------------------------------------------------------------------------
-   // read certificate
-   //-----------------------------------------------------------------------------
-   l_rawcert = 4;
-   ret = readFile2(0, &l_rawcert, buf);
-   if(ret) {
-      log_error("%s beid_read_file(cert_length) (cert_type=%d) returned 0x%08X", WHERE, type, ret);
-      CLEANUP(ret);
-   }
-   
-   l_rawcert = (buf[2] << 8) + buf[3];
-   if (l_rawcert == 0) {
-      pp_cert = 0;
-      l_cert = 0;
-      CLEANUP(0);
-   }
-   l_rawcert += 4; //read first 4 bytes again
-   
-   if((p_rawcert = (unsigned char*) malloc(l_rawcert)) == NULL) {
-      CLEANUP(E_ALLOC_ERR);
-   }
-   
-   ret = readFile2(0, &l_rawcert, p_rawcert);
-   if(ret) {
-      log_error("%s beid_read_file(cert_type=%d) returned 0x%08X", WHERE, type, ret);
-      CLEANUP(ret);
-   }
+   std::unordered_map<int,std::vector<char>> idFiles;
 
-//   if (DEBUG) {
- //     myFile.open (certfilename, ios::in | ios::out | ios::binary);
- //     myFile.write ((char*)p_rawcert, l_rawcert);
- //     myFile.close();
- //  }
+   const char* rrncert  = "\x3F\x00\xDF\x00\x50\x3C";
+   const char* authcert = "\x3F\x00\xDF\x00\x50\x38";
+   const char* signcert = "\x3F\x00\xDF\x00\x50\x39";
+   const char* cacert   = "\x3F\x00\xDF\x00\x50\x3A";
+   const char* rootcert = "\x3F\x00\xDF\x00\x50\x3B";
+   int path_len = 6;
+
+   idFiles[CERT_TYPE_RRN] = std::vector<char>(rrncert, rrncert+ path_len);
+   idFiles[CERT_TYPE_AUTH] = std::vector<char>(authcert, authcert+ path_len);
+   idFiles[CERT_TYPE_NONREP] = std::vector<char>(signcert, signcert+ path_len);
+   idFiles[CERT_TYPE_CA] = std::vector<char>(cacert, cacert+ path_len);
+   idFiles[CERT_TYPE_ROOT] = std::vector<char>(rootcert, rootcert+ path_len);
+
+   ret = Card::getFile((unsigned char *)idFiles[type].data(), path_len, &l_lengthbuf, lengthbuf);
+   if (ret) {
+      log_error("%s GetFile (cert) returned 0x%08X", WHERE, ret);
+      CLEANUP(ret);
+   }
+   
+   l_rawcert = (lengthbuf[2] << 8) + lengthbuf[3];
+   if (l_rawcert > 0) {
+      l_rawcert += 4;
+
+      if((p_rawcert = (unsigned char*) malloc(l_rawcert)) == NULL) {
+         CLEANUP(E_ALLOC_ERR);
+      }
+      ret = Card::getFile((unsigned char *)idFiles[type].data(), 6, &l_rawcert, p_rawcert);
+      if (ret) {
+         log_error("%s GetFile (cert) returned 0x%08X", WHERE, ret);
+         CLEANUP(ret);
+      }
+   }
    
    if (format == FORMAT_RADIX64) {
-      *l_cert =  base64encode_len(l_rawcert);
-      
-      if ((*pp_cert = (unsigned char*) malloc(*l_cert)) == NULL) {
+      l_cert =  base64encode_len(l_rawcert);
+      if ((p_cert = (unsigned char*) malloc(l_cert)) == NULL) {
          CLEANUP(E_ALLOC_ERR);
       }
-      
-      base64encode(p_rawcert, l_rawcert, *pp_cert);
-   }
-   else if (format == FORMAT_HEX) {
-      ret = -1; //not supported since we don't need it so far
+      base64encode(p_rawcert, l_rawcert, p_cert);
+      std::vector<char> buf(p_cert, p_cert + l_cert);
+      cert = buf;
    }
    else {
-      *l_cert =  l_rawcert;
-      
-      if ((*pp_cert = (unsigned char*) malloc(*l_cert)) == NULL) {
-         CLEANUP(E_ALLOC_ERR);
-      }
-      
-      memcpy(*pp_cert, p_rawcert, *l_cert);
+      std::vector<char> buf(p_rawcert, p_rawcert + l_rawcert);
+      cert = buf;
    }
    
 cleanup:
-   
-   if (begintransaction)
-      reader->endTransaction();
-   
+
+   if (p_cert)
+      free(p_cert);
    if (p_rawcert)
       free(p_rawcert);
-   
    return (ret);
 }
 #undef WHERE
-
 
 
 #define WHERE "BEIDCard::readUserCertificates"
 int BEIDCard::readUserCertificates(int format, int certType, std::vector<std::vector<char>> &certificates)
 {
    int ret = 0;
-   int l_cert = 0;
-   unsigned char* p_cert;
 
    if ((certType == 0) || (certType == CERT_TYPE_NONREP )) {
-      ret = readCertificate(CERT_TYPE_NONREP, format, &l_cert, &p_cert);
+      std::vector<char> buf;
+      ret = readCertificate(format, CERT_TYPE_NONREP, buf);
       if (ret) {
          log_error("%s readCertificate(non-rep) returned 0x%08X", WHERE, ret);
          CLEANUP(ret);
       }
-      else if (l_cert > 0) {
-         std::vector<char> buf(p_cert, p_cert + l_cert);
+      else {
          certificates.push_back(buf);
-         free(p_cert);
-         p_cert = NULL;
-         l_cert = 0;
       }
    }
 
    if ((certType == 0) || (certType == CERT_TYPE_AUTH )) {
-      ret = readCertificate(CERT_TYPE_AUTH, format, &l_cert, &p_cert);
+      std::vector<char> buf;
+      ret = readCertificate(format, CERT_TYPE_AUTH, buf);
       if (ret) {
          log_error("%s readCertificate(non-rep) returned 0x%08X", WHERE, ret);
          CLEANUP(ret);
       }
-      else if (l_cert > 0) {
-         std::vector<char> buf(p_cert, p_cert + l_cert);
+      else {
          certificates.push_back(buf);
-         free(p_cert);
-         p_cert = NULL;
       }
    }
    
@@ -244,50 +305,24 @@ cleanup:
 int BEIDCard::readCertificateChain(int format, unsigned char *cert, int l_cert, std::vector<std::vector<char>>  &subCerts, std::vector<char> &root)
 {
    int ret;
-   int len = 0;
-   
-   unsigned char lengthbuf[5];
-   int l_lengthbuf = 4;
-   
-   unsigned char *p_rawcert = NULL;
-   int l_rawcert = 0;
-   int begintransaction = 1;
-   unsigned char* p_cert;
+   unsigned char* p_cert = 0;
 #define X509_ISSUER           "\1\1\4"
 #define X509_SUBJECT          "\1\1\6"
    ASN1_ITEM subject, issuer;
    
-   //begin transaction
-   ret = reader->beginTransaction();
-   if (ret) {
-      log_error("E: ReadCert: Could not start transaction");
-      begintransaction = 0;
-      CLEANUP(E_SRC_START_TRANSACTION);
-   }
-   
    //-----------------------------------------------------------------------------
    // CA certificate
    //-----------------------------------------------------------------------------
-   ret = Card::getFile((unsigned char *)"\x3F\x00\xDF\x00\x50\x3A", 6, &l_lengthbuf, lengthbuf);
-   if (ret)
-   {
-      log_error("%s GetFile (ca cert) returned 0x%08X", WHERE, ret);
+   std::vector<char> cacert;
+   std::vector<char> rootcert;
+
+   ret = readCertificate(FORMAT_RAW, CERT_TYPE_CA, cacert);
+   if (ret) {
+      log_error("%s readCertificate(ca) returned 0x%08X", WHERE, ret);
       CLEANUP(ret);
    }
-   
-   l_rawcert = len = (lengthbuf[2] << 8) + lengthbuf[3]+4;
-   if((p_rawcert = (unsigned char*) malloc(l_rawcert)) == NULL) {
-      CLEANUP(E_ALLOC_ERR);
-   }
-   ret = Card::getFile((unsigned char *)"\x3F\x00\xDF\x00\x50\x3A", 6, &l_rawcert, p_rawcert);
-   if (ret)
-   {
-      log_error("%s GetFile (ca cert) returned 0x%08X", WHERE, ret);
-      CLEANUP(ret);
-   }
-   
-   //check if this is the CA of our certificate
-   ret = asn1_get_item((unsigned char*) p_rawcert, (unsigned int)l_rawcert, X509_SUBJECT, &subject);
+
+   ret = asn1_get_item((unsigned char*) cacert.data(), (unsigned int)cacert.size(), X509_SUBJECT, &subject);
    if (ret) {
       log_error("%s: Could not get subject name from certificate", WHERE);
       goto cleanup;
@@ -307,67 +342,45 @@ int BEIDCard::readCertificateChain(int format, unsigned char *cert, int l_cert, 
    }
 
    if (format == FORMAT_RADIX64) {
-      l_cert =  base64encode_len(l_rawcert);
+      l_cert =  base64encode_len((int)cacert.size());
       if ((p_cert = (unsigned char*) malloc(l_cert)) == NULL) {
          CLEANUP(E_ALLOC_ERR);
       }
-      base64encode(p_rawcert, l_rawcert, p_cert);
+      base64encode((unsigned char*) cacert.data(), (int) cacert.size(), p_cert);
       std::vector<char> buf(p_cert, p_cert + l_cert);
       subCerts.push_back(buf);
       free(p_cert);
       p_cert = NULL;
    }
    else {
-      std::vector<char> buf(p_rawcert, p_rawcert + l_rawcert);
-      subCerts.push_back(buf);
+      subCerts.push_back(cacert);
    }
-   free(p_rawcert);
-   p_rawcert = 0;
    
    //-----------------------------------------------------------------------------
    // root certificate
    //-----------------------------------------------------------------------------
-   ret = Card::getFile((unsigned char *)"\x3F\x00\xDF\x00\x50\x3B", 6, &l_lengthbuf, lengthbuf);
-   if (ret)
-   {
-      log_error("%s GetFile (root cert) returned 0x%08X", WHERE, ret);
-      CLEANUP(ret);
-   }
-   
-   l_rawcert = len = (lengthbuf[2] << 8) + lengthbuf[3]+4;
-   if((p_rawcert = (unsigned char*) malloc(l_rawcert)) == NULL) {
-      CLEANUP(E_ALLOC_ERR);
-   }
-   ret = Card::getFile((unsigned char *)"\x3F\x00\xDF\x00\x50\x3B", 6, &l_rawcert, p_rawcert);
-   if (ret)
-   {
-      log_error("%s GetFile (root cert) returned 0x%08X", WHERE, ret);
+   ret = readCertificate(FORMAT_RAW, CERT_TYPE_ROOT, rootcert);
+   if (ret) {
+      log_error("%s readCertificate(ca) returned 0x%08X", WHERE, ret);
       CLEANUP(ret);
    }
    
    if (format == FORMAT_RADIX64) {
-      l_cert =  base64encode_len(l_rawcert);
+      l_cert =  base64encode_len((int) rootcert.size());
       if ((p_cert = (unsigned char*) malloc(l_cert)) == NULL) {
          CLEANUP(E_ALLOC_ERR);
       }
-      base64encode(p_rawcert, l_rawcert, p_cert);
+      base64encode((unsigned char*) rootcert.data(), (int)rootcert.size(), p_cert);
       std::vector<char> buf(p_cert, p_cert + l_cert);
       root = buf;
       free(p_cert);
       p_cert = NULL;
    }
    else {
-      std::vector<char> buf(p_rawcert, p_rawcert + l_rawcert);
-      root = buf;
+      root = rootcert;
    }
    
 cleanup:
-   
-   if (begintransaction)
-      reader->endTransaction();
-   
-   if (p_rawcert)
-      free(p_rawcert);
    
    return (ret);
 }
@@ -380,11 +393,12 @@ int BEIDCard::selectKey(int pintype, unsigned char* cert, int l_cert)
    int ret = 0;
    int cmdlen, recvlen;
    unsigned char cmd[512], recv[512];
-   int l_cardcert;
-   unsigned char* cardcert = NULL;
+   //int l_cardcert;
+   //unsigned char* cardcert = NULL;
    int sw;
 
-   ret = readCertificate(pintype, FORMAT_RAW, &l_cardcert, &cardcert);
+   std::vector<char> cardcert;
+   ret = readCertificate(FORMAT_RAW, pintype, cardcert);
    if (ret) {
       log_error("E: could not read certificate from eID card");
       goto cleanup;
@@ -392,14 +406,14 @@ int BEIDCard::selectKey(int pintype, unsigned char* cert, int l_cert)
    
    //check if the current card is the one that contains the certificate we want to use for signing
    //in case of multiple readers, we should search until we find the right card
-   if (l_cert != l_cardcert) {
+   if (l_cert != cardcert.size()) {
       CLEANUP(E_SRC_CERT_NOT_FOUND);
    }
-   if (memcmp(cert, cardcert, l_cardcert) != 0) {
+   if (memcmp(cert, cardcert.data(), l_cert) != 0) {
       CLEANUP(E_SRC_CERT_NOT_FOUND);
    }
    
-   ret = getKeyInfo(cardcert, l_cardcert, &currentSelectedKeyType, &currentSelectedKeyLength);
+   ret = getKeyInfo((unsigned char*)cardcert.data(), (unsigned int) cardcert.size(), &currentSelectedKeyType, &currentSelectedKeyLength);
    if (ret) {
       log_error("E: getKeyInfo(type,size) returned %0X (%d)", ret);
       goto cleanup;
@@ -644,16 +658,12 @@ int BEIDCard::sign(unsigned char* in, unsigned int l_in, int hashAlgo, unsigned 
    recvlen = *l_out;
    
    ret = reader->apdu(cmd, cmdlen, out, &recvlen, sw);
-   if (ret < 0) {
-      log_error("%s: reader->apdu returned 0x%0X", WHERE, ret);
+   if ((ret < 0) || (*sw != 0x9000)) {
+      log_error("%s: reader->apdu returned 0x%0X (sw=0x%0X)", WHERE, ret, *sw);
       goto cleanup;
    }
 
    *l_out = (unsigned int) recvlen;
-   
-   if (*sw != 0x9000) {
-      CLEANUP(-1);
-   }
    
    if (currentSelectedKeyType == X509_KEYTYPE_EC) {
       //signature is a concatenation of 2 values, so we encode these in ASN1 to return the ASN1 format
@@ -821,46 +831,64 @@ cleanup:
 }
 #undef WHERE
 
-int BEIDCard::getFile(int fileType, int* l_out, unsigned char* p_out)
+
+#define WHERE "BEIDCard::getFile"
+std::vector<char> BEIDCard::getFile(int format, std::string fileType)
 {
    int ret = 0;
+   int len = MAX_ID_FILE_SIZE;
+   unsigned char p[MAX_ID_FILE_SIZE];
+   unsigned char* p_out;
+ 
+   std::unordered_map<std::string,std::vector<char>> idFiles;
+   std::vector<char> file;
+
+   const char* id           = "\x3F\x00\xDF\x01\x40\x31";
+   const char* id_sig       = "\x3F\x00\xDF\x01\x40\x32";
+   const char* address      = "\x3F\x00\xDF\x01\x40\x33";
+   const char* address_sig  = "\x3F\x00\xDF\x01\x40\x34";
+   const char* photo        = "\x3F\x00\xDF\x01\x40\x35";
+   const char* rrncert      = "\x3F\x00\xDF\x00\x50\x3C";
+   const char* authcert     = "\x3F\x00\xDF\x00\x50\x38";
+   const char* signcert     = "\x3F\x00\xDF\x00\x50\x39";
+   const char* cacert       = "\x3F\x00\xDF\x00\x50\x3A";
+   const char* rootcert     = "\x3F\x00\xDF\x00\x50\x3B";
+   int path_len = 6;
    
-   switch (fileType) {
-         
-      case IDFILE:
-         ret = Card::getFile((unsigned char *)"\x3F\x00\xDF\x01\x40\x31", 6, l_out, p_out);
-         break;
-      case IDSIGFILE:
-         ret = Card::getFile((unsigned char *)"\x3F\x00\xDF\x01\x40\x32", 6, l_out, p_out);
-         break;
-      case ADDRESSFILE:
-         ret = Card::getFile((unsigned char *)"\x3F\x00\xDF\x01\x40\x33", 6, l_out, p_out);
-         break;
-      case ADDRESSSIGFILE:
-         ret = Card::getFile((unsigned char *)"\x3F\x00\xDF\x01\x40\x34", 6, l_out, p_out);
-         break;
-      case PHOTOFILE:
-         ret = Card::getFile((unsigned char *)"\x3F\x00\xDF\x01\x40\x35", 6, l_out, p_out);
-         break;
-      case RRNCERT:
-         ret = Card::getFile((unsigned char *)"\x3F\x00\xDF\x00\x50\x3C", 6, l_out, p_out);
-         break;
-      case AUTHCERT:
-         ret = Card::getFile((unsigned char *)"\x3F\x00\xDF\x00\x50\x38", 6, l_out, p_out);
-         break;
-      case SIGNCERT:
-         ret = Card::getFile((unsigned char *)"\x3F\x00\xDF\x00\x50\x39", 6, l_out, p_out);
-         break;
-      case CACERT:
-         ret = Card::getFile((unsigned char *)"\x3F\x00\xDF\x00\x50\x3A", 6, l_out, p_out);
-         break;
-      case ROOTCERT:
-         ret = Card::getFile((unsigned char *)"\x3F\x00\xDF\x00\x50\x3B", 6, l_out, p_out);
-         break;
-      default: ret = E_SRC_FILETYPE_NOT_SUPPORTED;
+   idFiles["id"] = std::vector<char>(id, id+ path_len);
+   idFiles["id_sig"] = std::vector<char>(id_sig, id_sig+ path_len);
+   idFiles["address"] = std::vector<char>(address, address+ path_len);
+   idFiles["address_sig"] = std::vector<char>(address_sig, address_sig+ path_len);
+   idFiles["photo"] = std::vector<char>(photo, photo+ path_len);
+   idFiles["rrncert"] = std::vector<char>(rrncert, rrncert+ path_len);
+   idFiles["authcert"] = std::vector<char>(authcert, authcert+ path_len);
+   idFiles["signcert"] = std::vector<char>(signcert, signcert+ path_len);
+   idFiles["cacert"] = std::vector<char>(cacert, cacert+ path_len);
+   idFiles["rootcert"] = std::vector<char>(rootcert, rootcert+ path_len);
+
+   ret = Card::getFile((unsigned char *)idFiles[fileType].data(), path_len, &len, p);
+   if (ret) {
+      log_error("%s getFile returned %d (0x%0X)", WHERE, ret, ret);
+      CLEANUP(ret);
    }
    
-   return ret;
-}
+   if (format == FORMAT_RADIX64) {
+      int b64len =  base64encode_len(len);
+      if ((p_out = (unsigned char*) malloc(b64len)) == NULL) {
+         CLEANUP(E_ALLOC_ERR);
+      }
+      base64encode(p, len, p_out);
+      std::vector<char> buf(p_out, p_out + b64len);
+      file = buf;
+      free(p_out);
+      p_out = NULL;
+   }
+   else {
+      std::vector<char> buf(p, p + len);
+      file = buf;
+   }
 
+cleanup:
+   return file;
+}
 

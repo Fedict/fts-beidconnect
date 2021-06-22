@@ -1,4 +1,4 @@
-VERSION = 2.1.0
+VERSION = 2.3.0
 APPIDENTIFIER = be.bosa.beidconnect.safari
 APPEXIDENTIFIER = be.bosa.beidconnect.safari-extension
 PROGRAM = BeIDConnect\ Extension

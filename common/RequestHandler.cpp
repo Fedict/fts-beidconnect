@@ -1,5 +1,6 @@
 #include "RequestHandler.hpp"
 #include "VersionRequestHandler.hpp"
+#include "IDRequestHandler.hpp"
 #include "InfoRequestHandler.hpp"
 #include "UserCertsRequestHandler.hpp"
 #include "CertChainRequestHandler.hpp"
@@ -7,6 +8,7 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include "log.hpp"
+#include <unordered_map>
 
 using namespace boost::property_tree;
 
@@ -28,6 +30,9 @@ std::shared_ptr<RequestHandler> RequestHandler::createRequestHandler(std::shared
 
    if (operation == "VERSION") {
       requestHandler = std::make_shared<VersionRequestHandler>();
+   }
+   else if (operation == "ID") {
+      requestHandler = std::make_shared<IDRequestHandler>();
    }
    else if (operation == "USERCERTS") {
       requestHandler = std::make_shared<UserCertsRequestHandler>();

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E808DCC4267256D1006CFED0 /* IDRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E808DCC3267256D1006CFED0 /* IDRequestHandler.cpp */; };
 		E824FB77240FC263008E0C3D /* PCSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E824FB76240FC263008E0C3D /* PCSC.framework */; };
 		E84BAFE824477C7000D6A178 /* setup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E84BAFE624477C7000D6A178 /* setup.cpp */; };
 		E85AB669241539CC00BE9F0A /* UserCertsRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E85AB668241539CC00BE9F0A /* UserCertsRequestHandler.cpp */; };
@@ -47,6 +48,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E808DCC2267256D1006CFED0 /* IDRequestHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IDRequestHandler.hpp; sourceTree = "<group>"; };
+		E808DCC3267256D1006CFED0 /* IDRequestHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IDRequestHandler.cpp; sourceTree = "<group>"; };
 		E81B25A524B7C0CD00276999 /* CertChainRequestHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CertChainRequestHandler.hpp; sourceTree = "<group>"; };
 		E824FB76240FC263008E0C3D /* PCSC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PCSC.framework; path = System/Library/Frameworks/PCSC.framework; sourceTree = SDKROOT; };
 		E835C9A924376FFA008A17D9 /* package.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = package.json; sourceTree = "<group>"; };
@@ -196,6 +199,8 @@
 		E89B23CA24112BDC00D800E0 /* RequestHandlers */ = {
 			isa = PBXGroup;
 			children = (
+				E808DCC3267256D1006CFED0 /* IDRequestHandler.cpp */,
+				E808DCC2267256D1006CFED0 /* IDRequestHandler.hpp */,
 				E8AB54D024110F070051D9A2 /* VersionRequestHandler.cpp */,
 				E8AB54AD24110F070051D9A2 /* VersionRequestHandler.hpp */,
 				E85AB668241539CC00BE9F0A /* UserCertsRequestHandler.cpp */,
@@ -360,6 +365,7 @@
 				E8AB54E924110F070051D9A2 /* hash.cpp in Sources */,
 				E8AB54EB24110F070051D9A2 /* VirtualCard.cpp in Sources */,
 				E8AB54E024110F070051D9A2 /* x509Util.c in Sources */,
+				E808DCC4267256D1006CFED0 /* IDRequestHandler.cpp in Sources */,
 				E85AB66A24166DFB00BE9F0A /* comm.cpp in Sources */,
 				E8AB54E424110F070051D9A2 /* CardFactory.cpp in Sources */,
 				E89B23CD24114FBC00D800E0 /* native.cpp in Sources */,

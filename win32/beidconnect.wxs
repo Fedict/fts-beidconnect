@@ -114,7 +114,7 @@
             HideTarget="no"
             Impersonate="no" />
             
-    <util:CloseApplication Id="CloseIE" CloseMessage="yes" PromptToContinue="yes" Description="Internet Explorer needs to be closed to complete installation" Target="iexplore.exe" ElevatedCloseMessage="no" RebootPrompt="no" /> 
+    <util:CloseApplication Id="CloseIE" CloseMessage="yes" PromptToContinue="yes" Description='Please click "ignore" to close Internet Explorer and continue installation' Target="iexplore.exe" ElevatedCloseMessage="no" RebootPrompt="no" /> 
 
    <InstallExecuteSequence>
          <Custom Action="WixCloseApplications" Before="InstallValidate" /> 

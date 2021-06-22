@@ -45,7 +45,7 @@
             </Class>
             <File Id="beidconnectA.dll" KeyPath="yes" Source="BeIDConnectX\Release\beidconnectA.dll" />
             <ProgId Id="Record" />
-            <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\Domains\belgium.be" Name="https" Value="2" Type="integer" />
+            <RegistryValue Root="HKLM" Key="Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\Domains\belgium.be" Name="https" Value="2" Type="integer" />
             <RegistryValue Root="HKCR" Key="CLSID\{8B48F268-273E-3109-B5B2-27514C9C06C8}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" Action="write" />
             <RegistryValue Root="HKCR" Key="CLSID\{8B48F268-273E-3109-B5B2-27514C9C06C8}\InprocServer32\0.0.4.0" Name="Class" Value="BeIDConnectX.IObjectSafetyImpl" Type="string" Action="write" />
             <RegistryValue Root="HKCR" Key="CLSID\{8B48F268-273E-3109-B5B2-27514C9C06C8}\InprocServer32\0.0.4.0" Name="Assembly" Value="BeIDConnectA, Version=0.0.4.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />

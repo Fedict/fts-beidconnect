@@ -66,9 +66,27 @@ class TestLongrunningHost(unittest.TestCase):
              "operation":"VERSION",
              "correlationId":"07386ce7-f73e-4e99-dfc3-8d69b6adf33d"
          }
-         resp = self.transceive("{\"operation\":\"VERSION\",\"correlationId\":\"07386ce7-f73e-4e99-dfc3-8d69b6adf33d\"}")
-         self.assertEqual(resp['version'], "2.1")
-         self.pin = 1234
+         resp = self.transceive(json.dumps(cmd))
+         self.assertEqual(resp['version'], "2.3")
+         self.assertEqual(resp['result'], "OK")
+
+    def test2_readAllFiles(self):
+         cmd = {
+             "operation":"ID",
+             "idflags": "511",
+             "correlationId":"07386ce7-f73e-4e99-dfc3-8d69b6adf33d"
+         }
+         resp = self.transceive(json.dumps(cmd))
+         self.assertEqual(resp['result'], "OK")
+
+    def test2_readPhoto(self):
+         cmd = {
+             "operation":"ID",
+             "idflags": "4",
+             "correlationId":"07386ce7-f73e-4e99-dfc3-8d69b6adf33d"
+         }
+         resp = self.transceive(json.dumps(cmd))
+         self.assertEqual(resp['result'], "OK")
 
     def test3_read_usercerts(self):
         cmd = {

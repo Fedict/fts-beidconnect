@@ -169,7 +169,7 @@
     <ClInclude Include="..\..\common\crypto.h" />
     <ClInclude Include="..\..\common\general.h" />
     <ClInclude Include="..\..\common\hash.h" />
-    <ClInclude Include="..\..\common\InfoRequestHandler.hpp" />
+    <ClInclude Include="..\..\common\IDRequestHandler.hpp" />
     <ClInclude Include="..\..\common\log.hpp" />
     <ClInclude Include="..\..\common\main.hpp" />
     <ClInclude Include="..\..\common\native.hpp" />
@@ -197,7 +197,7 @@
     <ClCompile Include="..\..\common\comm.cpp" />
     <ClCompile Include="..\..\common\crypto.cpp" />
     <ClCompile Include="..\..\common\hash.cpp" />
-    <ClCompile Include="..\..\common\InfoRequestHandler.cpp" />
+    <ClCompile Include="..\..\common\IDRequestHandler.cpp" />
     <ClCompile Include="..\..\common\log.cpp" />
     <ClCompile Include="..\..\common\main.cpp" />
     <ClCompile Include="..\..\common\native.cpp" />

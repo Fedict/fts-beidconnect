@@ -47,14 +47,14 @@ public:
    virtual int isCardSupported(void) { return 1; };
    virtual std::string strType() { return "NOT DEFINED"; };
    virtual int type() { return -1; };
-   virtual int readCertificate(int type, int format, int *l_cert, unsigned char **pp_cert) = 0; //pure virtual
+   virtual int readCertificate(int format, int type, std::vector<char> &cert) = 0;
    virtual int readUserCertificates(int format, int certType, std::vector<std::vector<char>> &certificates){ return -1; };
    virtual int readCertificateChain(int format, unsigned char *cert, int l_cert, std::vector<std::vector<char>> &subCerts, std::vector<char> &root){ return -1; };
    virtual int selectKey(int type, unsigned char* cert = 0, int l_cert = 0) = 0;
    virtual int logon(int l_pin, char *pin) = 0;
    virtual int logoff() = 0;
    virtual int sign(unsigned char* in, unsigned int l_in, int hashAlgo, unsigned char *out, unsigned int *l_out, int *sw) = 0;
-   virtual int getFile(int fileType, int* l_out, unsigned char* p_out){ return -1; };
+   virtual std::vector<char> getFile(int format, std::string fileType) { return std::vector<char>(); };
 
    virtual std::string* valueForKey(std::string* key) {return nullptr;};
    virtual int selectFile(unsigned char *file, int l_file){ return -1; };

@@ -58,12 +58,7 @@ cleanup:
 #include "x509Util.h"
 int verifySignature(unsigned char *plain, unsigned int l_plain, const char *hashalg, const unsigned char *cert, int l_cert, unsigned char *signature, unsigned l_signature)
 {
-   //unsigned int length = getRSAKeyLength((const char*)cert, l_cert);
-   
-//   int keyType;
-//   int keySize;
-//   int ret = getKeyInfo(cert, (unsigned int)l_cert, &keyType, &keySize); //) (cert, (unsigned int) l_cert, &keyType, &keySize)
-
+   //server will validate the signature...
    return 0;
 }
 #endif
