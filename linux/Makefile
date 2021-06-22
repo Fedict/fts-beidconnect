@@ -1,6 +1,6 @@
 PLDFLAGS = $(shell pkg-config --libs libpcsclite)
 PCFLAGS = $(shell pkg-config --cflags libpcsclite)
-beidconnect: asn1.o BEIDCard.o Card.o CardFactory.o CardReader.o CertChainRequestHandler.o comm.o hash.o InfoRequestHandler.o log.o main.o native.o ReaderList.o Request.o RequestHandler.o SCard.o SignRequestHandler.o UserCertsRequestHandler.o util.o VersionRequestHandler.o VirtualCard.o VirtualReader.o x509Util.o crypto.o setup.o test.o
+beidconnect: asn1.o BEIDCard.o Card.o CardFactory.o CardReader.o CertChainRequestHandler.o comm.o hash.o InfoRequestHandler.o log.o main.o native.o ReaderList.o Request.o RequestHandler.o SCard.o SignRequestHandler.o UserCertsRequestHandler.o util.o VersionRequestHandler.o VirtualCard.o VirtualReader.o x509Util.o crypto.o setup.o test.o IDRequestHandler.o
 	$(CXX) $^ $(PLDFLAGS) $(LDFLAGS) -o $@
 
 %.o: ../common/%.cpp
