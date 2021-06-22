@@ -81,17 +81,17 @@ srpm:
     when:
       on_success
 
-build:fedora-32-64:
+build:fedora-34-64:
   <<: *fedbuild
   variables:
-    VERSION: 32
+    VERSION: 34
     ARCH: x86_64
     DIST: fedora
 
-build:fedora-32-32:
+build:fedora-34-32:
   <<: *fedbuild
   variables:
-    VERSION: 32
+    VERSION: 34
     ARCH: i386
     DIST: fedora
 
@@ -139,21 +139,21 @@ build:debian-10-64:
     ARCH: amd64
     MIRROR: http://deb.debian.org/debian
 
-build:ubuntu-2010-64:
+build:ubuntu-2104-64:
   <<: *debuild
   variables:
-    CODE: groovy
+    CODE: hirsute
     ARCH: amd64
-    SHORT: u2010
+    SHORT: u2104
     MIRROR: http://archive.ubuntu.com/ubuntu
     SCRIPT: /usr/share/debootstrap/scripts/gutsy
 
-build:ubuntu-2010-32:
+build:ubuntu-2104-32:
   <<: *debuild
   variables:
-    CODE: groovy
+    CODE: hirsute
     ARCH: i386
-    SHORT: u2010
+    SHORT: u2104
     MIRROR: http://archive.ubuntu.com/ubuntu
     SCRIPT: /usr/share/debootstrap/scripts/gutsy
 
