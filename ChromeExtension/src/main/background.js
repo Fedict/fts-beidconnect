@@ -1,11 +1,10 @@
-var NATIVE_HOST = "be.bosa.eidlink";
-var EXTENSION_ID = "pencgnkbgaekikmiahiaakjdgaibiipp";
+var NATIVE_HOST = "be.bosa.beidconnect";
 
-console.log("eIDLink event page activated");
+console.log("BeIDConnect event page activated");
 
 // When message is received from page send it to native
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-	if(sender.id !== EXTENSION_ID) {
+	if(sender.id !== chrome.runtime.id) {
 		console.log('Ignoring message not originating from our extension');
 		return;
 	}
@@ -18,7 +17,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
 // Send the message back to the originating tab
 function _reply(tab, msg) {
-	msg.src = "EIDChromeExt.background";
+	msg.src = "beidconnect.background";
 	msg.extensionVersion = chrome.runtime.getManifest().version;
 	chrome.tabs.sendMessage(tab, msg);
 }

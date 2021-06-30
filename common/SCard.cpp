@@ -348,7 +348,10 @@ int SCard::apdu(const unsigned char *apdu, unsigned int l_apdu, unsigned char *o
    ret = SCardTransmit(hCard,
                        ((cardIsT1 == 1)? SCARD_PCI_T1 : SCARD_PCI_T0),
                        apdu, l_apdu, NULL, recv, &l_recv);
-   if ( ret != SCARD_S_SUCCESS ) {
+   if ( ret == SCARD_E_NO_SMARTCARD) {
+      return (E_SRC_NO_CARD);
+   }
+   else if ( ret != SCARD_S_SUCCESS ) {
       log_error("%s: E: Failed SCardTransmit(): %d (0x%0x)", WHERE, ret, ret);
       return(ret);
    }

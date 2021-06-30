@@ -1,6 +1,6 @@
 //
 //  UserCertsRequestHandler.cpp
-//  eIDLink
+//  BeIDConnect
 //
 //  Created by Vital Schonkeren on 02/03/2020.
 //
@@ -12,6 +12,7 @@
 #include "CardFactory.hpp"
 #include "ReaderList.hpp"
 #include "CardReader.hpp"
+#include "general.h"
 
 using boost::property_tree::ptree;
 
@@ -27,7 +28,23 @@ std::string UserCertsRequestHandler::process()
    int countSupportedCards = 0;
    int countUnsupportedCards = 0;
    int countErrors = 0;
-   
+   int certType = 0;
+  
+   std::stringstream ss(ssRequest->str());
+   boost::property_tree::ptree pt;
+
+   boost::property_tree::read_json(ss, pt);
+   if (pt.get_optional<std::string>("keyusage").is_initialized()) {
+      std::string keyusage = pt.get<std::string>("keyusage");
+      if (keyusage.compare("NONREPUDIATION") == 0) {
+         certType = CERT_TYPE_NONREP;
+      }
+      else if (keyusage.compare("DIGITALSIGNATURE") == 0) {
+         certType = CERT_TYPE_AUTH;
+      }
+      //else 0, return all usercerts
+   }
+
    if (count == 0) {
       response.put("result", "no_reader");
    }
@@ -57,7 +74,7 @@ std::string UserCertsRequestHandler::process()
          
          //add usercertificates to list
          std::vector<std::vector<char>> certificates;
-         status = card->readUserCertificates(FORMAT_RADIX64, certificates);
+         status = card->readUserCertificates(FORMAT_RADIX64, certType, certificates);
          if (status) {
             countErrors++;
             log_error( "%s: E: card->readUserCertificates() returned %08X", WHERE, status);

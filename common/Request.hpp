@@ -1,6 +1,6 @@
 //
 //  Request.hpp
-//  eIDLink
+//  BeIDConnect
 //
 //  Created by Vital on 19/03/2020.
 //  Copyright © 2020 bosa. All rights reserved.

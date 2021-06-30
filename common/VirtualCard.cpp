@@ -4,6 +4,7 @@
 #include "hash.h"
 #include "general.h"
 #include "util.h"
+#include <unordered_map>
 
 #define test "test"
 
@@ -41,54 +42,29 @@ int VirtualCard::type()
    //return CARD_TYPE_PKCS15;
 };
 
-
 #define WHERE "VirtualCard::read_certificate"
-int VirtualCard::readCertificate(int type, int format, int* l_cert, unsigned char** pp_cert)
+int VirtualCard::readCertificate(int format, int type, std::vector<char> &cert)
 {
    int ret = 0;
-   
-   /* select certificate */
-   switch (type)
-   {
-      case CERT_TYPE_AUTH:
-         *l_cert = sizeof(auth_cert /* -1 */); //alloc + 1 byte to add 0
-         if ((*pp_cert = (unsigned char*) malloc(*l_cert)) == NULL) {
-            CLEANUP(E_ALLOC_ERR);
-         }
-         memcpy(*pp_cert, auth_cert, *l_cert);
-         break;
-      case CERT_TYPE_NONREP:
-         *l_cert = sizeof(nonrep_cert);
-         if ((*pp_cert = (unsigned char*) malloc(*l_cert)) == NULL) {
-            CLEANUP(E_ALLOC_ERR);
-         }
-         memcpy(*pp_cert, nonrep_cert, *l_cert);
-         break;
-      case CERT_TYPE_CA:
-         *l_cert = sizeof(ca_cert);
-         if ((*pp_cert = (unsigned char*) malloc(*l_cert)) == NULL) {
-            CLEANUP(E_ALLOC_ERR);
-         }
-         memcpy(*pp_cert, ca_cert, *l_cert);
-         break;
-      case CERT_TYPE_ROOT:
-         *l_cert = sizeof(root_cert);
-         if ((*pp_cert = (unsigned char*) malloc(*l_cert)) == NULL) {
-            CLEANUP(E_ALLOC_ERR);
-         }
-         memcpy(*pp_cert, root_cert, *l_cert);
-         break;
-      default:
-         log_error("%s: wrong certificate type (bad implementation)", WHERE);
-         CLEANUP(-1);
-   }
-   
+   std::unordered_map<int,std::string> idFiles;
+
+   idFiles[CERT_TYPE_RRN] = rrn_cert;
+   idFiles[CERT_TYPE_AUTH] = auth_cert;
+   idFiles[CERT_TYPE_NONREP] = nonrep_cert;
+   idFiles[CERT_TYPE_CA] = ca_cert;
+   idFiles[CERT_TYPE_ROOT] = root_cert;
+
    if (format == FORMAT_RADIX64) {
+      const char* f = idFiles[type].c_str();
+      std::vector<char> buf(f, f + idFiles[type].length());
+      cert = buf;
    }
    else {
-      ret = -1; //not supported in virtual card since we don't need it anyhow
+      unsigned char p[MAX_ID_FILE_SIZE];
+      int len = base64decode((unsigned char*) idFiles[type].c_str(), p);
+      std::vector<char> buf(p, p + len);
+      cert = buf;
    }
-   
    do_sleep(500); //virtual read time
    
 cleanup:
@@ -98,9 +74,8 @@ cleanup:
 #undef WHERE
 
 
-
 #define WHERE "VirtualCard::readUserCertificates"
-int VirtualCard::readUserCertificates(int format, std::vector<std::vector<char>> &certificates)
+int VirtualCard::readUserCertificates(int format, int certType, std::vector<std::vector<char>> &certificates)
 {
    int ret = 0;
    if (format == FORMAT_RADIX64) {
@@ -269,56 +244,37 @@ cleanup:
    return (ret);
 }
 
-int VirtualCard::getFile(int fileType, int* l_out, unsigned char* p_out)
+std::vector<char> VirtualCard::getFile(int format, std::string fileType)
 {
-   int ret = 0;
+   std::unordered_map<std::string,std::string> idFiles;
+   std::vector<char> file;
 
-   switch (fileType) {
-         
-      case IDFILE:
-         *l_out = base64decode((unsigned char*) id_file, p_out);
-         do_sleep(100); //virtual read time
-         break;
-      case IDSIGFILE:
-         *l_out = base64decode((unsigned char*) id_sig_file, p_out);
-         do_sleep(100); //virtual read time
-         break;
-      case ADDRESSFILE:
-         *l_out = base64decode((unsigned char*) address_file, p_out);
-         do_sleep(100); //virtual read time
-         break;
-      case ADDRESSSIGFILE:
-         *l_out = base64decode((unsigned char*) address_sig_file, p_out);
-         do_sleep(100); //virtual read time
-         break;
-      case PHOTOFILE:
-         *l_out = base64decode((unsigned char*) photo_file, p_out);
-         do_sleep(1000); //virtual read time
-         break;
-      case RRNCERT:
-         *l_out = base64decode((unsigned char*) rrn_cert, p_out);
-         do_sleep(500); //virtual read time
-         break;
-      case AUTHCERT:
-         *l_out = base64decode((unsigned char*) auth_cert, p_out);
-         do_sleep(500); //virtual read time
-         break;
-      case SIGNCERT:
-         *l_out = base64decode((unsigned char*) nonrep_cert, p_out);
-         do_sleep(500); //virtual read time
-         break;
-      case CACERT:
-         *l_out = base64decode((unsigned char*) ca_cert, p_out);
-         do_sleep(500); //virtual read time
-         break;
-      case ROOTCERT:
-         *l_out = base64decode((unsigned char*) root_cert, p_out);
-         do_sleep(500); //virtual read time
-         break;
-      default: ret = E_SRC_FILETYPE_NOT_SUPPORTED;
+   idFiles["id"] = id_file;
+   idFiles["id_sig"] = id_sig_file;
+   idFiles["address"] = address_file;
+   idFiles["address_sig"] = address_sig_file;
+   idFiles["photo"] = photo_file;
+   idFiles["rrncert"] = rrn_cert;
+   idFiles["authcert"] = auth_cert;
+   idFiles["signcert"] = nonrep_cert;
+   idFiles["cacert"] = ca_cert;
+   idFiles["rootcert"] = root_cert;
+
+   do_sleep(200); //virtual read time
+   
+   if (format == FORMAT_RADIX64) {
+      const char* f = idFiles[fileType].c_str();
+      std::vector<char> buf(f, f + idFiles[fileType].length());
+      file = buf;
+   }
+   else {
+      unsigned char p[MAX_ID_FILE_SIZE];
+      int len = base64decode((unsigned char*) idFiles[fileType].c_str(), p);
+      std::vector<char> buf(p, p + len);
+      file = buf;
    }
    
-   return ret;
+   return file;
 }
 
 

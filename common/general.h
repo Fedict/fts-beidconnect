@@ -4,7 +4,8 @@
 #define RET_OK						0
 #define E_COMM_PARAM          0xA0010011
 #define E_PARAM_ERR				0xB0010002
-#define E_ALLOC_ERR 				0xB0010003
+#define E_ALLOC_ERR           0xB0010003
+#define E_OUTPUT_TOO_SMALL  	0xB0010003
 
 #ifdef __cplusplus
   extern "C" {
@@ -15,19 +16,20 @@
  * Definitions
  *
  ******************************************************************************/
-#define EIDLINK_VERSION	"1.6"
+#define BEIDCONNECT_VERSION	"2.3"
 #define CLEANUP(a) { ret = a; goto cleanup; }
      
 #ifdef _WIN32
 #define CONFIG_FILE "c:\\tmp\\virtualdevice.cfg"
-#define LOG_FILE  "C:\\tmp\\eIDLink.log"
+#define LOG_FILE  "C:\\tmp\\beidconnect.log"
 #else
 #define CONFIG_FILE "/tmp/virtualdevice.cfg"
-#define LOG_FILE  "/tmp/eIDLink.log"
+#define LOG_FILE  "/tmp/beidconnect.log"
 #endif
      
-#define MAX_READER_NAME			128
-#define MAX_CARDTYPE_ID       20
+#define MAX_READER_NAME			  128
+#define MAX_CARDTYPE_ID         20
+#define MAX_ID_FILE_SIZE        20000
 #define READER_TYPE_STANDARD    1
 #define READER_TYPE_PINPAD      2
 

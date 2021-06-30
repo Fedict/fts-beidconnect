@@ -1,19 +1,18 @@
-VERSION = 1.6.0
-APPIDENTIFIER = be.bosa.eidapp
-APPEXIDENTIFIER = be.bosa.eidapp-extension
-PROGRAM = Bosa\ eID\ App\ Extension
+VERSION = 2.3.0
+APPIDENTIFIER = be.bosa.beidconnect.safari
+APPEXIDENTIFIER = be.bosa.beidconnect.safari-extension
+PROGRAM = BeIDConnect\ Extension
 DISTDIR = ./install/dist
 DEPSDIR = ./install/deps
 BUILDDIR = ./build
-#EXE = ./Build/Release/eIDLink
-APP = ./Build/Release/Bosa\ eID\ App\ Extension.app
-APPEX = $(APP)/Contents/PlugIns/BOSA\ eID\ App\ Extension.appex/Contents/MacOS/BOSA\ eID\ App\ Extension
-BINARIES = /tmp/BOSA\ eID\ App.dst
-DMGFILE = Bosa_eID_App_Extension_$(VERSION).dmg
+APP = ./Build/Release/BeIDConnect\ Extension.app
+APPEX = $(APP)/Contents/PlugIns/BeIDConnect\ Extension.appex/Contents/MacOS/BeIDConnect\ Extension
+BINARIES = /tmp/BeIDConnect.dst
+DMGFILE = BeIDConnect_Extension_$(VERSION).dmg
 INSTALL_PRODUCT = $(DISTDIR)/$(PROGRAM)-install.pkg
 INSTALL_RESOURCES = ./install/install_resources
-INSTALL_COMPONENT = $(DEPSDIR)/eIDAppComponent.pkg
-COMPONENT_PFILE = ./install/eIDAppComponent.plist
+INSTALL_COMPONENT = $(DEPSDIR)/BeIDConnectComponent.pkg
+COMPONENT_PFILE = ./install/BeIDConnectComponent.plist
 SCRIPTS = ./install/scripts
 INSTALL_DISTRIBUTION_FILE = ./install/distribution.plist
 REQUIREMENTS =./install/requirements.plist
@@ -31,7 +30,7 @@ $(DEPSDIR) :
 	mkdir $(DEPSDIR)
 
 $(DMGFILE): $(INSTALL_PRODUCT)
-	hdiutil create -fs JHFS+ -volname "Bosa eID App Extension Installer" -srcfolder $(DISTDIR) -ov $(DMGFILE)
+	hdiutil create -fs JHFS+ -volname "BeIDConnect Extension Installer" -srcfolder $(DISTDIR) -ov $(DMGFILE)
 	codesign -s "Developer ID Application: Zetes Sa" --timestamp -i $(APPIDENTIFIER) $(DMGFILE)
 	cp $(DMGFILE) $(PROGRAM).dmg
 
@@ -44,9 +43,9 @@ $(INSTALL_PRODUCT) : $(BINARIES) $(REQUIREMENTS) $(DEPENDENCY) $(COMPONENT_PFILE
 	$(INSTALL_PRODUCT)
 
 $(BINARIES):
-	xcodebuild install -project "BOSA eID App.xcodeproj"
-#	codesign -f --options=runtime -s "Developer ID Application: Zetes Sa" --identifier -v ./Build/Release/Bosa\ eID\ App\ Extension.app/Contents/XPCServices/BOSA\ eID\ App\ Extension.appex/Contents/MacOS/BOSA\ eID\ App\ Extension
-#	codesign -f --options=runtime -s "Developer ID Application: Zetes Sa" -v ./Build/Release/Bosa\ eID\ App\ Extension.app
+	xcodebuild install -project "BeIDConnect.xcodeproj"
+#	codesign -f --options=runtime -s "Developer ID Application: Zetes Sa" --identifier -v ./Build/Release/BeIDConnect\ Extension.app/Contents/XPCServices/BeIDConnect\ Extension.appex/Contents/MacOS/BeIDConnect\ Extension
+#	codesign -f --options=runtime -s "Developer ID Application: Zetes Sa" -v ./Build/Release/BeIDConnect\ Extension.app
 	
 $(COMPONENT_PFILE) :
 	@echo "Error: Missing component pfile."

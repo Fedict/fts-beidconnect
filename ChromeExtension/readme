@@ -17,9 +17,10 @@ For users of DSS and IDP services using this extension:
 
 
 1) install ChromeExtension
-open chrome: https://chrome.google.com/webstore/detail/eazylink/pencgnkbgaekikmiahiaakjdgaibiipp?hl=nl
+open chrome: "https://chrome.google.com/webstore/detail/eidlink/pencgnkbgaekikmiahiaakjdgaibiipp"
+
 
 2) install the NativeHostMessaging app that is used by the extension that talks to the reader and smartcard.
-* see installation of native host app for location of json extension file including binary location of eidlink
+* see installation of native host app for location of json extension file including binary location of beidconnect
 * default installation assumes release version of chrome
 * for testing with beta version of Chrome, copy the files from the NativeMessagingHost from the release version of Chrome to the beta chrome location

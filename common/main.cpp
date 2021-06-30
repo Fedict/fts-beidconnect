@@ -20,7 +20,7 @@ int main(int argc, const char * argv[]) {
    for (int i = 1; i < argc; i++) {
       if (strcmp(argv[i], "-version") == 0) {
 
-         std::cout << EIDLINK_VERSION;
+         std::cout << BEIDCONNECT_VERSION;
          exit(0);
       }
       else if (strcmp(argv[i], "-test") == 0) {
@@ -34,14 +34,14 @@ int main(int argc, const char * argv[]) {
 	 //generate the necessary json file for use with the Chrome/Firefox
 	 //extensions
          log_init(LOG_FILE, 1, 1);
-         log_info("eIDLink setup");
+         log_info("BeIDConnect setup");
          runSetup(argc, argv);
          exit(0);
       }
    }
 
    log_init(LOG_FILE, 0, 0);
-   log_info("**** eIDLink native ****");
+   log_info("**** BeIDConnect native ****");
    runNative(argc, argv);    //run as chrome extension and exit afterwards
    return 0;
 }

@@ -1,6 +1,6 @@
 //
 //  VersionRequestHandler.cpp
-//  eIDLink
+//  BeIDConnect
 //
 //  Created by Vital Schonkeren on 02/03/2020.
 //
@@ -18,7 +18,7 @@ std::string VersionRequestHandler::process()
    ptree response;
       
    response.put("result", "OK");
-   response.put("version", EIDLINK_VERSION);
+   response.put("version", BEIDCONNECT_VERSION);
 
    post_process(response);
    std::stringstream streamResponse;

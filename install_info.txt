@@ -72,6 +72,8 @@ PerMachine install
 
 ***  \HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\Domains\belgium.be
 
+***  => \HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\Domains\belgium.be
+
 Group Policies
 -----------------
 If group-policies are set or regkey HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings -> Security_HKLM_only (DWORD:1)
@@ -79,9 +81,15 @@ Then current user settings are not active (although still displayed in internet 
 (Internet settings show that settings are managed by admin) 
 =>use Group policies to set registry settings for current users
 
+https://docs.microsoft.com/en-us/troubleshoot/browsers/ie-security-zones-registry-entries
 https://www.grouppolicy.biz/2012/07/how-to-configuring-ie-site-zone-mapping-using-group-policy-without-locking-out-the-user/
 https://serverfault.com/questions/788463/why-is-sitetozoneassignment-gpo-applying-but-sites-not-appearing-in-ie
 https://getadmx.com/?Category=Windows_7_2008R2&Policy=Microsoft.Policies.InternetExplorer::IZ_Zonemaps_2
+
+
+Windows defender SmartScreen can block new (unknown) applications
+==================================================================
+https://support.microsoft.com/en-us/topic/what-is-smartscreen-and-how-can-it-help-protect-me-1c9a874a-6826-be5e-45b1-67fa445a74c8
 
 
 

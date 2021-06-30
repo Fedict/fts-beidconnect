@@ -21,7 +21,7 @@ void writeFile(string file, string exePath, bool isChrome) {
     ofstream myfile;
     myfile.open(file, std::ofstream::trunc);
     myfile << "{\n";
-    myfile << "  \"name\": \"be.bosa.eidlink\",\n";
+    myfile << "  \"name\": \"be.bosa.beidconnect\",\n";
     myfile << "  \"description\": \"Access your eID in webapps\",\n";
     myfile << "  \"path\": \"" << exePath << "\",\n";
     myfile << "  \"type\": \"stdio\",\n";
@@ -31,7 +31,7 @@ void writeFile(string file, string exePath, bool isChrome) {
         myfile << "  ]\n";
     } else {
         myfile << "  \"allowed_extensions\": [\n";
-        myfile << "     \"eidlink@bosa.be\"\n";
+        myfile << "     \"beidconnect@bosa.be\"\n";
         myfile << "  ]\n";
     }
 
@@ -50,12 +50,12 @@ int runSetup(int argc, const char * argv[])
    for (int i = 1; i < argc; i++) {
       if (strcmp(argv[i], "-setup") == 0) {
          
-         //eidlink -setup installFolder [chromeFilePath] [firefoxFilePath]
+         //beidconnect -setup installFolder [chromeFilePath] [firefoxFilePath]
          installFolder = argv[++i];
       } else if (i < argc && chromeFilePath=="") {
-         chromeFilePath = string(argv[i]) + "/be.bosa.eidlink.json";
+         chromeFilePath = string(argv[i]) + "/be.bosa.beidconnect.json";
       } else if (i < argc && firefoxFilePath == "") {
-          firefoxFilePath = string(argv[i]) + "/be.bosa.eidlink.json";
+          firefoxFilePath = string(argv[i]) + "/be.bosa.beidconnect.json";
       }
    }
    
@@ -66,7 +66,7 @@ int runSetup(int argc, const char * argv[])
    //log_info("install folder: <%s>", installFolder);
    
 #ifdef _WIN32
-   exePath = string(installFolder) + "\\eidlink.exe";
+   exePath = string(installFolder) + "\\beidconnect.exe";
    
    //escape all \ in json file or exe will not be found on windows
    exePath = std::regex_replace(exePath, std::regex("\\\\"), "\\\\");
@@ -78,7 +78,7 @@ int runSetup(int argc, const char * argv[])
        firefoxFilePath = string(installFolder) + "\\firefox.json";
    }
 #else
-   exePath = string(installFolder) + "/eidlink";
+   exePath = string(installFolder) + "/beidconnect";
    if (chromeFilePath == "") {
       chromeFilePath = string(installFolder) + "/chrome.json";
    }

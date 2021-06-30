@@ -15,6 +15,7 @@
 #define E_SRC_COMMAND_NOT_ALLOWED         0xC0020012
 #define E_SRC_FILETYPE_NOT_SUPPORTED      0xC0020013
 #define E_SRC_OUTPUT_BUFFER_TOO_SMALL     0xC0020014
+#define E_SRC_CERT_NOT_FOUND              0xC0020015
 
 #define E_PIN_LENGTH                   -10
 #define E_PIN_TOO_SHORT                -11

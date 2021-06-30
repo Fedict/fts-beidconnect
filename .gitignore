@@ -15,6 +15,9 @@ __pycache__
 *.VC.db
 *.VC.opendb
 *.pkg
+*.dmg
+*.msi
+*.zip
 
 testconf.pyc
 xcuserdata/
@@ -99,6 +102,7 @@ ipch/
 *.opensdf
 *.sdf
 *.cachefile
+Thumbs.db
 
 # Visual Studio profiler
 *.psess
@@ -248,3 +252,6 @@ _Pvt_Extensions
 # FAKE - F# Make
 .fake/
 *.xcuserstate
+
+# gulp output (browser extensions)
+ChromeExtension/target

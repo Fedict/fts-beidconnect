@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <installer-gui-script minSpecVersion="2">
-    <title>Uninstall eIDLink</title>
-    <pkg-ref id="be.bosa.eidlink"/>
+    <title>Uninstall BeIDConnect</title>
+    <pkg-ref id="be.bosa.beidconnect"/>
     <options customize="never" require-scripts="false"/>
     <readme file="UNINSTALL_README.html"/>
     <domains enable_localSystem="false" enable_anywhere="false" enable_currentUserHome="true"/>
@@ -9,12 +9,12 @@
     </volume-check>
     <choices-outline>
         <line choice="default">
-            <line choice="be.bosa.eidlink"/>
+            <line choice="be.bosa.beidconnect"/>
         </line>
     </choices-outline>
     <choice id="default"/>
-    <choice id="be.bosa.eidlink" visible="false">
-        <pkg-ref id="be.bosa.eidlink"/>
+    <choice id="be.bosa.beidconnect" visible="false">
+        <pkg-ref id="be.bosa.beidconnect"/>
     </choice>
-    <pkg-ref id="be.bosa.eidlink" version="1.0.0" onConclusion="none">eIDLinkUninstallComponent.pkg</pkg-ref>
+    <pkg-ref id="be.bosa.beidconnect" version="1.0.0" onConclusion="none">BeIDConnectUninstallComponent.pkg</pkg-ref>
 </installer-gui-script>
