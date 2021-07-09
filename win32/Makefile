@@ -12,7 +12,7 @@ BUILD_NUMBER=0
 !ENDIF
 
 MAJOR_VERSION=2
-MINOR_VERSION=3
+MINOR_VERSION=4
 VERSION=$(MAJOR_VERSION).$(MINOR_VERSION)
 
 SIGN = signtool sign /v /n "ZETES NV" /fd SHA256 /du http://eazysign.be /tr http://rfc3161timestamp.globalsign.com/advanced /td SHA256
@@ -29,6 +29,9 @@ SOLUTION = VS_2019\BeIDConnect.sln
 PROGRAM = VS_2019\Release\beidconnect.exe
 BINARIES = VS_2019\Release
 INSTALL_PRODUCT = beidconnect_$(VERSION).msi
+INSTALL_PRODUCT_NL = beidconnect_$(VERSION)_nl.msi
+INSTALL_PRODUCT_FR = beidconnect_$(VERSION)_fr.msi
+INSTALL_PRODUCT_DE = beidconnect_$(VERSION)_de.msi
 INSTALL_ADMIN_PRODUCT = beidconnect_admin_$(VERSION).msi
 BUILDCONSTANTS="LOG_INFO=1;WIN32;_WIN32_WINNT=0x0501;NDEBUG;_CRT_SECURE_NO_WARNINGS;_CONSOLE"
 
@@ -46,9 +49,18 @@ pkg: binaries
    $(SIGN) $(PROGRAM_X)
 	$(SIGN) $(PROGRAM)
 	"$(WIX)\bin\candle.exe" beidconnect.wxs -dVERSION=$(VERSION) -ext WixUtilExtension
-	"$(WIX)\bin\light.exe" -out $(INSTALL_PRODUCT) beidconnect.wixobj -v -ext WixUtilExtension -ext WixUIExtension -dWixUILicenseRtf=install/LICENSE.rtf -dWixUIDialogBmp=install/install_dlg.bmp
+	"$(WIX)\bin\light.exe" -out $(INSTALL_PRODUCT) beidconnect.wixobj -v -ext WixUtilExtension -ext WixUIExtension  -cultures:en-us -dWixUILicenseRtf=install/LICENSE.rtf -dWixUIDialogBmp=install/install_dlg.bmp
+	"$(WIX)\bin\light.exe" -out $(INSTALL_PRODUCT_NL) beidconnect.wixobj -v -ext WixUtilExtension -ext WixUIExtension  -cultures:nl-nl; -dWixUILicenseRtf=install/LICENSE_NL.rtf -dWixUIDialogBmp=install/install_dlg.bmp
+	"$(WIX)\bin\light.exe" -out $(INSTALL_PRODUCT_FR) beidconnect.wixobj -v -ext WixUtilExtension -ext WixUIExtension  -cultures:fr-fr; -dWixUILicenseRtf=install/LICENSE_FR.rtf -dWixUIDialogBmp=install/install_dlg.bmp
+#	"$(WIX)\bin\light.exe" -out $(INSTALL_PRODUCT_DE) beidconnect.wixobj -v -ext WixUtilExtension -ext WixUIExtension  -cultures:de-de -dWixUILicenseRtf=install/LICENSE.rtf -dWixUIDialogBmp=install/install_dlg.bmp
 	$(SIGN) $(INSTALL_PRODUCT)
+	$(SIGN) $(INSTALL_PRODUCT_NL)
+	$(SIGN) $(INSTALL_PRODUCT_FR)
+#	$(SIGN) $(INSTALL_PRODUCT_DE)
    copy $(INSTALL_PRODUCT) beidconnect.msi
+   copy $(INSTALL_PRODUCT_NL) beidconnect_nl.msi
+   copy $(INSTALL_PRODUCT_FR) beidconnect_fr.msi
+#   copy $(INSTALL_PRODUCT_DE) beidconnect_de.msi
     
 pkgadmin: binaries
    $(SIGN) $(PROGRAM_X_ADMIN)
@@ -72,6 +84,9 @@ clean:
    del /Q $(BINARIES_X)
    del /Q $(BINARIES)
    del /Q $(INSTALL_PRODUCT)
+   del /Q $(INSTALL_PRODUCT_NL)
+   del /Q $(INSTALL_PRODUCT_FR)
+   del /Q $(INSTALL_PRODUCT_DE)
    del /Q $(INSTALL_ADMIN_PRODUCT)
    del /Q $(HEAT_OUPUT_WXS)
    del /Q $(HEAT_OUPUT_ADMIN_WXS)
