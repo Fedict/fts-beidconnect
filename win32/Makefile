@@ -16,7 +16,9 @@ MINOR_VERSION=4
 VERSION=$(MAJOR_VERSION).$(MINOR_VERSION)
 
 SIGN = signtool sign /v /n "ZETES NV" /fd SHA256 /du http://eazysign.be /tr http://rfc3161timestamp.globalsign.com/advanced /td SHA256
+#SIGN = signtool sign /fd SHA256 /a /f D:\cpe\BoSa\bosa_self_signed_test_cert.pfx /p bosa
 WIX = C:\Program Files (x86)\WiX Toolset v3.10
+#WIX = C:\Program Files (x86)\WiX Toolset v3.11
 
 HEAT_OUPUT_WXS = heat_output.wxs
 HEAT_OUPUT_ADMIN_WXS = heat_output_admin.wxs
@@ -52,15 +54,15 @@ pkg: binaries
 	"$(WIX)\bin\light.exe" -out $(INSTALL_PRODUCT) beidconnect.wixobj -v -ext WixUtilExtension -ext WixUIExtension  -cultures:en-us -dWixUILicenseRtf=install/LICENSE.rtf -dWixUIDialogBmp=install/install_dlg.bmp
 	"$(WIX)\bin\light.exe" -out $(INSTALL_PRODUCT_NL) beidconnect.wixobj -v -ext WixUtilExtension -ext WixUIExtension  -cultures:nl-nl; -dWixUILicenseRtf=install/LICENSE_NL.rtf -dWixUIDialogBmp=install/install_dlg.bmp
 	"$(WIX)\bin\light.exe" -out $(INSTALL_PRODUCT_FR) beidconnect.wixobj -v -ext WixUtilExtension -ext WixUIExtension  -cultures:fr-fr; -dWixUILicenseRtf=install/LICENSE_FR.rtf -dWixUIDialogBmp=install/install_dlg.bmp
-#	"$(WIX)\bin\light.exe" -out $(INSTALL_PRODUCT_DE) beidconnect.wixobj -v -ext WixUtilExtension -ext WixUIExtension  -cultures:de-de -dWixUILicenseRtf=install/LICENSE.rtf -dWixUIDialogBmp=install/install_dlg.bmp
+ 	"$(WIX)\bin\light.exe" -out $(INSTALL_PRODUCT_DE) beidconnect.wixobj -v -ext WixUtilExtension -ext WixUIExtension  -cultures:de-de -dWixUILicenseRtf=install/LICENSE_DE.rtf -dWixUIDialogBmp=install/install_dlg.bmp
 	$(SIGN) $(INSTALL_PRODUCT)
 	$(SIGN) $(INSTALL_PRODUCT_NL)
 	$(SIGN) $(INSTALL_PRODUCT_FR)
-#	$(SIGN) $(INSTALL_PRODUCT_DE)
+	$(SIGN) $(INSTALL_PRODUCT_DE)
    copy $(INSTALL_PRODUCT) beidconnect.msi
    copy $(INSTALL_PRODUCT_NL) beidconnect_nl.msi
    copy $(INSTALL_PRODUCT_FR) beidconnect_fr.msi
-#   copy $(INSTALL_PRODUCT_DE) beidconnect_de.msi
+   copy $(INSTALL_PRODUCT_DE) beidconnect_de.msi
     
 pkgadmin: binaries
    $(SIGN) $(PROGRAM_X_ADMIN)
