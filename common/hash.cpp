@@ -25,7 +25,7 @@ int hash_length_for_algoheader(int hashAlgo)
 	case DIGEST_ALGO_SHA384:
 		return DIGEST_ALGO_SHA384_HEAD_LEN;
 	case DIGEST_ALGO_SHA512:
-		return DIGEST_ALGO_SHA512_LEN;
+		return DIGEST_ALGO_SHA512_HEAD_LEN;
 	default:
 		return -1;
 	}

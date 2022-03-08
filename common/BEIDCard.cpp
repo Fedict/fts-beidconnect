@@ -9,6 +9,8 @@
 
 #define BEID_READ_BINARY_MAX_LEN     250			 /*maximum length to read with single card command*/
 
+//MSE_SET command
+//For Applet 1.7 cards
 #define prepareAuthenticationCmd			   		"\x00\x22\x41\xB6\x05\x04\x80\x01\x84\x82"
 #define prepareAuthenticationSHA1Cmd				"\x00\x22\x41\xB6\x05\x04\x80\x02\x84\x82"
 #define prepareAuthenticationMD5Cmd					"\x00\x22\x41\xB6\x05\x04\x80\x04\x84\x82"
@@ -16,6 +18,11 @@
 #define prepareNonRepudiationCmd					   "\x00\x22\x41\xB6\x05\x04\x80\x01\x84\x83"
 #define prepareNonRepudiationSHA1Cmd				"\x00\x22\x41\xB6\x05\x04\x80\x02\x84\x83"
 #define prepareNonRepudiationMD5Cmd					"\x00\x22\x41\xB6\x05\x04\x80\x04\x84\x83"
+
+//MSE_SET command
+//For Applet 1.8 cards
+#define applet1_8_prepareAuthenticationCmd    "\x00\x22\x41\xB6\x05\x04\x80\x40\x84\x82"
+#define applet1_8_prepareNonRepudiationCmd    "\x00\x22\x41\xB6\x05\x04\x80\x40\x84\x83"
 
 //#define resetPinApdu                  "\x00\x20\x00\x02\x08\x2C\x33\x33\x33\x11\x11\x11\xFF" (13 bytes) New PIN: 1234
 
@@ -283,15 +290,33 @@ int BEIDCard::selectKey(int pintype, unsigned char* cert, int l_cert)
       goto cleanup;
    }
 
-   if (pintype == CERT_TYPE_NONREP)
+   if (currentSelectedKeyType == X509_KEYTYPE_RSA)
    {
-      cmdlen = sizeof(prepareNonRepudiationCmd)-1;
-      memcpy(cmd, prepareNonRepudiationCmd, cmdlen);
+       // Applet 1.7
+       if (pintype == CERT_TYPE_NONREP)
+       {
+           cmdlen = sizeof(prepareNonRepudiationCmd) - 1;
+           memcpy(cmd, prepareNonRepudiationCmd, cmdlen);
+       }
+       else
+       {
+           cmdlen = sizeof(prepareAuthenticationCmd) - 1;
+           memcpy(cmd, prepareAuthenticationCmd, cmdlen);
+       }
    }
    else
    {
-      cmdlen = sizeof(prepareAuthenticationCmd)-1;
-      memcpy(cmd, prepareAuthenticationCmd, cmdlen);
+       // Applet 1.8
+       if (pintype == CERT_TYPE_NONREP)
+       {
+           cmdlen = sizeof(applet1_8_prepareNonRepudiationCmd) - 1;
+           memcpy(cmd, applet1_8_prepareNonRepudiationCmd, cmdlen);
+       }
+       else
+       {
+           cmdlen = sizeof(applet1_8_prepareAuthenticationCmd) - 1;
+           memcpy(cmd, applet1_8_prepareAuthenticationCmd, cmdlen);
+       }
    }
    
    recvlen = 255;
@@ -453,7 +478,7 @@ int BEIDCard::sign(unsigned char* in, unsigned int l_in, int hashAlgo, unsigned 
    int begintransaction = 1;
 
    if (sign_lg > *l_out) {
-      return (-1);
+       return (-1);
    }
 
    //begin transaction
@@ -491,7 +516,7 @@ int BEIDCard::sign(unsigned char* in, unsigned int l_in, int hashAlgo, unsigned 
       cmdlen += l_in;
       cmd[cmdlen] = 0;     /* Le should be 0 */
    }
-   
+
    recvlen = (int) sizeof(recv);
    
    ret = reader->apdu(cmd, cmdlen, recv, &recvlen, sw);
