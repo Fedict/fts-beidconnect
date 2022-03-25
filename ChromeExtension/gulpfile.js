@@ -14,51 +14,74 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
     jshint = require('gulp-jshint'),
     zip = require('gulp-zip'),
-    sequence = require('run-sequence'),
     replace = require('gulp-replace-task'),
     jeditor = require('gulp-json-editor'),
     argv = require("yargs").string('extversion').argv;
 
-var version = (argv.extversion !== undefined ? argv.extversion : '0');
+//var version = (argv.extversion !== undefined ? argv.extversion : '0');
+var version = "2.4.0";
 
-gulp.task('default', function() {
-    sequence('clean', 'lint', 'copy-all', 'manifest-dev-chrome', 'manifest-dev-firefox', 'zip-chrome', 'zip-firefox');
-});
-
-gulp.task('release', function() {
-   sequence('clean', 'lint', 'minify-js', 'copy-png', 'manifest-release-chrome', 'manifest-release-firefox', 'zip-chrome', 'zip-firefox');
-});
-
-gulp.task('clean', function () {
+function taskclean(cb) {
     del(['target']);
-});
+    cb();
+  };
 
-gulp.task('lint', function () {
+function tasklint(cb) {
     return gulp.src(['./src/main/*.js'])
       .pipe(jshint())
       .pipe(jshint.reporter());
-});
+}
 
-gulp.task('minify-js', function () {
+function tasklintV3(cb) {
+    return gulp.src(['./src_v3/main/*.js'])
+      .pipe(jshint())
+      .pipe(jshint.reporter());
+}
+
+function taskMinifyjs(cb) {
     return gulp.src('./src/main/*.js')
       .pipe(uglify())
       .pipe(gulp.dest('./target/chrome'))
-      .pipe(gulp.dest('./target/firefox'));
-});
+      .pipe(gulp.dest('./target/firefox'))
+      .pipe(gulp.dest('./target/edge'));
+};
 
-gulp.task('copy-png', function () {
+function taskMinifyjsV3(cb) {
+    return gulp.src('./src_v3/main/*.js')
+      .pipe(uglify())
+      .pipe(gulp.dest('./target/chrome_v3'))
+      .pipe(gulp.dest('./target/firefox_v3'))
+      .pipe(gulp.dest('./target/edge_v3'));
+};
+
+function taskcopypng(cb) {
     return gulp.src(['./src/main/*.png'])
       .pipe(gulp.dest('./target/chrome'))
-      .pipe(gulp.dest('./target/firefox'));
-});
+      .pipe(gulp.dest('./target/firefox'))
+      .pipe(gulp.dest('./target/edge'));
+};
 
-gulp.task('copy-all', function () {
+function taskcopypngV3(cb) {
+    return gulp.src(['./src_v3/main/*.png'])
+      .pipe(gulp.dest('./target/chrome_v3'))
+      .pipe(gulp.dest('./target/firefox_v3'))
+      .pipe(gulp.dest('./target/edge_v3'));
+};
+
+function taskcopyall(cb) {
     return gulp.src(['./src/main/*.js','./src/main/*.png', './src/main/*.html'])
       .pipe(gulp.dest('./target/chrome'))
-      .pipe(gulp.dest('./target/firefox'));
-});
+      .pipe(gulp.dest('./target/firefox'))
+      .pipe(gulp.dest('./target/edge'));
+};
+function taskcopyallV3(cb) {
+    return gulp.src(['./src_v3/main/*.js','./src_v3/main/*.png', './src_v3/main/*.html'])
+      .pipe(gulp.dest('./target/chrome_v3'))
+      .pipe(gulp.dest('./target/firefox_v3'))
+      .pipe(gulp.dest('./target/edge_v3'));
+};
 
-gulp.task('manifest-dev-chrome', function () {
+function taskmanifestdevchrome(cb) {
     return gulp.src('./src/main/manifest.json')
     .pipe(replace({
       patterns: [
@@ -67,9 +90,18 @@ gulp.task('manifest-dev-chrome', function () {
       ]
     }))
     .pipe(gulp.dest('./target/chrome'));
-});
-
-gulp.task('manifest-dev-firefox', function() {
+};
+function taskmanifestdevchromeV3(cb) {
+    return gulp.src('./src_v3/main/manifest.json')
+    .pipe(replace({
+      patterns: [
+        {match: 'VERSION',
+         replacement: version}
+      ]
+    }))
+    .pipe(gulp.dest('./target/chrome_v3'));
+};
+function taskmanifestdevfirefox(cb) {
     return gulp.src('./src/main/manifest.json')
     .pipe(jeditor(function(manifest) {
 	manifest.version = version;
@@ -80,9 +112,40 @@ gulp.task('manifest-dev-firefox', function() {
 	return manifest;
     }))
     .pipe(gulp.dest('./target/firefox'));
-});
-
-gulp.task('manifest-release-chrome', function () {
+};
+function taskmanifestdevfirefoxV3(cb) {
+    return gulp.src('./src_v3/main/manifest.json')
+    .pipe(jeditor(function(manifest) {
+	manifest.version = version;
+	delete manifest.key;
+	delete manifest.minimum_chrome_version;
+	delete manifest.background.persistent;
+	manifest.applications = { 'gecko': { 'id':'beidconnect@bosa.be','strict_min_version':'57.0'}};
+	return manifest;
+    }))
+    .pipe(gulp.dest('./target/firefox_v3'));
+};
+function taskmanifestdevedge(cb) {
+    return gulp.src('./src/main/manifest.json')
+    .pipe(replace({
+      patterns: [
+        {match: 'VERSION',
+         replacement: version}
+      ]
+    }))
+    .pipe(gulp.dest('./target/edge'));
+};
+function taskmanifestdevedgeV3(cb) {
+    return gulp.src('./src_v3/main/manifest.json')
+    .pipe(replace({
+      patterns: [
+        {match: 'VERSION',
+         replacement: version}
+      ]
+    }))
+    .pipe(gulp.dest('./target/edge_v3'));
+};
+function taskmanifestreleasechrome() {
     return gulp.src('./src/main/manifest.json')
     .pipe(replace({
       patterns: [
@@ -93,30 +156,168 @@ gulp.task('manifest-release-chrome', function () {
       ]
     }))
     .pipe(gulp.dest('./target/chrome'));
-});
-
-gulp.task('manifest-release-firefox', function() {
+};
+function taskmanifestreleasechromeV3() {
+    return gulp.src('./src_v3/main/manifest.json')
+    .pipe(replace({
+      patterns: [
+        {match: /"matches": \[.+\]/g,
+                 replacement: '"matches": ["https://*.belgium.be/*","https://*.fgov.be/*"]'},
+        {match: 'VERSION',
+         replacement: version}
+      ]
+    }))
+    .pipe(gulp.dest('./target/chrome_v3'));
+};
+function taskmanifestreleasefirefox() {
     return gulp.src('./src/main/manifest.json')
     .pipe(jeditor(function(manifest) {
-	manifest.version = version;
-	manifest.content_scripts[0].matches = ['https://*.belgium.be/*','https://*.fgov.be/*'];
-	delete manifest.key;
-	delete manifest.minimum_chrome_version;
-	delete manifest.background.persistent;
-	manifest.applications = { 'gecko': { 'id':'beidconnect@bosa.be','strict_min_version':'57.0', "update_url": "https://eid.static.bosa.fgov.be/ffupdate-manifest.json" }};
-	return manifest;
+      manifest.version = version;
+      manifest.content_scripts[0].matches = ['https://*.belgium.be/*','https://*.fgov.be/*'];
+      delete manifest.key;
+      delete manifest.minimum_chrome_version;
+      delete manifest.background.persistent;
+      manifest.applications = { 'gecko': { 'id':'beidconnect@bosa.be','strict_min_version':'57.0', "update_url": "https://eid.static.bosa.fgov.be/ffupdate-manifest.json" }};
+      return manifest;
     }))
     .pipe(gulp.dest('./target/firefox'));
-});
-
-gulp.task('zip-chrome', function () {
+};
+function taskmanifestreleasefirefoxV3() {
+    return gulp.src('./src_v3/main/manifest.json')
+    .pipe(jeditor(function(manifest) {
+      manifest.version = version;
+      manifest.content_scripts[0].matches = ['https://*.belgium.be/*','https://*.fgov.be/*'];
+      delete manifest.key;
+      delete manifest.minimum_chrome_version;
+      delete manifest.background.persistent;
+      manifest.applications = { 'gecko': { 'id':'beidconnect@bosa.be','strict_min_version':'57.0', "update_url": "https://eid.static.bosa.fgov.be/ffupdate-manifest.json" }};
+      return manifest;
+    }))
+    .pipe(gulp.dest('./target/firefox_v3'));
+};
+function taskmanifestreleaseedge() {
+  return gulp.src('./src/main/manifest.json')
+  .pipe(replace({
+    patterns: [
+      {match: /"matches": \[.+\]/g,
+               replacement: '"matches": ["https://*.belgium.be/*","https://*.fgov.be/*"]'},
+      {match: 'VERSION',
+       replacement: version}
+    ]
+  }))
+  .pipe(gulp.dest('./target/edge'));
+};
+function taskmanifestreleaseedgeV3() {
+  return gulp.src('./src_v3/main/manifest.json')
+  .pipe(replace({
+    patterns: [
+      {match: /"matches": \[.+\]/g,
+               replacement: '"matches": ["https://*.belgium.be/*","https://*.fgov.be/*"]'},
+      {match: 'VERSION',
+       replacement: version}
+    ]
+  }))
+  .pipe(gulp.dest('./target/edge_v3'));
+};
+function taskzipchrome() {
     return gulp.src('./target/chrome/*')
       .pipe(zip('beidconnect-chrome-ext-' + version + '.zip'))
       .pipe(gulp.dest('./target'));
-});
-
-gulp.task('zip-firefox', function () {
+};
+function taskzipfirefox() {
     return gulp.src('./target/firefox/*')
       .pipe(zip('beidconnect-firefox-ext-' + version + '.zip'))
       .pipe(gulp.dest('./target'));
-});
+};
+function taskzipedge() {
+    return gulp.src('./target/edge/*')
+      .pipe(zip('beidconnect-Edge-ext-' + version + '.zip'))
+      .pipe(gulp.dest('./target'));
+};
+function taskzipchromeV3() {
+    return gulp.src('./target/chrome_v3/*')
+      .pipe(zip('beidconnect-chrome-ext-v3-' + version + '.zip'))
+      .pipe(gulp.dest('./target'));
+};
+function taskzipfirefoxV3() {
+    return gulp.src('./target/firefox_v3/*')
+      .pipe(zip('beidconnect-firefox-ext-v3-' + version + '.zip'))
+      .pipe(gulp.dest('./target'));
+};
+function taskzipedgeV3() {
+    return gulp.src('./target/edge_v3/*')
+      .pipe(zip('beidconnect-Edge-ext-v3-' + version + '.zip'))
+      .pipe(gulp.dest('./target'));
+};
+exports.default = gulp.series(
+  taskclean,
+  gulp.parallel(
+    gulp.series(
+      tasklint,
+      taskcopyall,
+      gulp.parallel(
+        gulp.series(
+          taskmanifestdevchrome,
+          taskzipchrome),
+        gulp.series(
+          taskmanifestdevfirefox,
+          taskzipfirefox),
+        gulp.series(
+          taskmanifestdevedge,
+          taskzipedge)
+      )
+    ),
+    gulp.series(
+      tasklintV3,
+      taskcopyallV3,
+      gulp.parallel(
+        gulp.series(
+          taskmanifestdevchromeV3,
+          taskzipchromeV3),
+        gulp.series(
+          taskmanifestdevfirefoxV3,
+          taskzipfirefoxV3),
+        gulp.series(
+          taskmanifestdevedgeV3,
+          taskzipedgeV3)
+      )
+    ),
+  )
+  );
+exports.release = gulp.series(
+  taskclean,
+  gulp.parallel(
+    gulp.series(
+      tasklint,
+      taskMinifyjs,
+      taskcopypng,
+      gulp.parallel(
+        gulp.series(
+          taskmanifestreleasechrome,
+          taskzipchrome),
+        gulp.series(
+          taskmanifestreleasefirefox,
+          taskzipfirefox),
+        gulp.series(
+          taskmanifestreleaseedge,
+          taskzipedge)
+        )
+    ),
+    gulp.series(
+      tasklintV3,
+      taskMinifyjsV3,
+      taskcopypngV3,
+      gulp.parallel(
+        gulp.series(
+          taskmanifestreleasechromeV3,
+          taskzipchromeV3),
+        gulp.series(
+          taskmanifestreleasefirefoxV3,
+          taskzipfirefoxV3),
+        gulp.series(
+          taskmanifestreleaseedgeV3,
+          taskzipedgeV3)
+        )
+     )
+  )
+  );
