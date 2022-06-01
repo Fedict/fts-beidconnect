@@ -9,7 +9,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 		return undefined;
 	}
 
-	if (sender.tab) {
+	console.log(request);
+	if (request.src === "beidconnect.page" && sender.tab) {
 		request.tab = sender.tab.id;
 		request.sendResponse = sendResponse;
 		_forward(request);

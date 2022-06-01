@@ -255,3 +255,4 @@ _Pvt_Extensions
 
 # gulp output (browser extensions)
 ChromeExtension/target
+.vscode/settings.json
