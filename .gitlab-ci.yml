@@ -123,7 +123,7 @@ build:fedora-36-32:
     ARCH: i386
     DIST: fedora
 
-build:centos-9-64:
+build:centos-stream-9-64:
   <<: *fedbuild
   variables:
     VERSION: 9
@@ -136,22 +136,6 @@ build:centos-7-64:
     VERSION: 7
     ARCH: x86_64
     DIST: centos
-
-build:debian-8-32:
-  <<: *debuild
-  variables:
-    CODE: jessie
-    SHORT: deb8
-    ARCH: i386
-    MIRROR: http://deb.debian.org/debian
-
-build:debian-8-64:
-  <<: *debuild
-  variables:
-    CODE: jessie
-    SHORT: deb8
-    ARCH: amd64
-    MIRROR: http://deb.debian.org/debian
 
 build:debian-9-32:
   <<: *debuild
