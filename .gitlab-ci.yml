@@ -95,26 +95,40 @@ build:fedora-34-32:
     ARCH: i386
     DIST: fedora
 
-build:fedora-33-64:
+build:fedora-35-64:
   <<: *fedbuild
   variables:
-    VERSION: 33
+    VERSION: 35
     ARCH: x86_64
     DIST: fedora
 
-build:fedora-33-32:
+build:fedora-35-32:
   <<: *fedbuild
   variables:
-    VERSION: 33
+    VERSION: 35
     ARCH: i386
     DIST: fedora
 
-build:centos-8-64:
+build:fedora-36-64:
   <<: *fedbuild
   variables:
-    VERSION: 8
+    VERSION: 36
     ARCH: x86_64
-    DIST: centos
+    DIST: fedora
+
+build:fedora-36-32:
+  <<: *fedbuild
+  variables:
+    VERSION: 36
+    ARCH: i386
+    DIST: fedora
+
+build:centos-9-64:
+  <<: *fedbuild
+  variables:
+    VERSION: 9
+    ARCH: x86_64
+    DIST: centos-stream
 
 build:centos-7-64:
   <<: *fedbuild
@@ -122,6 +136,38 @@ build:centos-7-64:
     VERSION: 7
     ARCH: x86_64
     DIST: centos
+
+build:debian-8-32:
+  <<: *debuild
+  variables:
+    CODE: jessie
+    SHORT: deb8
+    ARCH: i386
+    MIRROR: http://deb.debian.org/debian
+
+build:debian-8-64:
+  <<: *debuild
+  variables:
+    CODE: jessie
+    SHORT: deb8
+    ARCH: amd64
+    MIRROR: http://deb.debian.org/debian
+
+build:debian-9-32:
+  <<: *debuild
+  variables:
+    CODE: stretch
+    SHORT: deb9
+    ARCH: i386
+    MIRROR: http://deb.debian.org/debian
+
+build:debian-9-64:
+  <<: *debuild
+  variables:
+    CODE: stretch
+    SHORT: deb9
+    ARCH: amd64
+    MIRROR: http://deb.debian.org/debian
 
 build:debian-10-32:
   <<: *debuild
@@ -139,21 +185,37 @@ build:debian-10-64:
     ARCH: amd64
     MIRROR: http://deb.debian.org/debian
 
-build:ubuntu-2104-64:
+build:debian-11-32:
   <<: *debuild
   variables:
-    CODE: hirsute
+    CODE: bullseye
+    SHORT: deb11
+    ARCH: i386
+    MIRROR: http://deb.debian.org/debian
+
+build:debian-11-64:
+  <<: *debuild
+  variables:
+    CODE: bullseye
+    SHORT: deb11
     ARCH: amd64
-    SHORT: u2104
+    MIRROR: http://deb.debian.org/debian
+
+build:ubuntu-2204-64:
+  <<: *debuild
+  variables:
+    CODE: jammy
+    ARCH: amd64
+    SHORT: u2204
     MIRROR: http://archive.ubuntu.com/ubuntu
     SCRIPT: /usr/share/debootstrap/scripts/gutsy
 
-build:ubuntu-2104-32:
+build:ubuntu-2204-32:
   <<: *debuild
   variables:
-    CODE: hirsute
+    CODE: jammy
     ARCH: i386
-    SHORT: u2104
+    SHORT: u2204
     MIRROR: http://archive.ubuntu.com/ubuntu
     SCRIPT: /usr/share/debootstrap/scripts/gutsy
 
