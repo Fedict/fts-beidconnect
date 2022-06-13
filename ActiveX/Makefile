@@ -10,12 +10,12 @@ BUILD_NUMBER=0
 !ENDIF
 
 MAJOR_VERSION=2
-MINOR_VERSION=1
+MINOR_VERSION=5
 RELEASE_VERSION=0
 VERSION=$(MAJOR_VERSION).$(MINOR_VERSION)
 
 SIGN = signtool sign /v /n "ZETES NV" /fd SHA256 /du http://eazysign.be /tr http://rfc3161timestamp.globalsign.com/advanced /td SHA256 
-WIX = C:\Program Files (x86)\WiX Toolset v3.10
+WIX = C:\Program Files (x86)\WiX Toolset v3.11
 
 SOLUTION_X = BeIDConnectX.sln
 PROGRAM_X = beidconnectX\Release\beidconnect.dll
