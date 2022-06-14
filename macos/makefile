@@ -35,8 +35,7 @@ $(DEPSDIR) :
 $(DMGFILE): $(INSTALL_PRODUCT) $(UNINSTALL_PRODUCT)
 	hdiutil create -fs JHFS+ -volname “BeIDConnect_Installer” -srcfolder $(DISTDIR) -ov $(DMGFILE)
 	codesign -s "3rd Party Mac Developer Application: FOD BOSA (7682K6YL8X)" --timestamp -i $(IDENTIFIER) $(DMGFILE)
-	cp $(DMGFILE) $(PROGRAM).dmg
-
+	
 $(INSTALL_PRODUCT) : $(BINARIES) $(REQUIREMENTS) $(DEPENDENCY) $(COMPONENT_PFILE) $(INSTALL_COMPONENT) $(INSTALL_DISTRIBUTION_FILE)
 	productbuild --distribution $(INSTALL_DISTRIBUTION_FILE) \
 	--sign "Developer ID Installer: FOD BOSA (7682K6YL8X)" \
@@ -102,15 +101,14 @@ compfiles : $(BINARIES)
 	@echo "Edit the $(COMPONENT_PFILE).new template to create a suitable $(COMPONENT_PFILE) file."
 
 notarise: $(DMGFILE)
-	xcrun altool --notarize-app --primary-bundle-id $(IDENTIFIER) --username christophe.peerens@bosa.fgov.be --password "@keychain:AC_PASSWORD" --asc-provider 7682K6YL8X --file $(PROGRAM).dmg
+	xcrun altool --notarize-app --primary-bundle-id $(IDENTIFIER) --username christophe.peerens@bosa.fgov.be --password "@keychain:AC_PASSWORD" --asc-provider 7682K6YL8X --file $(DMGFILE)
 
 staple: 
-	xcrun stapler staple $(PROGRAM).dmg
+	xcrun stapler staple $(DMGFILE)
 
 .PHONY : clean
 clean:
 	-rm -f $(DMGFILE) $(INSTALL_PRODUCT) $(UNINSTALL_PRODUCT) $(INSTALL_COMPONENT) $(UNINSTALL_COMPONENT)
-	-rm -f $(PROGRAM).dmg
 	-rm -rf $(BINARIES)
 	-rm -rf $(DISTDIR)
 	-rm -rf $(BUILDDIR)
