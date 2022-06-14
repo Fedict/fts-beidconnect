@@ -5,6 +5,18 @@
 <?define Version = "$(var.VERSION)" ?>
 <?define UpgradeCode = "{edda0aaa-708b-4390-95c2-1e560314f26b}" ?>
 
+<?if $(sys.BUILDARCH)="x86" ?>
+<?define bitness = "(32 bit)" ?>
+<?define Win64 = "no" ?>
+<?define BeidConnectSourceFile = "VS_2019\Release\beidconnect.exe" ?>
+<?define PlatformProgramFilesFolder = "ProgramFilesFolder" ?>
+<?else ?>
+<?define bitness = "(64 bit)" ?>
+<?define Win64 = "yes" ?>
+<?define BeidConnectSourceFile = "VS_2019\x64\Release\beidconnect.exe" ?>
+<?define PlatformProgramFilesFolder = "ProgramFiles64Folder" ?>
+<?endif ?>
+
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
   <Product Id="*" Name="$(var.Name)" Manufacturer="$(var.Manufacturer)" UpgradeCode="$(var.UpgradeCode)" Version="$(var.Version)" Codepage="1252" Language="1033">
@@ -37,8 +49,8 @@
     </Directory>
 
     <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
-      <Component Id="beidconnect.exe" Guid="7A928767-2B74-4A5E-AE2A-0B8C80E282CD">
-         <File Id="beidconnectapp" Name="beidconnect.exe" Source="VS_2019\Release\beidconnect.exe" />
+      <Component Win64="$(var.Win64)" Id="beidconnect.exe" Guid="7A928767-2B74-4A5E-AE2A-0B8C80E282CD">
+         <File Id="beidconnectapp" Name="beidconnect.exe" Source="$(var.BeidConnectSourceFile)" />
          <RegistryValue Root='HKCU' Key='Software\BOSA\BeIDConnect'
                      Name="BeIDConnect.exe" Value="1" Type="integer" KeyPath='yes' />
          <RemoveFile Id="beidconnectexe" Name="*.*" On="both" />
