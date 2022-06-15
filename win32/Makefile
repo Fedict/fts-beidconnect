@@ -74,14 +74,6 @@ pkg: binaries
 	$(SIGN) $(INSTALL_PRODUCT_x64_NL)
 	$(SIGN) $(INSTALL_PRODUCT_x64_FR)
 	$(SIGN) $(INSTALL_PRODUCT_x64_DE)
-	copy $(INSTALL_PRODUCT) beidconnect.msi
-	copy $(INSTALL_PRODUCT_NL) beidconnect_nl.msi
-	copy $(INSTALL_PRODUCT_FR) beidconnect_fr.msi
-	copy $(INSTALL_PRODUCT_DE) beidconnect_de.msi
-	copy $(INSTALL_PRODUCT_x64) beidconnect_x64.msi
-	copy $(INSTALL_PRODUCT_x64_NL) beidconnect_x64_nl.msi
-	copy $(INSTALL_PRODUCT_x64_FR) beidconnect_x64_fr.msi
-	copy $(INSTALL_PRODUCT_x64_DE) beidconnect_x64_de.msi
    
 pkgadmin: binaries
 	$(SIGN) $(PROGRAM_X_ADMIN)
@@ -104,15 +96,11 @@ genwix: binaries
 clean:
 	del /Q $(BINARIES_X)
 	del /Q $(BINARIES)
-	del /Q $(INSTALL_PRODUCT)
-	del /Q $(INSTALL_PRODUCT_NL)
-	del /Q $(INSTALL_PRODUCT_FR)
-	del /Q $(INSTALL_PRODUCT_DE)
-	del /Q $(INSTALL_ADMIN_PRODUCT)
 	del /Q $(HEAT_OUPUT_WXS)
 	del /Q $(HEAT_OUPUT_ADMIN_WXS)
 	del /Q *.wixobj
 	del /Q *.wixpdb
+	del /Q *.msi
 
 test: binaries
 	python ../test/test.py
