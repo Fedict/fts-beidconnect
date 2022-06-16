@@ -34,7 +34,7 @@ $(DEPSDIR) :
 
 $(DMGFILE): $(INSTALL_PRODUCT) $(UNINSTALL_PRODUCT)
 	hdiutil create -fs JHFS+ -volname “BeIDConnect_Installer” -srcfolder $(DISTDIR) -ov $(DMGFILE)
-	codesign -s "3rd Party Mac Developer Application: FOD BOSA (7682K6YL8X)" --timestamp -i $(IDENTIFIER) $(DMGFILE)
+	codesign -s "Developer ID Application: FOD BOSA (7682K6YL8X)" --timestamp -i $(IDENTIFIER) $(DMGFILE)
 	
 $(INSTALL_PRODUCT) : $(BINARIES) $(REQUIREMENTS) $(DEPENDENCY) $(COMPONENT_PFILE) $(INSTALL_COMPONENT) $(INSTALL_DISTRIBUTION_FILE)
 	productbuild --distribution $(INSTALL_DISTRIBUTION_FILE) \
@@ -54,7 +54,7 @@ $(UNINSTALL_PRODUCT): $(COMPONENT_PFILE) $(UNINSTALL_COMPONENT) $(UNINSTALL_DIST
 
 $(BINARIES):
 	xcodebuild install -project BeIDConnect.xcodeproj
-	codesign -f --options=runtime -s "3rd Party Mac Developer Application: FOD BOSA (7682K6YL8X)" -v $(EXE)
+	codesign -f --options=runtime -s "Developer ID Application: FOD BOSA (7682K6YL8X)" -v $(EXE)
 	
 $(COMPONENT_PFILE) :
 	@echo "Error: Missing component pfile."
