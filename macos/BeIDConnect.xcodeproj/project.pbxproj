@@ -116,6 +116,7 @@
 		E8EE466E242360F30074DC2C /* Request.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Request.cpp; sourceTree = "<group>"; };
 		E8EE466F242360F30074DC2C /* Request.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Request.hpp; sourceTree = "<group>"; };
 		E8F2140923FAFAAC003768CE /* BeIDConnect */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = BeIDConnect; sourceTree = BUILT_PRODUCTS_DIR; };
+		F3C52EF4285A12CD00B4DCEB /* BeIDConnect.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BeIDConnect.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -277,6 +278,7 @@
 		E8F2140023FAFAAC003768CE = {
 			isa = PBXGroup;
 			children = (
+				F3C52EF4285A12CD00B4DCEB /* BeIDConnect.entitlements */,
 				E864546F25F260900098E299 /* installation */,
 				E835C9A824376FFA008A17D9 /* ChromeExtension */,
 				E85AB6632413A1B600BE9F0A /* test */,
@@ -418,6 +420,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 7682K6YL8X;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -479,6 +482,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 7682K6YL8X;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
