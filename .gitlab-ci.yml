@@ -78,7 +78,7 @@ srpm:
   - mkdir -p products/deb/$CODE/$ARCH
   - dcmd cp ../*ges products/deb/$CODE/$ARCH
   artifacts:
-    name: "beidconnect-build-$DIST-$VERSION-$ARCH"
+    name: "beidconnect-build-$SHORT-$CODE-$ARCH"
     paths:
     - products/deb
     when:
@@ -104,7 +104,7 @@ srpm:
   - mkdir -p products/deb/$CODE/$ARCH
   - dcmd cp ../*ges products/deb/$CODE/$ARCH
   artifacts:
-    name: "beidconnect-build-$DIST-$VERSION-$ARCH"
+    name: "beidconnect-build-$SHORT-$CODE-$ARCH"
     paths:
     - products/deb
     when:
