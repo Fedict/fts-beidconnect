@@ -52,6 +52,7 @@ srpm:
   script:
   - mock --old-chroot --verbose -r $DIST-$VERSION-$ARCH --define "version $VER" --rebuild products/srpm/beidconnect-*.src.rpm --resultdir $CI_PROJECT_DIR/products/$DIST-$VERSION-$ARCH
   artifacts:
+    name: "beidconnect-build-$DIST-$VERSION-$ARCH"
     paths:
     - products/$DIST-$VERSION-$ARCH
     when:
@@ -77,6 +78,7 @@ srpm:
   - mkdir -p products/deb/$CODE/$ARCH
   - dcmd cp ../*ges products/deb/$CODE/$ARCH
   artifacts:
+    name: "beidconnect-build-$DIST-$VERSION-$ARCH"
     paths:
     - products/deb
     when:
@@ -102,6 +104,7 @@ srpm:
   - mkdir -p products/deb/$CODE/$ARCH
   - dcmd cp ../*ges products/deb/$CODE/$ARCH
   artifacts:
+    name: "beidconnect-build-$DIST-$VERSION-$ARCH"
     paths:
     - products/deb
     when:
