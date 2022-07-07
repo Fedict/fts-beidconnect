@@ -9,6 +9,7 @@
 
 #ifdef _WIN32
 #include <io.h>
+#include <codecvt>
 #endif
 
 #ifndef _WIN32
@@ -17,9 +18,15 @@
 
 using namespace std;
 
+#ifdef _WIN32
+void writeFile(wstring file, wstring exePath, bool isChrome) {
+    wofstream myfile;
+    myfile.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t, 0x10ffff, std::generate_header>));
+#else
 void writeFile(string file, string exePath, bool isChrome) {
     ofstream myfile;
-    myfile.open(file, std::ofstream::trunc);
+#endif
+    myfile.open(file, std::ios::out/*std::ofstream::trunc*/);
     myfile << "{\n";
     myfile << "  \"name\": \"be.bosa.beidconnect\",\n";
     myfile << "  \"description\": \"Access your eID in webapps\",\n";
@@ -43,6 +50,35 @@ void writeFile(string file, string exePath, bool isChrome) {
 int runSetup(int argc, const char * argv[])
 {
    //generate a json file that is needed for the Chrome Extension to find the Native host application on Windows
+#ifdef _WIN32
+   wstring chromeFilePath = L"";
+   wstring firefoxFilePath = L"";
+   wstring exePath;
+   
+   wstring cmdLine = GetCommandLineW();
+   size_t pos = cmdLine.find(L"-setup");
+   // MSI setup add a '"' (double quote) to the -setup content, need to remove it
+   if (cmdLine[pos + 7] == L'"')
+   {
+       pos++;
+   }
+   wstring installFolder = cmdLine.substr(pos + 7);
+   if (installFolder.back() != L'\\')
+   {
+       installFolder += L"\\";
+   }
+   exePath = installFolder + L"beidconnect.exe";
+
+   //escape all \ in json file or exe will not be found on windows
+   exePath = std::regex_replace(exePath, std::wregex(L"\\\\"), L"\\\\");
+   
+   if (chromeFilePath == L"") {
+      chromeFilePath = wstring(installFolder) + L"chrome.json";
+   }
+   if (firefoxFilePath == L"") {
+       firefoxFilePath = wstring(installFolder) + L"firefox.json";
+   }
+#else
    const char* installFolder = NULL;
    string chromeFilePath = "";
    string firefoxFilePath = "";
@@ -66,19 +102,6 @@ int runSetup(int argc, const char * argv[])
    
    //log_info("install folder: <%s>", installFolder);
    
-#ifdef _WIN32
-   exePath = string(installFolder) + "\\beidconnect.exe";
-   
-   //escape all \ in json file or exe will not be found on windows
-   exePath = std::regex_replace(exePath, std::regex("\\\\"), "\\\\");
-   
-   if (chromeFilePath == "") {
-      chromeFilePath = string(installFolder) + "\\chrome.json";
-   }
-   if (firefoxFilePath == "") {
-       firefoxFilePath = string(installFolder) + "\\firefox.json";
-   }
-#else
    exePath = string(installFolder) + "/beidconnect";
    if (chromeFilePath == "") {
       chromeFilePath = string(installFolder) + "/chrome.json";

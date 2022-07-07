@@ -79,12 +79,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "FOD BOSA"
             VALUE "FileDescription", "EID bridge"
-            VALUE "FileVersion", "2.6.0.0"
+            VALUE "FileVersion", "2.7.0.0"
             VALUE "InternalName", "BeIDConn.exe"
             VALUE "LegalCopyright", "Copyright (C) 2022"
             VALUE "OriginalFilename", "BeIDConnect.exe"
             VALUE "ProductName", "BeIDConnect"
-            VALUE "ProductVersion", "2.6.0.0"
+            VALUE "ProductVersion", "2.7.0.0"
         END
     END
     BLOCK "VarFileInfo"

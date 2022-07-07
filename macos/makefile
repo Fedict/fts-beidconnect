@@ -1,4 +1,4 @@
-VERSION = 2.6
+VERSION = 2.7
 IDENTIFIER = be.bosa.beidconnect
 PROGRAM = beidconnect
 DISTDIR = ./install/dist
