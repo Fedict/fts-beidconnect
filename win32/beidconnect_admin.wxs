@@ -52,9 +52,8 @@
           <Class Id="{B08A638E-66C3-4586-823A-5B89A0301920}" Context="InprocServer32" Description="BeIDConnectX.Link" ThreadingModel="both" ForeignServer="mscoree.dll">
               <ProgId Id="be.bosa.beidconnect" Description="BeIDConnectX.Link" />
           </Class>
-         <File Id="beidconnectA.dll" KeyPath="yes" Source="..\ActiveX\BeIDConnectX\Release\beidconnectA.dll" />
+         <File Id="beidconnectA.dll" KeyPath="yes" Source="..\ActiveX\BeIDConnectX\bin\x86\ReleaseAdmin\beidconnectA.dll" />
          <ProgId Id="Record" />
-         <!--RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\Domains\belgium.be" Name="https" Value="2" Type="integer" /-->
          <RegistryValue Root="HKLM" Key="Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\Domains\belgium.be" Name="https" Value="2" Type="integer" />
          <RegistryValue Root="HKCR" Key="CLSID\{8B48F268-273E-3109-B5B2-27514C9C06C8}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" Action="write" />
          <RegistryValue Root="HKCR" Key="CLSID\{8B48F268-273E-3109-B5B2-27514C9C06C8}\InprocServer32\0.0.4.0" Name="Class" Value="BeIDConnectX.IObjectSafetyImpl" Type="string" Action="write" />
