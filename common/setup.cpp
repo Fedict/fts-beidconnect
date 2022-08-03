@@ -23,7 +23,7 @@ bool writeFile(wstring file, wstring exePath, bool isChrome) {
     wofstream myfile;
     myfile.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t, 0x10ffff, std::generate_header>));
 #else
-void writeFile(string file, string exePath, bool isChrome) {
+bool writeFile(string file, string exePath, bool isChrome) {
     ofstream myfile;
 #endif
     myfile.open(file, std::ios::out/*std::ofstream::trunc*/);
