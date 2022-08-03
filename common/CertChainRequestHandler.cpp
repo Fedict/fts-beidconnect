@@ -36,13 +36,13 @@ std::string CertChainRequestHandler::process()
    l_cert = base64decode((unsigned char*)certif.c_str(), cert);
    
    ReaderList readerList;
-   CardReader::Ptr reader = readerList.getReaderByIndex(0);
+   std::shared_ptr<CardReader> reader = readerList.getReaderByIndex(0);
    size_t count = readerList.readers.size();
    if (count == 0) {
       response.put("result", "no_reader");
    }
    else {
-      int status = 0;
+      long status = 0;
       ptree readerInfos;
       for (int i = 0; i < (int)count; i++) {
          
@@ -59,7 +59,7 @@ std::string CertChainRequestHandler::process()
             continue;
          }
          
-         Card::Ptr card = CardFactory::createCard(reader);
+         std::shared_ptr<Card> card = CardFactory::createCard(reader);
          if (card == nullptr) {
             countUnsupportedCards++;
             continue; //card not supported in this reader, try next reader

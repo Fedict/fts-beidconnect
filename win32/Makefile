@@ -15,8 +15,8 @@ MAJOR_VERSION=2
 MINOR_VERSION=7
 VERSION=$(MAJOR_VERSION).$(MINOR_VERSION)
 
-SIGN = signtool sign /v /n "Federale Overheidsdienst Beleid en Ondersteuning" /fd SHA256 /tr http://rfc3161timestamp.globalsign.com/advanced /td SHA256
-#SIGN = signtool sign /fd SHA256 /a /f D:\cpe\BoSa\bosa_self_signed_test_cert.pfx /p bosa
+#SIGN = signtool sign /v /n "Federale Overheidsdienst Beleid en Ondersteuning" /fd SHA256 /tr http://rfc3161timestamp.globalsign.com/advanced /td SHA256
+SIGN = signtool sign /fd SHA256 /a /f D:\cpe\BoSa\bosa_self_signed_test_cert.pfx /p bosa
 WIX = C:\Program Files (x86)\WiX Toolset v3.11
 
 HEAT_OUPUT_WXS = heat_output.wxs
@@ -45,6 +45,7 @@ all: pkg pkgadmin
 
 binaries:
 	msbuild -m /p:Configuration=Release;Platform=x86 /property:MAJOR_VERSION=$(MAJOR_VERSION) /property:MINOR_VERSION=$(MINOR_VERSION) /property:RELEASE_VERSION=0 /property:BUILD_NUMBER=$(BUILD_NUMBER) $(SOLUTION)
+	msbuild -m /p:Configuration=ReleaseAdmin;Platform=x86 /property:MAJOR_VERSION=$(MAJOR_VERSION) /property:MINOR_VERSION=$(MINOR_VERSION) /property:RELEASE_VERSION=0 /property:BUILD_NUMBER=$(BUILD_NUMBER) $(SOLUTION)
 	msbuild -m /p:Configuration=Release;Platform=x64 /property:MAJOR_VERSION=$(MAJOR_VERSION) /property:MINOR_VERSION=$(MINOR_VERSION) /property:RELEASE_VERSION=0 /property:BUILD_NUMBER=$(BUILD_NUMBER) $(SOLUTION)
 	msbuild /p:Configuration=Release;Platform="Any CPU" /property:AssemblyName=BeIDConnect /property:MAJOR_VERSION=$(MAJOR_VERSION) /property:MINOR_VERSION=$(MINOR_VERSION) /property:RELEASE_VERSION=0 /property:BUILD_NUMBER=$(BUILD_NUMBER) $(SOLUTION_X)
 	msbuild /p:Configuration=ReleaseAdmin;Platform="Any CPU" /property:AssemblyName=BeIDConnectA /property:MAJOR_VERSION=$(MAJOR_VERSION) /property:MINOR_VERSION=$(MINOR_VERSION) /property:RELEASE_VERSION=0 /property:BUILD_NUMBER=$(BUILD_NUMBER) $(SOLUTION_X)

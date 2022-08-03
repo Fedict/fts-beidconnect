@@ -24,10 +24,10 @@
 #define DIGEST_ALGO_SHA384_LEN      48
 #define DIGEST_ALGO_SHA512_LEN      64
 
-int hash_length_for_algo(int hashAlgo);
+unsigned int hash_length_for_algo(int hashAlgo);
 const char* hash_header_for_algo(int hashAlgo);
-int hash_length_for_algoheader(int hashAlgo);
-int algo2str(const char *hash_algo);
+unsigned int hash_length_for_algoheader(int hashAlgo);
+unsigned int algo2str(const char *hash_algo);
 
      
 #ifdef __cplusplus

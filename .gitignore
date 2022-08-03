@@ -256,3 +256,4 @@ _Pvt_Extensions
 # gulp output (browser extensions)
 ChromeExtension/target
 .vscode/settings.json
+/win32/VS_2019/ReleaseAdmin

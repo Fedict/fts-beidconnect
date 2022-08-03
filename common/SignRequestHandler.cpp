@@ -24,13 +24,11 @@ using boost::property_tree::ptree;
 std::string SignRequestHandler::process()
 {
    ptree response;
-   int lasterror = 0;
+   long lasterror = 0;
    
-   Card::Ptr card;
+   std::shared_ptr<Card> card;
    ReaderList readerList;
-   int connected = 0;
    int algo = 0;
-   int foundKey = 0;
    unsigned char signature[512];
    unsigned int l_signature = 512;
    bool loggedON = false;
@@ -58,7 +56,7 @@ std::string SignRequestHandler::process()
    }
    l_hash = base64decode((unsigned char*)digest.c_str(), hash);
    
-   CardReader::Ptr reader = readerList.getReaderByIndex(0);
+   std::shared_ptr<CardReader> reader = readerList.getReaderByIndex(0);
    if (reader == nullptr) {
       lasterror = E_SRC_NO_READERS_FOUND;
    }
@@ -78,7 +76,7 @@ std::string SignRequestHandler::process()
             continue;
          }
          
-         Card::Ptr card = CardFactory::createCard(reader);
+         std::shared_ptr<Card> card = CardFactory::createCard(reader);
          if (card == nullptr) {
             lasterror = CARD_TYPE_UNKNOWN;
             continue; //card not supported in this reader, try next reader
@@ -93,7 +91,6 @@ std::string SignRequestHandler::process()
          if (lasterror) {
             log_error("%s: E: card->selectKey returned %d (0x%0X)", WHERE, lasterror, lasterror);
             reader->disconnect();
-            connected = 0;
             continue; //try next reader to find chain
          }
   
@@ -120,7 +117,6 @@ std::string SignRequestHandler::process()
             }
             break;
          }
-         foundKey = 1;
          
          if (loggedON) {
             card->logoff();

@@ -12,7 +12,7 @@ public:
    CardFactory();
    ~CardFactory();
 
-   static std::shared_ptr<Card> createCard(CardReader::Ptr reader);
+   static std::shared_ptr<Card> createCard(const std::shared_ptr<CardReader>& reader);
 };
 
 

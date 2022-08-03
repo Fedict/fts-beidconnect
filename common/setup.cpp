@@ -19,7 +19,7 @@
 using namespace std;
 
 #ifdef _WIN32
-void writeFile(wstring file, wstring exePath, bool isChrome) {
+bool writeFile(wstring file, wstring exePath, bool isChrome) {
     wofstream myfile;
     myfile.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t, 0x10ffff, std::generate_header>));
 #else
@@ -27,24 +27,29 @@ void writeFile(string file, string exePath, bool isChrome) {
     ofstream myfile;
 #endif
     myfile.open(file, std::ios::out/*std::ofstream::trunc*/);
-    myfile << "{\n";
-    myfile << "  \"name\": \"be.bosa.beidconnect\",\n";
-    myfile << "  \"description\": \"Access your eID in webapps\",\n";
-    myfile << "  \"path\": \"" << exePath << "\",\n";
-    myfile << "  \"type\": \"stdio\",\n";
-    if (isChrome) {
-        myfile << "  \"allowed_origins\": [\n";
-        myfile << "     \"chrome-extension://pencgnkbgaekikmiahiaakjdgaibiipp/\",\n";
-        myfile << "     \"chrome-extension://ifdkechldgmcamjeenkbcddnjaikdlke/\"\n";
-        myfile << "  ]\n";
-    } else {
-        myfile << "  \"allowed_extensions\": [\n";
-        myfile << "     \"beidconnect@bosa.be\"\n";
-        myfile << "  ]\n";
-    }
+    if (myfile.is_open()) {
+        myfile << "{\n";
+        myfile << "  \"name\": \"be.bosa.beidconnect\",\n";
+        myfile << "  \"description\": \"Access your eID in webapps\",\n";
+        myfile << "  \"path\": \"" << exePath << "\",\n";
+        myfile << "  \"type\": \"stdio\",\n";
+        if (isChrome) {
+            myfile << "  \"allowed_origins\": [\n";
+            myfile << "     \"chrome-extension://pencgnkbgaekikmiahiaakjdgaibiipp/\",\n";
+            myfile << "     \"chrome-extension://ifdkechldgmcamjeenkbcddnjaikdlke/\"\n";
+            myfile << "  ]\n";
+        }
+        else {
+            myfile << "  \"allowed_extensions\": [\n";
+            myfile << "     \"beidconnect@bosa.be\"\n";
+            myfile << "  ]\n";
+        }
 
-    myfile << "}\n";
-    myfile.close();
+        myfile << "}\n";
+        myfile.close();
+        return true;
+    }
+    return false;
 }
 
 int runSetup(int argc, const char * argv[])
@@ -111,8 +116,10 @@ int runSetup(int argc, const char * argv[])
    }
 #endif
    //log_info("creating %s", chromeFilePath.c_str());
-   writeFile(chromeFilePath, exePath, true);
    //log_info("creating %s", firefoxFilePath.c_str());
-   writeFile(firefoxFilePath, exePath, false);
-   return 0;
+   if (writeFile(chromeFilePath, exePath, true)
+       && writeFile(firefoxFilePath, exePath, false)) {
+       return 0;
+   }
+   return -1;
 }

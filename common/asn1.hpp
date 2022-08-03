@@ -123,7 +123,7 @@ void asn_ui2bitstring(unsigned int in, unsigned char *out, unsigned int *l_out);
 int asn_compare_items(ASN1_ITEM* item1, ASN1_ITEM* item2);
    
 int dump_asn1(unsigned char* in, unsigned int l_in, int level, char** dump);
-int get_printable_dn(ASN1_ITEM *p_dn, char **pp_dn, unsigned int *p_l_dn);
+int get_printable_dn(ASN1_ITEM *p_dn, char **pp_dn, size_t *p_l_dn);
    
 /* Helper functions: encode uint as ASN_INTEGER */
 void encode_uint(unsigned int in, unsigned char *out, unsigned int *l_out);

@@ -22,22 +22,46 @@ using namespace std;
 
 class CardReader
 {
+    // To ensure transaction begin/end, use the ScopedCardTransaction class
+    friend class ScopedCardTransaction;
+    virtual long beginTransaction() = 0;
+    virtual long endTransaction() = 0;
 public:
-   CardReader(){};
-   virtual ~CardReader(){};
-   typedef std::shared_ptr <CardReader> Ptr;
-   virtual int connect() = 0;
-   virtual int disconnect() = 0;
-   virtual bool isPinPad() = 0;
-   virtual int beginTransaction() = 0;
-   virtual int endTransaction() = 0;
-   virtual int apdu(const unsigned char *apdu, unsigned int l_apdu, unsigned char *out, int *l_out, int *sw) = 0;
-   virtual int verify_pinpad(unsigned char format, unsigned char PINBlock, unsigned char PINLength, unsigned int PINMaxExtraDigit, unsigned char pinAPDU[], int l_pinAPDU, int *sw) = 0;
- 
-   std::string name;
-   std::string atr;
-   int language;
+    CardReader() {};
+    virtual ~CardReader() {};
+    virtual long connect() = 0;
+    virtual long disconnect() = 0;
+    virtual bool isPinPad() = 0;
+    virtual long apdu(const unsigned char* apdu, unsigned int l_apdu, unsigned char* out, int* l_out, int* sw) = 0;
+    virtual long verify_pinpad(unsigned char format, unsigned char PINBlock, unsigned char PINLength, unsigned int PINMaxExtraDigit, unsigned char pinAPDU[], int l_pinAPDU, int* sw) = 0;
+
+    std::string name;
+    std::string atr;
+    int language;
 };
 
+/// <summary>
+/// Transaction helper class. Try to start a transaction. When out of the calling scope, a successfull transaction is ended.
+/// </summary>
+class ScopedCardTransaction
+{
+    std::shared_ptr<CardReader> reader;
+    long beginTransactionRC;
+public:
+    ScopedCardTransaction(const std::shared_ptr<CardReader>& reader)
+    {
+        this->reader = reader;
+        beginTransactionRC = reader->beginTransaction();
+    }
+    ~ScopedCardTransaction()
+    {
+        if (beginTransactionRC)
+            reader->endTransaction();
+    }
+    bool TransactionFailed()
+    {
+        return beginTransactionRC;
+    }
+};
 
 #endif /* CardReader_hpp */

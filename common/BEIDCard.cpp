@@ -27,7 +27,8 @@
 //#define resetPinApdu                  "\x00\x20\x00\x02\x08\x2C\x33\x33\x33\x11\x11\x11\xFF" (13 bytes) New PIN: 1234
 
 #define unblockCardApdu								"\x00\x2c\x00\x01\x08\x2c\xFF\xFF\xFF\xFF\xFF\xFF\xFF"
-#define verifyPinApdu								"\x00\x20\x00\x01\x08\x2f\xff\xff\xff\xff\xff\xff\xff"
+//#define verifyPinApdu								"\x00\x20\x00\x01\x08\x2f\xff\xff\xff\xff\xff\xff\xff"
+#define verifyPinApdu								"\x00\x20\x00\x01\x08\x20\xff\xff\xff\xff\xff\xff\xff"
 #define logoutApdu									"\x80\xE6\x00\x00"
 #define beid_apdu_change_pin_1						"\x00\x24\x00\x01\x08\x2f\xff\xff\xff\xff\xff\xff\xff"
 
@@ -68,9 +69,9 @@ std::string* BEIDCard::valueForKey(std::string* key)
 }
 
 #define WHERE "BEIDCard::read_certificate"
-int BEIDCard::readCertificate(int format, int type, std::vector<char> &cert)
+long BEIDCard::readCertificate(int format, int type, std::vector<char> &cert)
 {
-   int ret;
+   long ret;
    int l_lengthbuf = 4;
    unsigned char lengthbuf[5];
    int l_rawcert, l_cert = 0;
@@ -137,9 +138,9 @@ cleanup:
 
 
 #define WHERE "BEIDCard::readUserCertificates"
-int BEIDCard::readUserCertificates(int format, int certType, std::vector<std::vector<char>> &certificates)
+long BEIDCard::readUserCertificates(int format, int certType, std::vector<std::vector<char>> &certificates)
 {
-   int ret = 0;
+   long ret = 0;
 
    if ((certType == 0) || (certType == CERT_TYPE_NONREP )) {
       std::vector<char> buf;
@@ -167,15 +168,15 @@ int BEIDCard::readUserCertificates(int format, int certType, std::vector<std::ve
    
 cleanup:
    
-   return (ret);
+   return ret;
 }
 #undef WHERE
 
 
 #define WHERE "BEIDCard::readCertificateChain"
-int BEIDCard::readCertificateChain(int format, unsigned char *cert, int l_cert, std::vector<std::vector<char>>  &subCerts, std::vector<char> &root)
+long BEIDCard::readCertificateChain(int format, unsigned char *cert, int l_cert, std::vector<std::vector<char>>  &subCerts, std::vector<char> &root)
 {
-   int ret;
+   long ret;
    unsigned char* p_cert = 0;
 #define X509_ISSUER           "\1\1\4"
 #define X509_SUBJECT          "\1\1\6"
@@ -259,9 +260,9 @@ cleanup:
 
 
 #define WHERE "BEIDCard::SelectKey()"
-int BEIDCard::selectKey(int pintype, unsigned char* cert, int l_cert)
+long BEIDCard::selectKey(int pintype, unsigned char* cert, size_t l_cert)
 {
-   int ret = 0;
+   long ret = 0;
    int cmdlen, recvlen;
    unsigned char cmd[512], recv[512];
    //int l_cardcert;
@@ -334,11 +335,23 @@ cleanup:
 }
 #undef WHERE
 
+// SizeOfPINLengthInAPDU (bits 7-4) bit size of PIN length in APDU
+// PINBlockSize          (bits 3-0) PIN block size in bytes after justification and formatting
+#define MAKE_PINBlockString(SizeOfPINLengthInAPDU, PINBlockSize) (((SizeOfPINLengthInAPDU&0xF)<<4)|(PINBlockSize&0xF))
+// RFU                   (bits 7-5) RFU
+// AreBytes              (bit 4   ) set if system units are bytes, clear if system units are bits 
+// PINLengthPosition     (bits 3-0) PIN length position in system units 
+#define MAKE_PINLengthFormat(RFU, AreBytes, PINLengthPosition) (((RFU&0x7)<<5)|((AreBytes&0x1)<<4)|(PINLengthPosition&0xF))
+// SystemUnits           (bits 7  ) The system units' type indicator: 0=bits, 1=bytes. This bit quantifies the next param
+// PINPosition           (bits 6-3) PIN position after format in the APDU command 
+// PINJustification      (bit 2   ) PIN justification: 0=Left justify data, 1=Right justify data
+// PINFormat             (bits 1-0) PIN Format type: 0=binary, 1=BCD, 2=ASCII
+#define MAKE_FormatString(SystemUnits, PINPosition, PINJustification, PINFormat) (((SystemUnits&0x1)<<7)|((PINPosition&0xf)<<3)|((PINJustification&0x1)<<2)|(PINFormat&0x3))
 
 #define WHERE "BEIDCard::logon()"
-int BEIDCard::logon(int l_pin, char *pin)
+long BEIDCard::logon(int l_pin, char *pin)
 {
-   int ret;
+   long ret;
    unsigned char recv[1024];
    int recvlen = 1024;
    unsigned char cmd[255];
@@ -346,21 +359,17 @@ int BEIDCard::logon(int l_pin, char *pin)
    int i;
    int sw = 0;
    
-   int begintransaction = 1;
-   
-   //begin transaction
-   ret = reader->beginTransaction();
-   if (ret) {
+   ScopedCardTransaction trans(reader);  //begin transaction
+   if (trans.TransactionFailed()) {
       log_error("E: Logon: Could not start transaction");
-      begintransaction = 0;
-      CLEANUP(E_SRC_START_TRANSACTION);
+      return E_SRC_START_TRANSACTION;
    }
    
    //test Pin conditions
    if ((l_pin > 0) && (l_pin < 4))
-      CLEANUP(E_PIN_TOO_SHORT);
+      return E_PIN_TOO_SHORT;
    if (l_pin > 12)
-      CLEANUP(E_PIN_TOO_LONG);
+      return E_PIN_TOO_LONG;
    
    cmdlen = sizeof(verifyPinApdu)-1;
    memcpy(cmd, verifyPinApdu, cmdlen);
@@ -371,12 +380,12 @@ int BEIDCard::logon(int l_pin, char *pin)
    //      pin_verify->wPINMaxExtraDigit = 0x040c; //test apg8201
    //      "\x00\x20\x00\x01\x08\x24\xFF\xFF\xFF\xFF\xFF\xFF\xFF"
    if ((l_pin == 0) && (reader->isPinPad())) {
-      ret = reader->verify_pinpad(0x89, 0x47, 0x04, 0x040c, cmd, cmdlen, &sw);  //TODO this should be handled more abstract since card shouldn't anything about the winswcard constants
+      ret = reader->verify_pinpad(MAKE_FormatString(1, 1, 0, 1), MAKE_PINBlockString(4, 7), MAKE_PINLengthFormat(0, 0, 4), 0x040c, cmd, cmdlen, &sw);  //TODO this should be handled more abstract since card shouldn't anything about the winswcard constants
       if (ret) {
          log_error("%s: reader->verify_pinpad() returned 0x%0x", WHERE, ret);
       }
    }
-   else if (pin != 0) {
+   else if (pin != 0 && strlen(pin) >= 4) {
       //BCD encoding
       cmd[5] = 0x20 + l_pin;  /* 0x20 + length of pin */
       
@@ -397,57 +406,42 @@ int BEIDCard::logon(int l_pin, char *pin)
    }
    
     if (ret < 0)
-      CLEANUP(ret);
+      return ret;
    
    switch (sw)
    {
       case 0x9000:
-         ret = 0;
-         break;
+         return 0;
       case 0x63C3:
-         ret = E_PIN_3_ATTEMPTS;
-         break;
+         return E_PIN_3_ATTEMPTS;
       case 0x63C2:
-         ret = E_PIN_2_ATTEMPTS;
-         break;
+          return E_PIN_2_ATTEMPTS;
       case 0x63C1:
-         ret = E_PIN_1_ATTEMPT;
-         break;
+          return E_PIN_1_ATTEMPT;
       case 0x6983:
-         ret = E_PIN_BLOCKED;
-         break;
+          return E_PIN_BLOCKED;
       case 0x6985:
-         ret = E_SRC_COMMAND_NOT_ALLOWED;
-         break;
-      default: ret = E_PIN_INCORRECT;
+          return E_SRC_COMMAND_NOT_ALLOWED;
+      default:
+          return E_PIN_INCORRECT;
    }
-   
-cleanup:
-   if (begintransaction)
-      reader->endTransaction();
-   
-   return (ret);
 }
 #undef WHERE
 
 #define WHERE "BEIDCard::logoff()"
-int BEIDCard::logoff()
+long BEIDCard::logoff()
 {
-   int ret;
+   long ret;
    unsigned char recv[1024];
    int recvlen = 1024;
    unsigned char cmd[255];
    int cmdlen;
    int sw = 0;
    
-   int begintransaction = 1;
-   
-   //begin transaction
-   ret = reader->beginTransaction();
-   if (ret) {
-      log_error("E: Logoff: Could not start transaction");
-      begintransaction = 0;
-      CLEANUP(E_SRC_START_TRANSACTION);
+   ScopedCardTransaction trans(reader);  //begin transaction
+   if (trans.TransactionFailed()) {
+       log_error("E: Logoff: Could not start transaction");
+      return E_SRC_START_TRANSACTION;
    }
    
    cmdlen = sizeof(logoutApdu)-1;
@@ -458,40 +452,34 @@ int BEIDCard::logoff()
       log_error("%s: reader->apdu(verify) returned 0x%0x", WHERE, ret);
    }
 
-cleanup:
-   if (begintransaction)
-      reader->endTransaction();
-   
    return (ret);
 }
 #undef WHERE
 
 #define WHERE "BEIDCard::sign()"
-int BEIDCard::sign(unsigned char* in, unsigned int l_in, int hashAlgo, unsigned char *out, unsigned int *l_out, int *sw)
+long BEIDCard::sign(unsigned char* in, unsigned int l_in, int hashAlgo, unsigned char *out, unsigned int *l_out, int *sw)
 {
-   int ret = 0;
+   long ret = 0;
    unsigned char recv[1024];
    int recvlen = 1024;
    unsigned char cmd[255];
-   int sign_lg = currentSelectedKeyLength;
+   unsigned int sign_lg = currentSelectedKeyLength;
    int cmdlen;
-   int begintransaction = 1;
 
    if (sign_lg > *l_out) {
        return (-1);
    }
 
    //begin transaction
-   ret = reader->beginTransaction();
-   if (ret) {
-      log_error("E: reader->beginTransaction() failed");
-      begintransaction = 0;
-      CLEANUP(E_SRC_START_TRANSACTION);
+   ScopedCardTransaction trans(reader);  //begin transaction
+   if (trans.TransactionFailed()) {
+       log_error("E: reader->beginTransaction() failed");
+      return E_SRC_START_TRANSACTION;
    }
    
    if ((l_in == 0) || (l_in != hash_length_for_algo(hashAlgo)) ) {
       log_error("hash input has wrong length for the specified digesting algo");
-      CLEANUP(E_DIGEST_LEN);
+      return E_DIGEST_LEN;
    }
    
    memset(cmd, 0xFF, sizeof(cmd));
@@ -522,7 +510,7 @@ int BEIDCard::sign(unsigned char* in, unsigned int l_in, int hashAlgo, unsigned 
    ret = reader->apdu(cmd, cmdlen, recv, &recvlen, sw);
    if (ret < 0) {
       log_error("%s: reader->apdu returned 0x%0X", WHERE, ret);
-      goto cleanup;
+      return ret;
    }
    
    cmdlen = sizeof(retrieveSignatureCmd)-1;
@@ -539,9 +527,9 @@ int BEIDCard::sign(unsigned char* in, unsigned int l_in, int hashAlgo, unsigned 
          cmd[4] = 0x00;
          break;
       case 0x6401:
-         CLEANUP(E_PIN_CANCELLED);
+         return E_PIN_CANCELLED;
       default:
-         CLEANUP(-1);
+         return -1;
    }
    
    recvlen = *l_out;
@@ -549,7 +537,7 @@ int BEIDCard::sign(unsigned char* in, unsigned int l_in, int hashAlgo, unsigned 
    ret = reader->apdu(cmd, cmdlen, out, &recvlen, sw);
    if ((ret < 0) || (*sw != 0x9000)) {
       log_error("%s: reader->apdu returned 0x%0X (sw=0x%0X)", WHERE, ret, *sw);
-      goto cleanup;
+      return ret;
    }
 
    *l_out = (unsigned int) recvlen;
@@ -591,26 +579,21 @@ int BEIDCard::sign(unsigned char* in, unsigned int l_in, int hashAlgo, unsigned 
       if ((ret = asn1_encode_list(&asn1_list, asn1_signature, &l_asn1_signature)) != 0)
       {
          log_error("asn1_encode returned 0x%08x (%d)", ret, ret);
-         goto cleanup;
+         return ret;
       }
       if (l_asn1_signature)
          memcpy(out, asn1_signature, l_asn1_signature);
       *l_out = l_asn1_signature;
    }
-
-cleanup:
-   
-   if (begintransaction)
-      reader->endTransaction();
    
    return (ret);
 }
 #undef WHERE
 
 #define WHERE "BEIDCard::selectFile"
-int BEIDCard::selectFile(unsigned char *file, int l_file)
+long BEIDCard::selectFile(unsigned char *file, int l_file)
 {
-   int ret = 0;
+   long ret = 0;
    unsigned char apdu[256] = "\x00\xA4\x02\x0C\x00";
    unsigned int l_apdu = 5;
    unsigned char recv[256];
@@ -651,9 +634,9 @@ int BEIDCard::selectFile(unsigned char *file, int l_file)
 #undef WHERE
 
 #define WHERE "BEIDCard::readFile2()"
-int BEIDCard::readFile2(unsigned int offset, int* p_len, unsigned char* p_out)
+long BEIDCard::readFile2(unsigned int offset, int* p_len, unsigned char* p_out)
 {
-   int iReturn = 0;
+   long iReturn = 0;
    
    unsigned int l_req;
    unsigned int l_read = 0;
@@ -724,7 +707,7 @@ cleanup:
 #define WHERE "BEIDCard::getFile"
 std::vector<char> BEIDCard::getFile(int format, std::string fileType)
 {
-   int ret = 0;
+   long ret = 0;
    int len = MAX_ID_FILE_SIZE;
    unsigned char p[MAX_ID_FILE_SIZE];
    unsigned char* p_out;

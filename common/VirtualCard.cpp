@@ -43,9 +43,8 @@ int VirtualCard::type()
 };
 
 #define WHERE "VirtualCard::read_certificate"
-int VirtualCard::readCertificate(int format, int type, std::vector<char> &cert)
+long VirtualCard::readCertificate(int format, int type, std::vector<char> &cert)
 {
-   int ret = 0;
    std::unordered_map<int,std::string> idFiles;
 
    idFiles[CERT_TYPE_RRN] = rrn_cert;
@@ -67,17 +66,15 @@ int VirtualCard::readCertificate(int format, int type, std::vector<char> &cert)
    }
    do_sleep(500); //virtual read time
    
-cleanup:
-   
-   return (ret);
+   return 0;
 }
 #undef WHERE
 
 
 #define WHERE "VirtualCard::readUserCertificates"
-int VirtualCard::readUserCertificates(int format, int certType, std::vector<std::vector<char>> &certificates)
+long VirtualCard::readUserCertificates(int format, int certType, std::vector<std::vector<char>> &certificates)
 {
-   int ret = 0;
+   long ret = 0;
    if (format == FORMAT_RADIX64) {
       char auth_cert_[] = auth_cert;
       std::vector<char> buf1(auth_cert_, auth_cert_ + sizeof(auth_cert_)-1);
@@ -125,9 +122,9 @@ int VirtualCard::readUserCertificates(int format, int certType, std::vector<std:
 
 
 #define WHERE "VirtualCard::readCertificateChain"
-int VirtualCard::readCertificateChain(int format, unsigned char *cert, int l_cert, std::vector<std::vector<char>>  &subCerts, std::vector<char> &root)
+long VirtualCard::readCertificateChain(int format, unsigned char *cert, int l_cert, std::vector<std::vector<char>>  &subCerts, std::vector<char> &root)
 {
-   int ret = 0;
+   long ret = 0;
    if (format == FORMAT_RADIX64) {
       
       char ca_cert_[] = ca_cert;
@@ -154,9 +151,9 @@ int VirtualCard::readCertificateChain(int format, unsigned char *cert, int l_cer
 
 
 #define WHERE "VirtualCard::SelectKey()"
-int VirtualCard::selectKey(int pintype, unsigned char* cert, int l_cert)
+long VirtualCard::selectKey(int pintype, unsigned char* cert, size_t l_cert)
 {
-   int ret = 0;
+   long ret = 0;
 
 #define eaZyID_PROVIDES_SIGNING_CERT    0
    
@@ -181,9 +178,9 @@ int VirtualCard::selectKey(int pintype, unsigned char* cert, int l_cert)
 }
 
 
-int VirtualCard::logon(int l_pin, char *pin)
+long VirtualCard::logon(int l_pin, char *pin)
 {
-   int ret = 0;
+   long ret = 0;
    
    //test Pin conditions
    if ((l_pin > 0) && (l_pin < 4))
@@ -218,14 +215,14 @@ cleanup:
 }
 
 
-int VirtualCard::logoff()
+long VirtualCard::logoff()
 {
    return 0;
 }
 
-int VirtualCard::sign(unsigned char* in, unsigned int l_in, int hashAlgo, unsigned char *out, unsigned int *l_out, int *sw)
+long VirtualCard::sign(unsigned char* in, unsigned int l_in, int hashAlgo, unsigned char *out, unsigned int *l_out, int *sw)
 {
-   int ret = 0;
+   long ret = 0;
    char rand[256] = "the quick brown fox or something...";
    
    if ((l_in == 0) || (l_in != hash_length_for_algo(hashAlgo)) ) {

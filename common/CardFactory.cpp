@@ -41,7 +41,7 @@ typedef struct CARD_TYPE
    int   protocol;
 } CARD_TYPE;
 
-std::shared_ptr<Card>  CardFactory::createCard(CardReader::Ptr reader)
+std::shared_ptr<Card>  CardFactory::createCard(const std::shared_ptr<CardReader>& reader)
 {
    CARD_TYPE *cardtype;
    CARD_TYPE cardTypeTable[] = CARD_TYPE_TABLE;

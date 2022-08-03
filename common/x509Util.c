@@ -12,7 +12,7 @@ char* getCertSubjectName(unsigned char* cert, unsigned int l_cert)
    int ret = 0;
    ASN1_ITEM subject;
    static char dn[256];
-   unsigned int l_dn = 0;
+   size_t l_dn = 0;
    char *p_dn = NULL;
 
    if ((l_cert == 0) || (cert == NULL)) {
@@ -335,7 +335,7 @@ int isTimeBeforeNow (int len, char *p_atime)
    return -1;
 }
 
-int getKeyInfo(unsigned char *cert, unsigned int l_cert, int *keyType, int *keySize)
+int getKeyInfo(unsigned char *cert, unsigned int l_cert, int *keyType, unsigned int *keySize)
 {
    int ret = 0;
    ASN1_ITEM keyinfo, keyalg, key;
@@ -371,7 +371,7 @@ int getKeyInfo(unsigned char *cert, unsigned int l_cert, int *keyType, int *keyS
       if (ret == E_ASN_ITEM_NOT_FOUND) {
          return ret;
       }
-#pragma message "review this since this might not be 100% correct XXXXXX"
+#pragma message ("review this since this might not be 100% correct XXXXXX")
       *keySize = key.l_data - 1; // -1 byte for unused bits in BITSRING
    }
    
