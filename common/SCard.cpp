@@ -300,19 +300,10 @@ bool SCard::isPinPad()
    status = getFeatures();
    if (status != SCARD_S_SUCCESS) {
       log_error("E: getFeatures failed %0x", status);
-      CLEANUP(false);
+      return false;
    }
    
-   if ((cmds.verify_pin_start != 0) || (cmds.verify_pin_direct != 0)) {
-      CLEANUP(true);
-   }
-   else {
-      CLEANUP(false);
-   }
-   
-cleanup:
-   
-   return ret;
+   return ((cmds.verify_pin_start != 0) || (cmds.verify_pin_direct != 0));
 }
 
 

@@ -381,9 +381,10 @@ long BEIDCard::logon(int l_pin, char *pin)
    //      "\x00\x20\x00\x01\x08\x24\xFF\xFF\xFF\xFF\xFF\xFF\xFF"
    if ((l_pin == 0) && (reader->isPinPad())) {
       ret = reader->verify_pinpad(MAKE_FormatString(1, 1, 0, 1), MAKE_PINBlockString(4, 7), MAKE_PINLengthFormat(0, 0, 4), 0x040c, cmd, cmdlen, &sw);  //TODO this should be handled more abstract since card shouldn't anything about the winswcard constants
-      if (ret) {
+      if (ret != 0) {
          log_error("%s: reader->verify_pinpad() returned 0x%0x", WHERE, ret);
       }
+      return ret;
    }
    else if (pin != 0 && strlen(pin) >= 4) {
       //BCD encoding
