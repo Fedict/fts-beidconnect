@@ -295,7 +295,6 @@ long SCard::disconnect()
 bool SCard::isPinPad()
 {
    long status;
-   bool ret;
 
    status = getFeatures();
    if (status != SCARD_S_SUCCESS) {
@@ -670,7 +669,7 @@ long SCard::verify_pinpad(unsigned char format, unsigned char PINBlock, unsigned
       case 0x6400:  // SPE operation timed out
          ret = E_PIN_TIMEOUT;
          break;
-      case 0x6401:  // SPE operation was cancelled by the ‘Cancel’ button
+      case 0x6401:  // SPE operation was cancelled by the ï¿½Cancelï¿½ button
          ret = E_PIN_CANCELLED;
          break;
       case 0x6402:  // Modify PIN operation failed because two "new PIN" entries do not match

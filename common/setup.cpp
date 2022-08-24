@@ -35,8 +35,9 @@ bool writeFile(string file, string exePath, bool isChrome) {
         myfile << "  \"type\": \"stdio\",\n";
         if (isChrome) {
             myfile << "  \"allowed_origins\": [\n";
-            myfile << "     \"chrome-extension://pencgnkbgaekikmiahiaakjdgaibiipp/\",\n";
-            myfile << "     \"chrome-extension://ifdkechldgmcamjeenkbcddnjaikdlke/\"\n";
+            myfile << "     \"chrome-extension://pencgnkbgaekikmiahiaakjdgaibiipp/\",\n";   // Chrome CRX ID
+            myfile << "     \"chrome-extension://ifdkechldgmcamjeenkbcddnjaikdlke/\",\n";
+            myfile << "     \"chrome-extension://cjhdnjahbjhicmbmejmcifaaiigbgjjd/\"\n";    // Edge CRX ID
             myfile << "  ]\n";
         }
         else {
