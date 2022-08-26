@@ -11,18 +11,17 @@
 
 class VirtualReader: public CardReader
 {
+   long beginTransaction() override { return 0; };
+   long endTransaction() override{ return 0; };
 public:
    VirtualReader();
    virtual ~VirtualReader();
-   typedef std::shared_ptr<VirtualReader> Ptr;
-   static int listReaders(std::vector<CardReader::Ptr> &readers);
-   int beginTransaction() override { return 0; };
-   int endTransaction() override{ return 0; };
-   int connect() override;
-   int disconnect() override;
+   static int listReaders(std::vector<std::shared_ptr<CardReader>>& readers);
+   long connect() override;
+   long disconnect() override;
    bool isPinPad() override{ return 0; };
-   int apdu(const unsigned char *apdu, unsigned int l_apdu, unsigned char *out, int *l_out, int *sw) override{ return -1; };
-   int verify_pinpad(unsigned char format, unsigned char PINBlock, unsigned char PINLength, unsigned int PINMaxExtraDigit, unsigned char pinAPDU[], int l_pinAPDU, int *sw)override { return -1; };
+   long apdu(const unsigned char* apdu, unsigned int l_apdu, unsigned char* out, int* l_out, int* sw) override { return -1; };
+   long verify_pinpad(unsigned char format, unsigned char PINBlock, unsigned char PINLength, unsigned int PINMaxExtraDigit, unsigned char pinAPDU[], int l_pinAPDU, int *sw)override { return -1; };
 };
 
 #endif /* VirtualReader_hpp */

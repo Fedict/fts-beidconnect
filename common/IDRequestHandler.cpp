@@ -21,9 +21,9 @@ std::string IDRequestHandler::process()
 {
    ptree response;
    
-   Card::Ptr card;
+   std::shared_ptr<Card> card;
    ReaderList readerList;
-   CardReader::Ptr reader = readerList.getReaderByIndex(0);
+   std::shared_ptr<CardReader> reader = readerList.getReaderByIndex(0);
    size_t count = readerList.readers.size();
    int countSupportedCards = 0;
    int countUnsupportedCards = 0;
@@ -37,7 +37,7 @@ std::string IDRequestHandler::process()
       response.put("result", "no_reader");
    }
    else {
-      int status = 0;
+      long status = 0;
       ptree readerInfos;
       for (int i = 0; i < (int)count; i++) {
          
@@ -53,7 +53,7 @@ std::string IDRequestHandler::process()
             continue;
          }
          
-         Card::Ptr card = CardFactory::createCard(reader);
+         std::shared_ptr<Card> card = CardFactory::createCard(reader);
          if (card == nullptr) {
             countUnsupportedCards++;
             continue; //card not supported in this reader, try next reader

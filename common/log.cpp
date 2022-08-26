@@ -5,6 +5,10 @@
 #include <stdarg.h>
 #include "log.hpp"
 
+#if defined(DEBUG) && defined(_WIN32)
+#include <windows.h>
+#endif
+
 #define CLEANUP(x)   { err = (x); goto cleanup; }
 
 /******************************************************************************
@@ -36,6 +40,15 @@ void log_init(const char *pszLogFile, int logStdOut, int logErrorStdOut)
  ******************************************************************************/
 void log_info_(const char *string,... )
 {
+#if defined(DEBUG) && defined(_WIN32)
+  static char   buf2[0x4000];    
+	va_list       args2;
+	va_start(args2, string);				    // get args from param-string	
+	_vsnprintf(buf2, sizeof(buf2), string, args2);	// convert to string
+	OutputDebugStringA(buf2);
+	OutputDebugStringA("\n");
+#endif
+
 #ifdef LOG_INFO
   static char   buf[0x4000];    
 	va_list       args;
@@ -79,6 +92,15 @@ cleanup:
  ******************************************************************************/
 void log_info(const char *string,... )
 {
+#if defined(DEBUG) && defined(_WIN32)
+	static char   buf2[0x4000];
+	va_list       args2;
+	va_start(args2, string);				    // get args from param-string	
+	_vsnprintf(buf2, sizeof(buf2), string, args2);	// convert to string
+	OutputDebugStringA(buf2);
+	OutputDebugStringA("\n");
+#endif
+
 #ifdef LOG_INFO
   static char   buf[0x4000];    
 	va_list       args;
@@ -121,7 +143,16 @@ cleanup:
  ******************************************************************************/
 void log_error(const char *string,... )
 {
-  static char   buf[0x4000];
+#if defined(DEBUG) && defined(_WIN32)
+	static char   buf2[0x4000];
+	va_list       args2;
+	va_start(args2, string);				    // get args from param-string	
+	_vsnprintf(buf2, sizeof(buf2), string, args2);	// convert to string
+	OutputDebugStringA(buf2);
+	OutputDebugStringA("\n");
+#endif
+	
+	static char   buf[0x4000];
    char timestring[20];
 	va_list       args;
   FILE          *fp;

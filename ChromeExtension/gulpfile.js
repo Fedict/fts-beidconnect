@@ -19,11 +19,10 @@ var gulp = require('gulp'),
   jeditor = require('gulp-json-editor'),
   argv = require("yargs").string('extversion').argv;
 
-var version = "2.5.0";
 var ChromeVersion = "0.0.7";
 var ChromeID = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0VKd3Y3RnWfFWi8YuiV5rR6qj103pvMMvYnLuV3XoChZWCSOFvDhzRZ3XJkwdYHpN3U3wLfadxUnYkWaH+w1jRZU9opM9WZxJFwor89ajCVK9wJ21cnfVnwWwIZESaEKt7ic2v+96miDzZryHQtVFzqyGr3aF/6SXr9u2iRJuzHlyCnVEuc8NiguYmUKnL5RZuy+z+9sCK+Q1P7bfj4tIIwUGVzC2MpjaSU1NcQCO+Rk23wIcWVmzX5n3EPOx0D8vHHnSTZxA6f9JigqthsHAR3v6c4bHsjpI6GQSX5PtD4Vfy1T7iYMrxi+mZFKd+qSLkWSqssHUnQGxnhEQJvFsQIDAQAB"
 var EdgeVersion = "1.0.0";
-var EdgeID = "kbfoeejdnkbgifongkedipkifldkkphn"
+var EdgeID = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhSZ7pV9iLxtvHvSsvKNIyPP8O91rj31fDQBecPmGTAx96axL32sHsroPiZl0fOtsbPdIAwt5CLDsxfeCZH1oxCkEO6LRe1YoQSs2X0llqS9EwZgoQBQ3k6S37qnFyBk4eJjNGw3uJgC4syuM70m85219KvbwFT8tj17f4RFIvygrWiF2nlws4+6rAIDHRImSVGS1mFutJdxir/U3dtLLrlRUusZfsLSXq8CU2Ill4FQXwBbFuRgsEELJoTsJNiu/IPPA6wI/IAdS/W+Fi1M7xutIeyqrPuNOesNDBHZxtr4JW0N7uf0LRdofeeDIXr02U1AaJ7NIdejYfBn5Mc1jtwIDAQAB"
 var FirefoxVersion = "0.0.11";
 
 // Delete the target directory

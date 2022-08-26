@@ -15,7 +15,6 @@
 class SCardCtx
 {
 public:
-   typedef shared_ptr<SCardCtx> Ptr;
    SCardCtx() {
       h = 0;
       valid = false;
@@ -36,7 +35,7 @@ public:
          //log_info("SCardReleaseContext ok");
       }
    };
-   SCARDCONTEXT hSC() { return h; };
+   operator SCARDCONTEXT() { return h; };
    bool valid;
 private:
    SCARDCONTEXT  h;
@@ -45,24 +44,23 @@ private:
 
 class SCard: public CardReader
 {
+   long beginTransaction() override;
+   long endTransaction() override;
 public:
    SCard();
    virtual ~SCard(){};
-   typedef std::shared_ptr<SCard> Ptr;
-   static int listReaders(std::vector<CardReader::Ptr> &readers);
-   int beginTransaction() override;
-   int endTransaction() override;
-   int connect() override;
-   int disconnect() override;
+   static int listReaders(std::vector<std::shared_ptr<CardReader>> &readers);
+   long connect() override;
+   long disconnect() override;
    bool isPinPad() override;
-   int apdu(const unsigned char *apdu, unsigned int l_apdu, unsigned char *out, int *l_out, int *sw) override;
-   int verify_pinpad(unsigned char format, unsigned char PINBlock, unsigned char PINLength, unsigned int PINMaxExtraDigit, unsigned char pinAPDU[], int l_pinAPDU, int *sw) override;
+   long apdu(const unsigned char *apdu, unsigned int l_apdu, unsigned char *out, int *l_out, int *sw) override;
+   long verify_pinpad(unsigned char format, unsigned char PINBlock, unsigned char PINLength, unsigned int PINMaxExtraDigit, unsigned char pinAPDU[], int l_pinAPDU, int *sw) override;
 
-   SCardCtx::Ptr context;
+   shared_ptr<SCardCtx> context;
    
 private:
-   int isPinpadWithTransmit(const char *readerName);
-   int getFeatures();
+   long getFeatures();
+   bool getPPDUFeatures();
    class commands
    {
       public:
@@ -78,8 +76,11 @@ private:
          unsigned int ifd_pin_prop = 0;
          unsigned int abort = 0;
    } cmds;
+   bool FeaturesRetrieved = false;
+   bool m_bCanUsePPDU = false;
    SCARDHANDLE     hCard;
-   int cardIsT1;
+   SCARD_IO_REQUEST  ioSendPci = { 1, sizeof(SCARD_IO_REQUEST) };
+   SCARD_IO_REQUEST  ioRecvPci = { 1, sizeof(SCARD_IO_REQUEST) };
 };
 
 #endif /* SCard_hpp */

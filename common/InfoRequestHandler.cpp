@@ -20,9 +20,9 @@ std::string InfoRequestHandler::process()
    ptree response;
       
    int supportedCardTypes[] = { CARD_TYPE_BEID, /*CARD_TYPE_PKCS15, CARD_TYPE_PKCS11 */};
-   Card::Ptr card;
+   std::shared_ptr<Card> card;
    ReaderList readerList;
-   CardReader::Ptr reader = readerList.getFirstReaderWithSupportedCardType(supportedCardTypes, sizeof(supportedCardTypes)/sizeof(int));
+   std::shared_ptr<CardReader> reader = readerList.getFirstReaderWithSupportedCardType(supportedCardTypes, sizeof(supportedCardTypes)/sizeof(int));
    if (reader == nullptr) {
       if (readerList.readers.size() == 0) {
          response.put("result", "no_reader");

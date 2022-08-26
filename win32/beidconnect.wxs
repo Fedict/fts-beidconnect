@@ -162,7 +162,7 @@
             FileKey="beidconnectapp"
             ExeCommand='-setup &quot;[INSTALLFOLDER]'
             Execute="deferred"
-            Return="ignore"
+            Return="check"
             HideTarget="no"
             Impersonate="no" />
             

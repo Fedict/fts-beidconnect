@@ -79,34 +79,34 @@ int runTest(int argc, const char * argv[])
    
    string ssResponse;
    
-   ssRequest = std::make_shared<stringstream>(message_Applet1_7_SHA256);
-   handler = RequestHandler::createRequestHandler(ssRequest);
-   
-   ssResponse = handler->process();
-
-   log_info(ssResponse.c_str());
-   
-   ssRequest = std::make_shared<stringstream>(message_Applet1_7_SHA384);
-   handler = RequestHandler::createRequestHandler(ssRequest);
-   
-   ssResponse = handler->process();
-   
-   log_info(ssResponse.c_str());
-
-   ssRequest = std::make_shared<stringstream>(message_Applet1_7_SHA512);
-   handler = RequestHandler::createRequestHandler(ssRequest);
-   
-   ssResponse = handler->process();
-   
-   log_info(ssResponse.c_str());
-
-   //ssRequest = std::make_shared<stringstream>(message_Applet1_8_SHA256);
+   //ssRequest = std::make_shared<stringstream>(message_Applet1_7_SHA256);
    //handler = RequestHandler::createRequestHandler(ssRequest);
    //
    //ssResponse = handler->process();
 
    //log_info(ssResponse.c_str());
    //
+   //ssRequest = std::make_shared<stringstream>(message_Applet1_7_SHA384);
+   //handler = RequestHandler::createRequestHandler(ssRequest);
+   //
+   //ssResponse = handler->process();
+   //
+   //log_info(ssResponse.c_str());
+
+   //ssRequest = std::make_shared<stringstream>(message_Applet1_7_SHA512);
+   //handler = RequestHandler::createRequestHandler(ssRequest);
+   //
+   //ssResponse = handler->process();
+   //
+   //log_info(ssResponse.c_str());
+
+   ssRequest = std::make_shared<stringstream>(message_Applet1_8_SHA256);
+   handler = RequestHandler::createRequestHandler(ssRequest);
+   
+   ssResponse = handler->process();
+
+   log_info(ssResponse.c_str());
+   
    //ssRequest = std::make_shared<stringstream>(message_Applet1_8_SHA384);
    //handler = RequestHandler::createRequestHandler(ssRequest);
    //

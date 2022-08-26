@@ -9,12 +9,14 @@ CHROME_EXTENSION_PATH="$HOME/Library/Application Support/Google/Chrome/NativeMes
 CHROME_BETA_EXTENSION_PATH="$HOME/Library/Application Support/Google/Chrome Beta/NativeMessagingHosts/be.bosa.beidconnect.json"
 CHROMIUM_EXTENSION_PATH="$HOME/Library/Application Support/Chromium/NativeMessagingHosts/be.bosa.beidconnect.json"
 FIREFOX_EXTENSION_PATH="$HOME/Library/Application Support/Mozilla/NativeMessagingHosts/be.bosa.beidconnect.json"
+EDGE_EXTENSION_PATH="$HOME/Library/Application Support/Microsoft Edge/NativeMessagingHosts/be.bosa.beidconnect.json"
 
 test -e "$BEIDCONNECT" && rm -f "$BEIDCONNECT"
 test -e "$CHROME_EXTENSION_PATH" && rm -f "$CHROME_EXTENSION_PATH"
 test -e "$CHROME_BETA_EXTENSION_PATH" && rm -f "$CHROME_BETA_EXTENSION_PATH"
 test -e "$CHROMIUM_EXTENSION_PATH" && rm -f "$CHROMIUM_EXTENSION_PATH"
 test -e "$FIREFOX_EXTENSION_PATH" && rm -f "$FIREFOX_EXTENSION_PATH"
+test -e "$EDGE_EXTENSION_PATH" && rm -f "$EDGE_EXTENSION_PATH"
 
 pkgutil --forget be.bosa.beidconnect
 

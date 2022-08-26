@@ -513,13 +513,13 @@ const char* oid2PrintableStr(unsigned char* oid, int l_oid)
 /* convert asn1 encoded DN to printable string according to table of DN items defined here */
 int get_printable_dn(ASN1_ITEM     *p_dn,   //I: points to the DN struct
                      char          **pp_dn, //O: contains printable DN
-                     unsigned int           *p_l_dn) //O: length of pp_dn
+                     size_t        *p_l_dn) //O: length of pp_dn
 {
    int          ret;
    char path[3];           // contains the number of dn attributes p_dn can contain
    char *p_buf = NULL;
-   int          l_buf = 0;
-   unsigned int  ofs = 0;
+   size_t          l_buf = 0;
+   size_t  ofs = 0;
    int i, n;
    ASN1_ITEM setitem;
    ASN1_ITEM item;

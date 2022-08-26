@@ -15,16 +15,15 @@ typedef int type;
 class ReaderList
 {
 public:
-   typedef std::unique_ptr<ReaderList> Ptr;
    ReaderList(){};
    virtual ~ReaderList();
-   CardReader::Ptr getReaderByName(string readername);
-   CardReader::Ptr getReaderByIndex(unsigned int index);
-   CardReader::Ptr getFirstReaderWithSupportedCardType(int type[], int size);
-   vector<CardReader::Ptr> readers;
+   std::shared_ptr<CardReader> getReaderByName(string readername);
+   std::shared_ptr<CardReader> getReaderByIndex(unsigned int index);
+   std::shared_ptr<CardReader> getFirstReaderWithSupportedCardType(int type[], int size);
+   vector<std::shared_ptr<CardReader>> readers;
 private:
    int listReaders();
-   CardReader::Ptr returnFirstReaderWithSupportedCardType(int type[], int size);
+   std::shared_ptr<CardReader> returnFirstReaderWithSupportedCardType(int type[], int size);
 };
 
 #endif /* ReaderList_hpp */
