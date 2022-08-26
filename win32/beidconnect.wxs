@@ -10,12 +10,20 @@
 <?define Win64 = "no" ?>
 <?define BeidConnectSourceFile = "VS_2019\Release\beidconnect.exe" ?>
 <?define PlatformProgramFilesFolder = "ProgramFilesFolder" ?>
+<?define BeidConnectDLLDestFile = "beidconnect.dll" ?>
+<?define BeidConnectDLLSourceFile = "..\ActiveX\BeIDConnectX\bin\x86\Release\beidconnect.dll" ?>
 <?else ?>
 <?define bitness = "(64 bit)" ?>
 <?define Win64 = "yes" ?>
 <?define BeidConnectSourceFile = "VS_2019\x64\Release\beidconnect.exe" ?>
 <?define PlatformProgramFilesFolder = "ProgramFiles64Folder" ?>
+<?define BeidConnectDLLDestFile = "beidconnect_x64.dll" ?>
+<?define BeidConnectDLLSourceFile = "..\ActiveX\BeIDConnectX\bin\x64\Release\BeIDConnect_x64.dll" ?>
+<?define BeidConnectWow6432NodeDLLSourceFile = "..\ActiveX\BeIDConnectX\bin\x86\Release\beidconnect.dll" ?>
+<?define BeidConnectWow6432DLLDestFile = "beidconnect.dll" ?>
 <?endif ?>
+
+
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 
@@ -51,15 +59,14 @@
     <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
       <Component Win64="$(var.Win64)" Id="beidconnect.exe" Guid="7A928767-2B74-4A5E-AE2A-0B8C80E282CD">
          <File Id="beidconnectapp" Name="beidconnect.exe" Source="$(var.BeidConnectSourceFile)" />
-         <RegistryValue Root='HKCU' Key='Software\BOSA\BeIDConnect'
-                     Name="BeIDConnect.exe" Value="1" Type="integer" KeyPath='yes' />
+         <RegistryValue Root='HKCU' Key='Software\BOSA\BeIDConnect' Name="BeIDConnect.exe" Value="1" Type="integer" KeyPath='yes' />
          <RemoveFile Id="beidconnectexe" Name="*.*" On="both" />
          <RemoveFolder Id='INSTALLFOLDER' On='uninstall' />
          <RemoveFolder Id='RemoveRootDirectory' Directory='ROOTDIRECTORY' On='uninstall' />        
       </Component>
-      <Component Id="beidconnect.dll" Guid="{D0DAB0A8-B7ED-4109-A098-F7CC6C9F0AD8}">
-         <File Id="beidconnect.dll" Name="beidconnect.dll" Source="..\ActiveX\BeIDConnectX\Release\beidconnect.dll" />
-         <RegistryValue Root='HKCU' Key='Software\BOSA\beidconnect' Name='beidconnect.dll' Value="1" Type="integer" KeyPath="yes" />
+      <Component Win64="$(var.Win64)" Id="beidconnect.dll" Guid="{D0DAB0A8-B7ED-4109-A098-F7CC6C9F0AD8}">
+         <File Id="beidconnect.dll" Name="$(var.BeidConnectDLLDestFile)" Source="$(var.BeidConnectDLLSourceFile)" />
+         <RegistryValue Root='HKCU' Key='Software\BOSA\beidconnect' Name='$(var.BeidConnectDLLDestFile)' Value="1" Type="integer" KeyPath="yes" />
          <RemoveFile Id="beidconnectdll" Name="*.*" On="both" />
 
          <Class Id="{82DBAA4A-87D8-375C-B0F3-F8EBEE3E5EA8}" Context="InprocServer32" Description="BeIDConnectX.IObjectSafetyImpl" ThreadingModel="both" ForeignServer="mscoree.dll">
@@ -92,7 +99,40 @@
          <RegistryValue Root="HKCR" Key="Record\{8BA0C5F5-1406-3600-A74C-29CA262A7504}\0.0.4.0" Name="Assembly" Value="BeIDConnect, Version=0.0.4.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
          <RegistryValue Root="HKCR" Key="Record\{8BA0C5F5-1406-3600-A74C-29CA262A7504}\0.0.4.0" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
          <RegistryValue Root="HKCR" Key="Record\{8BA0C5F5-1406-3600-A74C-29CA262A7504}\0.0.4.0" Name="CodeBase" Value="file:///[#beidconnect.dll]" Type="string" Action="write" />
-      </Component>
+        </Component>
+        <?if $(sys.BUILDARCH)="x64" ?>
+         <Component Win64="no" Id="BeIDConnect_Wow6432.dll" Guid="{D0DAB0A9-B7ED-4109-A098-F7CC6C9F0AD8}">
+          <File Id="BeIDConnect_Wow6432.dll" Name="$(var.BeidConnectWow6432DLLDestFile)" Source="$(var.BeidConnectWow6432NodeDLLSourceFile)" />
+          <RegistryValue Root='HKCU' Key='Software\BOSA\beidconnect' Name='$(var.BeidConnectDLLDestFile)' Value="1" Type="integer" KeyPath="yes" />
+          <RemoveFile Id="BeIDConnect_Wow6432" Name="*.*" On="both" />
+ 
+          <Class Id="{82DBAA4A-87D8-375C-B0F3-F8EBEE3E5EA8}" Context="InprocServer32" Description="BeIDConnectX.IObjectSafetyImpl" ThreadingModel="both" ForeignServer="mscoree.dll">
+             <ProgId Id="BeIDConnectX.IObjectSafetyImpl" Description="BeIDConnectX.IObjectSafetyImpl" />
+          </Class>
+          <Class Id="{B08A638E-66C3-4586-823A-5B89A0301920}" Context="InprocServer32" Description="BeIDConnectX.Link" ThreadingModel="both" ForeignServer="mscoree.dll">
+             <ProgId Id="be.bosa.beidconnect" Description="BeIDConnectX.Link" />
+          </Class>
+          <ProgId Id="Record" />
+          <RegistryValue Root="HKCR" Key="Wow6432Node\CLSID\{82DBAA4A-87D8-375C-B0F3-F8EBEE3E5EA8}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" Action="write" />
+          <RegistryValue Root="HKCR" Key="Wow6432Node\CLSID\{82DBAA4A-87D8-375C-B0F3-F8EBEE3E5EA8}\InprocServer32\0.0.4.0" Name="Class" Value="BeIDConnectX.IObjectSafetyImpl" Type="string" Action="write" />
+          <RegistryValue Root="HKCR" Key="Wow6432Node\CLSID\{82DBAA4A-87D8-375C-B0F3-F8EBEE3E5EA8}\InprocServer32\0.0.4.0" Name="Assembly" Value="BeIDConnect, Version=0.0.4.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
+          <RegistryValue Root="HKCR" Key="Wow6432Node\CLSID\{82DBAA4A-87D8-375C-B0F3-F8EBEE3E5EA8}\InprocServer32\0.0.4.0" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
+          <RegistryValue Root="HKCR" Key="Wow6432Node\CLSID\{82DBAA4A-87D8-375C-B0F3-F8EBEE3E5EA8}\InprocServer32\0.0.4.0" Name="CodeBase" Value="file:///[#BeIDConnect_Wow6432.dll]" Type="string" Action="write" />
+          <RegistryValue Root="HKCR" Key="Wow6432Node\CLSID\{82DBAA4A-87D8-375C-B0F3-F8EBEE3E5EA8}\InprocServer32" Name="Class" Value="BeIDConnectX.IObjectSafetyImpl" Type="string" Action="write" />
+          <RegistryValue Root="HKCR" Key="Wow6432Node\CLSID\{82DBAA4A-87D8-375C-B0F3-F8EBEE3E5EA8}\InprocServer32" Name="Assembly" Value="BeIDConnect, Version=0.0.4.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
+          <RegistryValue Root="HKCR" Key="Wow6432Node\CLSID\{82DBAA4A-87D8-375C-B0F3-F8EBEE3E5EA8}\InprocServer32" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
+          <RegistryValue Root="HKCR" Key="Wow6432Node\CLSID\{82DBAA4A-87D8-375C-B0F3-F8EBEE3E5EA8}\InprocServer32" Name="CodeBase" Value="file:///[#BeIDConnect_Wow6432.dll]" Type="string" Action="write" />
+          <RegistryValue Root="HKCR" Key="Wow6432Node\CLSID\{B08A638E-66C3-4586-823A-5B89A0301920}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" Action="write" />
+          <RegistryValue Root="HKCR" Key="Wow6432Node\CLSID\{B08A638E-66C3-4586-823A-5B89A0301920}\InprocServer32\0.0.4.0" Name="Class" Value="BeIDConnectX.Link" Type="string" Action="write" />
+          <RegistryValue Root="HKCR" Key="Wow6432Node\CLSID\{B08A638E-66C3-4586-823A-5B89A0301920}\InprocServer32\0.0.4.0" Name="Assembly" Value="BeIDConnect, Version=0.0.4.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
+          <RegistryValue Root="HKCR" Key="Wow6432Node\CLSID\{B08A638E-66C3-4586-823A-5B89A0301920}\InprocServer32\0.0.4.0" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
+          <RegistryValue Root="HKCR" Key="Wow6432Node\CLSID\{B08A638E-66C3-4586-823A-5B89A0301920}\InprocServer32\0.0.4.0" Name="CodeBase" Value="file:///[#BeIDConnect_Wow6432.dll]" Type="string" Action="write" />
+          <RegistryValue Root="HKCR" Key="Wow6432Node\CLSID\{B08A638E-66C3-4586-823A-5B89A0301920}\InprocServer32" Name="Class" Value="BeIDConnectX.Link" Type="string" Action="write" />
+          <RegistryValue Root="HKCR" Key="Wow6432Node\CLSID\{B08A638E-66C3-4586-823A-5B89A0301920}\InprocServer32" Name="Assembly" Value="BeIDConnect, Version=0.0.4.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
+          <RegistryValue Root="HKCR" Key="Wow6432Node\CLSID\{B08A638E-66C3-4586-823A-5B89A0301920}\InprocServer32" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
+          <RegistryValue Root="HKCR" Key="Wow6432Node\CLSID\{B08A638E-66C3-4586-823A-5B89A0301920}\InprocServer32" Name="CodeBase" Value="file:///[#BeIDConnect_Wow6432.dll]" Type="string" Action="write" />
+         </Component>
+        <?endif ?>
 
       <Component Id="be.bosa.beidconnect.json" Guid="1878E924-168F-4C3C-88B0-80A71C294E0C">
          <RegistryKey Root="HKCU"
