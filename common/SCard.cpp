@@ -105,7 +105,7 @@ SCard::SCard()
    hCard = 0;
 }
 
-LONG SCard::beginTransaction()
+long SCard::beginTransaction()
 {
    LONG ret = 0;
    int maxRetry = 10;
@@ -124,7 +124,7 @@ LONG SCard::beginTransaction()
    return ret;
 }
 
-LONG SCard::endTransaction()
+long SCard::endTransaction()
 {
    LONG ret = SCardEndTransaction(hCard, SCARD_LEAVE_CARD);
    if (ret) {

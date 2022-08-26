@@ -21,6 +21,6 @@ test -e "$HOME/Library/Application Support/Microsoft Edge" && mkdir "$EDGE_EXTEN
 test -e $BEIDCONNECT && $BEIDCONNECT -setup "$APPLICATIONPATH" "$CHROME_EXTENSION_PATH" "$FIREFOX_EXTENSION_PATH"
 test -e "$CHROMIUM_EXTENSION_PATH" && test -e "$CHROME_EXTENSION_PATH/be.bosa.beidconnect.json" && cp "$CHROME_EXTENSION_PATH/be.bosa.beidconnect.json" "$CHROMIUM_EXTENSION_PATH/"
 test -e "$CHROME_BETA_EXTENSION_PATH" && test -e "$CHROME_EXTENSION_PATH/be.bosa.beidconnect.json" && cp "$CHROME_EXTENSION_PATH/be.bosa.beidconnect.json" "$CHROME_BETA_EXTENSION_PATH/"
-test -e "$EDGE_EXTENSION_PATH" && test -e "$EDGE_EXTENSION_PATH/be.bosa.beidconnect.json" && cp "$CHROME_EXTENSION_PATH/be.bosa.beidconnect.json" "$EDGE_EXTENSION_PATH/"
+test -e "$EDGE_EXTENSION_PATH" && test -e "$CHROME_EXTENSION_PATH/be.bosa.beidconnect.json" && cp "$CHROME_EXTENSION_PATH/be.bosa.beidconnect.json" "$EDGE_EXTENSION_PATH/"
 
 exit 0
