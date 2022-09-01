@@ -44,41 +44,6 @@
          <RemoveFolder Id='INSTALLFOLDER' On='uninstall' />
          <RemoveFolder Id='RemoveRootDirectory' Directory='ROOTDIRECTORY' On='uninstall' />        
       </Component>
-
-      <Component Id="beidconnectA.dll" Guid="{2E5F7F4F-F422-4279-AAF6-9BB88D3140A1}">
-          <Class Id="{8B48F268-273E-3109-B5B2-27514C9C06C8}" Context="InprocServer32" Description="BeIDConnectX.IObjectSafetyImpl" ThreadingModel="both" ForeignServer="mscoree.dll">
-              <ProgId Id="BeIDConnectX.IObjectSafetyImpl" Description="BeIDConnectX.IObjectSafetyImpl" />
-          </Class>
-          <Class Id="{B08A638E-66C3-4586-823A-5B89A0301920}" Context="InprocServer32" Description="BeIDConnectX.Link" ThreadingModel="both" ForeignServer="mscoree.dll">
-              <ProgId Id="be.bosa.beidconnect" Description="BeIDConnectX.Link" />
-          </Class>
-         <File Id="beidconnectA.dll" KeyPath="yes" Source="..\ActiveX\BeIDConnectX\bin\x86\ReleaseAdmin\beidconnectA.dll" />
-         <ProgId Id="Record" />
-         <RegistryValue Root="HKLM" Key="Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\Domains\belgium.be" Name="https" Value="2" Type="integer" />
-         <RegistryValue Root="HKCR" Key="CLSID\{8B48F268-273E-3109-B5B2-27514C9C06C8}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" Action="write" />
-         <RegistryValue Root="HKCR" Key="CLSID\{8B48F268-273E-3109-B5B2-27514C9C06C8}\InprocServer32\0.0.4.0" Name="Class" Value="BeIDConnectX.IObjectSafetyImpl" Type="string" Action="write" />
-         <RegistryValue Root="HKCR" Key="CLSID\{8B48F268-273E-3109-B5B2-27514C9C06C8}\InprocServer32\0.0.4.0" Name="Assembly" Value="BeIDConnectA, Version=0.0.4.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
-         <RegistryValue Root="HKCR" Key="CLSID\{8B48F268-273E-3109-B5B2-27514C9C06C8}\InprocServer32\0.0.4.0" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
-         <RegistryValue Root="HKCR" Key="CLSID\{8B48F268-273E-3109-B5B2-27514C9C06C8}\InprocServer32\0.0.4.0" Name="CodeBase" Value="file:///[#beidconnectA.dll]" Type="string" Action="write" />
-         <RegistryValue Root="HKCR" Key="CLSID\{8B48F268-273E-3109-B5B2-27514C9C06C8}\InprocServer32" Name="Class" Value="BeIDConnectX.IObjectSafetyImpl" Type="string" Action="write" />
-         <RegistryValue Root="HKCR" Key="CLSID\{8B48F268-273E-3109-B5B2-27514C9C06C8}\InprocServer32" Name="Assembly" Value="BeIDConnectA, Version=0.0.4.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
-         <RegistryValue Root="HKCR" Key="CLSID\{8B48F268-273E-3109-B5B2-27514C9C06C8}\InprocServer32" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
-         <RegistryValue Root="HKCR" Key="CLSID\{8B48F268-273E-3109-B5B2-27514C9C06C8}\InprocServer32" Name="CodeBase" Value="file:///[#beidconnectA.dll]" Type="string" Action="write" />
-         <RegistryValue Root="HKCR" Key="CLSID\{B08A638E-66C3-4586-823A-5B89A0301920}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Value="" Type="string" Action="write" />
-         <RegistryValue Root="HKCR" Key="CLSID\{B08A638E-66C3-4586-823A-5B89A0301920}\InprocServer32\0.0.4.0" Name="Class" Value="BeIDConnectX.Link" Type="string" Action="write" />
-         <RegistryValue Root="HKCR" Key="CLSID\{B08A638E-66C3-4586-823A-5B89A0301920}\InprocServer32\0.0.4.0" Name="Assembly" Value="BeIDConnectA, Version=0.0.4.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
-         <RegistryValue Root="HKCR" Key="CLSID\{B08A638E-66C3-4586-823A-5B89A0301920}\InprocServer32\0.0.4.0" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
-         <RegistryValue Root="HKCR" Key="CLSID\{B08A638E-66C3-4586-823A-5B89A0301920}\InprocServer32\0.0.4.0" Name="CodeBase" Value="file:///[#beidconnectA.dll]" Type="string" Action="write" />
-         <RegistryValue Root="HKCR" Key="CLSID\{B08A638E-66C3-4586-823A-5B89A0301920}\InprocServer32" Name="Class" Value="BeIDConnectX.Link" Type="string" Action="write" />
-         <RegistryValue Root="HKCR" Key="CLSID\{B08A638E-66C3-4586-823A-5B89A0301920}\InprocServer32" Name="Assembly" Value="BeIDConnectA, Version=0.0.4.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
-         <RegistryValue Root="HKCR" Key="CLSID\{B08A638E-66C3-4586-823A-5B89A0301920}\InprocServer32" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
-         <RegistryValue Root="HKCR" Key="CLSID\{B08A638E-66C3-4586-823A-5B89A0301920}\InprocServer32" Name="CodeBase" Value="file:///[#beidconnectA.dll]" Type="string" Action="write" />
-         <RegistryValue Root="HKCR" Key="Record\{880433E6-29FD-37AE-8A63-FA155ACB279E}\0.0.4.0" Name="Class" Value="BeIDConnectX.ObjectSafetyOptions" Type="string" Action="write" />
-         <RegistryValue Root="HKCR" Key="Record\{880433E6-29FD-37AE-8A63-FA155ACB279E}\0.0.4.0" Name="Assembly" Value="BeIDConnectA, Version=0.0.4.0, Culture=neutral, PublicKeyToken=null" Type="string" Action="write" />
-         <RegistryValue Root="HKCR" Key="Record\{880433E6-29FD-37AE-8A63-FA155ACB279E}\0.0.4.0" Name="RuntimeVersion" Value="v4.0.30319" Type="string" Action="write" />
-         <RegistryValue Root="HKCR" Key="Record\{880433E6-29FD-37AE-8A63-FA155ACB279E}\0.0.4.0" Name="CodeBase" Value="file:///[#beidconnectA.dll]" Type="string" Action="write" />
-      </Component>
-
      
       <Component Id="be.bosa.beidconnect.json" Guid="2878E924-168F-4C3C-88B0-80A71C294E0C">
          <RegistryKey Root="HKLM" 
