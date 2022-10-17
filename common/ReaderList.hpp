@@ -15,7 +15,7 @@ typedef int type;
 class ReaderList
 {
 public:
-   ReaderList(){};
+   ReaderList(){ listReaders(); };
    virtual ~ReaderList();
    std::shared_ptr<CardReader> getReaderByName(string readername);
    std::shared_ptr<CardReader> getReaderByIndex(unsigned int index);

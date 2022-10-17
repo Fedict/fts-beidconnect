@@ -26,7 +26,6 @@ std::string SignRequestHandler::process()
    ptree response;
    long lasterror = 0;
    
-   std::shared_ptr<Card> card;
    ReaderList readerList;
    int algo = 0;
    unsigned char signature[512];

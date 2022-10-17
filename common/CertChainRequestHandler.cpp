@@ -36,7 +36,6 @@ std::string CertChainRequestHandler::process()
    l_cert = base64decode((unsigned char*)certif.c_str(), cert);
    
    ReaderList readerList;
-   std::shared_ptr<CardReader> reader = readerList.getReaderByIndex(0);
    size_t count = readerList.readers.size();
    if (count == 0) {
       response.put("result", "no_reader");
@@ -46,7 +45,7 @@ std::string CertChainRequestHandler::process()
       ptree readerInfos;
       for (int i = 0; i < (int)count; i++) {
          
-         reader = readerList.getReaderByIndex(i);
+         std::shared_ptr<CardReader> reader = readerList.getReaderByIndex(i);
          if (reader->atr == "") {
             continue;
          }

@@ -21,9 +21,7 @@ std::string UserCertsRequestHandler::process()
 {
    ptree response;
    
-   std::shared_ptr<Card> card;
    ReaderList readerList;
-   std::shared_ptr<CardReader> reader = readerList.getReaderByIndex(0);
    size_t count = readerList.readers.size();
    int countSupportedCards = 0;
    int countUnsupportedCards = 0;
@@ -53,7 +51,7 @@ std::string UserCertsRequestHandler::process()
       ptree readerInfos;
       for (int i = 0; i < (int)count; i++) {
          
-         reader = readerList.getReaderByIndex(i);
+         std::shared_ptr<CardReader> reader = readerList.getReaderByIndex(i);
          if (reader->atr == "") {
             continue;
          }
