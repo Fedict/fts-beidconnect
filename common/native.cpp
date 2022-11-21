@@ -1,3 +1,4 @@
+#include <fcntl.h>
 #include "log.hpp"
 #include "RequestHandler.hpp"
 #include <iostream>
@@ -12,25 +13,37 @@
 
 using namespace std;
 
-int runNative(int argc, const char * argv[])
+int runNative(int argc, const char *argv[])
 {
-   shared_ptr<stringstream> ssRequest = std::make_shared<stringstream>();
-   
-   int ret = readMessage(*ssRequest);
-   if (ret != 0) {
-      log_error("runNative() E: readMessage returned (0x%08x)", "runNative", ret);
-      return(ret);
-   }
-   
-   shared_ptr<RequestHandler> handler = RequestHandler::createRequestHandler(ssRequest);
+#ifdef _WIN32
+    _setmode(_fileno(stdin), _O_BINARY);
+    _setmode(_fileno(stdout), _O_BINARY);
+#endif
 
-   string ssResponse = handler->process();
-   
-   log_info(ssResponse.c_str());
-   
-   sendMessage(ssResponse);
-   
-   return 0;
+    while (1)
+    {
+        shared_ptr<stringstream> ssRequest = std::make_shared<stringstream>();
+
+        log_info("runNative : Read new Request");
+        int ret = readMessage(*ssRequest);
+        switch (ret)
+        {
+        case E_COMM_ENDREQUEST:
+        {
+            log_info("runNative : Close Request");
+        }
+        case E_COMM_PARAM:
+        {
+            log_info("runNative : Comm Parameter error");
+            return 0;
+        }
+        }
+
+        shared_ptr<RequestHandler> handler = RequestHandler::createRequestHandler(ssRequest);
+
+        string ssResponse = handler->process();
+
+        sendMessage(ssResponse);
+    }
+    return 0;
 }
-
-
