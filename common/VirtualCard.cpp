@@ -60,7 +60,7 @@ long VirtualCard::readCertificate(int format, int type, std::vector<char> &cert)
    }
    else {
       unsigned char p[MAX_ID_FILE_SIZE];
-      int len = base64decode((unsigned char*) idFiles[type].c_str(), p);
+      int len = base64decode(idFiles[type], p);
       std::vector<char> buf(p, p + len);
       cert = buf;
    }
@@ -90,24 +90,24 @@ long VirtualCard::readUserCertificates(int format, int certType, std::vector<std
    else {
 
       unsigned char *buf;
-      int l_buf = base64decode_len((const unsigned char*) auth_cert);
+      int l_buf = base64decode_len(auth_cert);
       buf = (unsigned char*) malloc(l_buf);
       if (buf == 0) {
          log_error("%s mem alloc error ", WHERE);
          return -1;
       }
-      int n = base64decode((const unsigned char*)auth_cert, buf);
+      int n = base64decode(auth_cert, buf);
       std::vector<char> buf1(buf, buf + n);
       certificates.push_back(buf1);
       free (buf);
 
-      l_buf = base64decode_len((const unsigned char*) nonrep_cert);
+      l_buf = base64decode_len(nonrep_cert);
       buf = (unsigned char*) malloc(l_buf);
       if (buf == 0) {
          log_error("%s mem alloc error ", WHERE);
          return -1;
       }
-      n = base64decode((const unsigned char*)nonrep_cert, buf);
+      n = base64decode(nonrep_cert, buf);
       std::vector<char> buf2(buf, buf + n);
       certificates.push_back(buf2);
       free (buf);
@@ -122,7 +122,7 @@ long VirtualCard::readUserCertificates(int format, int certType, std::vector<std
 
 
 #define WHERE "VirtualCard::readCertificateChain"
-long VirtualCard::readCertificateChain(int format, unsigned char *cert, int l_cert, std::vector<std::vector<char>>  &subCerts, std::vector<char> &root)
+long VirtualCard::readCertificateChain(int format, unsigned char *cert, size_t l_cert, std::vector<std::vector<char>>  &subCerts, std::vector<char> &root)
 {
    long ret = 0;
    if (format == FORMAT_RADIX64) {
@@ -241,10 +241,9 @@ cleanup:
    return (ret);
 }
 
-std::vector<char> VirtualCard::getFile(int format, std::string fileType)
+CardFile VirtualCard::getFile(const std::string& fileType)
 {
    std::unordered_map<std::string,std::string> idFiles;
-   std::vector<char> file;
 
    idFiles["id"] = id_file;
    idFiles["id_sig"] = id_sig_file;
@@ -259,19 +258,18 @@ std::vector<char> VirtualCard::getFile(int format, std::string fileType)
 
    do_sleep(200); //virtual read time
    
-   if (format == FORMAT_RADIX64) {
-      const char* f = idFiles[fileType].c_str();
-      std::vector<char> buf(f, f + idFiles[fileType].length());
-      file = buf;
-   }
-   else {
-      unsigned char p[MAX_ID_FILE_SIZE];
-      int len = base64decode((unsigned char*) idFiles[fileType].c_str(), p);
-      std::vector<char> buf(p, p + len);
-      file = buf;
-   }
-   
-   return file;
+   return CardFile(idFiles[fileType]);
+   //if (format == FORMAT_RADIX64) {
+   //   const char* f = idFiles[fileType].c_str();
+   //   std::vector<char> buf(f, f + idFiles[fileType].length());
+   //   return std::string(buf.begin(), buf.end());;
+   //}
+   //else {
+   //   unsigned char p[MAX_ID_FILE_SIZE];
+   //   int len = base64decode(idFiles[fileType], p);
+   //   std::vector<char> buf(p, p + len);
+   //   return std::string(buf.begin(), buf.end());;
+   //}
 }
 
 

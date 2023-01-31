@@ -21,11 +21,24 @@ int readMessage(std::stringstream &stream)
     {
         while ((read_char = getchar()) == EOF)
         {
+            // Check reason
+            if (std::feof(stdin))
+            {
+                //log_info("stdin EOF");
+            }
+            else if (std::ferror(stdin))
+            {
+                log_info("stdin error");
+                return (E_COMM_PARAM);
+            }
             do_sleep(20);
         }
         length = length | (read_char << i * 8);
     }
 
+    // Some info on internet defines a 0 or -1 is send by the browser to gracefully stop the native Host
+    // Never go it, but we can still handle it in case of
+    // NB: official doc does not mention this.
     if (length == 0)
     {
         log_info("%s: Resquest Len (%i)", WHERE, length);
@@ -51,7 +64,20 @@ int readMessage(std::stringstream &stream)
             stream << (unsigned char)read_char;
     }
 
-    log_info("%s: Resquest (%i): '%s'", WHERE, length, stream.str().c_str());
+    // Remove PIN from dump
+    std::string dumpstr = stream.str();
+    size_t len = dumpstr.length();
+    size_t pos = dumpstr.find("\"pin\":\"");
+    if (pos != string::npos)
+    {
+        pos += 7;
+        while (dumpstr[pos] != '\"' && pos < len)
+        {
+            dumpstr[pos] = '*';
+            pos++;
+        }
+    }
+    log_info("%s: Resquest (%i): '%s'", WHERE, length, dumpstr.c_str());
 
     return 0;
 }

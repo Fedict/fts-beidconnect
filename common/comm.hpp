@@ -3,8 +3,8 @@
 
 #define E_COMM                               0xA001
  
-#define E_COMM_PARAM						0xA0010011
-#define E_COMM_ENDREQUEST					0xA0010012
+#define E_COMM_PARAM						0xA001011
+#define E_COMM_ENDREQUEST					0xA001012
 
 
 //int ParseCL(int argc, char *argv[], COMMAND_PARAM *pCommand);

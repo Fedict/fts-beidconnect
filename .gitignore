@@ -257,3 +257,4 @@ _Pvt_Extensions
 ChromeExtension/target
 .vscode/settings.json
 /win32/VS_2019/ReleaseAdmin
+/win32/VS_2022/ReleaseAdmin

@@ -71,10 +71,14 @@ void RequestHandler::post_process(boost::property_tree::ptree &response)
         boost::property_tree::ptree pt;
         boost::property_tree::read_json(ss, pt);
         std::string correlationId = pt.get<std::string>("correlationId");
-
         if (correlationId != "")
         {
             response.put("correlationId", correlationId);
+        }
+        std::string operation = pt.get<std::string>("operation");
+        if (operation != "")
+        {
+            response.put("operation", operation);
         }
     }
 }

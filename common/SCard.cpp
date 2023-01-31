@@ -8,6 +8,7 @@
 #include "general.h"
 #include "util.h"
 #include <thread>
+#include "SCardException.h"
 
 #define READERS_BUF_SIZE 2000
 
@@ -119,7 +120,7 @@ long SCard::beginTransaction()
    }
    if (ret) {
       log_error("E: Could not start transaction");
-      return(E_SRC_START_TRANSACTION);
+      throw SCardException(TransactionFail);
    }
    return ret;
 }
@@ -307,7 +308,7 @@ bool SCard::isPinPad()
 
 
 #define WHERE "scard::apdu()"
-long SCard::apdu(const unsigned char *apdu, unsigned int l_apdu, unsigned char *out, int *l_out, int *sw)
+long SCard::apdu(const unsigned char *apdu, size_t l_apdu, unsigned char *out, size_t* l_out, int *sw)
 {
    long ret = 0;
    unsigned char recv[512];
@@ -315,7 +316,7 @@ long SCard::apdu(const unsigned char *apdu, unsigned int l_apdu, unsigned char *
    
    memset(out, 0, *l_out);
    
-   ret = SCardTransmit(hCard, &ioSendPci, apdu, l_apdu, &ioRecvPci, recv, &l_recv);
+   ret = SCardTransmit(hCard, &ioSendPci, apdu, (DWORD)l_apdu, &ioRecvPci, recv, &l_recv);
    if ( ret == SCARD_E_NO_SMARTCARD) {
       return (E_SRC_NO_CARD);
    }
@@ -375,8 +376,8 @@ bool SCard::getPPDUFeatures()
         (name.find("DIOSS pinpad") == 0))
     {
         unsigned char buf[512];
-        DWORD         rcv_len = 512;
-        ret = apdu(get_feature_list, sizeof(get_feature_list), buf, (int*)&rcv_len, &sw);
+        size_t         rcv_len = 512;
+        ret = apdu(get_feature_list, sizeof(get_feature_list), buf, &rcv_len, &sw);
         if (ret == 0) {
             // every byte represents a feature, except the last 2 bytes (SW1, SW2)
             for(DWORD i=0; i < rcv_len; i++)
@@ -470,7 +471,7 @@ long SCard::getFeatures()
 #undef WHERE
 
 
-inline void ToUchar4(unsigned long ulIn, unsigned char* pucOut4)
+inline void ToUchar4(size_t ulIn, unsigned char* pucOut4)
 {
     pucOut4[0] = (unsigned char)(ulIn % 256);
     ulIn /= 256;
@@ -481,14 +482,14 @@ inline void ToUchar4(unsigned long ulIn, unsigned char* pucOut4)
 }
 
 #define WHERE "SCard::verify_pinpad()"
-long SCard::verify_pinpad(unsigned char format, unsigned char PINBlock, unsigned char PINLength, unsigned int PINMaxExtraDigit, unsigned char pinAPDU[], int l_pinAPDU, int *sw)
+long SCard::verify_pinpad(unsigned char format, unsigned char PINBlock, size_t PINLength, unsigned int PINMaxExtraDigit, unsigned char pinAPDU[], size_t l_pinAPDU, int *sw)
 {
-   long           ret;
-   unsigned char send_buf[512] = { 0 };
-   unsigned int  send_buf_len;
-   unsigned char rcv_buf[512] = { 0 };
-   DWORD         rcv_len = 512;
-   unsigned int verify_pin_cmd;
+   long             ret;
+   unsigned char    send_buf[512] = { 0 };
+   DWORD            send_buf_len;
+   unsigned char    rcv_buf[512] = { 0 };
+   DWORD            rcv_len = 512;
+   unsigned int     verify_pin_cmd;
 
    PIN_VERIFY_STRUCTURE pin_verify;
 
@@ -501,7 +502,7 @@ long SCard::verify_pinpad(unsigned char format, unsigned char PINBlock, unsigned
    pin_verify.bTimeOut2 = 0x30;
    pin_verify.bmFormatString = format;
    pin_verify.bmPINBlockString = PINBlock;
-   pin_verify.bmPINLengthFormat = PINLength;
+   pin_verify.bmPINLengthFormat = (BYTE)PINLength;
    pin_verify.wPINMaxExtraDigit = PINMaxExtraDigit;//0x0408; //0x0804; //(0x0408 = Min Max  => max min = 0x0804 */
    pin_verify.bEntryValidationCondition = 0x02;	/* 1=max size reached, 2=ok button pressed, 4=timeout */
    pin_verify.bNumberMessage = 0x01;//spr532=>0x00; //0x01;
@@ -529,7 +530,7 @@ long SCard::verify_pinpad(unsigned char format, unsigned char PINBlock, unsigned
    memcpy(pin_verify.abData, pinAPDU, l_pinAPDU);
    //for (int i = 0; i < l_pinAPDU; i++)
    //    pin_verify.abData[i] = pinAPDU[i];
-   send_buf_len = sizeof(PIN_VERIFY_STRUCTURE) + l_pinAPDU - PP_APDU_MAX_LEN;	/* -PP_APDU_MAX_LEN because PIN_VERIFY_STRUCTURE contains the PP_APDU_MAX_LEN byte of abData[] */
+   send_buf_len = sizeof(PIN_VERIFY_STRUCTURE) + (DWORD)l_pinAPDU - PP_APDU_MAX_LEN;	/* -PP_APDU_MAX_LEN because PIN_VERIFY_STRUCTURE contains the PP_APDU_MAX_LEN byte of abData[] */
 
    if (!m_bCanUsePPDU) {
        if (cmds.verify_pin_direct != 0) {

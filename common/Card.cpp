@@ -3,14 +3,7 @@
 #include "log.hpp"
 #include "general.h"
 
-
-
-void Card::setAtr(std::string atr)
-{
-   this->atr = atr;
-}
-
-long Card::getFile(unsigned char* file, int l_file, int* l_out, unsigned char* p_out)
+long Card::getFile(unsigned char* file, size_t l_file, size_t* l_out, unsigned char* p_out)
 {
     long ret = 0;
     ScopedCardTransaction trans(reader);  //begin transaction
@@ -25,5 +18,3 @@ long Card::getFile(unsigned char* file, int l_file, int* l_out, unsigned char* p
     }
     return ret;
 }
-
-
