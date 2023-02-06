@@ -274,7 +274,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='ReleaseAdmin|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\common\BEIDCard.cpp" />
-    <ClCompile Include="..\..\common\Card.cpp" />
     <ClCompile Include="..\..\common\CardFactory.cpp" />
     <ClCompile Include="..\..\common\CardReader.cpp" />
     <ClCompile Include="..\..\common\CertChainRequestHandler.cpp" />

@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-/* return codes for ASN1 parsing */
+	/* return codes for ASN1 parsing */
 #define E_ASN_BAD_TAG           -1           /* tag not expected or unknown */
 #define E_ASN_TAG_LEN           -2           /* tag has length > 4 bytes */
 #define E_ASN_BAD_LEN           -3           /* length encoding error */
@@ -19,34 +19,34 @@ extern "C" {
 //#define ASN1_ERR -1
 
 
-typedef struct ASN1_ITEM 
-{
-	unsigned int   tag;
-	unsigned char  *p_data;
-	unsigned int	l_data;
-   unsigned int   nsubitems;
-   unsigned char  *p_raw;
-   unsigned int   l_raw;
-} ASN1_ITEM;
+	typedef struct ASN1_ITEM
+	{
+		unsigned int   tag;
+		unsigned char* p_data;
+		size_t	l_data;
+		unsigned int   nsubitems;
+		unsigned char* p_raw;
+		size_t   l_raw;
+	} ASN1_ITEM;
 
-typedef struct ASN1_LIST
-{
-   unsigned int   size;
-   unsigned int   nitems;
-   ASN1_ITEM      *item;
-} ASN1_LIST;
-
-
-
-typedef struct T_OID
-{
-	const char *dotid;
-	const char *str;
-} T_OID;
+	typedef struct ASN1_LIST
+	{
+		unsigned int   size;
+		unsigned int   nitems;
+		ASN1_ITEM* item;
+	} ASN1_LIST;
 
 
 
-/* BER ASN1 decoding masks */
+	typedef struct T_OID
+	{
+		const char* dotid;
+		const char* str;
+	} T_OID;
+
+
+
+	/* BER ASN1 decoding masks */
 #define TAG_MASK   0x1F  /* bits 1 - 5  */
 #define TYPE_MASK  0x20  /* bit  6      */
 #define CLASS_MASK 0xC0  /* bits 7,8    */
@@ -99,37 +99,37 @@ typedef struct T_OID
 #define OID_RSA_ENCRYPTION      "\x2A\x86\x48\x86\xF7\x0D\x01\x01\x01"
 
 /* ASN1 decoding functions */
-int asn1_get_item(const unsigned char *content, unsigned int len, const char *path, ASN1_ITEM *item);
-int asn1_find_item(const unsigned char *content, unsigned int len, unsigned int findtag, ASN1_ITEM *item);
-int asn1_find_item_simple(const unsigned char *content, unsigned int len, unsigned int findtag, ASN1_ITEM *item);
-int asn1_dec_oid( unsigned char *p_data, int l_data, unsigned int *oid, int *l_oid);
-char* oid2str(unsigned char* p_data, int l_data);
-   
-/* ASN1 encoding functions */
-/* !!!! asn1_add_item adds the pointer to a list of elements to encode, but does not copy the data */
-int asn1_add_item(ASN1_LIST *list, unsigned int tag, unsigned char *p_data, unsigned int l_data, unsigned int nsubitems);
-int get_item_length(ASN1_LIST *list, unsigned int n, unsigned int *l, unsigned int *nsubitems);
-int asn1_encode_list(ASN1_LIST *list, unsigned char *buf, unsigned int *l_buf);
-void asn_clear_list(ASN1_LIST *list);
+	int asn1_get_item(const unsigned char* content, size_t len, const char* path, ASN1_ITEM* item);
+	int asn1_find_item(const unsigned char* content, size_t len, unsigned int findtag, ASN1_ITEM* item);
+	int asn1_find_item_simple(const unsigned char* content, size_t len, unsigned int findtag, ASN1_ITEM* item);
+	int asn1_dec_oid(unsigned char* p_data, size_t l_data, unsigned int* oid, size_t* l_oid);
+	char* oid2str(unsigned char* p_data, size_t l_data);
 
-/* Helper functions: decode - encode bitstrings
- * LSB of the unsigned int corresponds to most left bit in the bitstring. 
- * Unused bits are added in front of bitstring
- * Make sure that output buffer for encoding is always sizeof(unsigned int)+1 !!! 
- * even if bits can be encoded in smaller sizes, l_out will output real size
- * independent of platform, endian and integer length */
-unsigned int asn_bitstring2ui(unsigned char *in, unsigned int l_in);
-void asn_ui2bitstring(unsigned int in, unsigned char *out, unsigned int *l_out);
-int asn_compare_items(ASN1_ITEM* item1, ASN1_ITEM* item2);
-   
-int dump_asn1(unsigned char* in, unsigned int l_in, int level, char** dump);
-int get_printable_dn(ASN1_ITEM *p_dn, char **pp_dn, size_t *p_l_dn);
-   
-/* Helper functions: encode uint as ASN_INTEGER */
-void encode_uint(unsigned int in, unsigned char *out, unsigned int *l_out);
+	/* ASN1 encoding functions */
+	/* !!!! asn1_add_item adds the pointer to a list of elements to encode, but does not copy the data */
+	int asn1_add_item(ASN1_LIST* list, unsigned int tag, unsigned char* p_data, size_t l_data, unsigned int nsubitems);
+	int get_item_length(ASN1_LIST* list, unsigned int n, size_t* l, unsigned int* nsubitems);
+	int asn1_encode_list(ASN1_LIST* list, unsigned char* buf, size_t* l_buf);
+	void asn_clear_list(ASN1_LIST* list);
+
+	/* Helper functions: decode - encode bitstrings
+	 * LSB of the unsigned int corresponds to most left bit in the bitstring.
+	 * Unused bits are added in front of bitstring
+	 * Make sure that output buffer for encoding is always sizeof(unsigned int)+1 !!!
+	 * even if bits can be encoded in smaller sizes, l_out will output real size
+	 * independent of platform, endian and integer length */
+	unsigned int asn_bitstring2ui(unsigned char* in, size_t l_in);
+	void asn_ui2bitstring(unsigned int in, unsigned char* out, unsigned int* l_out);
+	int asn_compare_items(ASN1_ITEM* item1, ASN1_ITEM* item2);
+
+	int dump_asn1(unsigned char* in, unsigned int l_in, int level, char** dump);
+	int get_printable_dn(ASN1_ITEM* p_dn, char** pp_dn, size_t* p_l_dn);
+
+	/* Helper functions: encode uint as ASN_INTEGER */
+	void encode_uint(unsigned int in, unsigned char* out, unsigned int* l_out);
 
 #ifdef __cplusplus
-   }
+}
 #endif
 
 #endif

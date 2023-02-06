@@ -26,7 +26,7 @@ std::string SignRequestHandler::process()
         ReaderList readerList;
         int algo = 0;
         unsigned char signature[512];
-        unsigned int l_signature = 512;
+        size_t l_signature = 512;
         bool loggedON = false;
 
         std::stringstream ss(ssRequest->str());
@@ -85,14 +85,24 @@ std::string SignRequestHandler::process()
                     continue; // card not supported in this reader, try next reader
                 }
 
-                if (operation == "SIGN")
+                try
                 {
-                    lasterror = card->selectKey(CERT_TYPE_NONREP, cert, l_cert);
+                    if (operation == "SIGN")
+                    {
+                        lasterror = card->selectKey(CardKeys::NonRep, cert, l_cert);
+                    }
+                    else
+                    {
+                        lasterror = card->selectKey(CardKeys::Auth, cert, l_cert);
+                    }
                 }
-                else
+                catch (CardFileException& e)
                 {
-                    lasterror = card->selectKey(CERT_TYPE_AUTH, cert, l_cert);
+                    lasterror = E_SRC_CERT_NOT_FOUND;
+                    reader->disconnect();
+                    continue; // try next reader to find chain
                 }
+
                 if (lasterror)
                 {
                     log_error("%s: E: card->selectKey returned %d (0x%0X)", WHERE, lasterror, lasterror);
@@ -133,21 +143,26 @@ std::string SignRequestHandler::process()
                 }
 
                 // verify the signature if we have a certificate
-                if ((l_cert > 0) && (cert != 0))
-                {
-                    lasterror = verifySignature(hash, l_hash, "sha256", cert, l_cert, signature, l_signature);
-                    if (lasterror)
-                    {
-                        // since we verify the signature based on the certificate that was used to do the signature,
-                        // there can only be two reasons to fail a verification:
-                        // 1. or the certificate linked to the private key on the card does not belong to the private key
-                        // 2. or the reader calculates a faux signature, maybe because the reader does not support extended APDU commands
-                        // where the signature is incomplete!
-                        lasterror = E_SRC_SIGNATURE_FAILED;
-                    }
-                }
+                //if ((l_cert > 0) && (cert != 0))
+                //{
+                //    lasterror = verifySignature(hash, l_hash, "sha256", cert, l_cert, signature, l_signature);
+                //    if (lasterror)
+                //    {
+                //        // since we verify the signature based on the certificate that was used to do the signature,
+                //        // there can only be two reasons to fail a verification:
+                //        // 1. or the certificate linked to the private key on the card does not belong to the private key
+                //        // 2. or the reader calculates a faux signature, maybe because the reader does not support extended APDU commands
+                //        // where the signature is incomplete!
+                //        lasterror = E_SRC_SIGNATURE_FAILED;
+                //    }
+                //}
                 break;
             }
+        }
+
+        if (TraceInfoInJsonResult)
+        {
+            response.put("ReaderName", reader->name);
         }
 
         switch (lasterror)
@@ -193,7 +208,7 @@ std::string SignRequestHandler::process()
             break;
         case 0:
         {
-            int l_signB64 = base64encode_len(l_signature);
+            size_t l_signB64 = base64encode_len(l_signature);
             unsigned char* signB64 = (unsigned char*)malloc(l_signB64 + 1);
             if (signB64 == NULL)
             {

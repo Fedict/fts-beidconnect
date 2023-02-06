@@ -43,10 +43,8 @@ std::string CertChainRequestHandler::process()
         {
             long status = 0;
             ptree readerInfos;
-            for (int i = 0; i < (int)count; i++)
+            for (auto& reader : readerList.readers)
             {
-
-                std::shared_ptr<CardReader> reader = readerList.getReaderByIndex(i);
                 if (reader->atr == "")
                 {
                     continue;
@@ -68,7 +66,7 @@ std::string CertChainRequestHandler::process()
                 }
 
                 // add usercertificates to list
-                std::vector<std::vector<char>> subCAs;
+                std::vector<std::shared_ptr<const CardFile>> subCAs;
                 std::vector<char> root;
                 status = card->readCertificateChain(FORMAT_RADIX64, cert, l_cert, subCAs, root);
                 if (status)
@@ -88,14 +86,10 @@ std::string CertChainRequestHandler::process()
                 for (auto& cert : subCAs)
                 {
                     ptree certEntry;
-                    certEntry.put("", std::string(cert.data(), cert.size()));
+                    certEntry.put("", std::string(cert->getBase64().data(), cert->getBase64().size()));
                     subCAList.push_back(std::make_pair("", certEntry));
                 }
                 certificateChain.add_child("subCA", subCAList);
-                for (auto& cert : subCAs)
-                {
-                    cert.clear();
-                }
 
                 response.add_child("certificateChain", certificateChain);
                 response.put("cardType", card->strType());
@@ -106,6 +100,10 @@ std::string CertChainRequestHandler::process()
                 else
                 {
                     response.put("ReaderType", "standard");
+                }
+                if (TraceInfoInJsonResult)
+                {
+                    response.put("ReaderName", reader->name);
                 }
 
                 break;

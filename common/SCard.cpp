@@ -325,7 +325,7 @@ long SCard::apdu(const unsigned char *apdu, size_t l_apdu, unsigned char *out, s
       return ret;
    }
    
-   if (*l_out >= (int) l_recv)
+   if (*l_out >= l_recv)
    {
       if (l_recv >= 2)
          *l_out = l_recv - 2;

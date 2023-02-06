@@ -8,14 +8,17 @@
 class RequestHandler
 {
 public:
-   RequestHandler() { };
+   static std::shared_ptr<RequestHandler> createRequestHandler(std::shared_ptr <std::stringstream> ssRequest); // Factory
+
    virtual ~RequestHandler() {};  //without this destructor of derived handler is not called
-   typedef std::shared_ptr<RequestHandler> Ptr;
-   
    virtual std::string process() = 0;
-   static std::shared_ptr<RequestHandler> createRequestHandler(std::shared_ptr <std::stringstream> ssRequest);
+
+   inline void AddTraceInfoInJsonResult() { TraceInfoInJsonResult = true; }
 protected:
+   RequestHandler() {};	// Need to go through the factory
    std::shared_ptr <std::stringstream> ssRequest;
+   bool TraceInfoInJsonResult = false;
+
    void post_process(boost::property_tree::ptree &response);
 };
 

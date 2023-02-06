@@ -39,13 +39,14 @@
 
 class CardFile
 {
-	std::string Base64Format;
-	std::vector<unsigned char> RawFormat;
+	mutable std::string Base64Format;
+	mutable std::vector<unsigned char> RawFormat;
 public:
 	CardFile(const std::string& Base64Format) : Base64Format(Base64Format) {}
 	CardFile(const std::vector<unsigned char>& RawFormat) : RawFormat(RawFormat) {}
+	CardFile(){}
 
-	inline std::string getBase64()
+	inline const std::string& getBase64() const
 	{
 		if (Base64Format.empty() && RawFormat.size() > 0)
 		{
@@ -53,7 +54,7 @@ public:
 		}
 		return Base64Format;
 	}
-	inline const std::vector<unsigned char> getRaw()
+	inline const std::vector<unsigned char>& getRaw() const
 	{
 		if (RawFormat.size() == 0 && !Base64Format.empty() )
 		{
@@ -68,6 +69,24 @@ enum class CardFileReadOptimization
 	None,
 	DEREncodedCertificate
 };
+enum class CardFiles
+{
+	Id,
+	Id_sig,
+	Address,
+	Address_sig,
+	Photo,
+	Rrncert,
+	Authcert,
+	Signcert,
+	Cacert,
+	Rootcert
+};
+enum class CardKeys
+{
+	NonRep,
+	Auth
+};
 
 class Card
 {
@@ -75,27 +94,21 @@ public:
    Card() {};
    virtual ~Card(){};
 
-   virtual std::string strType() { return "NOT DEFINED"; };
-   virtual int type() { return -1; };
-   virtual long readCertificate(int format, int type, std::vector<char> &cert) = 0;
-   virtual long readUserCertificates(int format, int certType, std::vector<std::vector<char>> &certificates){ throw NotImplementedException("CardFile readUserCertificates"); };
-   virtual long readCertificateChain(int format, unsigned char *cert, size_t l_cert, std::vector<std::vector<char>> &subCerts, std::vector<char> &root){ throw NotImplementedException("CardFile readCertificateChain"); };
-   virtual long selectKey(int type, unsigned char* cert = 0, size_t l_cert = 0) = 0;
+   virtual std::string strType() const { return "NOT DEFINED"; };
+   virtual int type() const { return -1; };
+   virtual long readCertificateChain(int format, const unsigned char *cert, size_t l_cert, std::vector<std::shared_ptr<const CardFile>> &subCerts, std::vector<char> &root){ throw NotImplementedException("CardFile readCertificateChain"); };
+   virtual long selectKey(CardKeys type, unsigned char* cert = 0, size_t l_cert = 0) = 0;
    virtual long logon(int l_pin, char *pin) = 0;
    virtual long logoff() = 0;
-   virtual long sign(unsigned char* in, unsigned int l_in, int hashAlgo, unsigned char *out, unsigned int *l_out, int *sw) = 0;
-   virtual CardFile getFile(const std::string& fileType) { throw NotImplementedException("CardFile getFile"); };
-   virtual CardFile getFile3(const std::string& fileType) { throw NotImplementedException("CardFile getFile3"); };
-
-   virtual long selectFile(unsigned char *file, size_t l_file){ throw NotImplementedException("CardFile selectFile"); };
-   virtual long readFile2(unsigned int offset, size_t* p_len, unsigned char* p_out){ throw NotImplementedException("CardFile readFile2"); };
-   virtual CardFile readFile3(CardFileReadOptimization optimization = CardFileReadOptimization::None) { throw NotImplementedException("CardFile readFile3"); };
+   virtual long sign(const unsigned char* in, size_t l_in, int hashAlgo, unsigned char *out, size_t*l_out, int *sw) = 0;
+   virtual std::shared_ptr<const CardFile> getFile(CardFiles fileType) { throw NotImplementedException("CardFile getFile"); };
 
    virtual const std::map<std::string, std::string> getCardData() { return std::map<std::string, std::string>(); }
-
-   long getFile(unsigned char *file, size_t l_file, size_t* l_out, unsigned char* p_out);
 protected:
    std::shared_ptr<class CardReader> reader;
+
+   virtual long selectFile(const unsigned char *file, size_t l_file){ throw NotImplementedException("CardFile selectFile"); };
+   virtual std::shared_ptr<const CardFile> readFile3(CardFileReadOptimization optimization = CardFileReadOptimization::None) { throw NotImplementedException("CardFile readFile3"); };
 };
 
 #endif /* Card_hpp */

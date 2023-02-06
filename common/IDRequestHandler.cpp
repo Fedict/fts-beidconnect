@@ -74,47 +74,37 @@ std::string IDRequestHandler::process()
 
                 if (idflags & ID_FLAG_INCLUDE_ID)
                 {
-                    readerInfo.put("id", card->getFile("id").getBase64());
+                    readerInfo.put("id", card->getFile(CardFiles::Id)->getBase64());
                 }
                 if (idflags & ID_FLAG_INCLUDE_ADDR)
                 {
-                    readerInfo.put("addr", card->getFile("address").getBase64());
+                    readerInfo.put("addr", card->getFile(CardFiles::Address)->getBase64());
                 }
                 if (idflags & ID_FLAG_INCLUDE_PHOTO)
                 {
-                    readerInfo.put("photo", card->getFile("photo").getBase64());
+                    readerInfo.put("photo", card->getFile(CardFiles::Photo)->getBase64());
                 }
                 if (idflags & ID_FLAG_INCLUDE_INTEGRITY)
                 {
-                    std::vector<char> rrncert;
-                    status = card->readCertificate(FORMAT_RADIX64, CERT_TYPE_RRN, rrncert);
-                    readerInfo.put("idsig", card->getFile("id_sig").getBase64());
-                    readerInfo.put("addrsig", card->getFile("address_sig").getBase64());
-                    readerInfo.put("rrncert", std::string(rrncert.data(), rrncert.size()));
+                    readerInfo.put("idsig", card->getFile(CardFiles::Id_sig)->getBase64());
+                    readerInfo.put("addrsig", card->getFile(CardFiles::Address_sig)->getBase64());
+                    readerInfo.put("rrncert", card->getFile(CardFiles::Rrncert)->getBase64());
                 }
                 if ((idflags & ID_FLAG_INCLUDE_AUTH_CERT) || (idflags & ID_FLAG_INCLUDE_CERTS))
                 {
-                    std::vector<char> buf;
-                    status = card->readCertificate(FORMAT_RADIX64, CERT_TYPE_AUTH, buf);
-                    readerInfo.put("authcert", std::string(buf.data(), buf.size()));
+                    readerInfo.put("authcert", card->getFile(CardFiles::Authcert)->getBase64());
                 }
                 if ((idflags & ID_FLAG_INCLUDE_SIGN_CERT) || (idflags & ID_FLAG_INCLUDE_CERTS))
                 {
-                    std::vector<char> buf;
-                    status = card->readCertificate(FORMAT_RADIX64, CERT_TYPE_NONREP, buf);
-                    readerInfo.put("signcert", std::string(buf.data(), buf.size()));
+                    readerInfo.put("signcert", card->getFile(CardFiles::Signcert)->getBase64());
                 }
                 if ((idflags & ID_FLAG_INCLUDE_CACERTS) || (idflags & ID_FLAG_INCLUDE_CERTS))
                 {
-                    std::vector<char> buf;
-                    status = card->readCertificate(FORMAT_RADIX64, CERT_TYPE_CA, buf);
-                    readerInfo.put("cacert", std::string(buf.data(), buf.size()));
+                    readerInfo.put("cacert", card->getFile(CardFiles::Cacert)->getBase64());
                 }
                 if ((idflags & ID_FLAG_INCLUDE_ROOTCERT) || (idflags & ID_FLAG_INCLUDE_CERTS))
                 {
-                    std::vector<char> buf;
-                    status = card->readCertificate(FORMAT_RADIX64, CERT_TYPE_ROOT, buf);
-                    readerInfo.put("rootcert", std::string(buf.data(), buf.size()));
+                    readerInfo.put("rootcert", card->getFile(CardFiles::Rootcert)->getBase64());
                 }
 
                 readerInfos.push_back(std::make_pair("", readerInfo));

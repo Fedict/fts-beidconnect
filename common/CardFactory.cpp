@@ -47,8 +47,6 @@ std::shared_ptr<Card>  CardFactory::createCard(const std::shared_ptr<CardReader>
    std::string atr = reader->atr;
    std::shared_ptr<Card> card;
 
-   int iii = sizeof(cardTypeTable);
-
    for (i=0; (cardTypeTable[i].atr != nullptr) && (cardtype = &cardTypeTable[i]) && cardtype->atr; i++)
 	  {
         if (atr.compare(cardtype->atr) == 0)

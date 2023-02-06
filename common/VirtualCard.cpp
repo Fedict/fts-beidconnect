@@ -30,128 +30,33 @@
 //eID root ca
 #define root_cert "MIIFjjCCA3agAwIBAgIBATANBgkqhkiG9w0BAQsFADAoMQswCQYDVQQGEwJCRTEZMBcGA1UEAwwQZUlEIFRFU1QgUm9vdCBDQTAgFw0wNzA0MzAyMjAwMTBaGA8yMDg4MDQwOTIyMDAxMFowKDELMAkGA1UEBhMCQkUxGTAXBgNVBAMMEGVJRCBURVNUIFJvb3QgQ0EwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQCDghj3eJtmTqV6USkBkstPl+8mRZl0ACsiUSe6FY3O73RXjztH54pAQgvN1VFMZdUE8p5bh3erX2AFDOVHcqgYv+i1Lxn22hEynXTTgmrXlKPj0AAzjC754SZ/fD7anIsA14WKv9rf2vU0evSHdHhMQAzy/Tvp+J3r9+b56QvUm+KcBakCGs+ifek9nIWFwzPPh0cx2HUblRRhbboO7d9LLQi16So5GmhqPXRhp91WhXmBvFPSieLAeh1DcCdEQWup0hYlSzRpcYqgxW0jMsjXk34xh84l/oQ7b0r6yGBdkQMjBm9Si6gEdW5dhX6LuojUUZy6DYjWjmiULfMWhtkjZfRtHvVRNhfSQqb67ZFVjGsHIFGT/O9Exz33HdOZsJT2iAwEAOIGpebb9C0giDViBJeW3UsxGM5LN/LH14DRuad92ODIyQ+dTsKQf5JEd3NinGMQdzDiWw7YQ3ID+4WgacLxCYO5Ku1IRKTZfYHCKlDhNpbk9CJppzjNSqJj+3TqB5bOK4fuWgd4jlvodX5LD3s99iJiOMgQIyfkz2fUuxYjh5HpRDOKpmSlIJabxbdnV2Xp/4RA2Iflh22BANLggdDl0SCCIcfvaviFJcxLPv2QLmS4CvUTRyEWqbTtQMeo73wDo+20yP6gE0vVk94dp6nd6bhRCBIPldEa8djduwIDAQABo4HAMIG9MB0GA1UdDgQWBBQiFIxTchU89SVmyt05rJsew0IvYDAfBgNVHSMEGDAWgBQiFIxTchU89SVmyt05rJsew0IvYDAOBgNVHQ8BAf8EBAMCAQYwRwYDVR0gBEAwPjA8BgVgOAwBATAzMDEGCCsGAQUFBwIBFiVodHRwOi8vZWlkZGV2Y2FyZHMuemV0ZXNjYXJkcy5iZS9jZXJ0MBEGCWCGSAGG+EIBAQQEAwIABzAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3DQEBCwUAA4ICAQAFS3rF8jgW4DTWbOqwA+tf49PVW+UPSxghwCJp2NWcT3nbFgPI73buGa4VIYah5XYlPYNAiiGZmgyIZS/4qp/UmSx6WmvNBPEVlGdeDSxCRQ3Zp6axQ7x+JEMbRijwAqEzuCfQTEVnDJXsZxypHWSSyb0thg3ooz3pUFxN/YU90V3UdPvVN6Tkb8P6gaKXSOME2Tzx9AS5ccToqX7LOR/Tq9vr8zhI6Nh2Gg+cEDqam7gfntDVdz5EO0wPMEaeJUOh3+pU997rNYBxKiyhCASt6hJxSvi7tLD57LwCDhjwhW96I5+94Vpx3EM4pzR5Ajw2vSJEKMvBHReaAHfS7IW54KVuKYToZIQ+kaq6q4gt42zNZ8jnD+Ki+Hkjkcybm0AzKVNCtcbiFcaqYDkl8E/ewgky0mMXXvQ36ON7TSUxpNu8upcyXQrqPbvHWDVz1VJQfiV7dnEHDDqKieiLDu5GWgFBB6XKm+c5Gk9ktMCguJ9MpOmDkE070MGu4A6Q18qqsmML5QKBtXKKgj2ZyDoaOCu+3Nx1FIYacIz+yswb+pBI6F29a57ME3AccQed4UPlUCf3rgUGHSwBSwUf0ODBudz2UurnEzvfBgg+rIPLPQrWCL+bfna95ep7CEVOFOz+vuHVxTIt/iWjkicH7c09TotcNbFWqJmWShf7NoFjhw=="
 
-std::string VirtualCard::strType()
+std::string VirtualCard::strType() const
 {
    return "BEID";
 };
 
 
-int VirtualCard::type()
+int VirtualCard::type() const
 {
    return CARD_TYPE_BEID;
    //return CARD_TYPE_PKCS15;
 };
 
-#define WHERE "VirtualCard::read_certificate"
-long VirtualCard::readCertificate(int format, int type, std::vector<char> &cert)
-{
-   std::unordered_map<int,std::string> idFiles;
-
-   idFiles[CERT_TYPE_RRN] = rrn_cert;
-   idFiles[CERT_TYPE_AUTH] = auth_cert;
-   idFiles[CERT_TYPE_NONREP] = nonrep_cert;
-   idFiles[CERT_TYPE_CA] = ca_cert;
-   idFiles[CERT_TYPE_ROOT] = root_cert;
-
-   if (format == FORMAT_RADIX64) {
-      const char* f = idFiles[type].c_str();
-      std::vector<char> buf(f, f + idFiles[type].length());
-      cert = buf;
-   }
-   else {
-      unsigned char p[MAX_ID_FILE_SIZE];
-      int len = base64decode(idFiles[type], p);
-      std::vector<char> buf(p, p + len);
-      cert = buf;
-   }
-   do_sleep(500); //virtual read time
-   
-   return 0;
-}
-#undef WHERE
-
-
-#define WHERE "VirtualCard::readUserCertificates"
-long VirtualCard::readUserCertificates(int format, int certType, std::vector<std::vector<char>> &certificates)
-{
-   long ret = 0;
-   if (format == FORMAT_RADIX64) {
-      char auth_cert_[] = auth_cert;
-      std::vector<char> buf1(auth_cert_, auth_cert_ + sizeof(auth_cert_)-1);
-      certificates.push_back(buf1);
-
-      char nonrep_cert_[] = nonrep_cert;
-      std::vector<char> buf2(nonrep_cert_, nonrep_cert_ + sizeof(nonrep_cert_)-1);
-      certificates.push_back(buf2);
-   }
-   else if (format == FORMAT_HEX) {
-      ret = -1; //not supported in virtual card since we don't need it anyhow
-   }
-   else {
-
-      unsigned char *buf;
-      int l_buf = base64decode_len(auth_cert);
-      buf = (unsigned char*) malloc(l_buf);
-      if (buf == 0) {
-         log_error("%s mem alloc error ", WHERE);
-         return -1;
-      }
-      int n = base64decode(auth_cert, buf);
-      std::vector<char> buf1(buf, buf + n);
-      certificates.push_back(buf1);
-      free (buf);
-
-      l_buf = base64decode_len(nonrep_cert);
-      buf = (unsigned char*) malloc(l_buf);
-      if (buf == 0) {
-         log_error("%s mem alloc error ", WHERE);
-         return -1;
-      }
-      n = base64decode(nonrep_cert, buf);
-      std::vector<char> buf2(buf, buf + n);
-      certificates.push_back(buf2);
-      free (buf);
-      ret = 0;
-   }
-
-   do_sleep(1000); //virtual read time
-
-   return (ret);
-}
-#undef WHERE
-
-
 #define WHERE "VirtualCard::readCertificateChain"
-long VirtualCard::readCertificateChain(int format, unsigned char *cert, size_t l_cert, std::vector<std::vector<char>>  &subCerts, std::vector<char> &root)
+long VirtualCard::readCertificateChain(int format, const unsigned char *cert, size_t l_cert, std::vector<std::shared_ptr<const CardFile>>  &subCerts, std::vector<char> &root)
 {
-   long ret = 0;
-   if (format == FORMAT_RADIX64) {
-      
-      char ca_cert_[] = ca_cert;
-      std::vector<char> buf1(ca_cert_, ca_cert_ + sizeof(ca_cert_)-1);
-      subCerts.push_back(buf1);
-      
-      char root_cert_[] = root_cert;
-      std::vector<char> buf2(root_cert_, root_cert_ + sizeof(root_cert_)-1);
-      root = buf2;
-   }
-   else if (format == FORMAT_HEX) {
-      ret = -1;
-   }
-   else {
-      ret = -1;
-   }
+    subCerts.push_back(getFile(CardFiles::Cacert));
+    subCerts.push_back(getFile(CardFiles::Rootcert));
+    do_sleep(1000); //virtual read time
 
-   do_sleep(1000); //virtual read time
-
-   return (ret);
+    return 0;
 }
 #undef WHERE
 
 
 
 #define WHERE "VirtualCard::SelectKey()"
-long VirtualCard::selectKey(int pintype, unsigned char* cert, size_t l_cert)
+long VirtualCard::selectKey(CardKeys pintype, unsigned char* cert, size_t l_cert)
 {
    long ret = 0;
 
@@ -166,14 +71,6 @@ long VirtualCard::selectKey(int pintype, unsigned char* cert, size_t l_cert)
       goto cleanup;
    }
 #endif
-   
-   if (pintype == CERT_TYPE_NONREP)
-   {
-   }
-   else
-   {
-   }
-   
    return ret;
 }
 
@@ -220,7 +117,7 @@ long VirtualCard::logoff()
    return 0;
 }
 
-long VirtualCard::sign(unsigned char* in, unsigned int l_in, int hashAlgo, unsigned char *out, unsigned int *l_out, int *sw)
+long VirtualCard::sign(const unsigned char* in, size_t l_in, int hashAlgo, unsigned char *out, size_t*l_out, int *sw)
 {
    long ret = 0;
    char rand[256] = "the quick brown fox or something...";
@@ -241,36 +138,22 @@ cleanup:
    return (ret);
 }
 
-CardFile VirtualCard::getFile(const std::string& fileType)
+std::shared_ptr<const CardFile> VirtualCard::getFile(CardFiles fileType)
 {
-   std::unordered_map<std::string,std::string> idFiles;
+    std::unordered_map<CardFiles, std::string> idFiles;
 
-   idFiles["id"] = id_file;
-   idFiles["id_sig"] = id_sig_file;
-   idFiles["address"] = address_file;
-   idFiles["address_sig"] = address_sig_file;
-   idFiles["photo"] = photo_file;
-   idFiles["rrncert"] = rrn_cert;
-   idFiles["authcert"] = auth_cert;
-   idFiles["signcert"] = nonrep_cert;
-   idFiles["cacert"] = ca_cert;
-   idFiles["rootcert"] = root_cert;
+    idFiles[CardFiles::Id] = id_file;
+    idFiles[CardFiles::Id_sig] = id_sig_file;
+    idFiles[CardFiles::Address] = address_file;
+    idFiles[CardFiles::Address_sig] = address_sig_file;
+    idFiles[CardFiles::Photo] = photo_file;
+    idFiles[CardFiles::Rrncert] = rrn_cert;
+    idFiles[CardFiles::Authcert] = auth_cert;
+    idFiles[CardFiles::Signcert] = nonrep_cert;
+    idFiles[CardFiles::Cacert] = ca_cert;
+    idFiles[CardFiles::Rootcert] = root_cert;
 
-   do_sleep(200); //virtual read time
-   
-   return CardFile(idFiles[fileType]);
-   //if (format == FORMAT_RADIX64) {
-   //   const char* f = idFiles[fileType].c_str();
-   //   std::vector<char> buf(f, f + idFiles[fileType].length());
-   //   return std::string(buf.begin(), buf.end());;
-   //}
-   //else {
-   //   unsigned char p[MAX_ID_FILE_SIZE];
-   //   int len = base64decode(idFiles[fileType], p);
-   //   std::vector<char> buf(p, p + len);
-   //   return std::string(buf.begin(), buf.end());;
-   //}
+    do_sleep(200); //virtual read time
+
+    return std::make_shared<CardFile>(idFiles[fileType]);
 }
-
-
-

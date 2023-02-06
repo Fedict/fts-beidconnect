@@ -26,7 +26,7 @@ int readMessage(std::stringstream &stream)
             {
                 //log_info("stdin EOF");
             }
-            else if (std::ferror(stdin))
+            if (std::ferror(stdin))
             {
                 log_info("stdin error");
                 return (E_COMM_PARAM);

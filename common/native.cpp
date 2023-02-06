@@ -20,7 +20,7 @@ int runNative(int argc, const char *argv[])
     _setmode(_fileno(stdout), _O_BINARY);
 #endif
 
-    while (1)
+    //while (1)
     {
         shared_ptr<stringstream> ssRequest = std::make_shared<stringstream>();
 

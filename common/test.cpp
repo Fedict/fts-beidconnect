@@ -20,21 +20,21 @@
 
 using namespace std;
 
-constexpr char* TestHeader = ">>> TEST : ";
-constexpr char* message_SHA256 = "{\"operation\":\"SIGN\",\"cert\":\"%%CERT%%\",\"algo\":\"SHA256\",\"digest\":\"H//bub3+V6UP3gk9/yofBaCLS6+HoPE7DOi4CRTfc+U=\",\"pin\":\"null\",\"language\":\"en\",\"mac\":\"0123456789ABCDEF0123456789ABCDEF\",\"correlationId\":\"07386ce7-f73e-4e99-dfc3-8d69b6adf33d\",\"origin\":\"https://sign.belgium.be\"}";
-constexpr char* message_SHA384 = "{\"operation\":\"SIGN\",\"cert\":\"%%CERT%%\",\"algo\":\"SHA384\",\"digest\":\"wj0jMglI2lnsNlcJmJmOLpWMyrl4r97CGbxKQMIpf1PtkaEnhQXe47AznDlhszCV\",\"pin\":\"null\",\"language\":\"en\",\"mac\":\"0123456789ABCDEF0123456789ABCDEF\",\"correlationId\":\"07386ce7-f73e-4e99-dfc3-8d69b6adf33d\",\"origin\":\"https://sign.belgium.be\"}";
-constexpr char* message_SHA512 = "{\"operation\":\"SIGN\",\"cert\":\"%%CERT%%\",\"algo\":\"SHA512\",\"digest\":\"lsk2FCVI0FR/zGpbZ1w94KZYMvxon8Z+3hyjpkESnrulRCdpUMhKa/4XjLILG3PmMaCkJiwxvbietHgCHB5LTw==\",\"pin\":\"null\",\"language\":\"en\",\"mac\":\"0123456789ABCDEF0123456789ABCDEF\",\"correlationId\":\"07386ce7-f73e-4e99-dfc3-8d69b6adf33d\",\"origin\":\"https://sign.belgium.be\" }";
-constexpr char* message_Get_Card_Info_ID_Only = "{\"operation\":\"ID\",\"idflags\":\"1\",\"language\":\"en\",\"mac\":\"0123456789ABCDEF0123456789ABCDEF\",\"correlationId\":\"07386ce7-f73e-4e99-dfc3-8d69b6adf33d\",\"origin\":\"https://sign.belgium.be\"}";
-constexpr char* message_Get_Card_Info = "{\"operation\":\"ID\",\"idflags\":\"511\",\"language\":\"en\",\"mac\":\"0123456789ABCDEF0123456789ABCDEF\",\"correlationId\":\"07386ce7-f73e-4e99-dfc3-8d69b6adf33d\",\"origin\":\"https://sign.belgium.be\"}";
-constexpr char* message_Get_User_Certificates = "{\"operation\":\"USERCERTS\",\"language\":\"en\",\"mac\":\"0123456789ABCDEF0123456789ABCDEF\",\"correlationId\":\"07386ce7-f73e-4e99-dfc3-8d69b6adf33d\",\"origin\":\"https://sign.belgium.be\"}";
-constexpr char* message_Get_Certificates_Chain = "{\"operation\":\"CERTCHAIN\",\"cert\":\"%%CERT%%\",\"language\":\"en\",\"mac\":\"0123456789ABCDEF0123456789ABCDEF\",\"correlationId\":\"07386ce7-f73e-4e99-dfc3-8d69b6adf33d\",\"origin\":\"https://sign.belgium.be\"}";
+constexpr char TestHeader[] = ">>> TEST : ";
+constexpr char message_SHA256[] = "{\"operation\":\"SIGN\",\"cert\":\"%%CERT%%\",\"algo\":\"SHA256\",\"digest\":\"H//bub3+V6UP3gk9/yofBaCLS6+HoPE7DOi4CRTfc+U=\",\"pin\":\"null\",\"language\":\"en\",\"mac\":\"0123456789ABCDEF0123456789ABCDEF\",\"correlationId\":\"07386ce7-f73e-4e99-dfc3-8d69b6adf33d\",\"origin\":\"https://sign.belgium.be\"}";
+constexpr char message_SHA384[] = "{\"operation\":\"SIGN\",\"cert\":\"%%CERT%%\",\"algo\":\"SHA384\",\"digest\":\"wj0jMglI2lnsNlcJmJmOLpWMyrl4r97CGbxKQMIpf1PtkaEnhQXe47AznDlhszCV\",\"pin\":\"null\",\"language\":\"en\",\"mac\":\"0123456789ABCDEF0123456789ABCDEF\",\"correlationId\":\"07386ce7-f73e-4e99-dfc3-8d69b6adf33d\",\"origin\":\"https://sign.belgium.be\"}";
+constexpr char message_SHA512[] = "{\"operation\":\"SIGN\",\"cert\":\"%%CERT%%\",\"algo\":\"SHA512\",\"digest\":\"lsk2FCVI0FR/zGpbZ1w94KZYMvxon8Z+3hyjpkESnrulRCdpUMhKa/4XjLILG3PmMaCkJiwxvbietHgCHB5LTw==\",\"pin\":\"null\",\"language\":\"en\",\"mac\":\"0123456789ABCDEF0123456789ABCDEF\",\"correlationId\":\"07386ce7-f73e-4e99-dfc3-8d69b6adf33d\",\"origin\":\"https://sign.belgium.be\" }";
+constexpr char message_Get_Card_Info_ID_Only[] = "{\"operation\":\"ID\",\"idflags\":\"1\",\"language\":\"en\",\"mac\":\"0123456789ABCDEF0123456789ABCDEF\",\"correlationId\":\"07386ce7-f73e-4e99-dfc3-8d69b6adf33d\",\"origin\":\"https://sign.belgium.be\"}";
+constexpr char message_Get_Card_Info[] = "{\"operation\":\"ID\",\"idflags\":\"511\",\"language\":\"en\",\"mac\":\"0123456789ABCDEF0123456789ABCDEF\",\"correlationId\":\"07386ce7-f73e-4e99-dfc3-8d69b6adf33d\",\"origin\":\"https://sign.belgium.be\"}";
+constexpr char message_Get_User_Certificates[] = "{\"operation\":\"USERCERTS\",\"language\":\"en\",\"mac\":\"0123456789ABCDEF0123456789ABCDEF\",\"correlationId\":\"07386ce7-f73e-4e99-dfc3-8d69b6adf33d\",\"origin\":\"https://sign.belgium.be\"}";
+constexpr char message_Get_Certificates_Chain[] = "{\"operation\":\"CERTCHAIN\",\"cert\":\"%%CERT%%\",\"language\":\"en\",\"mac\":\"0123456789ABCDEF0123456789ABCDEF\",\"correlationId\":\"07386ce7-f73e-4e99-dfc3-8d69b6adf33d\",\"origin\":\"https://sign.belgium.be\"}";
 
-void dumpCert(CardFile Cert) {
+void dumpCert(const std::shared_ptr<const CardFile>& Cert) {
 #ifdef _WIN32
-    PCCERT_CONTEXT certContext = CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, Cert.getRaw().data(), (DWORD)Cert.getRaw().size());
+    PCCERT_CONTEXT certContext = CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, Cert->getRaw().data(), (DWORD)Cert->getRaw().size());
 
     std::cout << "------------------------------ Certificate ------------------------------" << endl;
-    std::cout << Cert.getBase64() << endl << "-------------------------------------------------------------------------" << endl;
+    std::cout << Cert->getBase64() << endl << "-------------------------------------------------------------------------" << endl;
 
     //std::cout << certContext->pCertInfo->Subject.cbData;
     SYSTEMTIME st_NotBefore;
@@ -159,7 +159,7 @@ class TestDB
                 testcards.push_back(tc);
             }
         }
-        catch (boost::property_tree::json_parser_error e)
+        catch (boost::property_tree::json_parser_error& e)
         {
             std::cout << "Smart card test DB file parsing error " << e.what() << endl;
         }
@@ -220,20 +220,35 @@ std::string GetSignatureFromResponse(const std::string& result)
     }
     return "";
 }
-std::string GetResultFromResponse(const std::string& result)
+std::string GetResultFromResponse(const std::string& result, const std::string& ExpectedReader)
 {
     boost::property_tree::ptree pt;
     std::stringstream ss(result);
     boost::property_tree::read_json(ss, pt);
     try
     {
-        return pt.get<std::string>("result");
+        std::string ReaderName;
+        if (pt.get_optional<std::string>("ReaderName").is_initialized())
+        {
+            ReaderName = pt.get<std::string>("ReaderName");
+        }
+        std::string res = pt.get<std::string>("result");
+
+        if ((ReaderName == ExpectedReader || ExpectedReader == "All") && res == "OK")
+        {
+            return "OK";
+        }
+        else if (ReaderName != ExpectedReader)
+        {
+            return "Fail operation complete on reader " + ReaderName + " but expected on reader " + ExpectedReader;
+        }
+        return "Fail :" + res;
     }
     catch (...)
     {
 
     }
-    return "";
+    return "Failed parsing result";
 }
 
 class TestResult
@@ -255,7 +270,6 @@ int runTest(int argc, const char* argv[])
     string ssResponse;
 
     ReaderList readerList;
-    size_t count = readerList.readers.size();
     for (auto& cr : readerList.readers)
     {
         std::cout << "Reader " << cr->name << endl;
@@ -283,166 +297,69 @@ int runTest(int argc, const char* argv[])
             // Test the getFile function to retrieve the sign cert
             std::cout << endl << TestHeader << "Retrieve Sign certificate (getFile)..." << endl;
             auto start = std::chrono::steady_clock::now();
-            CardFile signCert = card->getFile("signcert");
+            std::shared_ptr<const CardFile> signCert = card->getFile(CardFiles::Signcert);
             auto stop = std::chrono::steady_clock::now();
-            TestCard tc = testDB.GetTestCard(signCert.getBase64());
-            testResults.push_back(TestResult("Retrieve Sign certificate (getFile)", signCert.getBase64() != tc.SignCert ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(stop - start).count()));
+            TestCard tc = testDB.GetTestCard(signCert->getBase64());
+            testResults.push_back(TestResult("Retrieve Sign certificate (getFile)", signCert->getBase64() != tc.SignCert ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(stop - start).count()));
             dumpCert(signCert);
-
-            // Test the getFile function to retrieve the sign cert
-            std::cout << endl << TestHeader << "Retrieve Sign certificate (getFile3)..." << endl;
-            start = std::chrono::steady_clock::now();
-            CardFile signCert3 = card->getFile3("signcert");
-            stop = std::chrono::steady_clock::now();
-            testResults.push_back(TestResult("Retrieve Sign certificate (getFile3)", signCert3.getBase64() != tc.SignCert ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(stop - start).count()));
-            dumpCert(signCert3);
 
             // Test the getFile function to retrieve the Auth cert
             std::cout << endl << TestHeader << "Retrieve Auth certificate (getFile)..." << endl;
             start = std::chrono::steady_clock::now();
-            CardFile authCert = card->getFile("authcert");
-            testResults.push_back(TestResult("Retrieve Auth certificate (getFile)", authCert.getBase64() != tc.AuthCert ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
+            std::shared_ptr<const CardFile> authCert = card->getFile(CardFiles::Authcert);
+            testResults.push_back(TestResult("Retrieve Auth certificate (getFile)", authCert->getBase64() != tc.AuthCert ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
             dumpCert(authCert);
-
-            // Test the getFile function to retrieve the Auth cert
-            std::cout << endl << TestHeader << "Retrieve Auth certificate (getFile3)..." << endl;
-            start = std::chrono::steady_clock::now();
-            CardFile authCert3 = card->getFile3("authcert");
-            testResults.push_back(TestResult("Retrieve Auth certificate (getFile3)", authCert3.getBase64() != tc.AuthCert ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
-            dumpCert(authCert3);
 
             // Test the getFile function to retrieve the CA cert
             std::cout << endl << TestHeader << "Retrieve CA certificate (getFile)..." << endl;
             start = std::chrono::steady_clock::now();
-            CardFile caCert = card->getFile("cacert");
-            testResults.push_back(TestResult("Retrieve CA certificate (getFile)", caCert.getBase64() != tc.CACert ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
+            std::shared_ptr<const CardFile> caCert = card->getFile(CardFiles::Cacert);
+            testResults.push_back(TestResult("Retrieve CA certificate (getFile)", caCert->getBase64() != tc.CACert ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
             dumpCert(caCert);
-
-            // Test the getFile function to retrieve the CA cert
-            std::cout << endl << TestHeader << "Retrieve CA certificate (getFile3)..." << endl;
-            start = std::chrono::steady_clock::now();
-            CardFile caCert3 = card->getFile3("cacert");
-            testResults.push_back(TestResult("Retrieve CA certificate (getFile3)", caCert3.getBase64() != tc.CACert ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
-            dumpCert(caCert3);
 
             // Test the getFile function to retrieve the ROOT cert
             std::cout << endl << TestHeader << "Retrieve ROOT certificate (getFile)..." << endl;
             start = std::chrono::steady_clock::now();
-            CardFile rootCert = card->getFile("rootcert");
-            testResults.push_back(TestResult("Retrieve ROOT certificate (getFile)", rootCert.getBase64() != tc.ROOTCert ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
-            dumpCert(rootCert);
-
-            // Test the getFile function to retrieve the ROOT cert
-            std::cout << endl << TestHeader << "Retrieve ROOT certificate (getFile3)..." << endl;
-            start = std::chrono::steady_clock::now();
-            CardFile rootCert3 = card->getFile3("rootcert");
-            testResults.push_back(TestResult("Retrieve ROOT certificate (getFile3)", rootCert3.getBase64() != tc.ROOTCert ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
+            std::shared_ptr<const CardFile> rootCert = card->getFile(CardFiles::Rootcert);
+            testResults.push_back(TestResult("Retrieve ROOT certificate (getFile)", rootCert->getBase64() != tc.ROOTCert ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
             dumpCert(rootCert);
 
             // Test the getFile function to retrieve the RRN cert
             std::cout << endl << TestHeader << "Retrieve RRN certificate (getFile)..." << endl;
             start = std::chrono::steady_clock::now();
-            CardFile rrnCert = card->getFile("rrncert");
-            testResults.push_back(TestResult("Retrieve RRN certificate (getFile)", rrnCert.getBase64() != tc.RRNCert ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
-            dumpCert(rrnCert);
-
-            // Test the getFile function to retrieve the RRN cert
-            std::cout << endl << TestHeader << "Retrieve RRN certificate (getFile3)..." << endl;
-            start = std::chrono::steady_clock::now();
-            CardFile rrnCert3 = card->getFile3("rrncert");
-            testResults.push_back(TestResult("Retrieve RRN certificate (getFile3)", rrnCert3.getBase64() != tc.RRNCert ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
+            std::shared_ptr<const CardFile> rrnCert = card->getFile(CardFiles::Rrncert);
+            testResults.push_back(TestResult("Retrieve RRN certificate (getFile)", rrnCert->getBase64() != tc.RRNCert ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
             dumpCert(rrnCert);
 
             // Test the getFile function to retrieve the ID File
             std::cout << endl << TestHeader << "Retrieve ID File (getFile)..." << endl;
             start = std::chrono::steady_clock::now();
-            CardFile IdFile = card->getFile("id");
-            testResults.push_back(TestResult("Retrieve ID File (getFile)", IdFile.getBase64() != tc.IdFile ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
-
-            // Test the getFile function to retrieve the ID File
-            std::cout << endl << TestHeader << "Retrieve ID File (getFile3)..." << endl;
-            start = std::chrono::steady_clock::now();
-            CardFile IdFile3 = card->getFile3("id");
-            testResults.push_back(TestResult("Retrieve ID File (getFile3)", IdFile3.getBase64() != tc.IdFile ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
+            std::shared_ptr<const CardFile> IdFile = card->getFile(CardFiles::Id);
+            testResults.push_back(TestResult("Retrieve ID File (getFile)", IdFile->getBase64() != tc.IdFile ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
 
             // Test the getFile function to retrieve the Addr File
             std::cout << endl << TestHeader << "Retrieve Addr File (getFile)..." << endl;
             start = std::chrono::steady_clock::now();
-            CardFile AddrFile = card->getFile("address");
-            testResults.push_back(TestResult("Retrieve Addr File (getFile)", AddrFile.getBase64() != tc.AddrFile ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
-
-            // Test the getFile function to retrieve the Addr File
-            std::cout << endl << TestHeader << "Retrieve Addr File (getFile3)..." << endl;
-            start = std::chrono::steady_clock::now();
-            CardFile AddrFile3 = card->getFile3("address");
-            testResults.push_back(TestResult("Retrieve Addr File (getFile3)", AddrFile3.getBase64() != tc.AddrFile ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
+            std::shared_ptr<const CardFile> AddrFile = card->getFile(CardFiles::Address);
+            testResults.push_back(TestResult("Retrieve Addr File (getFile)", AddrFile->getBase64() != tc.AddrFile ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
 
             // Test the getFile function to retrieve the Photo File
             std::cout << endl << TestHeader << "Retrieve Photo File (getFile)..." << endl;
             start = std::chrono::steady_clock::now();
-            CardFile Photo = card->getFile("photo");
-            testResults.push_back(TestResult("Retrieve Photo File (getFile)", Photo.getBase64() != tc.Photo ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
-
-            // Test the getFile function to retrieve the Photo File
-            std::cout << endl << TestHeader << "Retrieve Photo File (getFile3)..." << endl;
-            start = std::chrono::steady_clock::now();
-            CardFile Photo3 = card->getFile3("photo");
-            testResults.push_back(TestResult("Retrieve Photo File (getFile3)", Photo3.getBase64() != tc.Photo ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
+            std::shared_ptr<const CardFile> Photo = card->getFile(CardFiles::Photo);
+            testResults.push_back(TestResult("Retrieve Photo File (getFile)", Photo->getBase64() != tc.Photo ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
 
             // Test the getFile function to retrieve the ID File Signature
-            std::cout << endl << TestHeader << "Retrieve ID File Signature (getFile3)..." << endl;
+            std::cout << endl << TestHeader << "Retrieve ID File Signature (getFile)..." << endl;
             start = std::chrono::steady_clock::now();
-            CardFile IdSigFile = card->getFile3("id_sig");
-            testResults.push_back(TestResult("Retrieve ID File Signature (getFile3)", IdSigFile.getBase64() != tc.IdSigFile ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
+            std::shared_ptr<const CardFile> IdSigFile = card->getFile(CardFiles::Id_sig);
+            testResults.push_back(TestResult("Retrieve ID File Signature (getFile)", IdSigFile->getBase64() != tc.IdSigFile ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
 
             // Test the getFile function to retrieve the Addr File Signature
-            std::cout << endl << TestHeader << "Retrieve Addr File Signature (getFile3)..." << endl;
+            std::cout << endl << TestHeader << "Retrieve Addr File Signature (getFile)..." << endl;
             start = std::chrono::steady_clock::now();
-            CardFile AddrSigFile = card->getFile3("address_sig");
-            testResults.push_back(TestResult("Retrieve Addr File Signature (getFile3)", AddrSigFile.getBase64() != tc.AddrSigFile ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
-
-            //cf = card->getFile("photo");
-
-            // Test the readCertificate function to retrieve the Sign cert
-            {
-                std::cout << endl << TestHeader << "Retrieve Sign certificate (readCertificate)..." << endl;
-                std::vector<char> buf;
-                auto start = std::chrono::steady_clock::now();
-                card->readCertificate(FORMAT_RADIX64, CERT_TYPE_NONREP, buf);
-                testResults.push_back(TestResult("Retrieve Sign certificate (readCertificate)", std::string(buf.data(), buf.size()) != tc.SignCert ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
-            }
-            // Test the readCertificate function to retrieve the Auth cert
-            {
-                std::cout << endl << TestHeader << "Retrieve Auth certificate (readCertificate)..." << endl;
-                std::vector<char> buf;
-                auto start = std::chrono::steady_clock::now();
-                card->readCertificate(FORMAT_RADIX64, CERT_TYPE_AUTH, buf);
-                testResults.push_back(TestResult("Retrieve Auth certificate (readCertificate)", std::string(buf.data(), buf.size()) != tc.AuthCert ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
-            }
-            // Test the readCertificate function to retrieve the CA cert
-            {
-                std::cout << endl << TestHeader << "Retrieve CA certificate (readCertificate)..." << endl;
-                std::vector<char> buf;
-                auto start = std::chrono::steady_clock::now();
-                card->readCertificate(FORMAT_RADIX64, CERT_TYPE_CA, buf);
-                testResults.push_back(TestResult("Retrieve CA certificate (readCertificate)", std::string(buf.data(), buf.size()) != tc.CACert ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
-            }
-            // Test the readCertificate function to retrieve the ROOT cert
-            {
-                std::cout << endl << TestHeader << "Retrieve ROOT certificate (readCertificate)..." << endl;
-                std::vector<char> buf;
-                auto start = std::chrono::steady_clock::now();
-                card->readCertificate(FORMAT_RADIX64, CERT_TYPE_ROOT, buf);
-                testResults.push_back(TestResult("Retrieve ROOT certificate (readCertificate)", std::string(buf.data(), buf.size()) != tc.ROOTCert ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
-            }
-            // Test the readCertificate function to retrieve the RRN cert
-            {
-                std::cout << endl << TestHeader << "Retrieve RRN certificate (readCertificate)..." << endl;
-                std::vector<char> buf;
-                auto start = std::chrono::steady_clock::now();
-                card->readCertificate(FORMAT_RADIX64, CERT_TYPE_RRN, buf);
-                testResults.push_back(TestResult("Retrieve RRN certificate (readCertificate)", std::string(buf.data(), buf.size()) != tc.RRNCert ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
-            }
+            std::shared_ptr<const CardFile> AddrSigFile = card->getFile(CardFiles::Address_sig);
+            testResults.push_back(TestResult("Retrieve Addr File Signature (getFile)", AddrSigFile->getBase64() != tc.AddrSigFile ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
 
             bool isPinPadReader = cr->isPinPad();
             cr->disconnect();
@@ -456,8 +373,9 @@ int runTest(int argc, const char* argv[])
                 auto start = std::chrono::steady_clock::now();
                 ssRequest = std::make_shared<stringstream>(message_Get_Card_Info_ID_Only);
                 handler = RequestHandler::createRequestHandler(ssRequest);
+                handler->AddTraceInfoInJsonResult();
                 ssResponse = handler->process();
-                testResults.push_back(TestResult("Get Card Info (ID only) Browser Extension command", "OK" != GetResultFromResponse(ssResponse) ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
+                testResults.push_back(TestResult("Get Card Info (ID only) Browser Extension command", GetResultFromResponse(ssResponse, "All"), chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
 
                 std::cout << ssResponse << endl;
             }
@@ -469,8 +387,9 @@ int runTest(int argc, const char* argv[])
                 auto start = std::chrono::steady_clock::now();
                 ssRequest = std::make_shared<stringstream>(message_Get_Card_Info);
                 handler = RequestHandler::createRequestHandler(ssRequest);
+                handler->AddTraceInfoInJsonResult();
                 ssResponse = handler->process();
-                testResults.push_back(TestResult("Get Card Info (all fields) Browser Extension command", "OK" != GetResultFromResponse(ssResponse) ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
+                testResults.push_back(TestResult("Get Card Info (all fields) Browser Extension command", GetResultFromResponse(ssResponse, "All"), chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
 
                 std::cout << ssResponse << endl;
             }
@@ -482,8 +401,9 @@ int runTest(int argc, const char* argv[])
                 auto start = std::chrono::steady_clock::now();
                 ssRequest = std::make_shared<stringstream>(message_Get_User_Certificates);
                 handler = RequestHandler::createRequestHandler(ssRequest);
+                handler->AddTraceInfoInJsonResult();
                 ssResponse = handler->process();
-                testResults.push_back(TestResult("Get User Certificates (USERCERTS) Browser Extension command", "OK" != GetResultFromResponse(ssResponse) ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
+                testResults.push_back(TestResult("Get User Certificates (USERCERTS) Browser Extension command", GetResultFromResponse(ssResponse, "All"), chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
 
                 std::cout << ssResponse << endl;
             }
@@ -491,33 +411,35 @@ int runTest(int argc, const char* argv[])
             {
                 std::cout << endl << TestHeader << "Get Certificate Chain (CERTCHAIN) Browser Extension command..." << endl;
 
-                std::string cmd = PrepareCmd(message_Get_Certificates_Chain, signCert.getBase64(), isPinPadReader, tc.PIN);
+                std::string cmd = PrepareCmd(message_Get_Certificates_Chain, signCert->getBase64(), isPinPadReader, tc.PIN);
                 std::cout << cmd << endl;
 
                 auto start = std::chrono::steady_clock::now();
                 ssRequest = std::make_shared<stringstream>(cmd);
                 handler = RequestHandler::createRequestHandler(ssRequest);
+                handler->AddTraceInfoInJsonResult();
                 ssResponse = handler->process();
-                testResults.push_back(TestResult("Get Certificate Chain (CERTCHAIN) Browser Extension command", "OK" != GetResultFromResponse(ssResponse) ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
+                testResults.push_back(TestResult("Get Certificate Chain (CERTCHAIN) Browser Extension command", GetResultFromResponse(ssResponse, cr->name), chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
 
                 std::cout << ssResponse << endl;
             }
 
             // Check signing command only on the preconfigured (defined in the code) test smart card to avoid locking a real card
-            if (signCert.getBase64() == tc.SignCert && tc.DoPINOps)
+            if (signCert->getBase64() == tc.SignCert && tc.DoPINOps)
             {
                 // Test the browser extension message to sign a SHA256 digest
                 {
                     std::cout << endl << TestHeader << "Signing Browser Extension command (SHA256)..." << endl;
 
-                    std::string cmd = PrepareCmd(message_SHA256, signCert.getBase64(), isPinPadReader, tc.PIN);
+                    std::string cmd = PrepareCmd(message_SHA256, signCert->getBase64(), isPinPadReader, tc.PIN);
                     std::cout << cmd << endl;
 
                     auto start = std::chrono::steady_clock::now();
                     ssRequest = std::make_shared<stringstream>(cmd);
                     handler = RequestHandler::createRequestHandler(ssRequest);
+                    handler->AddTraceInfoInJsonResult();
                     ssResponse = handler->process();
-                    testResults.push_back(TestResult("Signing Browser Extension command (SHA256)", "OK" != GetResultFromResponse(ssResponse) ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
+                    testResults.push_back(TestResult("Signing Browser Extension command (SHA256)", GetResultFromResponse(ssResponse, cr->name), chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
 
                     std::cout << ssResponse << endl;
                     std::cout << "Signature " << GetSignatureFromResponse(ssResponse) << endl;
@@ -526,14 +448,15 @@ int runTest(int argc, const char* argv[])
                 {
                     std::cout << endl << TestHeader << "Signing Browser Extension command (SHA384)..." << endl;
 
-                    std::string cmd = PrepareCmd(message_SHA384, signCert.getBase64(), isPinPadReader, tc.PIN);
+                    std::string cmd = PrepareCmd(message_SHA384, signCert->getBase64(), isPinPadReader, tc.PIN);
                     std::cout << cmd << endl;
 
                     auto start = std::chrono::steady_clock::now();
                     ssRequest = std::make_shared<stringstream>(cmd);
                     handler = RequestHandler::createRequestHandler(ssRequest);
+                    handler->AddTraceInfoInJsonResult();
                     ssResponse = handler->process();
-                    testResults.push_back(TestResult("Signing Browser Extension command (SHA384)", "OK" != GetResultFromResponse(ssResponse) ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
+                    testResults.push_back(TestResult("Signing Browser Extension command (SHA384)", GetResultFromResponse(ssResponse, cr->name), chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
 
                     std::cout << ssResponse << endl;
                     std::cout << "Signature " << GetSignatureFromResponse(ssResponse) << endl;
@@ -542,14 +465,15 @@ int runTest(int argc, const char* argv[])
                 {
                     std::cout << endl << TestHeader << "Signing Browser Extension command (SHA512)..." << endl;
 
-                    std::string cmd = PrepareCmd(message_SHA512, signCert.getBase64(), isPinPadReader, tc.PIN);
+                    std::string cmd = PrepareCmd(message_SHA512, signCert->getBase64(), isPinPadReader, tc.PIN);
                     std::cout << cmd << endl;
 
                     auto start = std::chrono::steady_clock::now();
                     ssRequest = std::make_shared<stringstream>(cmd);
                     handler = RequestHandler::createRequestHandler(ssRequest);
+                    handler->AddTraceInfoInJsonResult();
                     ssResponse = handler->process();
-                    testResults.push_back(TestResult("Signing Browser Extension command (SHA512)", "OK" != GetResultFromResponse(ssResponse) ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
+                    testResults.push_back(TestResult("Signing Browser Extension command (SHA512)", GetResultFromResponse(ssResponse, cr->name), chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
 
                     std::cout << ssResponse << endl;
                     std::cout << "Signature " << GetSignatureFromResponse(ssResponse) << endl;

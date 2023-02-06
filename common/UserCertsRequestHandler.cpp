@@ -19,7 +19,6 @@ std::string UserCertsRequestHandler::process()
     try
     {
         ReaderList readerList;
-        size_t count = readerList.readers.size();
         int countSupportedCards = 0;
         int countUnsupportedCards = 0;
         int countErrors = 0;
@@ -43,7 +42,7 @@ std::string UserCertsRequestHandler::process()
             // else 0, return all usercerts
         }
 
-        if (count == 0)
+        if (readerList.readers.size() == 0)
         {
             response.put("result", "no_reader");
         }
@@ -51,10 +50,8 @@ std::string UserCertsRequestHandler::process()
         {
             long status = 0;
             ptree readerInfos;
-            for (int i = 0; i < (int)count; i++)
+            for (auto& reader : readerList.readers)
             {
-
-                std::shared_ptr<CardReader> reader = readerList.getReaderByIndex(i);
                 if (reader->atr == "")
                 {
                     continue;
@@ -75,15 +72,16 @@ std::string UserCertsRequestHandler::process()
                     continue; // card not supported in this reader, try next reader
                 }
 
-                // add usercertificates to list
-                std::vector<std::vector<char>> certificates;
-                status = card->readUserCertificates(FORMAT_RADIX64, certType, certificates);
-                if (status)
+                std::vector<std::shared_ptr<const CardFile>> certificates;
+                if (certType == 0 || certType == CERT_TYPE_NONREP)
                 {
-                    countErrors++;
-                    log_error("%s: E: card->readUserCertificates() returned %08X", WHERE, status);
-                    continue;
+                    certificates.push_back(card->getFile(CardFiles::Signcert));
                 }
+                if (certType == 0 || certType == CERT_TYPE_AUTH)
+                {
+                    certificates.push_back(card->getFile(CardFiles::Authcert));
+                }
+
                 countSupportedCards++;
                 ptree readerInfo;
                 readerInfo.put("ReaderName", reader->name);
@@ -100,15 +98,11 @@ std::string UserCertsRequestHandler::process()
                 for (auto& cert : certificates)
                 {
                     ptree certEntry;
-                    certEntry.put("", std::string(cert.data(), cert.size()));
+                    certEntry.put("", std::string(cert->getBase64().data(), cert->getBase64().size()));
                     certList.push_back(std::make_pair("", certEntry));
                 }
                 readerInfo.add_child("certificates", certList);
                 readerInfos.push_back(std::make_pair("", readerInfo));
-                for (auto& cert : certificates)
-                {
-                    cert.clear();
-                }
             }
             response.add_child("Readers", readerInfos);
 

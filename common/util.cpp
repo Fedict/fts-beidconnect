@@ -207,7 +207,7 @@ size_t base64encode(const unsigned char* string, size_t len, unsigned char* enco
 
 std::string rawToBase64(const std::vector<unsigned char> &raw)
 {
-    int i;
+    size_t i;
     const unsigned char basis_64[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
     std::string base64str;
 
@@ -235,7 +235,7 @@ std::string rawToBase64(const std::vector<unsigned char> &raw)
 
 const std::vector<unsigned char> base64ToRaw(const std::string& bufcoded)
 {
-    int nbytesdecoded;
+    //int nbytesdecoded;
     const unsigned char* bufin;
     std::vector<unsigned char> bufout;
     int nprbytes;
@@ -243,7 +243,7 @@ const std::vector<unsigned char> base64ToRaw(const std::string& bufcoded)
     bufin = (const unsigned char*)bufcoded.c_str();
     while (pr2six[*(bufin++)] <= 63);
     nprbytes = (int)(bufin - (const unsigned char*)bufcoded.c_str()) - 1;
-    nbytesdecoded = ((nprbytes + 3) / 4) * 3;
+    //nbytesdecoded = ((nprbytes + 3) / 4) * 3;
 
     bufin = (const unsigned char*)bufcoded.c_str();
 
