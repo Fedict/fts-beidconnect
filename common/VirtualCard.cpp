@@ -43,13 +43,11 @@ int VirtualCard::type() const
 };
 
 #define WHERE "VirtualCard::readCertificateChain"
-long VirtualCard::readCertificateChain(int format, const unsigned char *cert, size_t l_cert, std::vector<std::shared_ptr<const CardFile>>  &subCerts, std::vector<char> &root)
+void VirtualCard::readCertificateChain(std::vector<std::shared_ptr<const CardFile>> &subCerts, std::shared_ptr<const CardFile>& rootCert)
 {
     subCerts.push_back(getFile(CardFiles::Cacert));
-    subCerts.push_back(getFile(CardFiles::Rootcert));
+    rootCert = getFile(CardFiles::Rootcert);
     do_sleep(1000); //virtual read time
-
-    return 0;
 }
 #undef WHERE
 

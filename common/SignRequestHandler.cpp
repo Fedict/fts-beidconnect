@@ -29,14 +29,11 @@ std::string SignRequestHandler::process()
         size_t l_signature = 512;
         bool loggedON = false;
 
-        std::stringstream ss(ssRequest->str());
-        boost::property_tree::ptree pt;
-        boost::property_tree::read_json(ss, pt);
-        std::string certif = pt.get<std::string>("cert");
-        std::string operation = pt.get<std::string>("operation");
-        std::string pin = pt.get<std::string>("pin");
-        std::string digest = pt.get<std::string>("digest");
-        std::string digestAlgo = pt.get<std::string>("algo");
+        std::string certif = ptreeRequest->get<std::string>("cert");
+        std::string operation = ptreeRequest->get<std::string>("operation");
+        std::string pin = ptreeRequest->get<std::string>("pin");
+        std::string digest = ptreeRequest->get<std::string>("digest");
+        std::string digestAlgo = ptreeRequest->get<std::string>("algo");
 
         int l_cert = base64decode_len(certif);
         unsigned char* cert = (unsigned char*)malloc(l_cert);
@@ -64,7 +61,6 @@ std::string SignRequestHandler::process()
             ptree readerInfos;
             for (auto& reader : readerList.readers)
             {
-
                 if (reader->atr == "")
                 {
                     lasterror = E_SRC_NO_CARD;
@@ -102,6 +98,10 @@ std::string SignRequestHandler::process()
                     reader->disconnect();
                     continue; // try next reader to find chain
                 }
+                catch (...)
+                {
+                    continue;
+                }
 
                 if (lasterror)
                 {
@@ -137,6 +137,11 @@ std::string SignRequestHandler::process()
                     break;
                 }
 
+                if (TraceInfoInJsonResult)
+                {
+                    response.put("ReaderName", reader->name);
+                }
+
                 if (loggedON)
                 {
                     card->logoff();
@@ -158,11 +163,6 @@ std::string SignRequestHandler::process()
                 //}
                 break;
             }
-        }
-
-        if (TraceInfoInJsonResult)
-        {
-            response.put("ReaderName", reader->name);
         }
 
         switch (lasterror)

@@ -96,7 +96,7 @@ public:
 
    virtual std::string strType() const { return "NOT DEFINED"; };
    virtual int type() const { return -1; };
-   virtual long readCertificateChain(int format, const unsigned char *cert, size_t l_cert, std::vector<std::shared_ptr<const CardFile>> &subCerts, std::vector<char> &root){ throw NotImplementedException("CardFile readCertificateChain"); };
+   virtual void readCertificateChain(std::vector<std::shared_ptr<const CardFile>> &subCerts, std::shared_ptr<const CardFile>& rootCert){ throw NotImplementedException("CardFile readCertificateChain"); };
    virtual long selectKey(CardKeys type, unsigned char* cert = 0, size_t l_cert = 0) = 0;
    virtual long logon(int l_pin, char *pin) = 0;
    virtual long logoff() = 0;

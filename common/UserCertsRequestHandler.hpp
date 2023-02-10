@@ -7,7 +7,7 @@
 class UserCertsRequestHandler : public RequestHandler
 {
 public:
-    UserCertsRequestHandler(){};
+    UserCertsRequestHandler(const std::shared_ptr<boost::property_tree::ptree>& ptreeRequest) : RequestHandler(ptreeRequest) {};
     virtual ~UserCertsRequestHandler(){}; // without this destructor of derived handler is not called
     std::string process() override;
 };

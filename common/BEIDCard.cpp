@@ -80,46 +80,46 @@ constexpr unsigned char rootcert[6] = { 0x3F, 0x00, 0xDF, 0x00, 0x50, 0x3B }; //
 //}
 
 #define WHERE "BEIDCard::readCertificateChain"
-long BEIDCard::readCertificateChain(int format, const unsigned char* cert, size_t l_cert, std::vector<std::shared_ptr<const CardFile>>& subCerts, std::vector<char>& root)
+void BEIDCard::readCertificateChain(std::vector<std::shared_ptr<const CardFile>>& subCerts, std::shared_ptr<const CardFile>& rootCert)
 {
-    long ret;
-#define X509_ISSUER           "\1\1\4"
-#define X509_SUBJECT          "\1\1\6"
-    ASN1_ITEM subject, issuer;
+//    long ret;
+//#define X509_ISSUER           "\1\1\4"
+//#define X509_SUBJECT          "\1\1\6"
+//    ASN1_ITEM subject, issuer;
 
     //-----------------------------------------------------------------------------
     // CA certificate
     //-----------------------------------------------------------------------------
-    std::shared_ptr<const CardFile> cacert = getFile(CardFiles::Cacert);
-    ret = asn1_get_item(cacert->getRaw().data(), cacert->getRaw().size(), X509_SUBJECT, &subject);
-    if (ret) {
-        log_error("%s: Could not get subject name from certificate", WHERE);
-        goto cleanup;
-    }
+    //std::shared_ptr<const CardFile> cacert = getFile(CardFiles::Cacert);
+    //ret = asn1_get_item(cacert->getRaw().data(), cacert->getRaw().size(), X509_SUBJECT, &subject);
+    //if (ret) {
+    //    log_error("%s: Could not get subject name from certificate", WHERE);
+    //    goto cleanup;
+    //}
 
-    ret = asn1_get_item(cert, l_cert, X509_ISSUER, &issuer);
-    if (ret) {
-        log_error("%s: Could not get issuer name from certificate", WHERE);
-        goto cleanup;
-    }
+    //ret = asn1_get_item(cert, l_cert, X509_ISSUER, &issuer);
+    //if (ret) {
+    //    log_error("%s: Could not get issuer name from certificate", WHERE);
+    //    goto cleanup;
+    //}
 
-    if (asn_compare_items(&subject, &issuer) != 0) {
-        //this is not the issuer we are looking for
-        log_error("%s E: card does not contain the requested issuer certificate", WHERE);
-        ret = -1;
-        goto cleanup;
-    }
+    //if (asn_compare_items(&subject, &issuer) != 0) {
+    //    //this is not the issuer we are looking for
+    //    log_error("%s E: card does not contain the requested issuer certificate", WHERE);
+    //    ret = -1;
+    //    goto cleanup;
+    //}
 
-    subCerts.push_back(cacert);
+    subCerts.push_back(getFile(CardFiles::Cacert));
 
     //-----------------------------------------------------------------------------
     // root certificate
     //-----------------------------------------------------------------------------
-    subCerts.push_back(getFile(CardFiles::Rootcert));
+    rootCert = getFile(CardFiles::Rootcert);
 
-cleanup:
-
-    return (ret);
+//cleanup:
+//
+//    return (ret);
 }
 #undef WHERE
 

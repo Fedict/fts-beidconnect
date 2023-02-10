@@ -48,7 +48,7 @@ class SCard: public CardReader
    long endTransaction() override;
 public:
    SCard();
-   virtual ~SCard(){};
+   virtual ~SCard() { disconnect(); };
    static int listReaders(std::vector<std::shared_ptr<CardReader>> &readers);
    long connect() override;
    long disconnect() override;

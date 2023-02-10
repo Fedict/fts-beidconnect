@@ -7,7 +7,7 @@
 class InfoRequestHandler : public RequestHandler
 {
 public:
-    InfoRequestHandler(){};
+    InfoRequestHandler(const std::shared_ptr<boost::property_tree::ptree>& ptreeRequest) : RequestHandler(ptreeRequest) {};
     virtual ~InfoRequestHandler(){}; // without this destructor of derived handler is not called
     std::string process() override;
 };

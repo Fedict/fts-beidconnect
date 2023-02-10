@@ -23,10 +23,7 @@ std::string IDRequestHandler::process()
 
     try
     {
-        std::stringstream ss(ssRequest->str());
-        boost::property_tree::ptree pt;
-        boost::property_tree::read_json(ss, pt);
-        int idflags = stoi(pt.get<std::string>("idflags"));
+        int idflags = stoi(ptreeRequest->get<std::string>("idflags"));
 
         if (count == 0)
         {

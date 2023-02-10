@@ -17,7 +17,7 @@ class VirtualCard: public Card
    
       std::string strType() const override;
       int type() const override;
-      long readCertificateChain(int format, const unsigned char *cert, size_t l_cert, std::vector<std::shared_ptr<const CardFile>> &subCerts, std::vector<char> &root) override;
+      void readCertificateChain(std::vector<std::shared_ptr<const CardFile>> &subCerts, std::shared_ptr<const CardFile>& rootCert) override;
 
       long selectKey(CardKeys type, unsigned char* cert = 0, size_t l_cert = 0) override;
       long logon(int l_pin, char *pin) override;

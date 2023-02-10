@@ -21,10 +21,7 @@ std::string CertChainRequestHandler::process()
 
     try
     {
-        std::stringstream ss(ssRequest->str());
-        boost::property_tree::ptree pt;
-        boost::property_tree::read_json(ss, pt);
-        std::string certif = pt.get<std::string>("cert");
+        std::string certif = ptreeRequest->get<std::string>("cert");
         int l_cert = base64decode_len(certif);
         unsigned char* cert = (unsigned char*)malloc(l_cert);
         if (cert == 0)
@@ -62,31 +59,43 @@ std::string CertChainRequestHandler::process()
                 if (card == nullptr)
                 {
                     countUnsupportedCards++;
-                    continue; // card not supported in this reader, try next reader
+                    // card not supported in this reader, try next reader
+                    continue;
                 }
 
                 // add usercertificates to list
                 std::vector<std::shared_ptr<const CardFile>> subCAs;
-                std::vector<char> root;
-                status = card->readCertificateChain(FORMAT_RADIX64, cert, l_cert, subCAs, root);
-                if (status)
+                std::shared_ptr<const CardFile> rootCert;
+                try
                 {
-                    // countErrors++;
-                    // search next reader/card
-                    log_error("%s: E: readCertificateChain() returned %08X", WHERE, status);
+                    std::shared_ptr<const CardFile> cardSigningCert = card->getFile(CardFiles::Signcert);
+                    if (cardSigningCert->getBase64() != certif)
+                    {
+                        std::shared_ptr<const CardFile> cardAuthCert = card->getFile(CardFiles::Authcert);
+                        if (cardAuthCert->getBase64() != certif)
+                        {
+                            // none of the certificate of the card conrespond to the certificate received as parameter
+                            continue;
+                        }
+                    }
+
+                    card->readCertificateChain(subCAs, rootCert);
+                }
+                catch(...)
+                {
                     continue;
                 }
                 chainFound = 1;
 
                 // we found the subca(s) and root
                 ptree certificateChain;
-                certificateChain.put("rootCA", std::string(root.data(), root.size()));
+                certificateChain.put("rootCA", rootCert->getBase64());
 
                 ptree subCAList;
                 for (auto& cert : subCAs)
                 {
                     ptree certEntry;
-                    certEntry.put("", std::string(cert->getBase64().data(), cert->getBase64().size()));
+                    certEntry.put("", cert->getBase64());
                     subCAList.push_back(std::make_pair("", certEntry));
                 }
                 certificateChain.add_child("subCA", subCAList);

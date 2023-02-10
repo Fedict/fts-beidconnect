@@ -24,13 +24,9 @@ std::string UserCertsRequestHandler::process()
         int countErrors = 0;
         int certType = 0;
 
-        std::stringstream ss(ssRequest->str());
-        boost::property_tree::ptree pt;
-
-        boost::property_tree::read_json(ss, pt);
-        if (pt.get_optional<std::string>("keyusage").is_initialized())
+        if (ptreeRequest->get_optional<std::string>("keyusage").is_initialized())
         {
-            std::string keyusage = pt.get<std::string>("keyusage");
+            std::string keyusage = ptreeRequest->get<std::string>("keyusage");
             if (keyusage.compare("NONREPUDIATION") == 0)
             {
                 certType = CERT_TYPE_NONREP;
