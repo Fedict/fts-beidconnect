@@ -110,20 +110,6 @@ srpm:
     when:
       on_success
 
-build:fedora-35-64:
-  <<: *fedbuild
-  variables:
-    VERSION: 35
-    ARCH: x86_64
-    DIST: fedora
-
-build:fedora-35-32:
-  <<: *fedbuild
-  variables:
-    VERSION: 35
-    ARCH: i386
-    DIST: fedora
-
 build:fedora-36-64:
   <<: *fedbuild
   variables:
@@ -135,6 +121,20 @@ build:fedora-36-32:
   <<: *fedbuild
   variables:
     VERSION: 36
+    ARCH: i386
+    DIST: fedora
+
+build:fedora-37-64:
+  <<: *fedbuild
+  variables:
+    VERSION: 37
+    ARCH: x86_64
+    DIST: fedora
+
+build:fedora-37-32:
+  <<: *fedbuild
+  variables:
+    VERSION: 37
     ARCH: i386
     DIST: fedora
 
@@ -151,22 +151,6 @@ build:centos-7-64:
     VERSION: 7
     ARCH: x86_64
     DIST: centos
-
-build:debian-9-32:
-  <<: *debuild
-  variables:
-    CODE: stretch
-    SHORT: deb9
-    ARCH: i386
-    MIRROR: http://deb.debian.org/debian
-
-build:debian-9-64:
-  <<: *debuild
-  variables:
-    CODE: stretch
-    SHORT: deb9
-    ARCH: amd64
-    MIRROR: http://deb.debian.org/debian
 
 build:debian-10-32:
   <<: *debuild
