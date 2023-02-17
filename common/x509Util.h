@@ -34,12 +34,12 @@ enum X509_KEYTYPE {
    X509_KEYTYPE_EC
 };
 
-char* getCertSubjectName(unsigned char* cert, unsigned int l_cert);
-int isEndEntity(char* cert, unsigned int l_cert);
-unsigned int getKeyUsage(char* cert, unsigned int l_cert);
-int getKeyInfo(unsigned char *cert, unsigned int l_cert, int *keyType, unsigned int *keySize);
+char* getCertSubjectName(unsigned char* cert, size_t l_cert);
+int isEndEntity(char* cert, size_t l_cert);
+unsigned int getKeyUsage(char* cert, size_t l_cert);
+int getKeyInfo(const unsigned char *cert, size_t l_cert, int *keyType, size_t *keySize);
 //unsigned int getRSAKeyLength(const char* cert, unsigned int l_cert);
-char* getValidUntil(char* cert, unsigned int l_cert);
+char* getValidUntil(char* cert, size_t l_cert);
 int isTimeBeforeNow (int len, char *p_atime);
 
 #ifdef __cplusplus

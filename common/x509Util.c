@@ -7,7 +7,7 @@
 #include "log.hpp"
 #include "memory.h"
 
-char* getCertSubjectName(unsigned char* cert, unsigned int l_cert)
+char* getCertSubjectName(unsigned char* cert, size_t l_cert)
 {
    int ret = 0;
    ASN1_ITEM subject;
@@ -43,7 +43,7 @@ char* getCertSubjectName(unsigned char* cert, unsigned int l_cert)
 }
 
    
-int isEndEntity(char* cert, unsigned int l_cert)
+int isEndEntity(char* cert, size_t l_cert)
 {
    int ret = 0;
    ASN1_ITEM main;
@@ -119,7 +119,7 @@ int isEndEntity(char* cert, unsigned int l_cert)
 }
 
 
-unsigned int getKeyUsage(char* cert, unsigned int l_cert)
+unsigned int getKeyUsage(char* cert, size_t l_cert)
 {
    int ret = 0;
    ASN1_ITEM main;
@@ -175,7 +175,7 @@ unsigned int getKeyUsage(char* cert, unsigned int l_cert)
    return 0;
 }
 
-unsigned int getRSAKeyLength(const char *cert, unsigned int l_cert)
+size_t getRSAKeyLength(const char *cert, size_t l_cert)
 {
    int ret = 0;
    ASN1_ITEM spki, keyalg, key;
@@ -204,7 +204,7 @@ unsigned int getRSAKeyLength(const char *cert, unsigned int l_cert)
    return key.l_data;
 }
 
-char* getValidUntil(char* cert, unsigned int l_cert)
+char* getValidUntil(char* cert, size_t l_cert)
 {
    int ret = 0;
    static char time[LEN_DATE+1];
@@ -335,7 +335,7 @@ int isTimeBeforeNow (int len, char *p_atime)
    return -1;
 }
 
-int getKeyInfo(unsigned char *cert, unsigned int l_cert, int *keyType, unsigned int *keySize)
+int getKeyInfo(const unsigned char *cert, size_t l_cert, int *keyType, size_t *keySize)
 {
    int ret = 0;
    ASN1_ITEM keyinfo, keyalg, key;

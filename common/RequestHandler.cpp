@@ -12,59 +12,68 @@
 
 using namespace boost::property_tree;
 
-
-std::shared_ptr<RequestHandler> RequestHandler::createRequestHandler(std::shared_ptr <std::stringstream> ssRequest)
+std::shared_ptr<RequestHandler> RequestHandler::createRequestHandler(const std::shared_ptr<std::stringstream>& ssRequest)
 {
-   log_info(ssRequest->str().c_str());
-   boost::property_tree::ptree pt;
-   
-   try {
-       boost::property_tree::read_json(*ssRequest, pt);
-   }
-   catch (std::exception &e) {
-       log_error("error: %s", e.what());
-   }
+    std::shared_ptr<boost::property_tree::ptree> ptreeRequestTmp = std::make_shared<boost::property_tree::ptree>();
 
-   std::shared_ptr<RequestHandler> requestHandler = nullptr;
-   std::string operation = pt.get<std::string>("operation");
+    try
+    {
+        std::stringstream ss(ssRequest->str());
+        boost::property_tree::read_json(ss, *ptreeRequestTmp);
+    }
+    catch (std::exception &e)
+    {
+        log_error("error: %s", e.what());
+    }
 
-   if (operation == "VERSION") {
-      requestHandler = std::make_shared<VersionRequestHandler>();
-   }
-   else if (operation == "ID") {
-      requestHandler = std::make_shared<IDRequestHandler>();
-   }
-   else if (operation == "USERCERTS") {
-      requestHandler = std::make_shared<UserCertsRequestHandler>();
-   }
-   else if (operation == "CERTCHAIN") {
-      requestHandler = std::make_shared<CertChainRequestHandler>();
-   }
-   else if (operation == "SIGN") {
-      requestHandler = std::make_shared<SignRequestHandler>();
-   }
-   else if (operation == "AUTH") {
-      requestHandler = std::make_shared<SignRequestHandler>();
-   }
-   else {
+    std::shared_ptr<RequestHandler> requestHandler = nullptr;
+    std::string operation = ptreeRequestTmp->get<std::string>("operation");
+
+    if (operation == "VERSION")
+    {
+        requestHandler = std::make_shared<VersionRequestHandler>(ptreeRequestTmp);
+    }
+    else if (operation == "ID")
+    {
+        requestHandler = std::make_shared<IDRequestHandler>(ptreeRequestTmp);
+    }
+    else if (operation == "USERCERTS")
+    {
+        requestHandler = std::make_shared<UserCertsRequestHandler>(ptreeRequestTmp);
+    }
+    else if (operation == "CERTCHAIN")
+    {
+        requestHandler = std::make_shared<CertChainRequestHandler>(ptreeRequestTmp);
+    }
+    else if (operation == "SIGN")
+    {
+        requestHandler = std::make_shared<SignRequestHandler>(ptreeRequestTmp);
+    }
+    else if (operation == "AUTH")
+    {
+        requestHandler = std::make_shared<SignRequestHandler>(ptreeRequestTmp);
+    }
+    else
+    {
         log_error("Unknown operation <%s>", operation.c_str());
     }
 
-   requestHandler->ssRequest = ssRequest;
-   
-   return (requestHandler);
+    return (requestHandler);
 }
 
 void RequestHandler::post_process(boost::property_tree::ptree &response)
 {
-   if ( ssRequest) {
-      std::stringstream ss(ssRequest->str());
-      boost::property_tree::ptree pt;
-      boost::property_tree::read_json(ss, pt);
-      std::string correlationId = pt.get<std::string>("correlationId");
-
-      if (correlationId != "") {
-         response.put("correlationId", correlationId);
-      }
-   }
+    if (ptreeRequest)
+    {
+        std::string correlationId = ptreeRequest->get<std::string>("correlationId");
+        if (correlationId != "")
+        {
+            response.put("correlationId", correlationId);
+        }
+        std::string operation = ptreeRequest->get<std::string>("operation");
+        if (operation != "")
+        {
+            response.put("operation", operation);
+        }
+    }
 }

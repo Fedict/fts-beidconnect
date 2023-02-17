@@ -48,13 +48,13 @@ class SCard: public CardReader
    long endTransaction() override;
 public:
    SCard();
-   virtual ~SCard(){};
+   virtual ~SCard() { disconnect(); };
    static int listReaders(std::vector<std::shared_ptr<CardReader>> &readers);
    long connect() override;
    long disconnect() override;
    bool isPinPad() override;
-   long apdu(const unsigned char *apdu, unsigned int l_apdu, unsigned char *out, int *l_out, int *sw) override;
-   long verify_pinpad(unsigned char format, unsigned char PINBlock, unsigned char PINLength, unsigned int PINMaxExtraDigit, unsigned char pinAPDU[], int l_pinAPDU, int *sw) override;
+   long apdu(const unsigned char *apdu, size_t l_apdu, unsigned char *out, size_t*l_out, int *sw) override;
+   long verify_pinpad(unsigned char format, unsigned char PINBlock, size_t PINLength, unsigned int PINMaxExtraDigit, unsigned char pinAPDU[], size_t l_pinAPDU, int *sw) override;
 
    shared_ptr<SCardCtx> context;
    

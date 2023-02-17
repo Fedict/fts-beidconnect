@@ -32,8 +32,8 @@ public:
     virtual long connect() = 0;
     virtual long disconnect() = 0;
     virtual bool isPinPad() = 0;
-    virtual long apdu(const unsigned char* apdu, unsigned int l_apdu, unsigned char* out, int* l_out, int* sw) = 0;
-    virtual long verify_pinpad(unsigned char format, unsigned char PINBlock, unsigned char PINLength, unsigned int PINMaxExtraDigit, unsigned char pinAPDU[], int l_pinAPDU, int* sw) = 0;
+    virtual long apdu(const unsigned char* apdu, size_t l_apdu, unsigned char* out, size_t* l_out, int* sw) = 0;
+    virtual long verify_pinpad(unsigned char format, unsigned char PINBlock, size_t PINLength, unsigned int PINMaxExtraDigit, unsigned char pinAPDU[], size_t l_pinAPDU, int* sw) = 0;
 
     std::string name;
     std::string atr;

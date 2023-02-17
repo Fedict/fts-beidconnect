@@ -14,22 +14,6 @@
  ******************************************************************************************************
  ******************************************************************************************************/
 
-
-#define CARD_TYPE_TABLE { \
-{ "virtualcard",                             "VirtualCard",	   CARD_TYPE_VIRTUALCARD,  PROTOCOL_T0 },   \
-{ "3B9813400AA503010101AD1311",              "BEID",				CARD_TYPE_BEID,         PROTOCOL_T0 },   \
-{ "3B9813402AD000480101AD1311",              "BEID",           CARD_TYPE_BEID,         PROTOCOL_T0 },   \
-{ "3B9894400AA503010101AD1310",              "BEID",				CARD_TYPE_BEID,         PROTOCOL_T0 },   \
-{ "3B989440FFA503010101AD1310",				   "BEID",				CARD_TYPE_BEID,         PROTOCOL_T0 },   \
-{ "3B9895400AA507010101AD1320",              "BEID",           CARD_TYPE_BEID,         PROTOCOL_T0 },   \
-{ "3B989540FFD000480101AD1321",				   "BEID",			   CARD_TYPE_BEID,         PROTOCOL_T0 },   \
-{ "3B7F96000080318065B085040120120FFF829000","BEID",           CARD_TYPE_BEID,         PROTOCOL_T1 },   \
-{ "3BD218008131FE58C90316",                  "PKCS15",         CARD_TYPE_PKCS15,       PROTOCOL_T1 },   \
-{ "pkcs11",                                  "PKCS11",         CARD_TYPE_PKCS11,       PROTOCOL_T1 },   \
-NULL \
-};
-
-
 #define PROTOCOL_T0             1
 #define PROTOCOL_T1             2
 
@@ -41,15 +25,29 @@ typedef struct CARD_TYPE
    int   protocol;
 } CARD_TYPE;
 
+constexpr CARD_TYPE cardTypeTable[11] = {
+{ "virtualcard",                             "VirtualCard",	   CARD_TYPE_VIRTUALCARD,  PROTOCOL_T0 },
+{ "3B9813400AA503010101AD1311",              "BEID",           CARD_TYPE_BEID,         PROTOCOL_T0 },
+{ "3B9813402AD000480101AD1311",              "BEID",           CARD_TYPE_BEID,         PROTOCOL_T0 },
+{ "3B9894400AA503010101AD1310",              "BEID",           CARD_TYPE_BEID,         PROTOCOL_T0 },
+{ "3B989440FFA503010101AD1310",              "BEID",           CARD_TYPE_BEID,         PROTOCOL_T0 },
+{ "3B9895400AA507010101AD1320",              "BEID",           CARD_TYPE_BEID,         PROTOCOL_T0 },
+{ "3B989540FFD000480101AD1321",              "BEID",           CARD_TYPE_BEID,         PROTOCOL_T0 },
+{ "3B7F96000080318065B085040120120FFF829000","BEID",           CARD_TYPE_BEID,         PROTOCOL_T1 },
+{ "3BD218008131FE58C90316",                  "PKCS15",         CARD_TYPE_PKCS15,       PROTOCOL_T1 },
+{ "pkcs11",                                  "PKCS11",         CARD_TYPE_PKCS11,       PROTOCOL_T1 },
+{ nullptr,                                   nullptr,          0,                      0           },
+};
+
+
 std::shared_ptr<Card>  CardFactory::createCard(const std::shared_ptr<CardReader>& reader)
 {
-   CARD_TYPE *cardtype;
-   CARD_TYPE cardTypeTable[] = CARD_TYPE_TABLE;
+   const CARD_TYPE *cardtype;
    int i = 0;
    std::string atr = reader->atr;
    std::shared_ptr<Card> card;
 
-   for (i=0; (cardtype = &cardTypeTable[i]) && cardtype->atr; i++)
+   for (i=0; (cardTypeTable[i].atr != nullptr) && (cardtype = &cardTypeTable[i]) && cardtype->atr; i++)
 	  {
         if (atr.compare(cardtype->atr) == 0)
         {
@@ -62,8 +60,6 @@ std::shared_ptr<Card>  CardFactory::createCard(const std::shared_ptr<CardReader>
               case CARD_TYPE_BEID:
               {
                  card = std::make_shared<BEIDCard>(reader);
-                 if (!(card->isCardSupported()))
-                    continue;
                  return card;
               }
               case CARD_TYPE_PKCS15:
@@ -77,8 +73,6 @@ std::shared_ptr<Card>  CardFactory::createCard(const std::shared_ptr<CardReader>
               case CARD_TYPE_VIRTUALCARD:
               {
                  card = std::make_shared<VirtualCard>(reader);
-                 if (!(card->isCardSupported()))
-                    continue;
                  return card;
               }
               default:

@@ -6,15 +6,18 @@
 #include <sstream>
 #include <fstream>
 #include <memory>
+#include <map>
 #include "log.hpp"
 #include "CardErrors.h"
+#include "SCardException.h"
+#include "util.h"
 
 #define FORMAT_HEX				1
 #define FORMAT_RADIX64			2
 #define FORMAT_RAW            3
 
 #define CARD_TYPE_VIRTUALCARD   0
-#define CARD_TYPE_BEID			  1
+#define CARD_TYPE_BEID			1
 #define CARD_TYPE_CARDOS        2
 #define CARD_TYPE_CARDOS44      3
 #define CARD_TYPE_ADVCARD       4
@@ -34,6 +37,56 @@
 #define AUTHCERT           9
 #define SIGNCERT          10
 
+class CardFile
+{
+	mutable std::string Base64Format;
+	mutable std::vector<unsigned char> RawFormat;
+public:
+	CardFile(const std::string& Base64Format) : Base64Format(Base64Format) {}
+	CardFile(const std::vector<unsigned char>& RawFormat) : RawFormat(RawFormat) {}
+	CardFile(){}
+
+	inline const std::string& getBase64() const
+	{
+		if (Base64Format.empty() && RawFormat.size() > 0)
+		{
+			Base64Format = rawToBase64(RawFormat);
+		}
+		return Base64Format;
+	}
+	inline const std::vector<unsigned char>& getRaw() const
+	{
+		if (RawFormat.size() == 0 && !Base64Format.empty() )
+		{
+			RawFormat = base64ToRaw(Base64Format);
+		}
+		return RawFormat;
+	}
+};
+
+enum class CardFileReadOptimization
+{
+	None,
+	DEREncodedCertificate
+};
+enum class CardFiles
+{
+	Id,
+	Id_sig,
+	Address,
+	Address_sig,
+	Photo,
+	Rrncert,
+	Authcert,
+	Signcert,
+	Cacert,
+	Rootcert
+};
+enum class CardKeys
+{
+	NonRep,
+	Auth
+};
 
 class Card
 {
@@ -41,31 +94,21 @@ public:
    Card() {};
    virtual ~Card(){};
 
-   void setAtr(std::string atr);
-
-   virtual int isCardSupported(void) { return 1; };
-   virtual std::string strType() { return "NOT DEFINED"; };
-   virtual int type() { return -1; };
-   virtual long readCertificate(int format, int type, std::vector<char> &cert) = 0;
-   virtual long readUserCertificates(int format, int certType, std::vector<std::vector<char>> &certificates){ return -1; };
-   virtual long readCertificateChain(int format, unsigned char *cert, int l_cert, std::vector<std::vector<char>> &subCerts, std::vector<char> &root){ return -1; };
-   virtual long selectKey(int type, unsigned char* cert = 0, size_t l_cert = 0) = 0;
+   virtual std::string strType() const { return "NOT DEFINED"; };
+   virtual int type() const { return -1; };
+   virtual void readCertificateChain(std::vector<std::shared_ptr<const CardFile>> &subCerts, std::shared_ptr<const CardFile>& rootCert){ throw NotImplementedException("CardFile readCertificateChain"); };
+   virtual long selectKey(CardKeys type, unsigned char* cert = 0, size_t l_cert = 0) = 0;
    virtual long logon(int l_pin, char *pin) = 0;
    virtual long logoff() = 0;
-   virtual long sign(unsigned char* in, unsigned int l_in, int hashAlgo, unsigned char *out, unsigned int *l_out, int *sw) = 0;
-   virtual std::vector<char> getFile(int format, std::string fileType) { return std::vector<char>(); };
+   virtual long sign(const unsigned char* in, size_t l_in, int hashAlgo, unsigned char *out, size_t*l_out, int *sw) = 0;
+   virtual std::shared_ptr<const CardFile> getFile(CardFiles fileType) { throw NotImplementedException("CardFile getFile"); };
 
-   virtual std::string* valueForKey(std::string* key) {return nullptr;};
-   virtual long selectFile(unsigned char *file, int l_file){ return -1; };
-   virtual long readFile2(unsigned int offset, int* p_len, unsigned char* p_out){ return -1; };
-
-   long getFile(unsigned char *file, int l_file, int* l_out, unsigned char* p_out);
-   virtual int list_objects(std::ostringstream& buf) { return (-1); };
-
+   virtual const std::map<std::string, std::string> getCardData() { return std::map<std::string, std::string>(); }
+protected:
    std::shared_ptr<class CardReader> reader;
 
-private:
-   std::string     atr;
+   virtual long selectFile(const unsigned char *file, size_t l_file){ throw NotImplementedException("CardFile selectFile"); };
+   virtual std::shared_ptr<const CardFile> readFile3(CardFileReadOptimization optimization = CardFileReadOptimization::None) { throw NotImplementedException("CardFile readFile3"); };
 };
 
 #endif /* Card_hpp */

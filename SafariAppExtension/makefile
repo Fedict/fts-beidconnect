@@ -1,4 +1,4 @@
-VERSION = 2.7
+VERSION = 2.8
 APPIDENTIFIER = be.bosa.beidconnect.safari
 APPEXIDENTIFIER = be.bosa.beidconnect.safari-extension
 PROGRAM = BeIDConnect\ Extension
@@ -78,7 +78,8 @@ compfiles : $(BINARIES)
 	@echo "Edit the $(COMPONENT_PFILE).new template to create a suitable $(COMPONENT_PFILE) file."
 
 notarise: $(DMGFILE)
-	xcrun altool --notarize-app --primary-bundle-id $(APPIDENTIFIER) --username christophe.peerens@bosa.fgov.be --password "@keychain:AC_PASSWORD" --asc-provider 7682K6YL8X --file $(DMGFILE)
+#	xcrun altool --notarize-app --primary-bundle-id $(APPIDENTIFIER) --username christophe.peerens@bosa.fgov.be --password "@keychain:AC_PASSWORD" --asc-provider 7682K6YL8X --file $(DMGFILE)
+	xcrun notarytool submit $(DMGFILE) --keychain-profile "AC_PASSWORD" --wait
 
 staple: 
 	xcrun stapler staple $(DMGFILE)
