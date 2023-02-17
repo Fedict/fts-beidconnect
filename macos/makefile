@@ -1,4 +1,4 @@
-VERSION = 2.7
+VERSION = 2.8
 IDENTIFIER = be.bosa.beidconnect
 PROGRAM = beidconnect
 DISTDIR = ./install/dist
@@ -101,7 +101,8 @@ compfiles : $(BINARIES)
 	@echo "Edit the $(COMPONENT_PFILE).new template to create a suitable $(COMPONENT_PFILE) file."
 
 notarise: $(DMGFILE)
-	xcrun altool --notarize-app --primary-bundle-id $(IDENTIFIER) --username christophe.peerens@bosa.fgov.be --password "@keychain:AC_PASSWORD" --asc-provider 7682K6YL8X --file $(DMGFILE)
+#	xcrun altool --notarize-app --primary-bundle-id $(IDENTIFIER) --username christophe.peerens@bosa.fgov.be --password "@keychain:AC_PASSWORD" --asc-provider 7682K6YL8X --file $(DMGFILE)
+	xcrun notarytool submit $(DMGFILE) --keychain-profile "AC_PASSWORD" --wait
 
 staple: 
 	xcrun stapler staple $(DMGFILE)
