@@ -455,50 +455,24 @@ long BEIDCard::sign(const unsigned char* in, size_t l_in, int hashAlgo, unsigned
 #undef WHERE
 
 #define WHERE "BEIDCard::selectFile"
-long BEIDCard::selectFile(const unsigned char* file, size_t l_file)
+void BEIDCard::selectFile(const unsigned char* file, size_t l_file)
 {
-    long ret = 0;
-    unsigned char apdu[256] = "\x00\xA4\x02\x0C\x00";
-    unsigned int l_apdu = 5;
-    unsigned char recv[256];
-    size_t recvlen = 256;
-    int sw = 0;
-#if 0
-    apdu[4] = l_file;
-    memcpy(apdu + l_apdu, file, l_file);
-
-    l_apdu += l_file;
-
-    do_sleep(5);
-    ret = reader->apdu(apdu, l_apdu, recv, &recvlen, &sw);
-    if (ret < 0) {
-        log_error("%s: reader->apdu returned 0x%0X", WHERE, ret);
-        return(ret);
-    }
-    if (sw != 0x9000)
-        return(-1);
-#else
-    apdu[4] = 2;
-    l_apdu += 2;
+    CardAPDU apdu({ 0x00,0xA4,0x02,0x0C,0x00 }, 7);
+    apdu.patch(4, 2);
     for (size_t i = 0; i < (l_file / 2); i++) {
-        memcpy(&apdu[5], &file[i * 2], 2);
+        apdu.patch(5, file[i * 2]);
+        apdu.patch(6, file[(i * 2)+1]);
         do_sleep(5);
-        ret = reader->apdu(apdu, l_apdu, recv, &recvlen, &sw);
-        if (ret < 0) {
-            log_error("%s: reader->apdu returned 0x%0X", WHERE, ret);
-            return(ret);
-        }
-        if (sw != 0x9000)
-            return(-1);
+        CardAPDUResponse cr = reader->apdu2(apdu);
+        if (cr.getSW() != 0x9000)
+            throw CardException(cr.getSW());
     }
-#endif
-
-    return(ret);
 }
 #undef WHERE
 
-#define WHERE "BEIDCard::readFile2()"
-std::shared_ptr<const CardFile> BEIDCard::readFile3(CardFileReadOptimization optimization)
+
+#define WHERE "BEIDCard::readFile()"
+std::shared_ptr<const CardFile> BEIDCard::readFile(CardFileReadOptimization optimization)
 {
     std::vector<unsigned char> result;
     std::vector<unsigned char> buf(1024);
@@ -656,9 +630,8 @@ std::shared_ptr<const CardFile> BEIDCard::getFile(CardFiles fileType)
     }
     long ret = 0;
     ScopedCardTransaction trans(reader);  //begin transaction
-    ret = selectFile(idFile.data(), idFile.size());
-    if (ret == 0) return readFile3(optimization);
-    throw CardFileException("File select requested failed");
+    selectFile(idFile.data(), idFile.size());
+    return readFile(optimization);
 }
 
 const std::map<std::string, std::string> BEIDCard::getCardData()

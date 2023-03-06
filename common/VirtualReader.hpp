@@ -21,6 +21,7 @@ public:
    long disconnect() override;
    bool isPinPad() override{ return 0; };
    long apdu(const unsigned char* apdu, size_t l_apdu, unsigned char* out, size_t* l_out, int* sw) override { throw NotImplementedException("VirtualReader apdu"); };
+   CardAPDUResponse apdu2(const CardAPDU& apdu) override { throw NotImplementedException("VirtualReader apdu2"); };
    long verify_pinpad(unsigned char format, unsigned char PINBlock, size_t PINLength, unsigned int PINMaxExtraDigit, unsigned char pinAPDU[], size_t l_pinAPDU, int *sw)override { throw NotImplementedException("VirtualReader verify_pinpad"); };
 };
 

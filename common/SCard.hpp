@@ -41,7 +41,6 @@ private:
    SCARDCONTEXT  h;
 };
 
-
 class SCard: public CardReader
 {
    long beginTransaction() override;
@@ -54,6 +53,7 @@ public:
    long disconnect() override;
    bool isPinPad() override;
    long apdu(const unsigned char *apdu, size_t l_apdu, unsigned char *out, size_t*l_out, int *sw) override;
+   CardAPDUResponse apdu2(const CardAPDU& apdu) override;
    long verify_pinpad(unsigned char format, unsigned char PINBlock, size_t PINLength, unsigned int PINMaxExtraDigit, unsigned char pinAPDU[], size_t l_pinAPDU, int *sw) override;
 
    shared_ptr<SCardCtx> context;

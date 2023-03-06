@@ -243,6 +243,10 @@ std::string SignRequestHandler::process()
     {
         response.put("result", e.result());
     }
+    catch (CardException& e)
+    {
+        response.put("result", e.result());
+    }
     catch (...)
     {
         response.put("result", "general_error");

@@ -342,6 +342,22 @@ long SCard::apdu(const unsigned char *apdu, size_t l_apdu, unsigned char *out, s
 }
 #undef WHERE
 
+#define WHERE "scard::apdu2()"
+CardAPDUResponse SCard::apdu2(const CardAPDU& apdu)
+{
+    LONG r = 0;
+    unsigned char recv[512];
+    DWORD l_recv = 512;
+
+    r = SCardTransmit(hCard, &ioSendPci, apdu.GetAPDU().data(), (DWORD)apdu.GetAPDU().size(), &ioRecvPci, recv, &l_recv);
+    if (r != SCARD_S_SUCCESS) {
+        log_error("%s: E: Failed SCardTransmit(): %d (0x%0x)", WHERE, r, r);
+        throw SCardException(r);
+    }
+    return CardAPDUResponse(recv, l_recv);
+}
+#undef WHERE
+
 unsigned int load_int4(unsigned char *x)
 {
    return((x[0] << 24) + (x[1] << 16) + (x[2] << 8) + x[3]);
@@ -377,7 +393,7 @@ bool SCard::getPPDUFeatures()
     {
         unsigned char buf[512];
         size_t         rcv_len = 512;
-        ret = apdu(get_feature_list, sizeof(get_feature_list), buf, &rcv_len, &sw);
+        ret = 0; apdu(get_feature_list, sizeof(get_feature_list), buf, &rcv_len, &sw);
         if (ret == 0) {
             // every byte represents a feature, except the last 2 bytes (SW1, SW2)
             for(DWORD i=0; i < rcv_len; i++)

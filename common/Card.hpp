@@ -107,8 +107,8 @@ public:
 protected:
    std::shared_ptr<class CardReader> reader;
 
-   virtual long selectFile(const unsigned char *file, size_t l_file){ throw NotImplementedException("CardFile selectFile"); };
-   virtual std::shared_ptr<const CardFile> readFile3(CardFileReadOptimization optimization = CardFileReadOptimization::None) { throw NotImplementedException("CardFile readFile3"); };
+   virtual void selectFile(const unsigned char *file, size_t l_file){ throw NotImplementedException("CardFile selectFile"); };
+   virtual std::shared_ptr<const CardFile> readFile(CardFileReadOptimization optimization = CardFileReadOptimization::None) { throw NotImplementedException("CardFile readFile3"); };
 };
 
 #endif /* Card_hpp */

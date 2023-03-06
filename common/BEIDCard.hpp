@@ -26,14 +26,14 @@ class BEIDCard: public Card
       std::shared_ptr<const CardFile> getFile(CardFiles fileType) override;
 
       //std::string* valueForKey(std::string* key) override;
-      long selectFile(const unsigned char *file, size_t l_file) override;
-      std::shared_ptr<const CardFile> readFile3(CardFileReadOptimization optimization = CardFileReadOptimization::None) override;
+      void selectFile(const unsigned char *file, size_t l_file) override;
+      std::shared_ptr<const CardFile> readFile(CardFileReadOptimization optimization = CardFileReadOptimization::None) override;
 
       const std::map<std::string, std::string> getCardData() override;
 
    private:
-      int currentSelectedKeyType;
-      size_t currentSelectedKeyLength;
+      int currentSelectedKeyType = X509_KEYTYPE_RSA;
+      size_t currentSelectedKeyLength = 0;
       bool cacheCardDataLoaded = false;
       std::map<std::string, std::string> cacheCardData;
 };
