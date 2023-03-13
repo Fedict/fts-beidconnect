@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef IDRequestHandler_hpp
 #define IDRequestHandler_hpp
 

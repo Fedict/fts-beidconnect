@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef __ASN1_H__
 #define __ASN1_H__
 

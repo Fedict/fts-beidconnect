@@ -1,17 +1,18 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
+#include <sstream>
 #include "VersionRequestHandler.hpp"
 #include "general.h"
-#include <sstream>
 #include "log.hpp"
+#include "SCardException.h"
 
 using boost::property_tree::ptree;
 
 std::string VersionRequestHandler::process()
 {
     ptree response;
-    response.put("result", "OK");
-    response.put("version", BEIDCONNECT_VERSION);
+    response.put(BeidConnect_JSON_field::result, BeidConnect_Result::OK);
+    response.put(BeidConnect_JSON_field::version, BEIDCONNECT_VERSION);
 
     // The beidconnect Windows version is provided by 2 installation type:
     // current user installation and machine (all users) installation defined as the ADMIN installation.

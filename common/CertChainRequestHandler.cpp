@@ -15,30 +15,22 @@ using boost::property_tree::ptree;
 std::string CertChainRequestHandler::process()
 {
     ptree response;
-    int chainFound = 0;
-    int countUnsupportedCards = 0;
-    int countErrors = 0;
-
     try
     {
-        std::string certif = ptreeRequest->get<std::string>("cert");
-        int l_cert = base64decode_len(certif);
-        unsigned char* cert = (unsigned char*)malloc(l_cert);
-        if (cert == 0)
-        {
-            log_error("%s mem alloc failed for cert (%d)", WHERE, l_cert);
-        }
-        l_cert = base64decode(certif, cert);
+        bool chainFound = false;
+        // IsBusy flag handle the case when at least one card report a busy error and the reference certificate is not found.
+        // This may be the case when the busy card contains the certificate.
+        bool IsBusy = false;
+
+        std::string certif = ptreeRequest->get<std::string>(BeidConnect_JSON_field::cert);
 
         ReaderList readerList;
-        size_t count = readerList.readers.size();
-        if (count == 0)
+        if (readerList.readers.size() == 0)
         {
-            response.put("result", "no_reader");
+            response.put(BeidConnect_JSON_field::result, BeidConnect_Result::no_reader);
         }
         else
         {
-            long status = 0;
             ptree readerInfos;
             for (auto& reader : readerList.readers)
             {
@@ -47,18 +39,15 @@ std::string CertChainRequestHandler::process()
                     continue;
                 }
 
-                status = reader->connect();
-                if (status)
+                if (reader->connect())
                 {
-                    countErrors++;
-                    log_error("%s: E: reader->connect(%s) returned %08X", WHERE, reader->name.c_str(), status);
                     continue;
                 }
 
                 std::shared_ptr<Card> card = CardFactory::createCard(reader);
                 if (card == nullptr)
                 {
-                    countUnsupportedCards++;
+                    //countUnsupportedCards++;
                     // card not supported in this reader, try next reader
                     continue;
                 }
@@ -79,17 +68,23 @@ std::string CertChainRequestHandler::process()
                         }
                     }
 
-                    card->readCertificateChain(subCAs, rootCert);
+                }
+                catch (SCardException& e)
+                {
+                    if (e.getCode() == SCardException_Code::TransactionFail) IsBusy = true;
+                    continue;
                 }
                 catch(...)
                 {
                     continue;
                 }
-                chainFound = 1;
+                chainFound = true;
+
+                card->readCertificateChain(subCAs, rootCert);
 
                 // we found the subca(s) and root
                 ptree certificateChain;
-                certificateChain.put("rootCA", rootCert->getBase64());
+                certificateChain.put(BeidConnect_JSON_field::rootCA, rootCert->getBase64());
 
                 ptree subCAList;
                 for (auto& cert : subCAs)
@@ -98,58 +93,64 @@ std::string CertChainRequestHandler::process()
                     certEntry.put("", cert->getBase64());
                     subCAList.push_back(std::make_pair("", certEntry));
                 }
-                certificateChain.add_child("subCA", subCAList);
+                certificateChain.add_child(BeidConnect_JSON_field::subCA, subCAList);
 
-                response.add_child("certificateChain", certificateChain);
-                response.put("cardType", card->strType());
+                response.add_child(BeidConnect_JSON_field::certificateChain, certificateChain);
+                response.put(BeidConnect_JSON_field::cardType, card->strType());
                 if (reader->isPinPad())
                 {
-                    response.put("ReaderType", "pinpad");
+                    response.put(BeidConnect_JSON_field::ReaderType, BeidConnect_ReaderType::pinpad);
                 }
                 else
                 {
-                    response.put("ReaderType", "standard");
+                    response.put(BeidConnect_JSON_field::ReaderType, BeidConnect_ReaderType::standard);
                 }
                 if (TraceInfoInJsonResult)
                 {
-                    response.put("ReaderName", reader->name);
+                    response.put(BeidConnect_JSON_field::ReaderName, reader->name);
                 }
 
                 break;
             }
 
-            if (chainFound > 0)
+            if (chainFound)
             {
-                response.put("result", "OK");
+                response.put(BeidConnect_JSON_field::result, BeidConnect_Result::OK);
+            }
+            else if (IsBusy)
+            {
+                response.put(BeidConnect_JSON_field::result, BeidConnect_Result::busy);
             }
             else
             {
                 // errors and unsupported cards result in no_card
-                response.put("result", "no_card");
-
-                if (countUnsupportedCards > 0)
-                {
-                    response.put("report", "card_type_unsupported");
-                }
+                response.put(BeidConnect_JSON_field::result, BeidConnect_Result::no_card);
+                //if (countUnsupportedCards > 0)
+                //{
+                //    response.put(BeidConnect_JSON_field::report, BeidConnect_Result::card_type_unsupported);
+                //}
             }
-        }
-
-        if (cert)
-        {
-            free(cert);
         }
     }
     catch (SCardException& e)
     {
-        response.put("result", e.result());
+        log_error("%s: E: SCardException SCardResult(%08X) code(%08X)", WHERE, e.getSCardResult(), e.getCode());
+        response.put(BeidConnect_JSON_field::result, e.result());
     }
     catch (CardException& e)
     {
-        response.put("result", e.result());
+        log_error("%s: E: CardException SW(%04X)", WHERE, e.getSW());
+        response.put(BeidConnect_JSON_field::result, e.result());
+    }
+    catch (BeidConnectException& e)
+    {
+        log_error("%s: E: BeidConnectException code(%08X)", WHERE, e.getCode());
+        response.put(BeidConnect_JSON_field::result, e.result());
     }
     catch (...)
     {
-        response.put("result", "general_error");
+        log_error("%s: E: Exception", WHERE);
+        response.put(BeidConnect_JSON_field::result, BeidConnect_Result::general_error);
     }
     post_process(response);
     std::stringstream streamResponse;

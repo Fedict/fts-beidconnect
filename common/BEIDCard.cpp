@@ -1,3 +1,4 @@
+#include <unordered_map>
 #include "BEIDCard.hpp"
 #include "log.hpp"
 #include "util.h"
@@ -5,36 +6,38 @@
 #include "hash.h"
 #include "asn1.hpp"
 #include "x509Util.h"
-#include <unordered_map>
+#ifdef _DEBUG
+#include "test.hpp"
+#endif
 
 #define BEID_READ_BINARY_MAX_LEN     250			 /*maximum length to read with single card command*/
 
 //MSE_SET command
 //For Applet 1.7 cards
-constexpr unsigned char prepareAuthenticationCmd[10] = { 0x00, 0x22, 0x41, 0xB6, 0x05, 0x04, 0x80, 0x01, 0x84, 0x82 }; //"\x00\x22\x41\xB6\x05\x04\x80\x01\x84\x82"
+constexpr unsigned char prepareAuthenticationCmd[10] = { 0x00, 0x22, 0x41, 0xB6, 0x05, 0x04, 0x80, 0x01, 0x84, 0x82 };
 //#define prepareAuthenticationSHA1Cmd                         "\x00\x22\x41\xB6\x05\x04\x80\x02\x84\x82"
 //#define prepareAuthenticationMD5Cmd                          "\x00\x22\x41\xB6\x05\x04\x80\x04\x84\x82"
 
-constexpr unsigned char prepareNonRepudiationCmd[10] = { 0x00, 0x22, 0x41, 0xB6, 0x05, 0x04, 0x80, 0x01, 0x84, 0x83 }; //"\x00\x22\x41\xB6\x05\x04\x80\x01\x84\x83"
+constexpr unsigned char prepareNonRepudiationCmd[10] = { 0x00, 0x22, 0x41, 0xB6, 0x05, 0x04, 0x80, 0x01, 0x84, 0x83 };
 //#define prepareNonRepudiationSHA1Cmd                         "\x00\x22\x41\xB6\x05\x04\x80\x02\x84\x83"
 //#define prepareNonRepudiationMD5Cmd                          "\x00\x22\x41\xB6\x05\x04\x80\x04\x84\x83"
 
 //MSE_SET command
 //For Applet 1.8 cards
-constexpr unsigned char applet1_8_prepareAuthenticationCmd[10] = { 0x00, 0x22, 0x41, 0xB6, 0x05, 0x04, 0x80, 0x40, 0x84, 0x82 }; //"\x00\x22\x41\xB6\x05\x04\x80\x40\x84\x82"
-constexpr unsigned char applet1_8_prepareNonRepudiationCmd[10] = { 0x00, 0x22, 0x41, 0xB6, 0x05, 0x04, 0x80, 0x40, 0x84, 0x83 }; //"\x00\x22\x41\xB6\x05\x04\x80\x40\x84\x83"
+constexpr unsigned char applet1_8_prepareAuthenticationCmd[10] = { 0x00, 0x22, 0x41, 0xB6, 0x05, 0x04, 0x80, 0x40, 0x84, 0x82 };
+constexpr unsigned char applet1_8_prepareNonRepudiationCmd[10] = { 0x00, 0x22, 0x41, 0xB6, 0x05, 0x04, 0x80, 0x40, 0x84, 0x83 };
 
 //#define resetPinApdu                              "\x00\x20\x00\x02\x08\x2C\x33\x33\x33\x11\x11\x11\xFF" (13 bytes) New PIN: 1234
 
 //#define unblockCardApdu                           "\x00\x2c\x00\x01\x08\x2c\xFF\xFF\xFF\xFF\xFF\xFF\xFF"
 //#define verifyPinApdu                             "\x00\x20\x00\x01\x08\x2f\xff\xff\xff\xff\xff\xff\xff"
-#define verifyPinApdu                               "\x00\x20\x00\x01\x08\x20\xff\xff\xff\xff\xff\xff\xff"
-#define logoutApdu                                  "\x80\xE6\x00\x00"
+constexpr unsigned char verifyPinApdu[] = { 0x00,0x20,0x00,0x01,0x08,0x20,0xff,0xff,0xff,0xff,0xff,0xff,0xff };
+constexpr unsigned char logoutApdu[] = { 0x80, 0xE6, 0x00, 0x00 };
 //#define beid_apdu_change_pin_1                    "\x00\x24\x00\x01\x08\x2f\xff\xff\xff\xff\xff\xff\xff"
 //#define beid_apdu_change_pin_0                    "\x00\x24\x01\x01\x10\x2f\xff\xff\xff\xff\xff\xff\xff\x2f\xff\xff\xff\xff\xff\xff\xff"
 
-#define generateSignatureCmd                        "\x00\x2A\x9E\x9A"
-#define retrieveSignatureCmd                        "\x00\xC0\x00\x00\x80"
+constexpr unsigned char generateSignatureCmd[] = { 0x00,0x2A,0x9E,0x9A };
+constexpr unsigned char retrieveSignatureCmd[] = { 0x00,0xC0,0x00,0x00,0x80 };
 //#define getResultCmd                              "\x00\xC0\x00\x00\x00"
 //#define selectFileCmd                             "\x00\xa4\x02\x00\x02\x3f\x00"
 //#define selectSerialCmd                           "\x00\xA4\x08\x0C\x06\x3F\x00\xDF\x00\x50\x32"
@@ -58,26 +61,21 @@ constexpr unsigned char applet1_8_prepareNonRepudiationCmd[10] = { 0x00, 0x22, 0
 //#define selectAddressFileSignatureCmd             "\x00\xA4\x02\x0C\x02\x40\x34"
 //#define selectPhotoCommand                        "\x00\xA4\x02\x0C\x02\x40\x35"
 
-constexpr unsigned char beid_apdu_binary[5] = { 0x00, 0xB0, 0x00, 0x00, 0x00 }; //"\x00\xB0\x00\x00\x00"
+constexpr unsigned char beid_apdu_binary[5] = { 0x00, 0xB0, 0x00, 0x00, 0x00 };
 
 constexpr unsigned char beid_apdu_GetCardData[5] = { 0x80, 0xE4, 0x00, 0x00, 0x1C };
 
 // Files
-constexpr unsigned char id[6] = { 0x3F, 0x00, 0xDF, 0x01, 0x40, 0x31 }; //"\x3F\x00\xDF\x01\x40\x31";
-constexpr unsigned char id_sig[6] = { 0x3F, 0x00, 0xDF, 0x01, 0x40, 0x32 }; //"\x3F\x00\xDF\x01\x40\x32";
-constexpr unsigned char address[6] = { 0x3F, 0x00, 0xDF, 0x01, 0x40, 0x33 }; //"\x3F\x00\xDF\x01\x40\x33";
-constexpr unsigned char address_sig[6] = { 0x3F, 0x00, 0xDF, 0x01, 0x40, 0x34 }; //"\x3F\x00\xDF\x01\x40\x34";
-constexpr unsigned char photo[6] = { 0x3F, 0x00, 0xDF, 0x01, 0x40, 0x35 }; //"\x3F\x00\xDF\x01\x40\x35";
-constexpr unsigned char rrncert[6] = { 0x3F, 0x00, 0xDF, 0x00, 0x50, 0x3C }; //"\x3F\x00\xDF\x00\x50\x3C";
-constexpr unsigned char authcert[6] = { 0x3F, 0x00, 0xDF, 0x00, 0x50, 0x38 }; //"\x3F\x00\xDF\x00\x50\x38";
-constexpr unsigned char signcert[6] = { 0x3F, 0x00, 0xDF, 0x00, 0x50, 0x39 }; //"\x3F\x00\xDF\x00\x50\x39";
-constexpr unsigned char cacert[6] = { 0x3F, 0x00, 0xDF, 0x00, 0x50, 0x3A }; //"\x3F\x00\xDF\x00\x50\x3A";
-constexpr unsigned char rootcert[6] = { 0x3F, 0x00, 0xDF, 0x00, 0x50, 0x3B }; //"\x3F\x00\xDF\x00\x50\x3B";
-
-//std::string* BEIDCard::valueForKey(std::string* key)
-//{
-//   return nullptr;
-//}
+constexpr unsigned char id[6] = { 0x3F, 0x00, 0xDF, 0x01, 0x40, 0x31 };
+constexpr unsigned char id_sig[6] = { 0x3F, 0x00, 0xDF, 0x01, 0x40, 0x32 };
+constexpr unsigned char address[6] = { 0x3F, 0x00, 0xDF, 0x01, 0x40, 0x33 };
+constexpr unsigned char address_sig[6] = { 0x3F, 0x00, 0xDF, 0x01, 0x40, 0x34 };
+constexpr unsigned char photo[6] = { 0x3F, 0x00, 0xDF, 0x01, 0x40, 0x35 };
+constexpr unsigned char rrncert[6] = { 0x3F, 0x00, 0xDF, 0x00, 0x50, 0x3C };
+constexpr unsigned char authcert[6] = { 0x3F, 0x00, 0xDF, 0x00, 0x50, 0x38 };
+constexpr unsigned char signcert[6] = { 0x3F, 0x00, 0xDF, 0x00, 0x50, 0x39 };
+constexpr unsigned char cacert[6] = { 0x3F, 0x00, 0xDF, 0x00, 0x50, 0x3A };
+constexpr unsigned char rootcert[6] = { 0x3F, 0x00, 0xDF, 0x00, 0x50, 0x3B };
 
 #define WHERE "BEIDCard::readCertificateChain"
 void BEIDCard::readCertificateChain(std::vector<std::shared_ptr<const CardFile>>& subCerts, std::shared_ptr<const CardFile>& rootCert)
@@ -123,14 +121,10 @@ void BEIDCard::readCertificateChain(std::vector<std::shared_ptr<const CardFile>>
 }
 #undef WHERE
 
-
 #define WHERE "BEIDCard::SelectKey()"
-long BEIDCard::selectKey(CardKeys pintype, unsigned char* cert, size_t l_cert)
+void BEIDCard::selectKey(CardKeys pintype, const std::vector<unsigned char>& cert)
 {
     long ret = 0;
-    size_t cmdlen, recvlen;
-    unsigned char cmd[512], recv[512];
-    int sw;
 
     std::shared_ptr<const CardFile> cardcert;
     if (pintype == CardKeys::NonRep)
@@ -144,28 +138,27 @@ long BEIDCard::selectKey(CardKeys pintype, unsigned char* cert, size_t l_cert)
 
     //check if the current card is the one that contains the certificate we want to use for signing
     //in case of multiple readers, we should search until we find the right card
-    if (memcmp(cert, cardcert->getRaw().data(), l_cert) != 0) {
-        CLEANUP(E_SRC_CERT_NOT_FOUND);
+    if (cert != cardcert->getRaw()) {
+        throw BeidConnectException(BeidConnectException_Code::SRC_CERT_NOT_FOUND);
     }
 
     ret = getKeyInfo(cardcert->getRaw().data(), cardcert->getRaw().size(), &currentSelectedKeyType, &currentSelectedKeyLength);
     if (ret) {
         log_error("E: getKeyInfo(type,size) returned %0X (%d)", ret);
-        goto cleanup;
+        throw BeidConnectException(BeidConnectException_Code::CERT_Key_Info);
     }
 
+    CardAPDUResponse cr;
     if (currentSelectedKeyType == X509_KEYTYPE_RSA)
     {
         // Applet 1.7
         if (pintype == CardKeys::NonRep)
         {
-            cmdlen = sizeof(prepareNonRepudiationCmd);
-            memcpy(cmd, prepareNonRepudiationCmd, cmdlen);
+            cr = reader->apdu(CardAPDU(&prepareNonRepudiationCmd[0], sizeof(prepareNonRepudiationCmd)));
         }
         else
         {
-            cmdlen = sizeof(prepareAuthenticationCmd);
-            memcpy(cmd, prepareAuthenticationCmd, cmdlen);
+            cr = reader->apdu(CardAPDU(&prepareAuthenticationCmd[0], sizeof(prepareAuthenticationCmd)));
         }
     }
     else
@@ -173,28 +166,15 @@ long BEIDCard::selectKey(CardKeys pintype, unsigned char* cert, size_t l_cert)
         // Applet 1.8
         if (pintype == CardKeys::NonRep)
         {
-            cmdlen = sizeof(applet1_8_prepareNonRepudiationCmd);
-            memcpy(cmd, applet1_8_prepareNonRepudiationCmd, cmdlen);
+            cr = reader->apdu(CardAPDU(&applet1_8_prepareNonRepudiationCmd[0], sizeof(applet1_8_prepareNonRepudiationCmd)));
         }
         else
         {
-            cmdlen = sizeof(applet1_8_prepareAuthenticationCmd);
-            memcpy(cmd, applet1_8_prepareAuthenticationCmd, cmdlen);
+            cr = reader->apdu(CardAPDU(&applet1_8_prepareAuthenticationCmd[0], sizeof(applet1_8_prepareAuthenticationCmd)));
         }
     }
 
-    recvlen = 255;
-    ret = reader->apdu(cmd, cmdlen, recv, &recvlen, &sw);
-    if (ret < 0)
-        goto cleanup;
-
-    if ((sw != 0x9000))
-    {
-        CLEANUP(-1);
-    }
-cleanup:
-
-    return ret;
+    if (cr.getSW() != 0x9000) throw CardException(cr.getSW());
 }
 #undef WHERE
 
@@ -212,30 +192,47 @@ cleanup:
 #define MAKE_FormatString(SystemUnits, PINPosition, PINJustification, PINFormat) (((SystemUnits&0x1)<<7)|((PINPosition&0xf)<<3)|((PINJustification&0x1)<<2)|(PINFormat&0x3))
 
 #define WHERE "BEIDCard::logon()"
-long BEIDCard::logon(int l_pin, char* pin)
+void BEIDCard::logon(int l_pin, char* pin)
 {
-    long ret;
-    unsigned char recv[1024];
-    size_t recvlen = 1024;
-    unsigned char cmd[255];
-    size_t cmdlen;
-    int i;
-    int sw = 0;
+    uint16_t sw = 0;
+
+#ifdef _DEBUG
+    if (unittest_Generate_Exception_Other) {
+        throw CardException(0x9999);
+    }
+    if (unittest_Generate_Exception_Pin_Blocked) {
+        throw CardException(0x6983);
+    }
+    if (unittest_Generate_Exception_Pin_3_attempts) {
+        throw CardException(0x63C3);
+    }
+    if (unittest_Generate_Exception_Pin_2_attempts) {
+        throw CardException(0x63C2);
+    }
+    if (unittest_Generate_Exception_Pin_1_attempt) {
+        throw CardException(0x63C1);
+    }
+    if (unittest_Generate_Exception_PIN_TOO_SHORT) {
+        throw BeidConnectException(BeidConnectException_Code::E_PIN_TOO_SHORT);
+    }
+    if (unittest_Generate_Exception_PIN_TOO_LONG) {
+        throw BeidConnectException(BeidConnectException_Code::E_PIN_TOO_LONG);
+    }
+    if (unittest_Generate_Exception_PIN_Incorrect) {
+        throw CardException(0, CardException_Code::PIN_Incorrect);
+    }
+#endif
 
     ScopedCardTransaction trans(reader);  //begin transaction
-    if (trans.TransactionFailed()) {
-        log_error("E: Logon: Could not start transaction");
-        return E_SRC_START_TRANSACTION;
-    }
 
     //test Pin conditions
     if ((l_pin > 0) && (l_pin < 4))
-        return E_PIN_TOO_SHORT;
+        throw BeidConnectException(BeidConnectException_Code::E_PIN_TOO_SHORT);
     if (l_pin > 12)
-        return E_PIN_TOO_LONG;
+        throw BeidConnectException(BeidConnectException_Code::E_PIN_TOO_LONG);
 
-    cmdlen = sizeof(verifyPinApdu) - 1;
-    memcpy(cmd, verifyPinApdu, cmdlen);
+    CardAPDU cmd(&verifyPinApdu[0], sizeof(verifyPinApdu));
+    CardAPDUResponse resp;
 
     //      pin_verify->bmFormatString = 0x89;  //FORMAT_BCD  (Belpic eid card)
     //      pin_verify->bmPINBlockString = 0x047; //0x04;//47
@@ -243,92 +240,56 @@ long BEIDCard::logon(int l_pin, char* pin)
     //      pin_verify->wPINMaxExtraDigit = 0x040c; //test apg8201
     //      "\x00\x20\x00\x01\x08\x24\xFF\xFF\xFF\xFF\xFF\xFF\xFF"
     if ((l_pin == 0) && (reader->isPinPad())) {
-        ret = reader->verify_pinpad(MAKE_FormatString(1, 1, 0, 1), MAKE_PINBlockString(4, 7), MAKE_PINLengthFormat(0, 0, 4), 0x040c, cmd, cmdlen, &sw);  //TODO this should be handled more abstract since card shouldn't anything about the winswcard constants
-        if (ret != 0) {
-            log_error("%s: reader->verify_pinpad() returned 0x%0x", WHERE, ret);
-        }
-        return ret;
+        reader->verify_pinpad(MAKE_FormatString(1, 1, 0, 1), MAKE_PINBlockString(4, 7), MAKE_PINLengthFormat(0, 0, 4), 0x040c, cmd.GetAPDU().data(), cmd.GetAPDU().size(), &sw);  //TODO this should be handled more abstract since card shouldn't anything about the winswcard constants
+        return;
     }
     else if (pin != 0 && strlen(pin) >= 4) {
         //BCD encoding
-        cmd[5] = 0x20 + l_pin;  /* 0x20 + length of pin */
+        cmd.patchAt(5, (unsigned char)(0x20 + l_pin));  /* 0x20 + length of pin */
 
-        for (i = 0; i < l_pin; i++)
+        for (int i = 0; i < l_pin; i++)
         {
             if (i % 2 == 0)
-                cmd[6 + i / 2] = 0x0F + (((pin[i] - 48) << 4) & 0xF0);	/* pin[0], pin[1] in nibbles */
+                cmd.patchAt(6 + i / 2, (unsigned char)(0x0F + (((pin[i] - 48) << 4) & 0xF0)));	/* pin[0], pin[1] in nibbles */
             else
-                cmd[6 + (i / 2)] = (cmd[6 + (i / 2)] & 0xF0) + ((pin[i] - 48) & 0x0F);	/* pin[0], pin[1] in nibbles */
+                cmd.patchAt(6 + (i / 2), (cmd.getAt(6 + (i / 2)) & 0xF0) + ((pin[i] - 48) & 0x0F));	/* pin[0], pin[1] in nibbles */
         }
-        ret = reader->apdu(cmd, cmdlen, recv, &recvlen, &sw);
-        if (ret) {
-            log_error("%s: reader->apdu(verify) returned 0x%0x", WHERE, ret);
-        }
+        resp = reader->apdu(cmd);
     }
     else {
-        ret = -1;
+        throw BeidConnectException(BeidConnectException_Code::E_PIN_TOO_SHORT);
     }
 
-    if (ret < 0)
-        return ret;
-
-    switch (sw)
+    switch (resp.getSW())
     {
     case 0x9000:
-        return 0;
-    case 0x63C3:
-        return E_PIN_3_ATTEMPTS;
-    case 0x63C2:
-        return E_PIN_2_ATTEMPTS;
-    case 0x63C1:
-        return E_PIN_1_ATTEMPT;
-    case 0x6983:
-        return E_PIN_BLOCKED;
-    case 0x6985:
-        return E_SRC_COMMAND_NOT_ALLOWED;
+        return;
+    case 0x63C3: // E_PIN_3_ATTEMPTS;
+    case 0x63C2: // E_PIN_2_ATTEMPTS;
+    case 0x63C1: // E_PIN_1_ATTEMPT;
+    case 0x6983: // E_PIN_BLOCKED;
+    case 0x6985: // E_SRC_COMMAND_NOT_ALLOWED;
+        log_error("%s: E: Card returns SW(%04X)", WHERE, resp.getSW());
+        throw CardException(resp.getSW());
     default:
-        return E_PIN_INCORRECT;
+        throw CardException(resp.getSW(), CardException_Code::PIN_Incorrect);
     }
 }
 #undef WHERE
 
 #define WHERE "BEIDCard::logoff()"
-long BEIDCard::logoff()
+void BEIDCard::logoff()
 {
-    long ret;
-    unsigned char recv[1024];
-    size_t recvlen = 1024;
-    unsigned char cmd[255];
-    size_t cmdlen;
-    int sw = 0;
-
     ScopedCardTransaction trans(reader);  //begin transaction
-    if (trans.TransactionFailed()) {
-        log_error("E: Logoff: Could not start transaction");
-        return E_SRC_START_TRANSACTION;
-    }
-
-    cmdlen = sizeof(logoutApdu) - 1;
-    memcpy(cmd, logoutApdu, cmdlen);
-
-    ret = reader->apdu(cmd, cmdlen, recv, &recvlen, &sw);
-    if (ret) {
-        log_error("%s: reader->apdu(verify) returned 0x%0x", WHERE, ret);
-    }
-
-    return (ret);
+    reader->apdu(CardAPDU(&logoutApdu[0], sizeof(logoutApdu)));
 }
 #undef WHERE
 
 #define WHERE "BEIDCard::sign()"
-long BEIDCard::sign(const unsigned char* in, size_t l_in, int hashAlgo, unsigned char* out, size_t* l_out, int* sw)
+long BEIDCard::sign(const std::vector<unsigned char>& in, int hashAlgo, unsigned char* out, size_t* l_out, int* sw)
 {
     long ret = 0;
-    unsigned char recv[1024];
-    size_t recvlen = 1024;
-    unsigned char cmd[255];
     size_t sign_lg = currentSelectedKeyLength;
-    size_t cmdlen;
 
     if (sign_lg > *l_out) {
         return (-1);
@@ -336,75 +297,47 @@ long BEIDCard::sign(const unsigned char* in, size_t l_in, int hashAlgo, unsigned
 
     //begin transaction
     ScopedCardTransaction trans(reader);  //begin transaction
-    if (trans.TransactionFailed()) {
-        log_error("E: reader->beginTransaction() failed");
-        return E_SRC_START_TRANSACTION;
-    }
 
-    if ((l_in == 0) || (l_in != hash_length_for_algo(hashAlgo))) {
+    if ((in.size() == 0) || (in.size() != hash_length_for_algo(hashAlgo))) {
         log_error("hash input has wrong length for the specified digesting algo");
         return E_DIGEST_LEN;
     }
 
-    memset(cmd, 0xFF, sizeof(cmd));
-
     /* sign */
-    cmdlen = sizeof(generateSignatureCmd) - 1;
-    memcpy(cmd, generateSignatureCmd, cmdlen);
-
+    CardAPDU cmdGenSign(&generateSignatureCmd[0], sizeof(generateSignatureCmd));
     if (currentSelectedKeyType == X509_KEYTYPE_RSA) {
-        cmd[cmdlen] = (unsigned char)(hash_length_for_algoheader(hashAlgo) + l_in);
-        cmdlen++;
-        memcpy(&cmd[cmdlen], hash_header_for_algo(hashAlgo), hash_length_for_algoheader(hashAlgo));
-        cmdlen += hash_length_for_algoheader(hashAlgo);
-        memcpy(&cmd[cmdlen], in, l_in);
-        cmdlen += l_in;
-        cmd[cmdlen] = 0x00;      /* append Le */
+        // RSA
+        cmdGenSign.append((unsigned char)(hash_length_for_algoheader(hashAlgo) + in.size()));
+        cmdGenSign.append(hash_header_for_algo(hashAlgo), hash_length_for_algoheader(hashAlgo));
+        cmdGenSign.append(in.data(), in.size());
     }
     else {
         //EC
-        cmd[cmdlen] = (unsigned char)(l_in); cmdlen++;
-        memcpy(&cmd[cmdlen], in, l_in);
-        cmdlen += l_in;
-        cmd[cmdlen] = 0;     /* Le should be 0 */
+        cmdGenSign.append((unsigned char)in.size());
+        cmdGenSign.append(in.data(), in.size());
     }
+    CardAPDUResponse responseGenSign = reader->apdu(cmdGenSign);
 
-    recvlen = (int)sizeof(recv);
-
-    ret = reader->apdu(cmd, cmdlen, recv, &recvlen, sw);
-    if (ret < 0) {
-        log_error("%s: reader->apdu returned 0x%0X", WHERE, ret);
-        return ret;
-    }
-
-    cmdlen = sizeof(retrieveSignatureCmd) - 1;
-    memcpy(cmd, retrieveSignatureCmd, cmdlen);
-
-    switch (*sw) {
+    CardAPDU cmdRetrieveSignature(&retrieveSignatureCmd[0], sizeof(retrieveSignatureCmd));
+    switch (responseGenSign.getSW()) {
     case 0x6160:
-        cmd[4] = 0x60;
+        cmdRetrieveSignature.patchAt(4, 0x60);
         break;
     case 0x6180:
-        cmd[4] = 0x80;
+        cmdRetrieveSignature.patchAt(4, 0x80);
         break;
     case 0x6100:
-        cmd[4] = 0x00;
+        cmdRetrieveSignature.patchAt(4, 0x00);
         break;
     case 0x6401:
-        return E_PIN_CANCELLED;
+        log_error("%s: E: Card returns SW(%04X)", WHERE, responseGenSign.getSW());
+        throw CardException(responseGenSign.getSW());
     default:
         return -1;
     }
-
-    recvlen = *l_out;
-
-    ret = reader->apdu(cmd, cmdlen, out, &recvlen, sw);
-    if ((ret < 0) || (*sw != 0x9000)) {
-        log_error("%s: reader->apdu returned 0x%0X (sw=0x%0X)", WHERE, ret, *sw);
-        return ret;
-    }
-
-    *l_out = (unsigned int)recvlen;
+    CardAPDUResponse responseRetrieveSignature = reader->apdu(cmdRetrieveSignature);
+    *l_out = responseRetrieveSignature.getDataLen();
+    memcpy(out, responseRetrieveSignature.getData().data(), responseRetrieveSignature.getDataLen());
 
     if (currentSelectedKeyType == X509_KEYTYPE_EC) {
         //signature is a concatenation of 2 values, so we encode these in ASN1 to return the ASN1 format
@@ -458,83 +391,67 @@ long BEIDCard::sign(const unsigned char* in, size_t l_in, int hashAlgo, unsigned
 void BEIDCard::selectFile(const unsigned char* file, size_t l_file)
 {
     CardAPDU apdu({ 0x00,0xA4,0x02,0x0C,0x00 }, 7);
-    apdu.patch(4, 2);
+    apdu.patchAt(4, 2);
     for (size_t i = 0; i < (l_file / 2); i++) {
-        apdu.patch(5, file[i * 2]);
-        apdu.patch(6, file[(i * 2)+1]);
+        apdu.patchAt(5, file[i * 2]);
+        apdu.patchAt(6, file[(i * 2)+1]);
         do_sleep(5);
-        CardAPDUResponse cr = reader->apdu2(apdu);
+        CardAPDUResponse cr = reader->apdu(apdu);
         if (cr.getSW() != 0x9000)
+        {
+            log_error("%s: E: Card returns SW(%04X)", WHERE, cr.getSW());
             throw CardException(cr.getSW());
+        }
     }
 }
 #undef WHERE
-
 
 #define WHERE "BEIDCard::readFile()"
 std::shared_ptr<const CardFile> BEIDCard::readFile(CardFileReadOptimization optimization)
 {
     std::vector<unsigned char> result;
-    std::vector<unsigned char> buf(1024);
-
     size_t p_maxReadlen = 1024 * 1024; // Max file size to read (define upper limite 1MB)
-
     size_t l_req;
     size_t l_read = 0;
-
-    size_t recvlen = 1024;
-    unsigned char cmd[255];
-
-    int sw;
-
-    int cmdlen = sizeof(beid_apdu_binary);
-    memcpy(cmd, beid_apdu_binary, cmdlen);
-
     bool firstRead = true;
+    CardAPDU cmd(&beid_apdu_binary[0], sizeof(beid_apdu_binary));
 
     while ((p_maxReadlen - l_read) > 0)                                       /* loop for big datasize     */
     {
-        cmd[2] = (unsigned char)((l_read) >> 8);             /* set reading startpoint    */
-        cmd[3] = (unsigned char)(l_read);
+        cmd.patchAt(2, (unsigned char)((l_read) >> 8));             /* set reading startpoint    */
+        cmd.patchAt(3, (unsigned char)(l_read));
         l_req = p_maxReadlen - l_read;
 
         if (l_req > BEID_READ_BINARY_MAX_LEN)                                  /*if more than maximum length*/
             l_req = BEID_READ_BINARY_MAX_LEN;                               /* is requested, than read MAX_LEN  */
 
-        cmd[4] = (unsigned char)(l_req);
-
+        cmd.patchAt(4, (unsigned char)(l_req));
 
         do_sleep(20);  //reading ID fails if we don't wait 1ms here ????
 
-        buf.resize(1024);
-        recvlen = buf.size();
-        long iReturn = reader->apdu(cmd, cmdlen, buf.data(), &recvlen, &sw);
-        if (iReturn) {
-            throw CardFileException("APDU");
-        }
-        buf.resize(recvlen);
+        CardAPDUResponse r = reader->apdu(cmd);
 
         //check if we want to read too much
-        if ((sw & 0xFF00) == 0x6c00)
+        if ((r.getSW() & 0xFF00) == 0x6c00)
         {
-            p_maxReadlen = l_read + (sw & 0xFF);
+            p_maxReadlen = l_read + (r.getSW() & 0xFF);
             continue;
         }
-        else if (sw == 0x6B00)
+        else if (r.getSW() == 0x6B00)
         {
             //we wanted to read data that is not there so we stop reading and return what we have received so far
             break;
         }
-        else if (recvlen == 0)
+        else if (r.getDataLen() == 0)
             break;
 
         //check if we received less than we requested for (DIGIPASS...)
         //we cannot do it this way since if we are on a boundary, this will not work read 250 bytes recv 250 bytes gives 90 00 but following read of 250 bytes will return 6B00,
         //so we need to keep reading and when receivein 6B 00, we stop and return what we have read so far
-        result.insert(result.end(), buf.begin(), buf.end());            /* store read bytes          */
-        l_read += recvlen;
+        result.insert(result.end(), r.getData().begin(), r.getData().end());            /* store read bytes          */
+        l_read += r.getDataLen();
 
-        if ((int)l_req > recvlen)
+        if (l_req > r.getDataLen())
             break;
 
         if (firstRead && optimization == CardFileReadOptimization::DEREncodedCertificate)
@@ -548,7 +465,7 @@ std::shared_ptr<const CardFile> BEIDCard::readFile(CardFileReadOptimization opti
             // If the Value field contains fewer than 128 bytes, the Length field requires only one byte.
             // Bit 7 of the Length field is zero (0) and the remaining bits identify the number of bytes of content being sent.
             // If the Value field contains more than 127 bytes, bit 7 of the Length field is one (1) and the remaining bits identify the number of bytes needed to contain the length.
-            p_maxReadlen = (buf[2] << 8) + buf[3];
+            p_maxReadlen = (r.getData()[2] << 8) + r.getData()[3];
             if (p_maxReadlen > 0)
             {
                 p_maxReadlen += 4;
@@ -565,6 +482,12 @@ std::shared_ptr<const CardFile> BEIDCard::getFile(CardFiles fileType)
 {
     std::vector<unsigned char> idFile;
     CardFileReadOptimization optimization = CardFileReadOptimization::None;
+
+#ifdef _DEBUG
+    if (unittest_Generate_Exception_Removed_Card) {
+        throw SCardException(SCARD_W_REMOVED_CARD);
+    }
+#endif
 
     switch (fileType)
     {
@@ -628,7 +551,6 @@ std::shared_ptr<const CardFile> BEIDCard::getFile(CardFiles fileType)
         throw CardFileException("Unknow file requested");
     }
     }
-    long ret = 0;
     ScopedCardTransaction trans(reader);  //begin transaction
     selectFile(idFile.data(), idFile.size());
     return readFile(optimization);
@@ -638,14 +560,12 @@ const std::map<std::string, std::string> BEIDCard::getCardData()
 {
     if (!cacheCardDataLoaded)
     {
-        unsigned char recv[256];
-        size_t recvlen =256;
-        int sw;
-        if (0 == reader->apdu(beid_apdu_GetCardData, sizeof(beid_apdu_GetCardData), recv, &recvlen, &sw))
+        try
         {
-            if (sw == 0x9000 && recvlen >= 28)
+            CardAPDUResponse r = reader->apdu(CardAPDU(&beid_apdu_GetCardData[0], sizeof(beid_apdu_GetCardData)));
+            if (r.getSW() == 0x9000 && r.getDataLen() >= 28)
             {
-                switch (recv[21])
+                switch (r.getDataAtPos(21))
                 {
                 case 0x17:cacheCardData["AppletVersion"] = "1.7"; break;
                 case 0x18:cacheCardData["AppletVersion"] = "1.8"; break;
@@ -653,8 +573,8 @@ const std::map<std::string, std::string> BEIDCard::getCardData()
                 }
             }
         }
+        catch (...) {}
         cacheCardDataLoaded = true;
     }
     return cacheCardData;
 }
-

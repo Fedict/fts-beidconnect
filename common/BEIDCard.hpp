@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef BEIDCard_hpp
 #define BEIDCard_hpp
 
@@ -18,14 +20,13 @@ class BEIDCard: public Card
       int type() const override { return CARD_TYPE_BEID; };
       void readCertificateChain(std::vector<std::shared_ptr<const CardFile>> &subCerts, std::shared_ptr<const CardFile>& rootCert) override;
 
-      long selectKey(CardKeys type, unsigned char* cert = 0, size_t l_cert = 0) override;
-      long logon(int l_pin, char *pin) override;
-      long logoff() override;
-      long sign(const unsigned char* in, size_t l_in, int hashAlgo, unsigned char *out, size_t* l_out, int *sw) override;
+      void selectKey(CardKeys type, const std::vector<unsigned char>& cert) override;
+      void logon(int l_pin, char *pin) override;
+      void logoff() override;
+      long sign(const std::vector<unsigned char>& in, int hashAlgo, unsigned char *out, size_t* l_out, int *sw) override;
 
       std::shared_ptr<const CardFile> getFile(CardFiles fileType) override;
 
-      //std::string* valueForKey(std::string* key) override;
       void selectFile(const unsigned char *file, size_t l_file) override;
       std::shared_ptr<const CardFile> readFile(CardFileReadOptimization optimization = CardFileReadOptimization::None) override;
 

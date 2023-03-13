@@ -241,7 +241,7 @@ char* getValidUntil(char* cert, size_t l_cert)
 
 int isTimeBeforeNow (int len, char *p_atime)
 {
-   int fraction_digits = 0;
+   //int fraction_digits = 0;
    int century         = 0;
    int pos             = 0;
    struct tm ts;
@@ -261,7 +261,7 @@ int isTimeBeforeNow (int len, char *p_atime)
             case 14:
                century = 1;  // determine whether century ("20") is given
             case 12:
-               fraction_digits = len - pos - 1; // get length of fraction
+               //fraction_digits = len - pos - 1; // get length of fraction
                break;
                
             default:
@@ -278,7 +278,7 @@ int isTimeBeforeNow (int len, char *p_atime)
             case 14:
                century = 1;
             case 12:
-               fraction_digits = 0;
+               //fraction_digits = 0;
                break;
             default:
                return -2;//E_X509_TIME_WRONG_FORMAT;

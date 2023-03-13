@@ -24,14 +24,14 @@ std::string UserCertsRequestHandler::process()
         int countErrors = 0;
         int certType = 0;
 
-        if (ptreeRequest->get_optional<std::string>("keyusage").is_initialized())
+        if (ptreeRequest->get_optional<std::string>(BeidConnect_JSON_field::keyusage).is_initialized())
         {
-            std::string keyusage = ptreeRequest->get<std::string>("keyusage");
-            if (keyusage.compare("NONREPUDIATION") == 0)
+            std::string keyusage = ptreeRequest->get<std::string>(BeidConnect_JSON_field::keyusage);
+            if (keyusage.compare(BeidConnect_Keyusage::NONREPUDIATION) == 0)
             {
                 certType = CERT_TYPE_NONREP;
             }
-            else if (keyusage.compare("DIGITALSIGNATURE") == 0)
+            else if (keyusage.compare(BeidConnect_Keyusage::DIGITALSIGNATURE) == 0)
             {
                 certType = CERT_TYPE_AUTH;
             }
@@ -40,11 +40,10 @@ std::string UserCertsRequestHandler::process()
 
         if (readerList.readers.size() == 0)
         {
-            response.put("result", "no_reader");
+            response.put(BeidConnect_JSON_field::result, BeidConnect_Result::no_reader);
         }
         else
         {
-            long status = 0;
             ptree readerInfos;
             for (auto& reader : readerList.readers)
             {
@@ -53,11 +52,9 @@ std::string UserCertsRequestHandler::process()
                     continue;
                 }
 
-                status = reader->connect();
-                if (status)
+                if (reader->connect())
                 {
                     countErrors++;
-                    log_error("%s: E: reader->connect(%s) returned %08X", WHERE, reader->name.c_str(), status);
                     continue;
                 }
 
@@ -80,16 +77,16 @@ std::string UserCertsRequestHandler::process()
 
                 countSupportedCards++;
                 ptree readerInfo;
-                readerInfo.put("ReaderName", reader->name);
+                readerInfo.put(BeidConnect_JSON_field::ReaderName, reader->name);
                 if (reader->isPinPad())
                 {
-                    readerInfo.put("ReaderType", "pinpad");
+                    readerInfo.put(BeidConnect_JSON_field::ReaderType, BeidConnect_ReaderType::pinpad);
                 }
                 else
                 {
-                    readerInfo.put("ReaderType", "standard");
+                    readerInfo.put(BeidConnect_JSON_field::ReaderType, BeidConnect_ReaderType::standard);
                 }
-                readerInfo.put("cardType", card->strType());
+                readerInfo.put(BeidConnect_JSON_field::cardType, card->strType());
                 ptree certList;
                 for (auto& cert : certificates)
                 {
@@ -97,38 +94,46 @@ std::string UserCertsRequestHandler::process()
                     certEntry.put("", std::string(cert->getBase64().data(), cert->getBase64().size()));
                     certList.push_back(std::make_pair("", certEntry));
                 }
-                readerInfo.add_child("certificates", certList);
+                readerInfo.add_child(BeidConnect_JSON_field::certificates, certList);
                 readerInfos.push_back(std::make_pair("", readerInfo));
             }
-            response.add_child("Readers", readerInfos);
+            response.add_child(BeidConnect_JSON_field::Readers, readerInfos);
 
             if (countSupportedCards > 0)
             {
-                response.put("result", "OK");
+                response.put(BeidConnect_JSON_field::result, BeidConnect_Result::OK);
             }
             else
             {
                 // errors and unsupported cards result in nop_card
-                response.put("result", "no_card");
+                response.put(BeidConnect_JSON_field::result, BeidConnect_Result::no_card);
 
                 if (countUnsupportedCards > 0)
                 {
-                    response.put("report", "card_type_unsupported");
+                    response.put(BeidConnect_JSON_field::report, "card_type_unsupported");
                 }
             }
         }
     }
     catch (SCardException& e)
     {
-        response.put("result", e.result());
+        log_error("%s: E: SCardException SCardResult(%08X) code(%08X)", WHERE, e.getSCardResult(), e.getCode());
+        response.put(BeidConnect_JSON_field::result, e.result());
     }
     catch (CardException& e)
     {
-        response.put("result", e.result());
+        log_error("%s: E: CardException SW(%04X)", WHERE, e.getSW());
+        response.put(BeidConnect_JSON_field::result, e.result());
+    }
+    catch (BeidConnectException& e)
+    {
+        log_error("%s: E: BeidConnectException code(%08X)", WHERE, e.getCode());
+        response.put(BeidConnect_JSON_field::result, e.result());
     }
     catch (...)
     {
-        response.put("result", "general_error");
+        log_error("%s: E: Exception", WHERE);
+        response.put(BeidConnect_JSON_field::result, BeidConnect_Result::general_error);
     }
     post_process(response);
     std::stringstream streamResponse;

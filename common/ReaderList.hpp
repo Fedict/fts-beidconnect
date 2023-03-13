@@ -1,10 +1,12 @@
+#pragma once
+
+#ifndef ReaderList_hpp
+#define ReaderList_hpp
+
 #include "CardReader.hpp"
 #include <iostream>
 #include <vector>
 #include <memory>
-
-#ifndef ReaderList_hpp
-#define ReaderList_hpp
 
 #include <stdio.h>
 
@@ -22,7 +24,7 @@ public:
    std::shared_ptr<CardReader> getFirstReaderWithSupportedCardType(int type[], int size);
    vector<std::shared_ptr<CardReader>> readers;
 private:
-   int listReaders();
+   void listReaders();
    std::shared_ptr<CardReader> returnFirstReaderWithSupportedCardType(int type[], int size);
 };
 

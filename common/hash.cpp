@@ -16,7 +16,7 @@ unsigned int hash_length_for_algo(int hashAlgo)
 	}
 }
 
-unsigned int hash_length_for_algoheader(int hashAlgo)
+size_t hash_length_for_algoheader(int hashAlgo)
 {
 	switch (hashAlgo) 
 	{
@@ -31,7 +31,7 @@ unsigned int hash_length_for_algoheader(int hashAlgo)
 	}
 }
 
-const char* hash_header_for_algo(int hashAlgo)
+const unsigned char* hash_header_for_algo(int hashAlgo)
 {
 	switch (hashAlgo) 
 	{

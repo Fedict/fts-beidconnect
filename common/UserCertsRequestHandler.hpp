@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef UserCertsRequestHandler_hpp
 #define UserCertsRequestHandler_hpp
 

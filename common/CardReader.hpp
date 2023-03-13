@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef CardReader_hpp
 #define CardReader_hpp
 
@@ -14,40 +16,81 @@
 #define MAX_LABEL_LENGTH		32
 #define MAX_READERS				10
 
-
-#define FORMAT_HEX				1
-#define FORMAT_RADIX64			2
-
 using namespace std;
 
+/// <summary>
+/// Encapsulate an APDU to transmit to the smart card.
+/// </summary>
 class CardAPDU
 {
     std::vector<unsigned char> APDU;
 public:
-    CardAPDU(unsigned char* data, size_t len, size_t lenBuffer = -1)
+    CardAPDU(){}
+    CardAPDU(const unsigned char* data, size_t len, size_t lenBuffer = SIZE_MAX)
     {
-        if (lenBuffer == -1) lenBuffer = len;
+        if (lenBuffer == SIZE_MAX) lenBuffer = len;
         APDU.resize(lenBuffer);
         APDU.assign(data, data + len);
     }
-    CardAPDU(std::initializer_list<unsigned char> data, size_t lenBuffer = -1) : APDU(data)
+    CardAPDU(std::initializer_list<unsigned char> data, size_t lenBuffer = SIZE_MAX) : APDU(data)
     {
-        if (lenBuffer != -1) APDU.resize(lenBuffer);;
+        if (lenBuffer != SIZE_MAX) APDU.resize(lenBuffer);;
     }
+    /// <summary>
+    /// Get the ADPU bytes.
+    /// </summary>
+    /// <returns>A const vector containig the APDU bytes</returns>
     inline const std::vector<unsigned char>& GetAPDU() const
     {
         return APDU;
     }
-    inline void patch(size_t pos, unsigned char value)
+    /// <summary>
+    /// Modify a byte at a specific position.
+    /// </summary>
+    /// <param name="pos">The position where to change the byte.</param>
+    /// <param name="value">The new value.</param>
+    inline void patchAt(size_t pos, unsigned char value)
     {
         APDU[pos] = value;
     }
+    /// <summary>
+    /// Get a value at a specific position
+    /// </summary>
+    /// <param name="pos">The position where to retribe the byte value.</param>
+    /// <returns>The byte value.</returns>
+    inline unsigned char getAt(size_t pos)
+    {
+        return APDU[pos];
+    }
+    /// <summary>
+    /// Append a byte value at the end of the ADPU.
+    /// </summary>
+    /// <param name="value">The value to append.</param>
+    inline void append(unsigned char value)
+    {
+        APDU.push_back(value);
+    }
+    /// <summary>
+    /// Append an array of byte value at the end of the ADPU.
+    /// </summary>
+    /// <param name="value">The array to append.</param>
+    /// <param name="len">The length of the array to append.</param>
+    inline void append(const unsigned char* value, size_t len)
+    {
+        APDU.insert(APDU.end(), value, value+ len);
+    }
 };
+
+/// <summary>
+/// Encapsulate a response regarding an transmited APDU to the smart card.
+/// It may contain the SW and the result data.
+/// </summary>
 class CardAPDUResponse
 {
     std::vector<unsigned char> result;
-    uint16_t SW;
+    uint16_t SW = 0;
 public:
+    CardAPDUResponse(){}
     CardAPDUResponse(unsigned char* data, size_t len)
     {
         setCardResponse(data, len);
@@ -61,7 +104,7 @@ public:
             result.resize(lenData);
             result.assign(data, data + lenData);
         }
-        SW = (data[len - 2] << 8) + data[len - 1];
+        SW = (uint16_t)((data[len - 2] << 8) + data[len - 1]);
     }
     inline void setSW(uint16_t SW)
     {
@@ -71,23 +114,34 @@ public:
     {
         return SW;
     }
+    inline size_t getDataLen() const
+    {
+        return result.size();
+    }
+    inline unsigned char getDataAtPos(size_t pos) const
+    {
+        return result[pos];
+    }
+    inline const std::vector<unsigned char>& getData() const
+    {
+        return result;
+    }
 };
 
 class CardReader
 {
     // To ensure transaction begin/end, use the ScopedCardTransaction class
     friend class ScopedCardTransaction;
-    virtual long beginTransaction() = 0;
-    virtual long endTransaction() = 0;
+    virtual void beginTransaction() = 0;
+    virtual void endTransaction() = 0;
 public:
     CardReader() {};
     virtual ~CardReader() {};
     virtual long connect() = 0;
-    virtual long disconnect() = 0;
+    virtual void disconnect() = 0;
     virtual bool isPinPad() = 0;
-    virtual long apdu(const unsigned char* apdu, size_t l_apdu, unsigned char* out, size_t* l_out, int* sw) = 0;
-    virtual CardAPDUResponse apdu2(const CardAPDU& apdu) = 0;
-    virtual long verify_pinpad(unsigned char format, unsigned char PINBlock, size_t PINLength, unsigned int PINMaxExtraDigit, unsigned char pinAPDU[], size_t l_pinAPDU, int* sw) = 0;
+    virtual CardAPDUResponse apdu(const CardAPDU& apdu) = 0;
+    virtual void verify_pinpad(unsigned char format, unsigned char PINBlock, size_t PINLength, uint16_t PINMaxExtraDigit, const unsigned char pinAPDU[], size_t l_pinAPDU, uint16_t* sw) = 0;
 
     std::string name;
     std::string atr;
@@ -100,21 +154,18 @@ public:
 class ScopedCardTransaction
 {
     std::shared_ptr<CardReader> reader;
-    long beginTransactionRC;
+    bool TransactionInProgress = false;
 public:
     ScopedCardTransaction(const std::shared_ptr<CardReader>& reader)
     {
         this->reader = reader;
-        beginTransactionRC = reader->beginTransaction();
+        reader->beginTransaction();
+        TransactionInProgress = true;
     }
     ~ScopedCardTransaction()
     {
-        if (beginTransactionRC)
+        if (TransactionInProgress)
             reader->endTransaction();
-    }
-    bool TransactionFailed()
-    {
-        return beginTransactionRC;
     }
 };
 

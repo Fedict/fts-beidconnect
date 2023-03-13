@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef CardFactory_hpp
 #define CardFactory_hpp
 
