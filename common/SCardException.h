@@ -65,6 +65,7 @@ public:
         case SCARD_E_NO_SMARTCARD:
         case SCARD_E_COMM_DATA_LOST:
         case SCARD_W_REMOVED_CARD:
+        case ERROR_OPERATION_ABORTED:   // VASCO DIGIPASS 870 return this error when removing the smart card during secure pin entry
         {
             return BeidConnect_Result::no_card;
         }
