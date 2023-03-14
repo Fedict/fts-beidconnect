@@ -65,6 +65,17 @@ void dumpCert(const std::shared_ptr<const CardFile>& Cert) {
     {
         std::cout << str << endl;
     }
+
+    if (certContext->pCertInfo->SerialNumber.cbData > 0)
+    {
+        std::cout << "Serial number ";
+        for (DWORD i = 0; i < certContext->pCertInfo->SerialNumber.cbData; i++)
+        {
+            std::cout << std::setfill('0') << std::setw(2) << std::hex << (int)certContext->pCertInfo->SerialNumber.pbData[-1+certContext->pCertInfo->SerialNumber.cbData-i];
+        }
+        std::cout << endl << std::dec;
+    }
+
     std::cout << "Valid from " << st_NotBefore.wDay << "/" << st_NotBefore.wMonth << "/" << st_NotBefore.wYear << " to " << st_NotAfter.wDay << "/" << st_NotAfter.wMonth << "/" << st_NotAfter.wYear << endl;
 
     WCHAR wstr[256];
@@ -363,6 +374,8 @@ TestResult TestGetFile(const std::string& DisplayMessage, const std::shared_ptr<
 
 int runTest(int argc, const char* argv[])
 {
+    std::cout << "BeidConnect Version " << BEIDCONNECT_VERSION << " Build on " << __DATE__ << " " << __TIME__ << endl;
+
     TestDB testDB;
     shared_ptr<stringstream> ssRequest;
     shared_ptr<RequestHandler> handler;

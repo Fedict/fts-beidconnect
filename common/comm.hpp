@@ -9,6 +9,7 @@ namespace BeidConnect_JSON_field
     constexpr char result[] = "result";
     constexpr char report[] = "report";
     constexpr char version[] = "version";
+    constexpr char builddate[] = "BuildDate";
     constexpr char Readers[] = "Readers";
     constexpr char ReaderName[] = "ReaderName";
     constexpr char ReaderType[] = "ReaderType";

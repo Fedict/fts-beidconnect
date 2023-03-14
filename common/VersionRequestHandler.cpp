@@ -13,6 +13,7 @@ std::string VersionRequestHandler::process()
     ptree response;
     response.put(BeidConnect_JSON_field::result, BeidConnect_Result::OK);
     response.put(BeidConnect_JSON_field::version, BEIDCONNECT_VERSION);
+    response.put(BeidConnect_JSON_field::builddate, __DATE__);
 
     // The beidconnect Windows version is provided by 2 installation type:
     // current user installation and machine (all users) installation defined as the ADMIN installation.

@@ -32,7 +32,6 @@ int main(int argc, const char * argv[]) {
 	 //generate the necessary json file for use with the Chrome/Firefox
 	 //extensions
          log_init(LOG_FILE, 1, 1);
-         log_info("BeIDConnect setup");
          return runSetup(argc, argv);
       }
    }

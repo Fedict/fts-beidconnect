@@ -1,11 +1,12 @@
-#include "log.hpp"
 #include <iostream>
 #include <sstream>
 #include <iostream>
 #include <fstream>
-#include "util.h"
 #include <string.h>
 #include <regex>
+#include "general.h"
+#include "log.hpp"
+#include "util.h"
 
 #ifdef _WIN32
 #include <io.h>
@@ -53,74 +54,82 @@ bool writeFile(string file, string exePath, bool isChrome) {
     return false;
 }
 
-int runSetup(int argc, const char * argv[])
+int runSetup(int argc, const char* argv[])
 {
-   //generate a json file that is needed for the Chrome Extension to find the Native host application on Windows
+    log_info("BeidConnect Setup Version %s Build %s", BEIDCONNECT_VERSION, __DATE__);
+    //generate a json file that is needed for the Chrome Extension to find the Native host application on Windows
 #ifdef _WIN32
-   wstring chromeFilePath = L"";
-   wstring firefoxFilePath = L"";
-   wstring exePath;
-   
-   wstring cmdLine = GetCommandLineW();
-   size_t pos = cmdLine.find(L"-setup");
-   // MSI setup add a '"' (double quote) to the -setup content, need to remove it
-   if (cmdLine[pos + 7] == L'"')
-   {
-       pos++;
-   }
-   wstring installFolder = cmdLine.substr(pos + 7);
-   if (installFolder.back() != L'\\')
-   {
-       installFolder += L"\\";
-   }
-   exePath = installFolder + L"beidconnect.exe";
+    wstring chromeFilePath = L"";
+    wstring firefoxFilePath = L"";
+    wstring exePath;
 
-   //escape all \ in json file or exe will not be found on windows
-   exePath = std::regex_replace(exePath, std::wregex(L"\\\\"), L"\\\\");
-   
-   if (chromeFilePath == L"") {
-      chromeFilePath = wstring(installFolder) + L"chrome.json";
-   }
-   if (firefoxFilePath == L"") {
-       firefoxFilePath = wstring(installFolder) + L"firefox.json";
-   }
+    wstring cmdLine = GetCommandLineW();
+    size_t pos = cmdLine.find(L"-setup");
+    // MSI setup add a '"' (double quote) to the -setup content, need to remove it
+    if (cmdLine[pos + 7] == L'"')
+    {
+        pos++;
+    }
+    wstring installFolder = cmdLine.substr(pos + 7);
+    if (installFolder.back() != L'\\')
+    {
+        installFolder += L"\\";
+    }
+    exePath = installFolder + L"beidconnect.exe";
+
+    //escape all \ in json file or exe will not be found on windows
+    exePath = std::regex_replace(exePath, std::wregex(L"\\\\"), L"\\\\");
+
+    if (chromeFilePath == L"") {
+        chromeFilePath = wstring(installFolder) + L"chrome.json";
+    }
+    if (firefoxFilePath == L"") {
+        firefoxFilePath = wstring(installFolder) + L"firefox.json";
+    }
+    log_info("BeidConnect Setup exePath  \"%S\"", exePath.c_str());
+    log_info("BeidConnect Setup creating \"%S\"", chromeFilePath.c_str());
+    log_info("BeidConnect Setup creating \"%S\"", firefoxFilePath.c_str());
 #else
-   const char* installFolder = NULL;
-   string chromeFilePath = "";
-   string firefoxFilePath = "";
-   string exePath;
-   
-   for (int i = 1; i < argc; i++) {
-      if (strcmp(argv[i], "-setup") == 0) {
-         
-         //beidconnect -setup installFolder [chromeFilePath] [firefoxFilePath]
-         installFolder = argv[++i];
-      } else if (i < argc && chromeFilePath=="") {
-         chromeFilePath = string(argv[i]) + "/be.bosa.beidconnect.json";
-      } else if (i < argc && firefoxFilePath == "") {
-          firefoxFilePath = string(argv[i]) + "/be.bosa.beidconnect.json";
-      }
-   }
-   
-   if (installFolder == NULL) {
-      return (0);
-   }
-   
-   //log_info("install folder: <%s>", installFolder);
-   
-   exePath = string(installFolder) + "/beidconnect";
-   if (chromeFilePath == "") {
-      chromeFilePath = string(installFolder) + "/chrome.json";
-   }
-   if (firefoxFilePath == "") {
-      firefoxFilePath = string(installFolder) + "/firefox.json";
-   }
+    const char* installFolder = NULL;
+    string chromeFilePath = "";
+    string firefoxFilePath = "";
+    string exePath;
+
+    for (int i = 1; i < argc; i++) {
+        if (strcmp(argv[i], "-setup") == 0) {
+            //beidconnect -setup installFolder [chromeFilePath] [firefoxFilePath]
+            installFolder = argv[++i];
+        }
+        else if (i < argc && chromeFilePath == "") {
+            chromeFilePath = string(argv[i]) + "/be.bosa.beidconnect.json";
+        }
+        else if (i < argc && firefoxFilePath == "") {
+            firefoxFilePath = string(argv[i]) + "/be.bosa.beidconnect.json";
+        }
+    }
+
+    if (installFolder == NULL) {
+        return (0);
+    }
+
+    //log_info("install folder: <%s>", installFolder);
+
+    exePath = string(installFolder) + "/beidconnect";
+    if (chromeFilePath == "") {
+        chromeFilePath = string(installFolder) + "/chrome.json";
+    }
+    if (firefoxFilePath == "") {
+        firefoxFilePath = string(installFolder) + "/firefox.json";
+    }
+    log_info("BeidConnect Setup exePath  \"%s\"", exePath.c_str());
+    log_info("BeidConnect Setup creating \"%s\"", chromeFilePath.c_str());
+    log_info("BeidConnect Setup creating \"%s\"", firefoxFilePath.c_str());
 #endif
-   //log_info("creating %s", chromeFilePath.c_str());
-   //log_info("creating %s", firefoxFilePath.c_str());
-   if (writeFile(chromeFilePath, exePath, true)
-       && writeFile(firefoxFilePath, exePath, false)) {
-       return 0;
-   }
-   return -1;
+    if (writeFile(chromeFilePath, exePath, true)
+        && writeFile(firefoxFilePath, exePath, false)) {
+        log_info("BeidConnect Setup Succeed");
+        return 0;
+    }
+    log_error("BeidConnect Setup Failed");
+    return -1;
 }
