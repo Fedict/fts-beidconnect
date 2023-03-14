@@ -20,6 +20,23 @@
 
 using namespace std;
 
+#ifdef _DEBUG
+bool unittest_Generate_Exception_No_Reader = false;
+bool unittest_Generate_Exception_Other = false;
+bool unittest_Generate_Exception_Pin_Blocked = false;
+bool unittest_Generate_Exception_Pin_3_attempts = false;
+bool unittest_Generate_Exception_Pin_2_attempts = false;
+bool unittest_Generate_Exception_Pin_1_attempt = false;
+bool unittest_Generate_Exception_Src_Command_not_allowed = false;
+bool unittest_Generate_Exception_Removed_Card = false;
+bool unittest_Generate_Exception_Transaction_Fail = false;
+bool unittest_Generate_Exception_PinPad_TimeOut = false;
+bool unittest_Generate_Exception_PinPad_Cancel = false;
+bool unittest_Generate_Exception_PIN_TOO_SHORT = false;
+bool unittest_Generate_Exception_PIN_TOO_LONG = false;
+bool unittest_Generate_Exception_PIN_Incorrect = false;
+#endif
+
 constexpr char TestHeader[] = ">>> TEST : ";
 constexpr char message_SHA256[] = "{\"operation\":\"SIGN\",\"cert\":\"%%CERT%%\",\"algo\":\"SHA256\",\"digest\":\"H//bub3+V6UP3gk9/yofBaCLS6+HoPE7DOi4CRTfc+U=\",\"pin\":\"null\",\"language\":\"en\",\"mac\":\"0123456789ABCDEF0123456789ABCDEF\",\"correlationId\":\"07386ce7-f73e-4e99-dfc3-8d69b6adf33d\",\"origin\":\"https://sign.belgium.be\"}";
 constexpr char message_SHA384[] = "{\"operation\":\"SIGN\",\"cert\":\"%%CERT%%\",\"algo\":\"SHA384\",\"digest\":\"wj0jMglI2lnsNlcJmJmOLpWMyrl4r97CGbxKQMIpf1PtkaEnhQXe47AznDlhszCV\",\"pin\":\"null\",\"language\":\"en\",\"mac\":\"0123456789ABCDEF0123456789ABCDEF\",\"correlationId\":\"07386ce7-f73e-4e99-dfc3-8d69b6adf33d\",\"origin\":\"https://sign.belgium.be\"}";
@@ -48,6 +65,17 @@ void dumpCert(const std::shared_ptr<const CardFile>& Cert) {
     {
         std::cout << str << endl;
     }
+
+    if (certContext->pCertInfo->SerialNumber.cbData > 0)
+    {
+        std::cout << "Serial number ";
+        for (DWORD i = 0; i < certContext->pCertInfo->SerialNumber.cbData; i++)
+        {
+            std::cout << std::setfill('0') << std::setw(2) << std::hex << (int)certContext->pCertInfo->SerialNumber.pbData[-1+certContext->pCertInfo->SerialNumber.cbData-i];
+        }
+        std::cout << endl << std::dec;
+    }
+
     std::cout << "Valid from " << st_NotBefore.wDay << "/" << st_NotBefore.wMonth << "/" << st_NotBefore.wYear << " to " << st_NotAfter.wDay << "/" << st_NotAfter.wMonth << "/" << st_NotAfter.wYear << endl;
 
     WCHAR wstr[256];
@@ -69,9 +97,9 @@ void dumpCert(const std::shared_ptr<const CardFile>& Cert) {
 
 /*
 * sample TestDB file
-* 
+*
 * ps: Base64 can contain "/" characters. They must be escaped in the json file
-* 
+*
 {
     "cards": [
         {
@@ -187,7 +215,7 @@ public:
 };
 
 
-std::string PrepareCmd(const std::string& cmd, const std::string& crt, bool isPinPadReader, const std::string pin)
+std::string PrepareCmd(const std::string& cmd, const std::string& crt, bool isPinPadReader, const std::string& pin)
 {
     std::string preparedCmd = cmd;
     // Inject the sign cert
@@ -212,13 +240,25 @@ std::string GetSignatureFromResponse(const std::string& result)
     boost::property_tree::read_json(ss, pt);
     try
     {
-        return pt.get<std::string>("signature");
+        return pt.get<std::string>(BeidConnect_JSON_field::signature);
     }
     catch (...)
     {
 
     }
     return "";
+}
+std::string GetResultFromFileCompare(const std::shared_ptr<const CardFile>& File, const std::string& ExpectedFileContent)
+{
+    if (ExpectedFileContent.length() == 0 && File->getBase64().length() != 0)
+    {
+        return "OK but no reference file for comparison";
+    }
+    else if (ExpectedFileContent == File->getBase64())
+    {
+        return "OK";
+    }
+    return "Fail retrieved file empty";
 }
 std::string GetResultFromResponse(const std::string& result, const std::string& ExpectedReader)
 {
@@ -228,21 +268,43 @@ std::string GetResultFromResponse(const std::string& result, const std::string& 
     try
     {
         std::string ReaderName;
-        if (pt.get_optional<std::string>("ReaderName").is_initialized())
+        if (pt.get_optional<std::string>(BeidConnect_JSON_field::ReaderName).is_initialized())
         {
-            ReaderName = pt.get<std::string>("ReaderName");
+            ReaderName = pt.get<std::string>(BeidConnect_JSON_field::ReaderName);
         }
-        std::string res = pt.get<std::string>("result");
+        std::string res = pt.get<std::string>(BeidConnect_JSON_field::result);
 
-        if ((ReaderName == ExpectedReader || ExpectedReader == "All") && res == "OK")
+        if ((ReaderName == ExpectedReader || ExpectedReader == "All") && res == BeidConnect_Result::OK)
         {
             return "OK";
         }
         else if (ReaderName != ExpectedReader)
         {
-            return "Fail operation complete on reader " + ReaderName + " but expected on reader " + ExpectedReader;
+            return "Fail (" + res + ") operation complete on reader " + ReaderName + " but expected on reader " + ExpectedReader;
         }
         return "Fail :" + res;
+    }
+    catch (...)
+    {
+
+    }
+    return "Failed parsing result";
+}
+
+std::string ExpectResultInResponse(const std::string& result, const std::string& ExpectResult)
+{
+    boost::property_tree::ptree pt;
+    std::stringstream ss(result);
+    boost::property_tree::read_json(ss, pt);
+    try
+    {
+        std::string res = pt.get<std::string>(BeidConnect_JSON_field::result);
+
+        if (res == ExpectResult)
+        {
+            return "OK";
+        }
+        return "Fail : Expect result " + ExpectResult + " but receive " + res;
     }
     catch (...)
     {
@@ -254,15 +316,66 @@ std::string GetResultFromResponse(const std::string& result, const std::string& 
 class TestResult
 {
 public:
-    TestResult(const std::string& Test, const std::string& Result) :Test(Test), Result(Result), Duration(0) {}
+    TestResult(const std::string& Test) : Test(Test) {}
+    TestResult(const std::string& Test, const std::string& Result) :Test(Test), Result(Result) {}
     TestResult(const std::string& Test, const std::string& Result, long long Duration) :Test(Test), Result(Result), Duration(Duration) {}
     std::string Test;
     std::string Result;
-    long long Duration;
+    long long Duration = 0;
+    std::string cmd;
+    std::string cmdResponse;
 };
+
+TestResult TestSign(const std::string& DisplayMessage, const std::string& cmdTemplate, const std::string& crt, bool isPinPadReader, const std::string& pin, const std::function<std::string(const std::string& Response)>& f)
+{
+    TestResult tr(DisplayMessage);
+    std::cout << endl << TestHeader << DisplayMessage << endl;
+    tr.cmd = PrepareCmd(cmdTemplate, crt, isPinPadReader, pin);
+    std::cout << tr.cmd << endl;
+
+    auto startTime = std::chrono::steady_clock::now();
+    shared_ptr<stringstream> ssRequest = std::make_shared<stringstream>(tr.cmd);
+    shared_ptr<RequestHandler> handler = RequestHandler::createRequestHandler(ssRequest);
+    handler->AddTraceInfoInJsonResult();
+    string Response = handler->process();
+    tr.Duration = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - startTime).count();
+    std::cout << Response << endl;
+    tr.Result = f(Response);
+    return tr;
+}
+TestResult TestOp(const std::string& DisplayMessage, const std::string& cmdTemplate, const std::function<std::string(const std::string& Response)>& f)
+{
+    TestResult tr(DisplayMessage);
+    std::cout << endl << TestHeader << DisplayMessage << endl;
+    tr.cmd = cmdTemplate;
+    std::cout << tr.cmd << endl;
+
+    auto startTime = std::chrono::steady_clock::now();
+    shared_ptr<stringstream> ssRequest = std::make_shared<stringstream>(tr.cmd);
+    shared_ptr<RequestHandler> handler = RequestHandler::createRequestHandler(ssRequest);
+    handler->AddTraceInfoInJsonResult();
+    string Response = handler->process();
+    tr.Duration = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - startTime).count();
+    std::cout << Response << endl;
+    tr.Result = f(Response);
+    return tr;
+}
+TestResult TestGetFile(const std::string& DisplayMessage, const std::shared_ptr<Card>& card, CardFiles fileType, const std::function<std::string(const std::shared_ptr<const CardFile>& File)>& ResponseFile)
+{
+    TestResult tr(DisplayMessage);
+    std::cout << endl << TestHeader << DisplayMessage << endl;
+    auto startTime = std::chrono::steady_clock::now();
+    std::shared_ptr<const CardFile> file = card->getFile(fileType);
+    tr.Duration = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - startTime).count();
+    tr.Result = ResponseFile(file);
+    return tr;
+}
+
 
 int runTest(int argc, const char* argv[])
 {
+    std::cout << "BeidConnect Version " << BEIDCONNECT_VERSION << " Build on " << __DATE__ << " " << __TIME__ << endl;
+
     TestDB testDB;
     shared_ptr<stringstream> ssRequest;
     shared_ptr<RequestHandler> handler;
@@ -294,190 +407,294 @@ int runTest(int argc, const char* argv[])
                 std::cout << "Applet version not handled" << endl;
             }
 
+            TestCard tc;
+            std::shared_ptr<const CardFile> signCert;
+
             // Test the getFile function to retrieve the sign cert
-            std::cout << endl << TestHeader << "Retrieve Sign certificate (getFile)..." << endl;
-            auto start = std::chrono::steady_clock::now();
-            std::shared_ptr<const CardFile> signCert = card->getFile(CardFiles::Signcert);
-            auto stop = std::chrono::steady_clock::now();
-            TestCard tc = testDB.GetTestCard(signCert->getBase64());
-            testResults.push_back(TestResult("Retrieve Sign certificate (getFile)", signCert->getBase64() != tc.SignCert ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(stop - start).count()));
-            dumpCert(signCert);
-
+            testResults.push_back(TestGetFile("Retrieve Sign certificate (getFile)", card, CardFiles::Signcert,
+                [&signCert, &testDB, &tc](const std::shared_ptr<const CardFile>& File) {
+                    signCert = File;
+                    dumpCert(File);
+                    tc = testDB.GetTestCard(File->getBase64());
+                    return GetResultFromFileCompare(File, tc.SignCert);
+                }));
             // Test the getFile function to retrieve the Auth cert
-            std::cout << endl << TestHeader << "Retrieve Auth certificate (getFile)..." << endl;
-            start = std::chrono::steady_clock::now();
-            std::shared_ptr<const CardFile> authCert = card->getFile(CardFiles::Authcert);
-            testResults.push_back(TestResult("Retrieve Auth certificate (getFile)", authCert->getBase64() != tc.AuthCert ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
-            dumpCert(authCert);
-
+            testResults.push_back(TestGetFile("Retrieve Auth certificate (getFile)", card, CardFiles::Authcert,
+                [&tc](const std::shared_ptr<const CardFile>& File) {
+                    dumpCert(File);
+                    return GetResultFromFileCompare(File, tc.AuthCert);
+                }));
             // Test the getFile function to retrieve the CA cert
-            std::cout << endl << TestHeader << "Retrieve CA certificate (getFile)..." << endl;
-            start = std::chrono::steady_clock::now();
-            std::shared_ptr<const CardFile> caCert = card->getFile(CardFiles::Cacert);
-            testResults.push_back(TestResult("Retrieve CA certificate (getFile)", caCert->getBase64() != tc.CACert ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
-            dumpCert(caCert);
-
+            testResults.push_back(TestGetFile("Retrieve CA certificate (getFile)", card, CardFiles::Cacert,
+                [&tc](const std::shared_ptr<const CardFile>& File) {
+                    dumpCert(File);
+                    return GetResultFromFileCompare(File, tc.CACert);
+                }));
             // Test the getFile function to retrieve the ROOT cert
-            std::cout << endl << TestHeader << "Retrieve ROOT certificate (getFile)..." << endl;
-            start = std::chrono::steady_clock::now();
-            std::shared_ptr<const CardFile> rootCert = card->getFile(CardFiles::Rootcert);
-            testResults.push_back(TestResult("Retrieve ROOT certificate (getFile)", rootCert->getBase64() != tc.ROOTCert ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
-            dumpCert(rootCert);
-
+            testResults.push_back(TestGetFile("Retrieve ROOT certificate (getFile)", card, CardFiles::Rootcert,
+                [&tc](const std::shared_ptr<const CardFile>& File) {
+                    dumpCert(File);
+                    return GetResultFromFileCompare(File, tc.ROOTCert);
+                }));
             // Test the getFile function to retrieve the RRN cert
-            std::cout << endl << TestHeader << "Retrieve RRN certificate (getFile)..." << endl;
-            start = std::chrono::steady_clock::now();
-            std::shared_ptr<const CardFile> rrnCert = card->getFile(CardFiles::Rrncert);
-            testResults.push_back(TestResult("Retrieve RRN certificate (getFile)", rrnCert->getBase64() != tc.RRNCert ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
-            dumpCert(rrnCert);
-
+            testResults.push_back(TestGetFile("Retrieve RRN certificate (getFile)", card, CardFiles::Rrncert,
+                [&tc](const std::shared_ptr<const CardFile>& File) {
+                    dumpCert(File);
+                    return GetResultFromFileCompare(File, tc.RRNCert);
+                }));
             // Test the getFile function to retrieve the ID File
-            std::cout << endl << TestHeader << "Retrieve ID File (getFile)..." << endl;
-            start = std::chrono::steady_clock::now();
-            std::shared_ptr<const CardFile> IdFile = card->getFile(CardFiles::Id);
-            testResults.push_back(TestResult("Retrieve ID File (getFile)", IdFile->getBase64() != tc.IdFile ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
-
+            testResults.push_back(TestGetFile("Retrieve ID File (getFile)", card, CardFiles::Id,
+                [&tc](const std::shared_ptr<const CardFile>& File) {
+                    return GetResultFromFileCompare(File, tc.IdFile);
+                }));
             // Test the getFile function to retrieve the Addr File
-            std::cout << endl << TestHeader << "Retrieve Addr File (getFile)..." << endl;
-            start = std::chrono::steady_clock::now();
-            std::shared_ptr<const CardFile> AddrFile = card->getFile(CardFiles::Address);
-            testResults.push_back(TestResult("Retrieve Addr File (getFile)", AddrFile->getBase64() != tc.AddrFile ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
-
+            testResults.push_back(TestGetFile("Retrieve Addr File (getFile)", card, CardFiles::Address,
+                [&tc](const std::shared_ptr<const CardFile>& File) {
+                    return GetResultFromFileCompare(File, tc.AddrFile);
+                }));
             // Test the getFile function to retrieve the Photo File
-            std::cout << endl << TestHeader << "Retrieve Photo File (getFile)..." << endl;
-            start = std::chrono::steady_clock::now();
-            std::shared_ptr<const CardFile> Photo = card->getFile(CardFiles::Photo);
-            testResults.push_back(TestResult("Retrieve Photo File (getFile)", Photo->getBase64() != tc.Photo ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
-
+            testResults.push_back(TestGetFile("Retrieve Photo File (getFile)", card, CardFiles::Photo,
+                [&tc](const std::shared_ptr<const CardFile>& File) {
+                    return GetResultFromFileCompare(File, tc.Photo);
+                }));
             // Test the getFile function to retrieve the ID File Signature
-            std::cout << endl << TestHeader << "Retrieve ID File Signature (getFile)..." << endl;
-            start = std::chrono::steady_clock::now();
-            std::shared_ptr<const CardFile> IdSigFile = card->getFile(CardFiles::Id_sig);
-            testResults.push_back(TestResult("Retrieve ID File Signature (getFile)", IdSigFile->getBase64() != tc.IdSigFile ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
-
+            testResults.push_back(TestGetFile("Retrieve ID File Signature (getFile)", card, CardFiles::Id_sig,
+                [&tc](const std::shared_ptr<const CardFile>& File) {
+                    return GetResultFromFileCompare(File, tc.IdSigFile);
+                }));
             // Test the getFile function to retrieve the Addr File Signature
-            std::cout << endl << TestHeader << "Retrieve Addr File Signature (getFile)..." << endl;
-            start = std::chrono::steady_clock::now();
-            std::shared_ptr<const CardFile> AddrSigFile = card->getFile(CardFiles::Address_sig);
-            testResults.push_back(TestResult("Retrieve Addr File Signature (getFile)", AddrSigFile->getBase64() != tc.AddrSigFile ? "Fail" : "OK", chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
-
+            testResults.push_back(TestGetFile("Retrieve Addr File Signature (getFile)", card, CardFiles::Address_sig,
+                [&tc](const std::shared_ptr<const CardFile>& File) {
+                    return GetResultFromFileCompare(File, tc.AddrSigFile);
+                }));
             bool isPinPadReader = cr->isPinPad();
             cr->disconnect();
             do_sleep(500);
-
             // Test the browser extension message to retrieve the card information (idflags set to 1 to retrieve only the ID file)
-            {
-                std::cout << endl << TestHeader << "Get Card Info (ID only) Browser Extension command..." << endl;
-
-                std::cout << message_Get_Card_Info_ID_Only << endl;
-                auto start = std::chrono::steady_clock::now();
-                ssRequest = std::make_shared<stringstream>(message_Get_Card_Info_ID_Only);
-                handler = RequestHandler::createRequestHandler(ssRequest);
-                handler->AddTraceInfoInJsonResult();
-                ssResponse = handler->process();
-                testResults.push_back(TestResult("Get Card Info (ID only) Browser Extension command", GetResultFromResponse(ssResponse, "All"), chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
-
-                std::cout << ssResponse << endl;
-            }
+            testResults.push_back(TestOp("Get Card Info (ID only) Browser Extension command", message_Get_Card_Info_ID_Only,
+                [](const std::string& Response) {
+                    std::string r = ExpectResultInResponse(Response, BeidConnect_Result::OK);
+                    if (r != "OK") {
+                        return r;
+                    }
+                    return GetResultFromResponse(Response, "All");
+                }));
             // Test the browser extension message to retrieve the card information (idflags set to 511 to retrieve all file)
-            {
-                std::cout << endl << TestHeader << "Get Card Info (all fields) Browser Extension command..." << endl;
-
-                std::cout << message_Get_Card_Info << endl;
-                auto start = std::chrono::steady_clock::now();
-                ssRequest = std::make_shared<stringstream>(message_Get_Card_Info);
-                handler = RequestHandler::createRequestHandler(ssRequest);
-                handler->AddTraceInfoInJsonResult();
-                ssResponse = handler->process();
-                testResults.push_back(TestResult("Get Card Info (all fields) Browser Extension command", GetResultFromResponse(ssResponse, "All"), chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
-
-                std::cout << ssResponse << endl;
-            }
+            testResults.push_back(TestOp("Get Card Info (all fields) Browser Extension command", message_Get_Card_Info,
+                [](const std::string& Response) {
+                    std::string r = ExpectResultInResponse(Response, BeidConnect_Result::OK);
+                    if (r != "OK") {
+                        return r;
+                    }
+                    return GetResultFromResponse(Response, "All");
+                }));
+#ifdef _DEBUG // Test generating exception to check the error handling on Card Info
+            // Test error No_Reader 
+            unittest_Generate_Exception_No_Reader = true;
+            testResults.push_back(TestOp("Test error handling (Card Info (all fields)) no_reader", message_Get_Card_Info,
+                [](const std::string& Response) {
+                    return ExpectResultInResponse(Response, BeidConnect_Result::no_reader);
+                }));
+            unittest_Generate_Exception_No_Reader = false;
+            // Test error Card Removed
+            unittest_Generate_Exception_Removed_Card = true;
+            testResults.push_back(TestOp("Test error handling (Card Info (all fields)) Card Removed", message_Get_Card_Info,
+                [](const std::string& Response) {
+                    return ExpectResultInResponse(Response, BeidConnect_Result::no_card);
+                }));
+            unittest_Generate_Exception_Removed_Card = false;
+            // Test error Transaction Fail
+            unittest_Generate_Exception_Transaction_Fail = true;
+            testResults.push_back(TestOp("Test error handling (Card Info (all fields)) Transaction Fail", message_Get_Card_Info,
+                [](const std::string& Response) {
+                    return ExpectResultInResponse(Response, BeidConnect_Result::busy);
+                }));
+            unittest_Generate_Exception_Transaction_Fail = false;
+#endif
             // Test the browser extension message to retrieve the user certificates
-            {
-                std::cout << endl << TestHeader << "Get User Certificates (USERCERTS) Browser Extension command..." << endl;
-
-                std::cout << message_Get_User_Certificates << endl;
-                auto start = std::chrono::steady_clock::now();
-                ssRequest = std::make_shared<stringstream>(message_Get_User_Certificates);
-                handler = RequestHandler::createRequestHandler(ssRequest);
-                handler->AddTraceInfoInJsonResult();
-                ssResponse = handler->process();
-                testResults.push_back(TestResult("Get User Certificates (USERCERTS) Browser Extension command", GetResultFromResponse(ssResponse, "All"), chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
-
-                std::cout << ssResponse << endl;
-            }
+            testResults.push_back(TestOp("Get User Certificates (USERCERTS) Browser Extension command", message_Get_User_Certificates,
+                [](const std::string& Response) {
+                    std::string r = ExpectResultInResponse(Response, BeidConnect_Result::OK);
+                    if (r != "OK") {
+                        return r;
+                    }
+                    return GetResultFromResponse(Response, "All");
+                }));
+#ifdef _DEBUG // Test generating exception to check the error handling on Card Info
+            // Test error No_Reader 
+            unittest_Generate_Exception_No_Reader = true;
+            testResults.push_back(TestOp("Test error handling (USERCERTS) no_reader", message_Get_User_Certificates,
+                [](const std::string& Response) {
+                    return ExpectResultInResponse(Response, BeidConnect_Result::no_reader);
+                }));
+            unittest_Generate_Exception_No_Reader = false;
+            // Test error Card Removed
+            unittest_Generate_Exception_Removed_Card = true;
+            testResults.push_back(TestOp("Test error handling (USERCERTS) Card Removed", message_Get_User_Certificates,
+                [](const std::string& Response) {
+                    return ExpectResultInResponse(Response, BeidConnect_Result::no_card);
+                }));
+            unittest_Generate_Exception_Removed_Card = false;
+            // Test error Transaction Fail
+            unittest_Generate_Exception_Transaction_Fail = true;
+            testResults.push_back(TestOp("Test error handling (USERCERTS) Transaction Fail", message_Get_User_Certificates,
+                [](const std::string& Response) {
+                    return ExpectResultInResponse(Response, BeidConnect_Result::busy);
+                }));
+            unittest_Generate_Exception_Transaction_Fail = false;
+#endif
             // Test the browser extension message to retrieve the certificate chain
-            {
-                std::cout << endl << TestHeader << "Get Certificate Chain (CERTCHAIN) Browser Extension command..." << endl;
-
-                std::string cmd = PrepareCmd(message_Get_Certificates_Chain, signCert->getBase64(), isPinPadReader, tc.PIN);
-                std::cout << cmd << endl;
-
-                auto start = std::chrono::steady_clock::now();
-                ssRequest = std::make_shared<stringstream>(cmd);
-                handler = RequestHandler::createRequestHandler(ssRequest);
-                handler->AddTraceInfoInJsonResult();
-                ssResponse = handler->process();
-                testResults.push_back(TestResult("Get Certificate Chain (CERTCHAIN) Browser Extension command", GetResultFromResponse(ssResponse, cr->name), chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
-
-                std::cout << ssResponse << endl;
-            }
-
+            testResults.push_back(TestSign("Get Certificate Chain (CERTCHAIN) Browser Extension command", message_Get_Certificates_Chain, signCert->getBase64(), isPinPadReader, tc.PIN,
+                [cr](const std::string& Response) {
+                    std::string r = ExpectResultInResponse(Response, BeidConnect_Result::OK);
+                    if (r != "OK") {
+                        return r;
+                    }
+                    return GetResultFromResponse(Response, cr->name);
+                }));
+#ifdef _DEBUG // Test generating exception to check the error handling on Card Info
+            // Test error No_Reader 
+            unittest_Generate_Exception_No_Reader = true;
+            testResults.push_back(TestSign("Test error handling (CERTCHAIN) no_reader", message_Get_Certificates_Chain, signCert->getBase64(), isPinPadReader, tc.PIN,
+                [](const std::string& Response) {
+                    return ExpectResultInResponse(Response, BeidConnect_Result::no_reader);
+                }));
+            unittest_Generate_Exception_No_Reader = false;
+            // Test error Card Removed
+            unittest_Generate_Exception_Removed_Card = true;
+            testResults.push_back(TestSign("Test error handling (CERTCHAIN) Card Removed", message_Get_Certificates_Chain, signCert->getBase64(), isPinPadReader, tc.PIN,
+                [](const std::string& Response) {
+                    return ExpectResultInResponse(Response, BeidConnect_Result::no_card);
+                }));
+            unittest_Generate_Exception_Removed_Card = false;
+            // Test error Transaction Fail
+            unittest_Generate_Exception_Transaction_Fail = true;
+            testResults.push_back(TestSign("Test error handling (CERTCHAIN) Transaction Fail", message_Get_Certificates_Chain, signCert->getBase64(), isPinPadReader, tc.PIN,
+                [](const std::string& Response) {
+                    return ExpectResultInResponse(Response, BeidConnect_Result::busy);
+                }));
+            unittest_Generate_Exception_Transaction_Fail = false;
+#endif
             // Check signing command only on the preconfigured (defined in the code) test smart card to avoid locking a real card
             if (signCert->getBase64() == tc.SignCert && tc.DoPINOps)
             {
                 // Test the browser extension message to sign a SHA256 digest
-                {
-                    std::cout << endl << TestHeader << "Signing Browser Extension command (SHA256)..." << endl;
-
-                    std::string cmd = PrepareCmd(message_SHA256, signCert->getBase64(), isPinPadReader, tc.PIN);
-                    std::cout << cmd << endl;
-
-                    auto start = std::chrono::steady_clock::now();
-                    ssRequest = std::make_shared<stringstream>(cmd);
-                    handler = RequestHandler::createRequestHandler(ssRequest);
-                    handler->AddTraceInfoInJsonResult();
-                    ssResponse = handler->process();
-                    testResults.push_back(TestResult("Signing Browser Extension command (SHA256)", GetResultFromResponse(ssResponse, cr->name), chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
-
-                    std::cout << ssResponse << endl;
-                    std::cout << "Signature " << GetSignatureFromResponse(ssResponse) << endl;
-                }
+                testResults.push_back(TestSign("Signing Browser Extension command (SHA256)", message_SHA256, signCert->getBase64(), isPinPadReader, tc.PIN,
+                    [cr](const std::string& Response) {
+                        std::string r = ExpectResultInResponse(Response, BeidConnect_Result::OK);
+                        if (r != "OK") {
+                            return r;
+                        }
+                        return GetResultFromResponse(Response, cr->name);
+                    }));
                 // Test the browser extension message to sign a SHA384 digest
-                {
-                    std::cout << endl << TestHeader << "Signing Browser Extension command (SHA384)..." << endl;
-
-                    std::string cmd = PrepareCmd(message_SHA384, signCert->getBase64(), isPinPadReader, tc.PIN);
-                    std::cout << cmd << endl;
-
-                    auto start = std::chrono::steady_clock::now();
-                    ssRequest = std::make_shared<stringstream>(cmd);
-                    handler = RequestHandler::createRequestHandler(ssRequest);
-                    handler->AddTraceInfoInJsonResult();
-                    ssResponse = handler->process();
-                    testResults.push_back(TestResult("Signing Browser Extension command (SHA384)", GetResultFromResponse(ssResponse, cr->name), chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
-
-                    std::cout << ssResponse << endl;
-                    std::cout << "Signature " << GetSignatureFromResponse(ssResponse) << endl;
-                }
+                testResults.push_back(TestSign("Signing Browser Extension command (SHA384)", message_SHA384, signCert->getBase64(), isPinPadReader, tc.PIN,
+                    [cr](const std::string& Response) {
+                        std::string r = ExpectResultInResponse(Response, BeidConnect_Result::OK);
+                        if (r != "OK") {
+                            return r;
+                        }
+                        return GetResultFromResponse(Response, cr->name);
+                    }));
                 // Test the browser extension message to sign a SHA512 digest
-                {
-                    std::cout << endl << TestHeader << "Signing Browser Extension command (SHA512)..." << endl;
-
-                    std::string cmd = PrepareCmd(message_SHA512, signCert->getBase64(), isPinPadReader, tc.PIN);
-                    std::cout << cmd << endl;
-
-                    auto start = std::chrono::steady_clock::now();
-                    ssRequest = std::make_shared<stringstream>(cmd);
-                    handler = RequestHandler::createRequestHandler(ssRequest);
-                    handler->AddTraceInfoInJsonResult();
-                    ssResponse = handler->process();
-                    testResults.push_back(TestResult("Signing Browser Extension command (SHA512)", GetResultFromResponse(ssResponse, cr->name), chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count()));
-
-                    std::cout << ssResponse << endl;
-                    std::cout << "Signature " << GetSignatureFromResponse(ssResponse) << endl;
+                testResults.push_back(TestSign("Signing Browser Extension command (SHA512)", message_SHA512, signCert->getBase64(), isPinPadReader, tc.PIN,
+                    [cr](const std::string& Response) {
+                        std::string r = ExpectResultInResponse(Response, BeidConnect_Result::OK);
+                        if (r != "OK") {
+                            return r;
+                        }
+                        return GetResultFromResponse(Response, cr->name);
+                    }));
+#ifdef _DEBUG // Test generating exception to check the error handling
+                // Test error Transaction Fail
+                unittest_Generate_Exception_Transaction_Fail = true;
+                testResults.push_back(TestSign("Test error handling (signing) Transaction Fail", message_SHA512, signCert->getBase64(), isPinPadReader, tc.PIN,
+                    [](const std::string& Response) {
+                        return ExpectResultInResponse(Response, BeidConnect_Result::busy);
+                    }));
+                unittest_Generate_Exception_Transaction_Fail = false;
+                // Test error no_reader
+                unittest_Generate_Exception_No_Reader = true;
+                testResults.push_back(TestSign("Test error handling (signing) no_reader", message_SHA512, signCert->getBase64(), isPinPadReader, tc.PIN,
+                    [](const std::string& Response) {
+                        return ExpectResultInResponse(Response, BeidConnect_Result::no_reader);
+                    }));
+                unittest_Generate_Exception_No_Reader = false;
+                // Test error unhandled CardException
+                unittest_Generate_Exception_Other = true;
+                testResults.push_back(TestSign("Test error handling (signing) general_error", message_SHA512, signCert->getBase64(), isPinPadReader, tc.PIN,
+                    [](const std::string& Response) {
+                        return ExpectResultInResponse(Response, BeidConnect_Result::general_error);
+                    }));
+                unittest_Generate_Exception_Other = false;
+                // Test error Pin Blocked
+                unittest_Generate_Exception_Pin_Blocked = true;
+                testResults.push_back(TestSign("Test error handling (signing) card_blocked", message_SHA512, signCert->getBase64(), isPinPadReader, tc.PIN,
+                    [](const std::string& Response) {
+                        return ExpectResultInResponse(Response, BeidConnect_Result::card_blocked);
+                    }));
+                unittest_Generate_Exception_Pin_Blocked = false;
+                // Test error Pin_3_attempts
+                unittest_Generate_Exception_Pin_3_attempts = true;
+                testResults.push_back(TestSign("Test error handling (signing) pin_3_attempts_left", message_SHA512, signCert->getBase64(), isPinPadReader, tc.PIN,
+                    [](const std::string& Response) {
+                        return ExpectResultInResponse(Response, BeidConnect_Result::pin_3_attempts_left);
+                    }));
+                unittest_Generate_Exception_Pin_3_attempts = false;
+                // Test error Pin_2_attempts
+                unittest_Generate_Exception_Pin_2_attempts = true;
+                testResults.push_back(TestSign("Test error handling (signing) pin_2_attempts_left", message_SHA512, signCert->getBase64(), isPinPadReader, tc.PIN,
+                    [](const std::string& Response) {
+                        return ExpectResultInResponse(Response, BeidConnect_Result::pin_2_attempts_left);
+                    }));
+                unittest_Generate_Exception_Pin_2_attempts = false;
+                // Test error Pin_1_attempts
+                unittest_Generate_Exception_Pin_1_attempt = true;
+                testResults.push_back(TestSign("Test error handling (signing) pin_1_attempt_left", message_SHA512, signCert->getBase64(), isPinPadReader, tc.PIN,
+                    [](const std::string& Response) {
+                        return ExpectResultInResponse(Response, BeidConnect_Result::pin_1_attempt_left);
+                    }));
+                unittest_Generate_Exception_Pin_1_attempt = false;
+                // Test error pin_too_short
+                unittest_Generate_Exception_PIN_TOO_SHORT = true;
+                testResults.push_back(TestSign("Test error handling (signing) pin_too_short", message_SHA512, signCert->getBase64(), isPinPadReader, tc.PIN,
+                    [](const std::string& Response) {
+                        return ExpectResultInResponse(Response, BeidConnect_Result::pin_too_short);
+                    }));
+                unittest_Generate_Exception_PIN_TOO_SHORT = false;
+                // Test error pin_too_long
+                unittest_Generate_Exception_PIN_TOO_LONG = true;
+                testResults.push_back(TestSign("Test error handling (signing) pin_too_long", message_SHA512, signCert->getBase64(), isPinPadReader, tc.PIN,
+                    [](const std::string& Response) {
+                        return ExpectResultInResponse(Response, BeidConnect_Result::pin_too_long);
+                    }));
+                unittest_Generate_Exception_PIN_TOO_LONG = false;
+                // Test error pin_incorrect
+                unittest_Generate_Exception_PIN_Incorrect = true;
+                testResults.push_back(TestSign("Test error handling (signing) pin_incorrect", message_SHA512, signCert->getBase64(), isPinPadReader, tc.PIN,
+                    [](const std::string& Response) {
+                        return ExpectResultInResponse(Response, BeidConnect_Result::pin_incorrect);
+                    }));
+                unittest_Generate_Exception_PIN_Incorrect = false;
+                // Test error PinPad TimeOut
+                if (isPinPadReader) {
+                    unittest_Generate_Exception_PinPad_TimeOut = true;
+                    testResults.push_back(TestSign("Test error handling (signing) pin_timeout", message_SHA512, signCert->getBase64(), isPinPadReader, tc.PIN,
+                        [](const std::string& Response) {
+                            return ExpectResultInResponse(Response, BeidConnect_Result::pin_timeout);
+                        }));
+                    unittest_Generate_Exception_PinPad_TimeOut = false;
                 }
+                // Test error PinPad Cancel button
+                if (isPinPadReader) {
+                    unittest_Generate_Exception_PinPad_Cancel = true;
+                    testResults.push_back(TestSign("Test error handling (signing) cancel", message_SHA512, signCert->getBase64(), isPinPadReader, tc.PIN,
+                        [](const std::string& Response) {
+                            return ExpectResultInResponse(Response, BeidConnect_Result::cancel);
+                        }));
+                    unittest_Generate_Exception_PinPad_Cancel = false;
+                }
+#endif
             }
             else
             {

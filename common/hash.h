@@ -1,20 +1,19 @@
+#pragma once
+
 #ifndef __hash_h
 #define __hash_h
 
+#include <cstddef>
+
 #define E_DIGEST_LEN				0xB0020001
-
-
-#ifdef __cplusplus
-  extern "C" {
-#endif
 
 #define DIGEST_ALGO_SHA256          2
 #define DIGEST_ALGO_SHA384          3
 #define DIGEST_ALGO_SHA512          4
 
-#define DIGEST_ALGO_SHA256_HEAD     "\x30\x31\x30\x0d\x06\x09\x60\x86\x48\x01\x65\x03\x04\x02\x01\x05\x00\x04\x20"
-#define DIGEST_ALGO_SHA384_HEAD     "\x30\x41\x30\x0d\x06\x09\x60\x86\x48\x01\x65\x03\x04\x02\x02\x05\x00\x04\x30"
-#define DIGEST_ALGO_SHA512_HEAD     "\x30\x51\x30\x0d\x06\x09\x60\x86\x48\x01\x65\x03\x04\x02\x03\x05\x00\x04\x40"
+constexpr unsigned char DIGEST_ALGO_SHA256_HEAD[] = { 0x30,0x31,0x30,0x0d,0x06,0x09,0x60,0x86,0x48,0x01,0x65,0x03,0x04,0x02,0x01,0x05,0x00,0x04,0x20 };
+constexpr unsigned char DIGEST_ALGO_SHA384_HEAD[] = { 0x30,0x41,0x30,0x0d,0x06,0x09,0x60,0x86,0x48,0x01,0x65,0x03,0x04,0x02,0x02,0x05,0x00,0x04,0x30 };
+constexpr unsigned char DIGEST_ALGO_SHA512_HEAD[] = { 0x30,0x51,0x30,0x0d,0x06,0x09,0x60,0x86,0x48,0x01,0x65,0x03,0x04,0x02,0x03,0x05,0x00,0x04,0x40 };
 
 #define DIGEST_ALGO_SHA256_HEAD_LEN    19
 #define DIGEST_ALGO_SHA384_HEAD_LEN    19
@@ -25,13 +24,8 @@
 #define DIGEST_ALGO_SHA512_LEN      64
 
 unsigned int hash_length_for_algo(int hashAlgo);
-const char* hash_header_for_algo(int hashAlgo);
-unsigned int hash_length_for_algoheader(int hashAlgo);
+const unsigned char* hash_header_for_algo(int hashAlgo);
+size_t hash_length_for_algoheader(int hashAlgo);
 unsigned int algo2str(const char *hash_algo);
-
-     
-#ifdef __cplusplus
-  }
-#endif
 
 #endif

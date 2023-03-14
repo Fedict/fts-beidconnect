@@ -109,11 +109,11 @@ int isEqual(const char* str1, int size1, const char* str2, int size2)
 //    p_hex[3 * l_bin] = 0;
 //}
 
-int base64decode_len(const std::string& bufcoded)
+size_t base64decode_len(const std::string& bufcoded)
 {
-    int nbytesdecoded;
+    size_t nbytesdecoded;
     const unsigned char* bufin;
-    int nprbytes;
+    size_t nprbytes;
 
     bufin = (const unsigned char*)bufcoded.c_str();
     while (pr2six[*(bufin++)] <= 63);
@@ -124,12 +124,12 @@ int base64decode_len(const std::string& bufcoded)
     return nbytesdecoded + 1;
 }
 
-int base64decode(const std::string& bufcoded, unsigned char* bufplain)
+size_t base64decode(const std::string& bufcoded, unsigned char* bufplain)
 {
-    int nbytesdecoded;
+    size_t nbytesdecoded;
     const unsigned char* bufin;
     unsigned char* bufout;
-    int nprbytes;
+    size_t nprbytes;
 
     bufin = (const unsigned char*)bufcoded.c_str();
     while (pr2six[*(bufin++)] <= 63);

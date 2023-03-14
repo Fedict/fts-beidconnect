@@ -70,10 +70,8 @@ long VirtualReader::connect()
 
 
 #define WHERE "VirtualReader::disconnect()"
-long VirtualReader::disconnect()
+void VirtualReader::disconnect()
 {
-   long rv = 0;
-   return (rv);
 }
 #undef WHERE
 

@@ -52,7 +52,7 @@ char* bitstring2str(unsigned char* p_data, int l_data)
 int skip_item(unsigned char* in, size_t l_in, unsigned int n, unsigned char** out, size_t* l_out)
 {
     //int ret = 0;
-    unsigned int  classtag, type, tag, l = 0;
+    unsigned int  /*classtag, type,*/ tag, l = 0;
     unsigned char* p = in;
     unsigned char* end = in + l_in - 1;  //points to last byte from input stream
     unsigned int i, j;
@@ -62,8 +62,8 @@ int skip_item(unsigned char* in, size_t l_in, unsigned int n, unsigned char** ou
 
     for (i = 1; i < n; i++)
     {
-        classtag = *p & CLASS_MASK;
-        type = *p & TYPE_MASK;
+        //classtag = *p & CLASS_MASK;
+        //type = *p & TYPE_MASK;
         tag = *p & TAG_MASK;
 
         if (tag == TAG_MASK)

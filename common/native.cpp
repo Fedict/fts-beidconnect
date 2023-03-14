@@ -25,18 +25,19 @@ int runNative(int argc, const char *argv[])
         shared_ptr<stringstream> ssRequest = std::make_shared<stringstream>();
 
         log_info("runNative : Read new Request");
-        int ret = readMessage(*ssRequest);
-        switch (ret)
+        switch (readMessage(*ssRequest))
         {
-        case E_COMM_ENDREQUEST:
+        case BECOM_Code::E_COMM_ENDREQUEST:
         {
             log_info("runNative : Close Request");
         }
-        case E_COMM_PARAM:
+        case BECOM_Code::E_COMM_PARAM:
         {
             log_info("runNative : Comm Parameter error");
             return 0;
         }
+        default:
+            break;
         }
 
         shared_ptr<RequestHandler> handler = RequestHandler::createRequestHandler(ssRequest);

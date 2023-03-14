@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef VirtualCard_hpp
 #define VirtualCard_hpp
 
@@ -19,10 +21,10 @@ class VirtualCard: public Card
       int type() const override;
       void readCertificateChain(std::vector<std::shared_ptr<const CardFile>> &subCerts, std::shared_ptr<const CardFile>& rootCert) override;
 
-      long selectKey(CardKeys type, unsigned char* cert = 0, size_t l_cert = 0) override;
-      long logon(int l_pin, char *pin) override;
-      long logoff() override;
-      long sign(const unsigned char* in, size_t l_in, int hashAlgo, unsigned char *out, size_t*l_out, int *sw) override;
+      void selectKey(CardKeys type, const std::vector<unsigned char>& cert) override;
+      void logon(int l_pin, char *pin) override;
+      void logoff() override;
+      long sign(const std::vector<unsigned char>& in, int hashAlgo, unsigned char *out, size_t*l_out, int *sw) override;
 
       std::shared_ptr<const CardFile> getFile(CardFiles fileType) override;
 };

@@ -1,3 +1,4 @@
+#include <unordered_map>
 #include "RequestHandler.hpp"
 #include "VersionRequestHandler.hpp"
 #include "IDRequestHandler.hpp"
@@ -8,7 +9,7 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include "log.hpp"
-#include <unordered_map>
+#include "comm.hpp"
 
 using namespace boost::property_tree;
 
@@ -27,29 +28,29 @@ std::shared_ptr<RequestHandler> RequestHandler::createRequestHandler(const std::
     }
 
     std::shared_ptr<RequestHandler> requestHandler = nullptr;
-    std::string operation = ptreeRequestTmp->get<std::string>("operation");
+    std::string operation = ptreeRequestTmp->get<std::string>(BeidConnect_JSON_field::operation);
 
-    if (operation == "VERSION")
+    if (operation == BeidConnect_operation::VERSION)
     {
         requestHandler = std::make_shared<VersionRequestHandler>(ptreeRequestTmp);
     }
-    else if (operation == "ID")
+    else if (operation == BeidConnect_operation::ID)
     {
         requestHandler = std::make_shared<IDRequestHandler>(ptreeRequestTmp);
     }
-    else if (operation == "USERCERTS")
+    else if (operation == BeidConnect_operation::USERCERTS)
     {
         requestHandler = std::make_shared<UserCertsRequestHandler>(ptreeRequestTmp);
     }
-    else if (operation == "CERTCHAIN")
+    else if (operation == BeidConnect_operation::CERTCHAIN)
     {
         requestHandler = std::make_shared<CertChainRequestHandler>(ptreeRequestTmp);
     }
-    else if (operation == "SIGN")
+    else if (operation == BeidConnect_operation::SIGN)
     {
         requestHandler = std::make_shared<SignRequestHandler>(ptreeRequestTmp);
     }
-    else if (operation == "AUTH")
+    else if (operation == BeidConnect_operation::AUTH)
     {
         requestHandler = std::make_shared<SignRequestHandler>(ptreeRequestTmp);
     }
@@ -65,15 +66,15 @@ void RequestHandler::post_process(boost::property_tree::ptree &response)
 {
     if (ptreeRequest)
     {
-        std::string correlationId = ptreeRequest->get<std::string>("correlationId");
+        std::string correlationId = ptreeRequest->get<std::string>(BeidConnect_JSON_field::correlationId);
         if (correlationId != "")
         {
-            response.put("correlationId", correlationId);
+            response.put(BeidConnect_JSON_field::correlationId, correlationId);
         }
-        std::string operation = ptreeRequest->get<std::string>("operation");
+        std::string operation = ptreeRequest->get<std::string>(BeidConnect_JSON_field::operation);
         if (operation != "")
         {
-            response.put("operation", operation);
+            response.put(BeidConnect_JSON_field::operation, operation);
         }
     }
 }

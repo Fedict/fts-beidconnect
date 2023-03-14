@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef VersionRequestHandler_hpp
 #define VersionRequestHandler_hpp
 
@@ -12,4 +14,4 @@ public:
     std::string process() override;
 };
 
-#endif /* VersionRequestHandler_hpp */
+#endif

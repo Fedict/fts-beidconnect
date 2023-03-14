@@ -9,13 +9,15 @@
 #include "util.h"
 #include <thread>
 #include "SCardException.h"
+#ifdef _DEBUG
+#include "test.hpp"
+#endif
 
 #define READERS_BUF_SIZE 2000
 
 #ifndef _WIN32
 #define lstrlen(s) strlen(s)   // non-Windows wintypes.h: LPTSTR == LPSTR == char*
 #endif
-
 
 /******************************************************************************
  *
@@ -43,7 +45,6 @@
 #define FEATURE_ABORT                   0x0B
 #define FEATURE_CCID_ESC_COMMAND        0x13
 
-
 //see pcsc10_v2.01.6.pdf
 #pragma pack(1)
 
@@ -69,8 +70,6 @@ typedef struct PIN_VERIFY_STRUCTURE
    BYTE    ulDataLength[4];             // length of Data to be sent to the ICC
    BYTE    abData[PP_APDU_MAX_LEN];                // Data to send to the ICC
 } PIN_VERIFY_STRUCTURE, *PPIN_VERIFY_STRUCTURE;
-
-
 
 //typedef struct PIN_MODIFY_STRUCTURE
 //{
@@ -106,11 +105,17 @@ SCard::SCard()
    hCard = 0;
 }
 
-long SCard::beginTransaction()
+void SCard::beginTransaction()
 {
    LONG ret = 0;
    int maxRetry = 10;
    
+#ifdef _DEBUG
+   if (unittest_Generate_Exception_Transaction_Fail) {
+       throw SCardException(0, SCardException_Code::TransactionFail);
+   }
+#endif
+
    while (maxRetry--) {
       ret = SCardBeginTransaction(hCard);
       if (ret == 0) {
@@ -118,26 +123,28 @@ long SCard::beginTransaction()
       }
       do_sleep(300);
    }
-   if (ret) {
+   if (ret != SCARD_S_SUCCESS) {
       log_error("E: Could not start transaction");
-      throw SCardException(TransactionFail);
+      throw SCardException(ret, SCardException_Code::TransactionFail);
    }
-   return ret;
 }
 
-long SCard::endTransaction()
+void SCard::endTransaction()
 {
    LONG ret = SCardEndTransaction(hCard, SCARD_LEAVE_CARD);
    if (ret) {
       log_error("SCardEndTransaction failed (%0x)", ret);
    }
-   return 0;
 }
 
-
 #define WHERE "SCard::listReaders()"
-int SCard::listReaders(std::vector<std::shared_ptr<CardReader>>& readers)
+void SCard::listReaders(std::vector<std::shared_ptr<CardReader>>& readers)
 {
+#ifdef _DEBUG
+   if (unittest_Generate_Exception_No_Reader) {
+       throw BeidConnectException(BeidConnectException_Code::no_reader);
+   }
+#endif
    LPTSTR            szRdr;
    DWORD             dwI = 0;
    DWORD			dwRdrCount = 0;
@@ -145,13 +152,8 @@ int SCard::listReaders(std::vector<std::shared_ptr<CardReader>>& readers)
    int n_readers;
    LONG              lReturn;
    unsigned int i;
-   int ret = 0;
    shared_ptr<SCardCtx> context = std::make_shared<SCardCtx>();
 
-   if (!context->valid) {
-      return E_SRC_NO_CONTEXT;
-   }
-   
    log_info("SCardListReaders()");
 #ifdef _WIN32
    LPTSTR            szReaders = NULL;
@@ -171,7 +173,7 @@ int SCard::listReaders(std::vector<std::shared_ptr<CardReader>>& readers)
    if ( SCARD_S_SUCCESS != lReturn )
    {
       log_error("%s: E: SCardListReaders returned 0x%08x", WHERE, lReturn);
-      return(E_SRC_NO_READERS_FOUND);
+      throw BeidConnectException(BeidConnectException_Code::no_reader);
    }
    
    // Place the readers into the state array.
@@ -189,7 +191,7 @@ int SCard::listReaders(std::vector<std::shared_ptr<CardReader>>& readers)
    dwRdrCount = dwI;
    n_readers = (int)dwI;
    if (n_readers == 0){
-      return(E_SRC_NO_READERS_FOUND);
+       throw BeidConnectException(BeidConnectException_Code::no_reader);
    }
    
 //   // Look through the array of readers.
@@ -206,7 +208,7 @@ int SCard::listReaders(std::vector<std::shared_ptr<CardReader>>& readers)
    if ( SCARD_S_SUCCESS != lReturn )
    {
       log_error("E: SCardGetStatusChange failed (%lx)", lReturn);
-      return(E_SRC_NO_READERS_FOUND);
+      throw BeidConnectException(BeidConnectException_Code::no_reader);
    }
    /* if something has changed, check it */
    for ( dwI=0; dwI < dwRdrCount; dwI++)
@@ -237,11 +239,8 @@ int SCard::listReaders(std::vector<std::shared_ptr<CardReader>>& readers)
 #else
    delete[] szReaders;
 #endif
-   
-   return ret;
 }
 #undef WHERE
-
 
 #define WHERE "SCard::connect()"
 long SCard::connect()
@@ -254,6 +253,7 @@ long SCard::connect()
    DWORD ActiveProtocol = SCARD_PROTOCOL_UNDEFINED;
    ret = SCardConnect(*context, name.c_str(), SCARD_SHARE_SHARED, SCARD_PROTOCOL_T1| SCARD_PROTOCOL_T0, &hCard, &ActiveProtocol);
    if (ret != SCARD_S_SUCCESS) {
+       log_error("%s: E: SCardConnect(%s) returned %08X", WHERE, name.c_str(), ret);
        return (ret);
    }
 
@@ -266,7 +266,7 @@ long SCard::connect()
 #undef WHERE
 
 #define WHERE "src_disconnect()"
-long SCard::disconnect()
+void SCard::disconnect()
 {
    long rv = 0;
    
@@ -277,7 +277,6 @@ long SCard::disconnect()
       if ( rv != SCARD_S_SUCCESS )
       {
          log_error("E: SCardDisconnect: rv = %d\n", rv);
-         return (rv);
       }
       else
       {
@@ -287,11 +286,8 @@ long SCard::disconnect()
       }
       hCard = 0;
    }
-   
-   return rv;
 }
 #undef WHERE
-
 
 bool SCard::isPinPad()
 {
@@ -306,39 +302,19 @@ bool SCard::isPinPad()
    return ((cmds.verify_pin_start != 0) || (cmds.verify_pin_direct != 0));
 }
 
-
 #define WHERE "scard::apdu()"
-long SCard::apdu(const unsigned char *apdu, size_t l_apdu, unsigned char *out, size_t* l_out, int *sw)
+CardAPDUResponse SCard::apdu(const CardAPDU& apdu)
 {
-   long ret = 0;
-   unsigned char recv[512];
-   DWORD l_recv = 512;
-   
-   memset(out, 0, *l_out);
-   
-   ret = SCardTransmit(hCard, &ioSendPci, apdu, (DWORD)l_apdu, &ioRecvPci, recv, &l_recv);
-   if ( ret == SCARD_E_NO_SMARTCARD) {
-      return (E_SRC_NO_CARD);
-   }
-   else if ( ret != SCARD_S_SUCCESS ) {
-      log_error("%s: E: Failed SCardTransmit(): %d (0x%0x)", WHERE, ret, ret);
-      return ret;
-   }
-   
-   if (*l_out >= l_recv)
-   {
-      if (l_recv >= 2)
-         *l_out = l_recv - 2;
-      else
-         *l_out = l_recv;
-   }
-   
-   if (*l_out > 0)
-      memcpy(out, recv, *l_out);
-   
-   *sw = (recv[l_recv - 2] << 8) + recv[l_recv - 1];
-   
-   return ret;
+    LONG r = 0;
+    unsigned char recv[512];
+    DWORD l_recv = 512;
+
+    r = SCardTransmit(hCard, &ioSendPci, apdu.GetAPDU().data(), (DWORD)apdu.GetAPDU().size(), &ioRecvPci, recv, &l_recv);
+    if (r != SCARD_S_SUCCESS) {
+        log_error("%s: E: Failed SCardTransmit(): %d (0x%0x)", WHERE, r, r);
+        throw SCardException(r);
+    }
+    return CardAPDUResponse(recv, l_recv);
 }
 #undef WHERE
 
@@ -354,15 +330,12 @@ unsigned long change_endian(unsigned long a)
 
 unsigned short load_int2(unsigned char *x)
 {
-   return((x[0] << 8) + x[1]);
+   return (unsigned short)((x[0] << 8) + x[1]);
 }
 
 bool SCard::getPPDUFeatures()
 {
     unsigned char get_feature_list[] = { 0xFF, 0xC2, 0x01, 0x00, 0x00 };
-    int      sw;
-    int           ret;
-
     //add friendlynames of readers that support PPDU over transmit here
     // List retrieved on eid-mw (18/7/2022)
     if ((name.find("VASCO DIGIPASS 870") == 0) ||
@@ -375,52 +348,53 @@ bool SCard::getPPDUFeatures()
         (name.find("ETSWW eKrypto PINPad") == 0) ||
         (name.find("DIOSS pinpad") == 0))
     {
-        unsigned char buf[512];
-        size_t         rcv_len = 512;
-        ret = apdu(get_feature_list, sizeof(get_feature_list), buf, &rcv_len, &sw);
-        if (ret == 0) {
+        try
+        {
+            CardAPDUResponse r = apdu(CardAPDU(&get_feature_list[0], sizeof(get_feature_list)));
+
             // every byte represents a feature, except the last 2 bytes (SW1, SW2)
-            for(DWORD i=0; i < rcv_len; i++)
+            for(DWORD i=0; i < r.getDataLen(); i++)
             {
-                switch (buf[i]) {
+                switch (r.getDataAtPos(i)) {
                 case FEATURE_MODIFY_PIN_START:
-                    cmds.modify_pin_start = buf[i];
+                    cmds.modify_pin_start = r.getDataAtPos(i);
                     m_bCanUsePPDU = true;
                     break;
-                case FEATURE_MODIFY_PIN_FINISH: cmds.modify_pin_start = buf[i]; break;
+                case FEATURE_MODIFY_PIN_FINISH: cmds.modify_pin_start = r.getDataAtPos(i); break;
                 case FEATURE_VERIFY_PIN_START:
-                    cmds.verify_pin_start = buf[i];
+                    cmds.verify_pin_start = r.getDataAtPos(i);
                     m_bCanUsePPDU = true;
                     break;
-                case FEATURE_VERIFY_PIN_FINISH: cmds.verify_pin_finish = buf[i]; break;
+                case FEATURE_VERIFY_PIN_FINISH: cmds.verify_pin_finish = r.getDataAtPos(i); break;
                 case FEATURE_VERIFY_PIN_DIRECT:
-                    cmds.verify_pin_direct = buf[i];
+                    cmds.verify_pin_direct = r.getDataAtPos(i);
                     m_bCanUsePPDU = true;
                     break;
                 case FEATURE_MODIFY_PIN_DIRECT:
-                    cmds.modify_pin_direct = buf[i];
+                    cmds.modify_pin_direct = r.getDataAtPos(i);
                     m_bCanUsePPDU = true;
                     break;
-                case FEATURE_GET_KEY_PRESSED:   cmds.get_key_pressed = buf[i]; break;
-                case FEATURE_MCT_READERDIRECT:  cmds.mct_readerdirect = buf[i]; break;
-                case FEATURE_MCT_UNIVERSAL:     cmds.mct_universal = buf[i]; break;
-                case FEATURE_IFD_PIN_PROP:      cmds.ifd_pin_prop = buf[i]; break;
-                case FEATURE_ABORT:             cmds.abort = buf[i]; break;
+                case FEATURE_GET_KEY_PRESSED:   cmds.get_key_pressed = r.getDataAtPos(i); break;
+                case FEATURE_MCT_READERDIRECT:  cmds.mct_readerdirect = r.getDataAtPos(i); break;
+                case FEATURE_MCT_UNIVERSAL:     cmds.mct_universal = r.getDataAtPos(i); break;
+                case FEATURE_IFD_PIN_PROP:      cmds.ifd_pin_prop = r.getDataAtPos(i); break;
+                case FEATURE_ABORT:             cmds.abort = r.getDataAtPos(i); break;
                 }
             }
             return true;
+
         }
+        catch(...){}
     }
     return false;
 }
-
 
 #define WHERE "get_features()"
 long SCard::getFeatures()
 {
     if (!FeaturesRetrieved) {
         if (!getPPDUFeatures()) {
-            memset(&cmds, 0, sizeof(cmds));
+            cmds.clear();
             long           ret;
             unsigned char buf[512];
             DWORD         rcv_len = 512;
@@ -470,7 +444,6 @@ long SCard::getFeatures()
 }
 #undef WHERE
 
-
 inline void ToUchar4(size_t ulIn, unsigned char* pucOut4)
 {
     pucOut4[0] = (unsigned char)(ulIn % 256);
@@ -482,7 +455,7 @@ inline void ToUchar4(size_t ulIn, unsigned char* pucOut4)
 }
 
 #define WHERE "SCard::verify_pinpad()"
-long SCard::verify_pinpad(unsigned char format, unsigned char PINBlock, size_t PINLength, unsigned int PINMaxExtraDigit, unsigned char pinAPDU[], size_t l_pinAPDU, int *sw)
+void SCard::verify_pinpad(unsigned char format, unsigned char PINBlock, size_t PINLength, uint16_t PINMaxExtraDigit, const unsigned char pinAPDU[], size_t l_pinAPDU, uint16_t* sw)
 {
    long             ret;
    unsigned char    send_buf[512] = { 0 };
@@ -495,9 +468,36 @@ long SCard::verify_pinpad(unsigned char format, unsigned char PINBlock, size_t P
 
    if (!isPinPad()) {
          log_error("reader is not a pinpad reader");
-         return(1);
+         throw BeidConnectException(BeidConnectException_Code::Not_PinPad);
    }
-   
+
+#ifdef _DEBUG
+   if (unittest_Generate_Exception_Pin_Blocked) {
+       throw CardException(0x6983);
+   }
+   if (unittest_Generate_Exception_Pin_3_attempts) {
+       throw CardException(0x63C3);
+   }
+   if (unittest_Generate_Exception_Pin_2_attempts) {
+       throw CardException(0x63C2);
+   }
+   if (unittest_Generate_Exception_Pin_1_attempt) {
+       throw CardException(0x63C1);
+   }
+   if (unittest_Generate_Exception_Src_Command_not_allowed) {
+       throw CardException(0x6985);
+   }
+   if (unittest_Generate_Exception_PinPad_TimeOut) {
+       throw CardException(0x6400);
+   }
+   if (unittest_Generate_Exception_PinPad_Cancel) {
+       throw CardException(0x6401);
+   }
+   if (unittest_Generate_Exception_Other) {
+       throw CardException(0x9999);
+   }
+#endif
+
    pin_verify.bTimeOut = 0x20;
    pin_verify.bTimeOut2 = 0x30;
    pin_verify.bmFormatString = format;
@@ -528,8 +528,6 @@ long SCard::verify_pinpad(unsigned char format, unsigned char PINBlock, size_t P
    pin_verify.bTeoPrologue[2] = 0x00;
    ToUchar4(l_pinAPDU, pin_verify.ulDataLength);
    memcpy(pin_verify.abData, pinAPDU, l_pinAPDU);
-   //for (int i = 0; i < l_pinAPDU; i++)
-   //    pin_verify.abData[i] = pinAPDU[i];
    send_buf_len = sizeof(PIN_VERIFY_STRUCTURE) + (DWORD)l_pinAPDU - PP_APDU_MAX_LEN;	/* -PP_APDU_MAX_LEN because PIN_VERIFY_STRUCTURE contains the PP_APDU_MAX_LEN byte of abData[] */
 
    if (!m_bCanUsePPDU) {
@@ -539,7 +537,7 @@ long SCard::verify_pinpad(unsigned char format, unsigned char PINBlock, size_t P
            if (ret != SCARD_S_SUCCESS) {
                /* In case of a parameter error of the passed structure, the ScardControl may return ERROR_INVALID_PARAMETER (0x57). */
                log_error("E: scardControl returned 0x%08x\n", ret);
-               return(ret);
+               throw SCardException(ret);
            }
        }
        else {
@@ -548,7 +546,7 @@ long SCard::verify_pinpad(unsigned char format, unsigned char PINBlock, size_t P
            if (ret != SCARD_S_SUCCESS) {
                /* In case of a parameter error of the passed structure, the ScardControl may return ERROR_INVALID_PARAMETER (0x57). */
                log_error("E: scardControl returned 0x%08x\n", ret);
-               return(ret);
+               throw SCardException(ret);
            }
            bool ScanKeyPressed = true;
            while (ScanKeyPressed) {
@@ -556,7 +554,7 @@ long SCard::verify_pinpad(unsigned char format, unsigned char PINBlock, size_t P
                if (ret != SCARD_S_SUCCESS)
                {
                    log_error("E: scardControl returned 0x%08x\n", ret);
-                   return(ret);
+                   throw SCardException(ret);
                }
                switch (rcv_buf[0]) {
                case 0x00:
@@ -601,22 +599,23 @@ long SCard::verify_pinpad(unsigned char format, unsigned char PINBlock, size_t P
            if (ret != SCARD_S_SUCCESS)
            {
                log_error("E: scardControl returned 0x%08x\n", ret);
-               return(ret);
+               throw SCardException(ret);
            }
            if ((rcv_len >= 2) /*&&
                ((rcv_buf[rcv_len - 2]) != 90)*/)
            {
-               *sw = (rcv_buf[rcv_len - 2] << 8) + (rcv_buf[rcv_len - 1] & 0xFF);
+               *sw = (uint16_t)((rcv_buf[rcv_len - 2] << 8) + (rcv_buf[rcv_len - 1] & 0xFF));
            }
            if (*sw != 0x9000)
            {
                log_error("E: scardControl verify_pin_finish returned 0x%04x\n", *sw);
-               return(ret);
+               throw CardException(*sw);
            }
        }
-       return ret;
+       return;
    }
-   else {
+   else
+   {
        verify_pin_cmd = cmds.verify_pin_direct;
        if (verify_pin_cmd == 0) {
            verify_pin_cmd = cmds.verify_pin_start;
@@ -640,14 +639,14 @@ long SCard::verify_pinpad(unsigned char format, unsigned char PINBlock, size_t P
       {
          /* In case of a parameter error of the passed structure, the ScardControl may return ERROR_INVALID_PARAMETER (0x57). */
          log_error("E: scardTransmit(pinpad command) returned 0x%08x\n", ret);
-         return(ret);
+         throw SCardException(ret);
       }
    }
 
    if ((rcv_len >= 2) /*&&
        ((rcv_buf[rcv_len - 2]) != 90)*/)
    {
-      *sw = (rcv_buf[rcv_len - 2] << 8) + (rcv_buf[rcv_len - 1] & 0xFF);
+      *sw = (uint16_t)((rcv_buf[rcv_len - 2] << 8) + (rcv_buf[rcv_len - 1] & 0xFF));
    }
 
    switch (*sw)
@@ -655,40 +654,26 @@ long SCard::verify_pinpad(unsigned char format, unsigned char PINBlock, size_t P
       case 0x9000:
          ret = 0;
          break;
-      case 0x63C3:
-         ret = E_PIN_3_ATTEMPTS;
-         break;
-      case 0x63C2:
-         ret = E_PIN_2_ATTEMPTS;
-         break;
-      case 0x63C1:
-         ret = E_PIN_1_ATTEMPT;
-         break;
-      case 0x6983:
-         ret = E_PIN_BLOCKED;
-         break;
-      case 0x6400:  // SPE operation timed out
-         ret = E_PIN_TIMEOUT;
-         break;
-      case 0x6401:  // SPE operation was cancelled by the �Cancel� button
-         ret = E_PIN_CANCELLED;
-         break;
-      case 0x6402:  // Modify PIN operation failed because two "new PIN" entries do not match
-         ret = E_PIN_INCORRECT;
-         break;
+      case 0x63C3:  // E_PIN_3_ATTEMPTS;
+      case 0x63C2:  // E_PIN_2_ATTEMPTS;
+      case 0x63C1:  // E_PIN_1_ATTEMPT;
+      case 0x6983:  // E_PIN_BLOCKED;
+      case 0x6400:  // SPE operation timed out // E_PIN_TIMEOUT;
+      case 0x6401:  // SPE operation was cancelled by the Cancel button // E_PIN_CANCELLED;
+      case 0x6402:  // Modify PIN operation failed because two "new PIN" entries do not match // E_PIN_INCORRECT;
       case 0x6403:  // User entered too short or too long PIN regarding MIN/MAX PIN Length
                     // Note : as this error code is not known by CT-API implementations, it should be mapped to 64 01 on CT - API leve
-         ret = E_PIN_LENGTH;
-         break;
+                    // E_PIN_LENGTH;
+          log_error("%s: E: Card returns SW(%04X)", WHERE, *sw);
+          throw CardException(*sw);
+          break;
       case 0x6B80:  // invalid parameter in passed structure
       case 0x6A86:  // Incorrect value for P2
+          log_error("%s: E: Card returns SW(%04X)", WHERE, *sw);
+          throw CardException(*sw);
       default: ret = E_PIN_INCORRECT;
+          log_error("%s: E: Card returns SW(%04X)", WHERE, *sw);
+          throw CardException(*sw, CardException_Code::PIN_Incorrect);
    }
-
-   return (ret);
 }
 #undef WHERE
-
-
-
-

@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef CertChainRequestHandler_hpp
 #define CertChainRequestHandler_hpp
 

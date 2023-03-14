@@ -1,6 +1,7 @@
+#pragma once
+
 #ifndef x509Util_h
 #define x509Util_h
-
 
 #include "time.h"
 

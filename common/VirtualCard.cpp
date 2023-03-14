@@ -40,10 +40,8 @@ void VirtualCard::readCertificateChain(std::vector<std::shared_ptr<const CardFil
 #undef WHERE
 
 #define WHERE "VirtualCard::SelectKey()"
-long VirtualCard::selectKey(CardKeys pintype, unsigned char* cert, size_t l_cert)
+void VirtualCard::selectKey(CardKeys pintype, const std::vector<unsigned char>& cert)
 {
-    long ret = 0;
-
 #define eaZyID_PROVIDES_SIGNING_CERT    0
 
 #if (eaZyID_PROVIDES_SIGNING_CERT)
@@ -55,56 +53,46 @@ long VirtualCard::selectKey(CardKeys pintype, unsigned char* cert, size_t l_cert
         goto cleanup;
     }
 #endif
-    return ret;
 }
 
-long VirtualCard::logon(int l_pin, char* pin)
+void VirtualCard::logon(int l_pin, char* pin)
 {
-    long ret = 0;
-
     //test Pin conditions
     if ((l_pin > 0) && (l_pin < 4))
-        CLEANUP(E_PIN_TOO_SHORT);
+        throw BeidConnectException(BeidConnectException_Code::E_PIN_TOO_SHORT);
     if (l_pin > 12)
-        CLEANUP(E_PIN_TOO_LONG);
+        throw BeidConnectException(BeidConnectException_Code::E_PIN_TOO_LONG);
 
 
     if ((l_pin == 0) && (reader->isPinPad())) {
-        ret = 0;
+        return;
     }
     else if (pin != 0) {
 
         if (strcmp(pin, "1234") == 0)
-            ret = 0;
+            return;
         else if (strcmp(pin, "1235") == 0)
-            ret = E_PIN_2_ATTEMPTS;
+            throw CardException(0x63C2);
         else if (strcmp(pin, "1236") == 0)
-            ret = E_PIN_1_ATTEMPT;
+            throw CardException(0x63C1);
         else if (strcmp(pin, "1237") == 0)
-            ret = E_PIN_BLOCKED;
+            throw CardException(0x6983);
         else
-            ret = E_PIN_INCORRECT;
+            throw CardException(0, CardException_Code::PIN_Incorrect);
     }
-    else
-        ret = -1;
-
-
-cleanup:
-
-    return (ret);
+    throw CardException(0, CardException_Code::PIN_Incorrect);
 }
 
-long VirtualCard::logoff()
+void VirtualCard::logoff()
 {
-    return 0;
 }
 
-long VirtualCard::sign(const unsigned char* in, size_t l_in, int hashAlgo, unsigned char* out, size_t* l_out, int* sw)
+long VirtualCard::sign(const std::vector<unsigned char>& in, int hashAlgo, unsigned char* out, size_t* l_out, int* sw)
 {
     long ret = 0;
     char rand[256] = "the quick brown fox or something...";
 
-    if ((l_in == 0) || (l_in != hash_length_for_algo(hashAlgo))) {
+    if ((in.size() == 0) || (in.size() != hash_length_for_algo(hashAlgo))) {
         log_error("hash input has wrong length for the specified digesting algo");
         CLEANUP(E_DIGEST_LEN);
     }

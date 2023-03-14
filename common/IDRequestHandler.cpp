@@ -15,23 +15,22 @@ using boost::property_tree::ptree;
 std::string IDRequestHandler::process()
 {
     ptree response;
-
-    ReaderList readerList;
-    size_t count = readerList.readers.size();
     int countSupportedCards = 0;
     int countUnsupportedCards = 0;
 
     try
     {
+        ReaderList readerList;
+        size_t count = readerList.readers.size();
+
         int idflags = stoi(ptreeRequest->get<std::string>("idflags"));
 
         if (count == 0)
         {
-            response.put("result", "no_reader");
+            response.put(BeidConnect_JSON_field::result, BeidConnect_Result::no_reader);
         }
         else
         {
-            long status = 0;
             ptree readerInfos;
             for (int i = 0; i < (int)count; i++)
             {
@@ -42,10 +41,8 @@ std::string IDRequestHandler::process()
                     continue;
                 }
 
-                status = reader->connect();
-                if (status)
+                if (reader->connect())
                 {
-                    log_error("%s: E: reader->connect(%s) returned %08X", WHERE, reader->name.c_str(), status);
                     continue;
                 }
 
@@ -58,16 +55,16 @@ std::string IDRequestHandler::process()
 
                 countSupportedCards++;
                 ptree readerInfo;
-                readerInfo.put("ReaderName", reader->name);
+                readerInfo.put(BeidConnect_JSON_field::ReaderName, reader->name);
                 if (reader->isPinPad())
                 {
-                    readerInfo.put("ReaderType", "pinpad");
+                    readerInfo.put(BeidConnect_JSON_field::ReaderType, BeidConnect_ReaderType::pinpad);
                 }
                 else
                 {
-                    readerInfo.put("ReaderType", "standard");
+                    readerInfo.put(BeidConnect_JSON_field::ReaderType, BeidConnect_ReaderType::standard);
                 }
-                readerInfo.put("cardType", card->strType());
+                readerInfo.put(BeidConnect_JSON_field::cardType, card->strType());
 
                 if (idflags & ID_FLAG_INCLUDE_ID)
                 {
@@ -106,31 +103,43 @@ std::string IDRequestHandler::process()
 
                 readerInfos.push_back(std::make_pair("", readerInfo));
             }
-            response.add_child("Readers", readerInfos);
+            response.add_child(BeidConnect_JSON_field::Readers, readerInfos);
 
             if (countSupportedCards > 0)
             {
-                response.put("result", "OK");
+                response.put(BeidConnect_JSON_field::result, BeidConnect_Result::OK);
             }
             else
             {
                 // errors and unsupported cards result in nop_card
-                response.put("result", "no_card");
+                response.put(BeidConnect_JSON_field::result, BeidConnect_Result::no_card);
 
                 if (countUnsupportedCards > 0)
                 {
-                    response.put("report", "card_type_unsupported");
+                    response.put(BeidConnect_JSON_field::report, "card_type_unsupported");
                 }
             }
         }
     }
     catch (SCardException& e)
     {
-        response.put("result", e.result());
+        log_error("%s: E: SCardException SCardResult(%08X) code(%08X)", WHERE, e.getSCardResult(), e.getCode());
+        response.put(BeidConnect_JSON_field::result, e.result());
+    }
+    catch (CardException& e)
+    {
+        log_error("%s: E: CardException SW(%04X)", WHERE, e.getSW());
+        response.put(BeidConnect_JSON_field::result, e.result());
+    }
+    catch (BeidConnectException& e)
+    {
+        log_error("%s: E: BeidConnectException code(%08X)", WHERE, e.getCode());
+        response.put(BeidConnect_JSON_field::result, e.result());
     }
     catch (...)
     {
-        response.put("result", "general_error");
+        log_error("%s: E: Exception", WHERE);
+        response.put(BeidConnect_JSON_field::result, BeidConnect_Result::general_error);
     }
     post_process(response);
     std::stringstream streamResponse;

@@ -11,7 +11,7 @@
 using namespace std;
 
 #define WHERE "readMessage()"
-int readMessage(std::stringstream &stream)
+BECOM_Code readMessage(std::stringstream &stream)
 {
     int length = 0;
     int read_char;
@@ -29,7 +29,7 @@ int readMessage(std::stringstream &stream)
             if (std::ferror(stdin))
             {
                 log_info("stdin error");
-                return (E_COMM_PARAM);
+                return BECOM_Code::E_COMM_PARAM;
             }
             do_sleep(20);
         }
@@ -42,19 +42,19 @@ int readMessage(std::stringstream &stream)
     if (length == 0)
     {
         log_info("%s: Resquest Len (%i)", WHERE, length);
-        return E_COMM_ENDREQUEST;
+        return BECOM_Code::E_COMM_ENDREQUEST;
     }
     else if (length < 0)
     {
         log_info("%s: Resquest Len (%i)", WHERE, length);
-        return (E_COMM_PARAM);
+        return BECOM_Code::E_COMM_PARAM;
     }
 
     // sanity check
     if (length > 10000)
     {
         log_error("%s: message length exceeds max size (%d > 10000)", WHERE, length);
-        return (E_COMM_PARAM);
+        return BECOM_Code::E_COMM_PARAM;
     }
 
     for (i = 0; i < length; i++)
@@ -79,12 +79,12 @@ int readMessage(std::stringstream &stream)
     }
     log_info("%s: Resquest (%i): '%s'", WHERE, length, dumpstr.c_str());
 
-    return 0;
+    return BECOM_Code::OK;
 }
 #undef WHERE
 
 #define WHERE "sendMessage()"
-int sendMessage(const std::string response)
+void sendMessage(const std::string response)
 {
     std::string response2 = response.substr(0, response.length() - 1);
     size_t length = response2.length();
@@ -96,7 +96,5 @@ int sendMessage(const std::string response)
     log_info("%s: Response (%i): '%s'", WHERE, len, response2.c_str());
 
     cout << response2 << std::flush;
-
-    return 0;
 }
 #undef WHERE

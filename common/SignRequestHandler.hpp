@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef SignRequestHandler_hpp
 #define SignRequestHandler_hpp
 
