@@ -59,15 +59,16 @@ public:
         {
             return BeidConnect_Result::busy;
         }
+        // Add LONG cast for MacOS Build
         switch (SCardResult)
         {
-        case SCARD_E_NOT_READY:
+        case (LONG)SCARD_E_NOT_READY:
         {
             return BeidConnect_Result::busy;
         }
-        case SCARD_E_NO_SMARTCARD:
-        case SCARD_E_COMM_DATA_LOST:
-        case SCARD_W_REMOVED_CARD:
+        case (LONG)SCARD_E_NO_SMARTCARD:
+        case (LONG)SCARD_E_COMM_DATA_LOST:
+        case (LONG)SCARD_W_REMOVED_CARD:
         case ERROR_OPERATION_ABORTED:   // VASCO DIGIPASS 870 return this error when removing the smart card during secure pin entry
         {
             return BeidConnect_Result::no_card;

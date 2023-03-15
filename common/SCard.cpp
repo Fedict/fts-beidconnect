@@ -457,7 +457,7 @@ inline void ToUchar4(size_t ulIn, unsigned char* pucOut4)
 #define WHERE "SCard::verify_pinpad()"
 void SCard::verify_pinpad(unsigned char format, unsigned char PINBlock, size_t PINLength, uint16_t PINMaxExtraDigit, const unsigned char pinAPDU[], size_t l_pinAPDU, uint16_t* sw)
 {
-   long             ret;
+   LONG             ret;
    unsigned char    send_buf[512] = { 0 };
    DWORD            send_buf_len;
    unsigned char    rcv_buf[512] = { 0 };
