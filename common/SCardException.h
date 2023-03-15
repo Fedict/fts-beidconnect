@@ -4,6 +4,9 @@
 #ifndef _WIN32
 #include <PCSC/wintypes.h>
 #include <PCSC/winscard.h>
+#ifndef ERROR_OPERATION_ABORTED
+#define ERROR_OPERATION_ABORTED          995L
+#endif // !ERROR_OPERATION_ABORTED
 #else
 #include <winscard.h>
 #endif
