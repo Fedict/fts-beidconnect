@@ -138,6 +138,20 @@ build:fedora-37-32:
     ARCH: i386
     DIST: fedora
 
+build:fedora-38-64:
+  <<: *fedbuild
+  variables:
+    VERSION: 38
+    ARCH: x86_64
+    DIST: fedora
+
+build:fedora-38-32:
+  <<: *fedbuild
+  variables:
+    VERSION: 38
+    ARCH: i386
+    DIST: fedora
+
 build:centos-stream-9-64:
   <<: *fedbuild
   variables:
@@ -197,6 +211,22 @@ build:debian-11-64:
   variables:
     CODE: bullseye
     SHORT: deb11
+    ARCH: amd64
+    MIRROR: http://deb.debian.org/debian
+
+build:debian-12-32:
+  <<: *debuild
+  variables:
+    CODE: bookworm
+    SHORT: deb12
+    ARCH: i386
+    MIRROR: http://deb.debian.org/debian
+
+build:debian-12-64:
+  <<: *debuild
+  variables:
+    CODE: bookworm
+    SHORT: deb12
     ARCH: amd64
     MIRROR: http://deb.debian.org/debian
 

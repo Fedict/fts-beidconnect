@@ -22,7 +22,15 @@ using namespace std;
 #ifdef _WIN32
 bool writeFile(wstring file, wstring exePath, bool isChrome) {
     wofstream myfile;
-    myfile.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t, 0x10ffff, std::generate_header>));
+    if (isChrome)
+    {
+        myfile.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t, 0x10ffff, std::generate_header>));
+    }
+    else
+    {
+        // Since firefox generate an error when parsing the BOM
+        myfile.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t, 0x10ffff>));
+    }
 #else
 bool writeFile(string file, string exePath, bool isChrome) {
     ofstream myfile;
@@ -125,11 +133,19 @@ int runSetup(int argc, const char* argv[])
     log_info("BeidConnect Setup creating \"%s\"", chromeFilePath.c_str());
     log_info("BeidConnect Setup creating \"%s\"", firefoxFilePath.c_str());
 #endif
-    if (writeFile(chromeFilePath, exePath, true)
-        && writeFile(firefoxFilePath, exePath, false)) {
-        log_info("BeidConnect Setup Succeed");
-        return 0;
+    bool chromeFileStatus = writeFile(chromeFilePath, exePath, true);
+    if (chromeFileStatus) {
+        log_info("BeidConnect Setup Chrome config file creation Succeed");
     }
-    log_error("BeidConnect Setup Failed");
-    return -1;
+    else{
+        log_info("BeidConnect Setup Chrome config file creation Failed");
+    }
+    bool firefoxFileStatus = writeFile(firefoxFilePath, exePath, false);
+    if (firefoxFileStatus) {
+        log_info("BeidConnect Setup Firefox config file creation Succeed");
+    }
+    else{
+        log_info("BeidConnect Setup Firefox config file creation Failed");
+    }
+    return chromeFileStatus&&firefoxFileStatus?0:-1;
 }

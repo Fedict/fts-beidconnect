@@ -7,6 +7,9 @@
 #ifndef ERROR_OPERATION_ABORTED
 #define ERROR_OPERATION_ABORTED          995L
 #endif // !ERROR_OPERATION_ABORTED
+#ifndef ERROR_NO_MEDIA_IN_DRIVE
+#define ERROR_NO_MEDIA_IN_DRIVE          1112L
+#endif // !ERROR_NO_MEDIA_IN_DRIVE
 #else
 #include <winscard.h>
 #endif
@@ -69,6 +72,7 @@ public:
         case (LONG)SCARD_E_NO_SMARTCARD:
         case (LONG)SCARD_E_COMM_DATA_LOST:
         case (LONG)SCARD_W_REMOVED_CARD:
+        case ERROR_NO_MEDIA_IN_DRIVE:
         case ERROR_OPERATION_ABORTED:   // VASCO DIGIPASS 870 return this error when removing the smart card during secure pin entry
         {
             return BeidConnect_Result::no_card;

@@ -61,8 +61,8 @@ LANGUAGE LANG_FRENCH, SUBLANG_FRENCH
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 2,8,0,0
- PRODUCTVERSION 2,8,0,0
+ FILEVERSION 2,9,0,0
+ PRODUCTVERSION 2,9,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -79,12 +79,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "FOD BOSA"
             VALUE "FileDescription", "EID bridge"
-            VALUE "FileVersion", "2.8.0.0"
+            VALUE "FileVersion", "2.9.0.0"
             VALUE "InternalName", "BeIDConn.exe"
-            VALUE "LegalCopyright", "Copyright (C) 2022"
+            VALUE "LegalCopyright", "Copyright (C) 2023"
             VALUE "OriginalFilename", "BeIDConnect.exe"
             VALUE "ProductName", "BeIDConnect"
-            VALUE "ProductVersion", "2.8.0.0"
+            VALUE "ProductVersion", "2.9.0.0"
         END
     END
     BLOCK "VarFileInfo"
