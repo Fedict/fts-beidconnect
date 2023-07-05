@@ -3,6 +3,8 @@
 #ifndef __COMM_H
 #define __COMM_H
 
+#include <cstdint>
+
 // json field
 namespace BeidConnect_JSON_field
 {
