@@ -14,7 +14,7 @@
  *
  ******************************************************************************/
 
-#define BEIDCONNECT_VERSION	"2.9"
+#define BEIDCONNECT_VERSION	"2.10"
 
 #define CLEANUP(a) { ret = a; goto cleanup; }
      

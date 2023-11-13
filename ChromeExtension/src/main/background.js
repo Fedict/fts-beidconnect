@@ -19,6 +19,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 function _reply(tab, msg) {
     msg.src = "beidconnect.background";
     msg.extensionVersion = chrome.runtime.getManifest().version;
+    msg.extensionBrowser = "EXTENSIONPLATFORM";
     chrome.tabs.sendMessage(tab, msg);
 }
 

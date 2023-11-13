@@ -29,28 +29,21 @@ If I understand correctly, Windows Installer makes it particularly easy to provi
 Most .msi files that support per-user installations will also support per-machine installations via the ALLUSERS property. 
 I'm not sure whether the developer needs to do anything in particular to make this work.
 
-
-Vital
-=======
 https://docs.microsoft.com/en-us/windows/win32/msi/installation-context
 
 PerUser Install (cannot be used by sysadmins, they need a perMachine install)
 ------------------------------------------------------------------------------
 => both on win7 and win10: LocalAppDataFolder (wix) folder points to user/AppData/Local
 => see with set in environment variable to LOCALAPPDATA
-=> native app eIDLink is same for all browsers (except Safari on Mac where all sources are directly part of the Safari App extension ObjC++ => C/C++
+=> native app beidconnect is same for all browsers (except Safari on Mac where all sources are directly part of the Safari App extension ObjC++ => C/C++)
 
-Installation of eIDLink to .../user/AppData/Local/BOSA/eIDLink/
-
-- Internet Explorer ActiveX plugin
-  Installation of ActiveX to same folder: eIDLink.dll
-  In Link.cs activeX looks for Environment.SpecialFolder.LocalApplicationData/ to find native app eIDLink.exe
+Installation of beidconnect to .../user/AppData/Local/BOSA/beidconnect/
 
 - Chrome (also Edge based on Chromium, Opera), firefox
-  Json file points to native app eIdLink.exe
+  Json file points to native app beidconnect.exe
 
 - Safari Extension
-  Safari app extension contains all the sources from eIDLink -> common so no link to eIDLink app
+  Safari app extension contains all the sources from beidconnect -> common so no link to beidconnect app
 
 
 Internet explorer ActiveX

@@ -18,7 +18,7 @@ Requires: ccid
 Conflicts: openct
 
 %description
-The eIDlink is a program to help implementing digital signing services
+The beidconnect is a program to help implementing digital signing services
 and/or an identity service using the Belgian eID card. It provides
 services to webbrowsers to read data from cards, and is intended to work
 together with a WebExtension in the browser.

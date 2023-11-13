@@ -30,7 +30,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{A42F654E-CE62-4479-B7A8-79E006DD0662}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>eIDLink</RootNamespace>
+    <RootNamespace>BeIDConnect</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName>BeIDConnect</ProjectName>
   </PropertyGroup>

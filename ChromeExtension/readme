@@ -17,7 +17,7 @@ For users of DSS and IDP services using this extension:
 
 
 1) install ChromeExtension
-open chrome: "https://chrome.google.com/webstore/detail/eidlink/pencgnkbgaekikmiahiaakjdgaibiipp"
+open chrome: "https://chrome.google.com/webstore/detail/beidconnect/pencgnkbgaekikmiahiaakjdgaibiipp"
 
 
 2) install the NativeHostMessaging app that is used by the extension that talks to the reader and smartcard.

@@ -47,12 +47,17 @@ constexpr char message_Get_User_Certificates[] = "{\"operation\":\"USERCERTS\",\
 constexpr char message_Get_Certificates_Chain[] = "{\"operation\":\"CERTCHAIN\",\"cert\":\"%%CERT%%\",\"language\":\"en\",\"mac\":\"0123456789ABCDEF0123456789ABCDEF\",\"correlationId\":\"07386ce7-f73e-4e99-dfc3-8d69b6adf33d\",\"origin\":\"https://sign.belgium.be\"}";
 
 void dumpCert(const std::shared_ptr<const CardFile>& Cert) {
-#ifdef _WIN32
-    PCCERT_CONTEXT certContext = CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, Cert->getRaw().data(), (DWORD)Cert->getRaw().size());
-
     std::cout << "------------------------------ Certificate ------------------------------" << endl;
+    if (Cert->getBase64().length() == 0)
+    {
+        std::cout << "No certificate found" << endl << "-------------------------------------------------------------------------" << endl;
+        return;
+    }
     std::cout << Cert->getBase64() << endl << "-------------------------------------------------------------------------" << endl;
 
+#ifdef _WIN32
+    PCCERT_CONTEXT certContext = CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, Cert->getRaw().data(), (DWORD)Cert->getRaw().size());
+    if (certContext == NULL) return;
     //std::cout << certContext->pCertInfo->Subject.cbData;
     SYSTEMTIME st_NotBefore;
     SYSTEMTIME st_NotAfter;

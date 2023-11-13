@@ -466,7 +466,11 @@ std::shared_ptr<const CardFile> BEIDCard::readFile(CardFileReadOptimization opti
             // Bit 7 of the Length field is zero (0) and the remaining bits identify the number of bytes of content being sent.
             // If the Value field contains more than 127 bytes, bit 7 of the Length field is one (1) and the remaining bits identify the number of bytes needed to contain the length.
             p_maxReadlen = (r.getData()[2] << 8) + r.getData()[3];
-            if (p_maxReadlen > 0)
+            if (p_maxReadlen == 0)
+            {
+                return std::make_shared<CardFile>("");
+            }
+            else if (p_maxReadlen > 0)
             {
                 p_maxReadlen += 4;
             }

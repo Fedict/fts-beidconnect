@@ -19,11 +19,11 @@ var gulp = require('gulp'),
   jeditor = require('gulp-json-editor'),
   argv = require("yargs").string('extversion').argv;
 
-var ChromeVersion = "0.0.8";
+var ChromeVersion = "0.0.9";
 var ChromeID = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0VKd3Y3RnWfFWi8YuiV5rR6qj103pvMMvYnLuV3XoChZWCSOFvDhzRZ3XJkwdYHpN3U3wLfadxUnYkWaH+w1jRZU9opM9WZxJFwor89ajCVK9wJ21cnfVnwWwIZESaEKt7ic2v+96miDzZryHQtVFzqyGr3aF/6SXr9u2iRJuzHlyCnVEuc8NiguYmUKnL5RZuy+z+9sCK+Q1P7bfj4tIIwUGVzC2MpjaSU1NcQCO+Rk23wIcWVmzX5n3EPOx0D8vHHnSTZxA6f9JigqthsHAR3v6c4bHsjpI6GQSX5PtD4Vfy1T7iYMrxi+mZFKd+qSLkWSqssHUnQGxnhEQJvFsQIDAQAB"
 var EdgeVersion = "1.0.2";
 var EdgeID = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhSZ7pV9iLxtvHvSsvKNIyPP8O91rj31fDQBecPmGTAx96axL32sHsroPiZl0fOtsbPdIAwt5CLDsxfeCZH1oxCkEO6LRe1YoQSs2X0llqS9EwZgoQBQ3k6S37qnFyBk4eJjNGw3uJgC4syuM70m85219KvbwFT8tj17f4RFIvygrWiF2nlws4+6rAIDHRImSVGS1mFutJdxir/U3dtLLrlRUusZfsLSXq8CU2Ill4FQXwBbFuRgsEELJoTsJNiu/IPPA6wI/IAdS/W+Fi1M7xutIeyqrPuNOesNDBHZxtr4JW0N7uf0LRdofeeDIXr02U1AaJ7NIdejYfBn5Mc1jtwIDAQAB"
-var FirefoxVersion = "0.0.12";
+var FirefoxVersion = "0.0.14";
 
 // Delete the target directory
 function taskclean(cb) {
@@ -47,12 +47,19 @@ function tasklintV3(cb) {
 function taskMinifyjs(cb) {
   return gulp.src('./src/main/*.js')
     //.pipe(uglify())
+    .pipe(replace('EXTENSIONPLATFORM', 'firefox'))
     .pipe(gulp.dest('./target/firefox'))
 };
-function taskMinifyjsV3(cb) {
+function taskMinifyjsV3Chrome(cb) {
   return gulp.src('./src_v3/main/*.js')
+    .pipe(replace('EXTENSIONPLATFORM', 'chrome'))
     .pipe(uglify())
     .pipe(gulp.dest('./target/chrome_v3'))
+};
+function taskMinifyjsV3Edge(cb) {
+  return gulp.src('./src_v3/main/*.js')
+    .pipe(replace('EXTENSIONPLATFORM', 'edge'))
+    .pipe(uglify())
     .pipe(gulp.dest('./target/edge_v3'));
 };
 
@@ -69,11 +76,13 @@ function taskcopypngV3(cb) {
 
 function taskcopyall(cb) {
   return gulp.src(['./src/main/*.js', './src/main/*.png', './src/main/*.html'])
-    .pipe(gulp.dest('./target/firefox'));
+  .pipe(replace('EXTENSIONPLATFORM', 'firefox'))
+  .pipe(gulp.dest('./target/firefox'));
 };
 function taskcopyallV3(cb) {
   return gulp.src(['./src_v3/main/*.js', './src_v3/main/*.png', './src_v3/main/*.html'])
-    .pipe(gulp.dest('./target/chrome_v3'))
+  .pipe(replace('EXTENSIONPLATFORM', 'chrome'))
+  .pipe(gulp.dest('./target/chrome_v3'))
 };
 function taskcopyallV3Edge1(cb) {
   return gulp.src(['./src_v3/main/*.png', './src_v3/main/*.html'])
@@ -88,6 +97,7 @@ function taskcopyallV3Edge3(cb) {
   return gulp.src('./src_v3/main/background.js')
     .pipe(replace('beidconnect.page', 'beidconnectedge.page'))
     .pipe(replace('beidconnect.background', 'beidconnectedge.background'))
+    .pipe(replace('EXTENSIONPLATFORM', 'chrome'))
     .pipe(gulp.dest('./target/edge_v3'));
 };
 function taskcopyallV3Edge4(cb) {
@@ -143,7 +153,7 @@ function taskmanifestreleasechromeV3() {
       patterns: [
         {
           match: /"matches": \[.+\]/g,
-          replacement: '"matches": ["https://*.belgium.be/*","https://*.fgov.be/*","https://gcloudbelgium.sharepoint.com/*"]'
+          replacement: '"matches": ["https://*.belgium.be/*","https://*.fgov.be/*","https://gcloudbelgium.sharepoint.com/*","https://*.yourict.be/*","https://*.govshare.fed.be/*"]'
         },
         {
           match: 'VERSION',
@@ -157,7 +167,7 @@ function taskmanifestreleasefirefox() {
   return gulp.src('./src/main/manifest.json')
     .pipe(jeditor(function (manifest) {
       manifest.version = FirefoxVersion;
-      manifest.content_scripts[0].matches = ['https://*.belgium.be/*', 'https://*.fgov.be/*', "https://gcloudbelgium.sharepoint.com/*"];
+      manifest.content_scripts[0].matches = ['https://*.belgium.be/*','https://*.fgov.be/*','https://gcloudbelgium.sharepoint.com/*'];
       delete manifest.key;
       delete manifest.minimum_chrome_version;
       delete manifest.background.persistent;
@@ -172,7 +182,7 @@ function taskmanifestreleaseedgeV3() {
       // manifest.key = EdgeID;
       delete manifest.key;
       manifest.version = EdgeVersion;
-      manifest.content_scripts[0].matches = ['https://*.belgium.be/*', 'https://*.fgov.be/*', "https://gcloudbelgium.sharepoint.com/*"];
+      manifest.content_scripts[0].matches = ['https://*.belgium.be/*', 'https://*.fgov.be/*', 'https://gcloudbelgium.sharepoint.com/*'];
       return manifest;
     }))
     .pipe(gulp.dest('./target/edge_v3'));
@@ -245,7 +255,10 @@ exports.release = gulp.series(
     ),
     gulp.series(
       tasklintV3,
-      taskMinifyjsV3,
+      gulp.parallel(
+        taskMinifyjsV3Chrome,
+        taskMinifyjsV3Edge,
+        ),
       taskcopypngV3,
       taskcopylocales,
       gulp.parallel(
