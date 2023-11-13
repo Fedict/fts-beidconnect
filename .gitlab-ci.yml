@@ -138,6 +138,20 @@ build:fedora-38-32:
     ARCH: i386
     DIST: fedora
 
+build:fedora-39-64:
+  <<: *fedbuild
+  variables:
+    VERSION: 39
+    ARCH: x86_64
+    DIST: fedora
+
+build:fedora-39-32:
+  <<: *fedbuild
+  variables:
+    VERSION: 39
+    ARCH: i386
+    DIST: fedora
+
 build:centos-stream-9-64:
   <<: *fedbuild
   variables:
