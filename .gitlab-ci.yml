@@ -4,7 +4,7 @@ stages:
 
 srpm:
   stage: source
-  image: fedora:latest
+  image: fedora:38
   before_script:
   # Fedora decided that restricting mirrors don't exist :-/
   - sed -i -e 's,^metalink=.*repo=fedora-.releasever.arch=.basearch$,baseurl=https://ftp.halifax.rwth-aachen.de/fedora/linux/releases/$releasever/Everything/$basearch/os/,g' /etc/yum.repos.d/fedora.repo; cat /etc/yum.repos.d/fedora.repo
@@ -33,7 +33,7 @@ srpm:
 
 .build:fedora: &fedbuild
   stage: binary
-  image: fedora:latest
+  image: fedora:38
   dependencies:
   - srpm
   before_script:
