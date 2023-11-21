@@ -54,6 +54,11 @@ function _forward(message) {
             }
         })
         .catch((reason) => {
-            console.log("ERROR " + tabid, reason);
+            console.log("ERROR CATCH " + tabid, reason);
+            if (reason && reason.message && reason.message.startsWith("No such native application")) {
+                _fail_with(message, "timeout");
+            } else {
+                _fail_with(message, "technical_error");
+            }
         });
 }
