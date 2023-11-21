@@ -1,22 +1,17 @@
-//
-//  IDRequestHandler.cpp
-//  BeIDConnect
-//
-//  Created by Vital Schonkeren on 02/03/2020.
-//
+#pragma once
+
 #ifndef IDRequestHandler_hpp
 #define IDRequestHandler_hpp
 
 #include <iostream>
 #include "RequestHandler.hpp"
 
-class IDRequestHandler: public RequestHandler
+class IDRequestHandler : public RequestHandler
 {
 public:
-   IDRequestHandler() {};
-   virtual ~IDRequestHandler() {};  //without this destructor of derived handler is not called
-   std::string process() override;
+    IDRequestHandler(const std::shared_ptr<boost::property_tree::ptree>& ptreeRequest) : RequestHandler(ptreeRequest) {};
+    virtual ~IDRequestHandler(){}; // without this destructor of derived handler is not called
+    std::string process() override;
 };
 
 #endif
-

@@ -4,7 +4,7 @@ stages:
 
 srpm:
   stage: source
-  image: fedora:latest
+  image: fedora:38
   before_script:
   # Fedora decided that restricting mirrors don't exist :-/
   - sed -i -e 's,^metalink=.*repo=fedora-.releasever.arch=.basearch$,baseurl=https://ftp.halifax.rwth-aachen.de/fedora/linux/releases/$releasever/Everything/$basearch/os/,g' /etc/yum.repos.d/fedora.repo; cat /etc/yum.repos.d/fedora.repo
@@ -33,7 +33,7 @@ srpm:
 
 .build:fedora: &fedbuild
   stage: binary
-  image: fedora:latest
+  image: fedora:38
   dependencies:
   - srpm
   before_script:
@@ -47,10 +47,12 @@ srpm:
   - sed -i -e 's,^metalink=.*repo=fedora-.releasever.arch=.basearch$,baseurl=https://ftp.halifax.rwth-aachen.de/fedora/linux/releases/$releasever/Everything/$basearch/os/,g' /etc/mock/templates/fedora-branched.tpl
   - sed -i -e 's,^metalink=.*repo=updates-released-f.releasever.arch=.basearch$,baseurl=https://ftp.halifax.rwth-aachen.de/fedora/linux/updates/$releasever/Everything/$basearch/,g' /etc/mock/templates/fedora-branched.tpl; cat /etc/mock/templates/fedora-branched.tpl
   - sed -i -e 's,^mirrorlist=.*repo=epel-7.arch=.basearch,baseurl=https://ftp.halifax.rwth-aachen.de/fedora-epel/$releasever/$basearch/,g' /etc/mock/templates/epel-7.tpl; cat /etc/mock/templates/epel-7.tpl
-  - sed -i -e 's,^mirrorlist=.*repo=epel-8.arch=.basearch,baseurl=https://ftp.halifax.rwth-aachen.de/fedora-epel/$releasever/$basearch/,g' /etc/mock/templates/epel-8.tpl; cat /etc/mock/templates/epel-8.tpl
+  - sed -i -e 's,^mirrorlist=.*repo=epel-8.arch=.basearch,baseurl=https://ftp.halifax.rwth-aachen.de/fedora-epel/$releasever/Everything/$basearch/,g' /etc/mock/templates/epel-8.tpl; cat /etc/mock/templates/epel-8.tpl
+  - sed -i -e 's,^metalink=.*repo=epel-$releasever.arch=.basearch,baseurl=https://ftp.halifax.rwth-aachen.de/fedora-epel/$releasever/Everything/$basearch/,g' /etc/mock/templates/epel-9.tpl; cat /etc/mock/templates/epel-9.tpl
   script:
   - mock --old-chroot --verbose -r $DIST-$VERSION-$ARCH --define "version $VER" --rebuild products/srpm/beidconnect-*.src.rpm --resultdir $CI_PROJECT_DIR/products/$DIST-$VERSION-$ARCH
   artifacts:
+    name: "beidconnect-build-$DIST-$VERSION-$ARCH"
     paths:
     - products/$DIST-$VERSION-$ARCH
     when:
@@ -76,45 +78,86 @@ srpm:
   - mkdir -p products/deb/$CODE/$ARCH
   - dcmd cp ../*ges products/deb/$CODE/$ARCH
   artifacts:
+    name: "beidconnect-build-$SHORT-$CODE-$ARCH"
     paths:
     - products/deb
     when:
       on_success
 
-build:fedora-34-64:
+.build:ubuntu: &ubbuild
+  stage: binary
+  image: ubuntu:latest
+  dependencies:
+  # We don't actually need the srpms, but we do need the version file. Although that could be done in a separate job, having them together seems easier.
+  - srpm
+  before_script:
+  - apt-get update; apt-get -y install devscripts dpkg-dev git debhelper zstd sbuild schroot debootstrap
+  - sbuild-createchroot --arch=$ARCH $CODE /srv/chroot/$CODE $MIRROR $SCRIPT
+  - VER=$(cat products/version)
+  - if [ $ARCH = "i386" ]; then DASHA="-A -s"; else DASHA="--no-arch-all --no-source"; fi
+  - export DASHA
+  - if [ ! -z "$http_proxy" ]; then echo "Acquire::http::Proxy \"$http_proxy\";" > /srv/chroot/$CODE/etc/apt/apt.conf.d/99proxy; fi
+  - ./linux/deb-cl.pl "$VER" "$CODE" "$SHORT"
+  script:
+  - sbuild -n $DASHA -c $CODE-$ARCH-sbuild --arch=$ARCH
+  after_script:
+  - mkdir -p products/deb/$CODE/$ARCH
+  - dcmd cp ../*ges products/deb/$CODE/$ARCH
+  artifacts:
+    name: "beidconnect-build-$SHORT-$CODE-$ARCH"
+    paths:
+    - products/deb
+    when:
+      on_success
+
+build:fedora-37-64:
   <<: *fedbuild
   variables:
-    VERSION: 34
+    VERSION: 37
     ARCH: x86_64
     DIST: fedora
 
-build:fedora-34-32:
+build:fedora-37-32:
   <<: *fedbuild
   variables:
-    VERSION: 34
+    VERSION: 37
     ARCH: i386
     DIST: fedora
 
-build:fedora-33-64:
+build:fedora-38-64:
   <<: *fedbuild
   variables:
-    VERSION: 33
+    VERSION: 38
     ARCH: x86_64
     DIST: fedora
 
-build:fedora-33-32:
+build:fedora-38-32:
   <<: *fedbuild
   variables:
-    VERSION: 33
+    VERSION: 38
     ARCH: i386
     DIST: fedora
 
-build:centos-8-64:
+build:fedora-39-64:
   <<: *fedbuild
   variables:
-    VERSION: 8
+    VERSION: 39
     ARCH: x86_64
-    DIST: centos
+    DIST: fedora
+
+build:fedora-39-32:
+  <<: *fedbuild
+  variables:
+    VERSION: 39
+    ARCH: i386
+    DIST: fedora
+
+build:centos-stream-9-64:
+  <<: *fedbuild
+  variables:
+    VERSION: 9
+    ARCH: x86_64
+    DIST: centos-stream
 
 build:centos-7-64:
   <<: *fedbuild
@@ -139,21 +182,53 @@ build:debian-10-64:
     ARCH: amd64
     MIRROR: http://deb.debian.org/debian
 
-build:ubuntu-2104-64:
+build:debian-11-32:
   <<: *debuild
   variables:
-    CODE: hirsute
+    CODE: bullseye
+    SHORT: deb11
+    ARCH: i386
+    MIRROR: http://deb.debian.org/debian
+
+build:debian-11-64:
+  <<: *debuild
+  variables:
+    CODE: bullseye
+    SHORT: deb11
     ARCH: amd64
-    SHORT: u2104
+    MIRROR: http://deb.debian.org/debian
+
+build:debian-12-32:
+  <<: *debuild
+  variables:
+    CODE: bookworm
+    SHORT: deb12
+    ARCH: i386
+    MIRROR: http://deb.debian.org/debian
+
+build:debian-12-64:
+  <<: *debuild
+  variables:
+    CODE: bookworm
+    SHORT: deb12
+    ARCH: amd64
+    MIRROR: http://deb.debian.org/debian
+
+build:ubuntu-2204-64:
+  <<: *ubbuild
+  variables:
+    CODE: jammy
+    ARCH: amd64
+    SHORT: u2204
     MIRROR: http://archive.ubuntu.com/ubuntu
     SCRIPT: /usr/share/debootstrap/scripts/gutsy
 
-build:ubuntu-2104-32:
-  <<: *debuild
+build:ubuntu-2204-32:
+  <<: *ubbuild
   variables:
-    CODE: hirsute
+    CODE: jammy
     ARCH: i386
-    SHORT: u2104
+    SHORT: u2204
     MIRROR: http://archive.ubuntu.com/ubuntu
     SCRIPT: /usr/share/debootstrap/scripts/gutsy
 

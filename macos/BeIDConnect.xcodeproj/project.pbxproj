@@ -25,7 +25,6 @@
 		E8AB54E724110F070051D9A2 /* ReaderList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8AB54C824110F070051D9A2 /* ReaderList.cpp */; };
 		E8AB54E824110F070051D9A2 /* asn1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8AB54C924110F070051D9A2 /* asn1.cpp */; };
 		E8AB54E924110F070051D9A2 /* hash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8AB54CA24110F070051D9A2 /* hash.cpp */; };
-		E8AB54EA24110F070051D9A2 /* Card.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8AB54CB24110F070051D9A2 /* Card.cpp */; };
 		E8AB54EB24110F070051D9A2 /* VirtualCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8AB54CD24110F070051D9A2 /* VirtualCard.cpp */; };
 		E8AB54EC24110F070051D9A2 /* VersionRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8AB54D024110F070051D9A2 /* VersionRequestHandler.cpp */; };
 		E8AB54ED24110F070051D9A2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8AB54D124110F070051D9A2 /* main.cpp */; };
@@ -98,7 +97,6 @@
 		E8AB54C824110F070051D9A2 /* ReaderList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ReaderList.cpp; sourceTree = "<group>"; };
 		E8AB54C924110F070051D9A2 /* asn1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = asn1.cpp; sourceTree = "<group>"; };
 		E8AB54CA24110F070051D9A2 /* hash.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = hash.cpp; sourceTree = "<group>"; };
-		E8AB54CB24110F070051D9A2 /* Card.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Card.cpp; sourceTree = "<group>"; };
 		E8AB54CC24110F070051D9A2 /* log.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = log.hpp; sourceTree = "<group>"; };
 		E8AB54CD24110F070051D9A2 /* VirtualCard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VirtualCard.cpp; sourceTree = "<group>"; };
 		E8AB54D024110F070051D9A2 /* VersionRequestHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VersionRequestHandler.cpp; sourceTree = "<group>"; };
@@ -116,6 +114,7 @@
 		E8EE466E242360F30074DC2C /* Request.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Request.cpp; sourceTree = "<group>"; };
 		E8EE466F242360F30074DC2C /* Request.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Request.hpp; sourceTree = "<group>"; };
 		E8F2140923FAFAAC003768CE /* BeIDConnect */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = BeIDConnect; sourceTree = BUILT_PRODUCTS_DIR; };
+		F3C52EF4285A12CD00B4DCEB /* BeIDConnect.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BeIDConnect.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -255,7 +254,6 @@
 				E8AB54B324110F070051D9A2 /* asn1.hpp */,
 				E8AB54B124110F070051D9A2 /* BEIDCard.cpp */,
 				E8AB54D624110F070051D9A2 /* BEIDCard.hpp */,
-				E8AB54CB24110F070051D9A2 /* Card.cpp */,
 				E8AB54AA24110F070051D9A2 /* Card.hpp */,
 				E8AB54B724110F070051D9A2 /* CardReader.hpp */,
 				E8AB54C224110F070051D9A2 /* CardReader.cpp */,
@@ -277,6 +275,7 @@
 		E8F2140023FAFAAC003768CE = {
 			isa = PBXGroup;
 			children = (
+				F3C52EF4285A12CD00B4DCEB /* BeIDConnect.entitlements */,
 				E864546F25F260900098E299 /* installation */,
 				E835C9A824376FFA008A17D9 /* ChromeExtension */,
 				E85AB6632413A1B600BE9F0A /* test */,
@@ -310,7 +309,7 @@
 			dependencies = (
 			);
 			name = BeIDConnect;
-			productName = eIDLink;
+			productName = BeIDConnect;
 			productReference = E8F2140923FAFAAC003768CE /* BeIDConnect */;
 			productType = "com.apple.product-type.tool";
 		};
@@ -321,7 +320,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 1200;
-				ORGANIZATIONNAME = bosa;
+				ORGANIZATIONNAME = "FOD BOSA";
 				TargetAttributes = {
 					E8F2140823FAFAAC003768CE = {
 						CreatedOnToolsVersion = 11.3.1;
@@ -361,7 +360,6 @@
 				E8AB54DA24110F070051D9A2 /* util.cpp in Sources */,
 				E8AB54E324110F070051D9A2 /* CardReader.cpp in Sources */,
 				E8AB54E524110F070051D9A2 /* SCard.cpp in Sources */,
-				E8AB54EA24110F070051D9A2 /* Card.cpp in Sources */,
 				E8AB54E924110F070051D9A2 /* hash.cpp in Sources */,
 				E8AB54EB24110F070051D9A2 /* VirtualCard.cpp in Sources */,
 				E8AB54E024110F070051D9A2 /* x509Util.c in Sources */,
@@ -415,8 +413,10 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 7682K6YL8X;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -434,6 +434,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 2.10;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -474,8 +475,10 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 7682K6YL8X;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -487,6 +490,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 2.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;

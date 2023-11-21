@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef SCard_hpp
 #define SCard_hpp
 
@@ -15,71 +17,86 @@
 class SCardCtx
 {
 public:
-   typedef shared_ptr<SCardCtx> Ptr;
-   SCardCtx() {
-      h = 0;
-      valid = false;
-      LONG ret = SCardEstablishContext(SCARD_SCOPE_USER, NULL, NULL, &h);
-      if (ret) {
-         log_error("SCardEstablishContext() returned %0x", ret);
-         log_error("Smartcard service not running?");
-      }
-      valid = true;
-   };
-   ~SCardCtx() {
-      LONG lReturn = SCardReleaseContext(h);
-      if ( SCARD_S_SUCCESS != lReturn )
-      {
-         log_error("E: Failed SCardReleaseContext");
-      }
-      else {
-         //log_info("SCardReleaseContext ok");
-      }
-   };
-   SCARDCONTEXT hSC() { return h; };
-   bool valid;
+    SCardCtx() {
+        LONG ret = SCardEstablishContext(SCARD_SCOPE_USER, NULL, NULL, &h);
+        if (SCARD_S_SUCCESS != ret) {
+            log_error("SCardEstablishContext() returned %0x", ret);
+            log_error("Smartcard service not running?");
+            h = 0;
+            throw BeidConnectException(BeidConnectException_Code::SRC_NO_CONTEXT);
+        }
+    };
+    ~SCardCtx() {
+        if (h != 0)
+        {
+            LONG ret = SCardReleaseContext(h);
+            if (SCARD_S_SUCCESS != ret)
+            {
+                log_error("E: Failed SCardReleaseContext");
+            }
+            else {
+                //log_info("SCardReleaseContext ok");
+            }
+        }
+    };
+    operator SCARDCONTEXT() { return h; };
 private:
-   SCARDCONTEXT  h;
+    SCARDCONTEXT h = 0;
 };
 
-
-class SCard: public CardReader
+class SCard : public CardReader
 {
+    void beginTransaction() override;
+    void endTransaction() override;
 public:
-   SCard();
-   virtual ~SCard(){};
-   typedef std::shared_ptr<SCard> Ptr;
-   static int listReaders(std::vector<CardReader::Ptr> &readers);
-   int beginTransaction() override;
-   int endTransaction() override;
-   int connect() override;
-   int disconnect() override;
-   bool isPinPad() override;
-   int apdu(const unsigned char *apdu, unsigned int l_apdu, unsigned char *out, int *l_out, int *sw) override;
-   int verify_pinpad(unsigned char format, unsigned char PINBlock, unsigned char PINLength, unsigned int PINMaxExtraDigit, unsigned char pinAPDU[], int l_pinAPDU, int *sw) override;
+    SCard();
+    virtual ~SCard() { disconnect(); };
+    static void listReaders(std::vector<std::shared_ptr<CardReader>>& readers);
+    long connect() override;
+    void disconnect() override;
+    bool isPinPad() override;
+    CardAPDUResponse apdu(const CardAPDU& apdu) override;
+    void verify_pinpad(unsigned char format, unsigned char PINBlock, size_t PINLength, uint16_t PINMaxExtraDigit, const unsigned char pinAPDU[], size_t l_pinAPDU, uint16_t* sw) override;
 
-   SCardCtx::Ptr context;
-   
+    shared_ptr<SCardCtx> context;
+
 private:
-   int isPinpadWithTransmit(const char *readerName);
-   int getFeatures();
-   class commands
-   {
-      public:
-         unsigned int verify_pin_start = 0;
-         unsigned int verify_pin_finish = 0;
-         unsigned int modify_pin_start = 0;
-         unsigned int modify_pin_finish = 0;
-         unsigned int get_key_pressed = 0;
-         unsigned int verify_pin_direct = 0;
-         unsigned int modify_pin_direct = 0;
-         unsigned int mct_readerdirect = 0;
-         unsigned int mct_universal = 0;
-         unsigned int ifd_pin_prop = 0;
-         unsigned int abort = 0;
-   } cmds;
-   SCARDHANDLE     hCard;
-   int cardIsT1;
+    long getFeatures();
+    bool getPPDUFeatures();
+    class commands
+    {
+    public:
+        unsigned int verify_pin_start = 0;
+        unsigned int verify_pin_finish = 0;
+        unsigned int modify_pin_start = 0;
+        unsigned int modify_pin_finish = 0;
+        unsigned int get_key_pressed = 0;
+        unsigned int verify_pin_direct = 0;
+        unsigned int modify_pin_direct = 0;
+        unsigned int mct_readerdirect = 0;
+        unsigned int mct_universal = 0;
+        unsigned int ifd_pin_prop = 0;
+        unsigned int abort = 0;
+        void clear()
+        {
+            verify_pin_start = 0;
+            verify_pin_finish = 0;
+            modify_pin_start = 0;
+            modify_pin_finish = 0;
+            get_key_pressed = 0;
+            verify_pin_direct = 0;
+            modify_pin_direct = 0;
+            mct_readerdirect = 0;
+            mct_universal = 0;
+            ifd_pin_prop = 0;
+            abort = 0;
+        }
+    } cmds;
+    bool FeaturesRetrieved = false;
+    bool m_bCanUsePPDU = false;
+    SCARDHANDLE     hCard;
+    SCARD_IO_REQUEST  ioSendPci = { 1, sizeof(SCARD_IO_REQUEST) };
+    SCARD_IO_REQUEST  ioRecvPci = { 1, sizeof(SCARD_IO_REQUEST) };
 };
 
 #endif /* SCard_hpp */

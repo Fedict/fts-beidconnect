@@ -27,7 +27,7 @@ VirtualReader::~VirtualReader()
 }
 
 #define WHERE "VirtualReader::listReaders()"
-int VirtualReader::listReaders(std::vector<CardReader::Ptr> & readers)
+int VirtualReader::listReaders(std::vector<std::shared_ptr<CardReader>>& readers)
 {
    int ret = 0;
    
@@ -38,7 +38,7 @@ int VirtualReader::listReaders(std::vector<CardReader::Ptr> & readers)
  
       for (auto& section : pt)
       {
-         VirtualReader::Ptr reader = std::make_shared<VirtualReader>();
+         std::shared_ptr<VirtualReader> reader = std::make_shared<VirtualReader>();
          reader->name = section.first;
          //std::cout << '[' << section.first << "]\n";
          reader->atr = "";
@@ -61,19 +61,17 @@ int VirtualReader::listReaders(std::vector<CardReader::Ptr> & readers)
 
 
 #define WHERE "VirtualReader::connect()"
-int VirtualReader::connect()
+long VirtualReader::connect()
 {
-   int ret = 0;
+   long ret = 0;
    return (ret);
 }
 #undef WHERE
 
 
 #define WHERE "VirtualReader::disconnect()"
-int VirtualReader::disconnect()
+void VirtualReader::disconnect()
 {
-   int rv = 0;
-   return (rv);
 }
 #undef WHERE
 

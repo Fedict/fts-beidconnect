@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef ___crypto_h____
 #define ___crypto_h____
 

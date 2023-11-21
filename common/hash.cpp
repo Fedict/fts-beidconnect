@@ -1,7 +1,7 @@
 #include "hash.h"
 #include "string.h"
 
-int hash_length_for_algo(int hashAlgo)
+unsigned int hash_length_for_algo(int hashAlgo)
 {
 	switch (hashAlgo) 
 	{
@@ -16,7 +16,7 @@ int hash_length_for_algo(int hashAlgo)
 	}
 }
 
-int hash_length_for_algoheader(int hashAlgo)
+size_t hash_length_for_algoheader(int hashAlgo)
 {
 	switch (hashAlgo) 
 	{
@@ -25,13 +25,13 @@ int hash_length_for_algoheader(int hashAlgo)
 	case DIGEST_ALGO_SHA384:
 		return DIGEST_ALGO_SHA384_HEAD_LEN;
 	case DIGEST_ALGO_SHA512:
-		return DIGEST_ALGO_SHA512_LEN;
+		return DIGEST_ALGO_SHA512_HEAD_LEN;
 	default:
 		return -1;
 	}
 }
 
-const char* hash_header_for_algo(int hashAlgo)
+const unsigned char* hash_header_for_algo(int hashAlgo)
 {
 	switch (hashAlgo) 
 	{
@@ -47,7 +47,7 @@ const char* hash_header_for_algo(int hashAlgo)
 }
 
 
-int algo2str(const char *hash_algo)
+unsigned int algo2str(const char *hash_algo)
 {
    if (!strcmp(hash_algo, "SHA384") || !strcmp(hash_algo, "SHA-384"))
       return DIGEST_ALGO_SHA384;

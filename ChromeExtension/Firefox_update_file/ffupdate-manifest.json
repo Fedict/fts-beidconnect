@@ -1,0 +1,20 @@
+{
+  "addons": {
+    "beidconnect@bosa.be": {
+      "updates": [
+        {
+          "version": "0.0.10",
+          "update_link": "https://eid.static.bosa.fgov.be/beidconnect-fx.xpi"
+        },
+        {
+          "version": "0.0.11",
+          "update_link": "https://eid.static.bosa.fgov.be/beidconnect-fx-0.0.11.xpi"
+        },
+        {
+          "version": "0.0.12",
+          "update_link": "https://eid.static.bosa.fgov.be/beidconnect-fx-0.0.12.xpi"
+        }
+    ]
+    }
+  }
+}

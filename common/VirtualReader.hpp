@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef VirtualReader_hpp
 #define VirtualReader_hpp
 
@@ -11,18 +13,17 @@
 
 class VirtualReader: public CardReader
 {
+   void beginTransaction() override {};
+   void endTransaction() override {};
 public:
    VirtualReader();
    virtual ~VirtualReader();
-   typedef std::shared_ptr<VirtualReader> Ptr;
-   static int listReaders(std::vector<CardReader::Ptr> &readers);
-   int beginTransaction() override { return 0; };
-   int endTransaction() override{ return 0; };
-   int connect() override;
-   int disconnect() override;
+   static int listReaders(std::vector<std::shared_ptr<CardReader>>& readers);
+   long connect() override;
+   void disconnect() override;
    bool isPinPad() override{ return 0; };
-   int apdu(const unsigned char *apdu, unsigned int l_apdu, unsigned char *out, int *l_out, int *sw) override{ return -1; };
-   int verify_pinpad(unsigned char format, unsigned char PINBlock, unsigned char PINLength, unsigned int PINMaxExtraDigit, unsigned char pinAPDU[], int l_pinAPDU, int *sw)override { return -1; };
+   CardAPDUResponse apdu(const CardAPDU& apdu) override { throw NotImplementedException("VirtualReader apdu2"); };
+   void verify_pinpad(unsigned char format, unsigned char PINBlock, size_t PINLength, uint16_t PINMaxExtraDigit, const unsigned char pinAPDU[], size_t l_pinAPDU, uint16_t*sw) override { throw NotImplementedException("VirtualReader verify_pinpad"); };
 };
 
 #endif /* VirtualReader_hpp */

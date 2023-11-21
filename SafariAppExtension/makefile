@@ -1,4 +1,4 @@
-VERSION = 2.3.0
+VERSION = 2.10
 APPIDENTIFIER = be.bosa.beidconnect.safari
 APPEXIDENTIFIER = be.bosa.beidconnect.safari-extension
 PROGRAM = BeIDConnect\ Extension
@@ -31,12 +31,11 @@ $(DEPSDIR) :
 
 $(DMGFILE): $(INSTALL_PRODUCT)
 	hdiutil create -fs JHFS+ -volname "BeIDConnect Extension Installer" -srcfolder $(DISTDIR) -ov $(DMGFILE)
-	codesign -s "Developer ID Application: Zetes Sa" --timestamp -i $(APPIDENTIFIER) $(DMGFILE)
-	cp $(DMGFILE) $(PROGRAM).dmg
+	codesign -s "Developer ID Application: FOD BOSA (7682K6YL8X)" --timestamp -i $(APPIDENTIFIER) $(DMGFILE)
 
 $(INSTALL_PRODUCT) : $(BINARIES) $(REQUIREMENTS) $(DEPENDENCY) $(COMPONENT_PFILE) $(INSTALL_COMPONENT) $(INSTALL_DISTRIBUTION_FILE)
 	productbuild --distribution $(INSTALL_DISTRIBUTION_FILE) \
-	--sign "Developer ID Installer: Zetes Sa" \
+	--sign "Developer ID Installer: FOD BOSA (7682K6YL8X)" \
 	--timestamp \
 	--resources $(INSTALL_RESOURCES) \
 	--package-path $(DEPSDIR) \
@@ -44,8 +43,8 @@ $(INSTALL_PRODUCT) : $(BINARIES) $(REQUIREMENTS) $(DEPENDENCY) $(COMPONENT_PFILE
 
 $(BINARIES):
 	xcodebuild install -project "BeIDConnect.xcodeproj"
-#	codesign -f --options=runtime -s "Developer ID Application: Zetes Sa" --identifier -v ./Build/Release/BeIDConnect\ Extension.app/Contents/XPCServices/BeIDConnect\ Extension.appex/Contents/MacOS/BeIDConnect\ Extension
-#	codesign -f --options=runtime -s "Developer ID Application: Zetes Sa" -v ./Build/Release/BeIDConnect\ Extension.app
+#	codesign -f --options=runtime -s "3rd Party Mac Developer Application: FOD BOSA (7682K6YL8X)" --identifier -v ./Build/Release/BeIDConnect\ Extension.app/Contents/XPCServices/BeIDConnect\ Extension.appex/Contents/MacOS/BeIDConnect\ Extension
+#	codesign -f --options=runtime -s "Developer ID Application: FOD BOSA (7682K6YL8X)" -v ./Build/Release/BeIDConnect\ Extension.app
 	
 $(COMPONENT_PFILE) :
 	@echo "Error: Missing component pfile."
@@ -79,10 +78,11 @@ compfiles : $(BINARIES)
 	@echo "Edit the $(COMPONENT_PFILE).new template to create a suitable $(COMPONENT_PFILE) file."
 
 notarise: $(DMGFILE)
-	xcrun altool --notarize-app --primary-bundle-id $(APPIDENTIFIER) --username vital.schonkeren@be.zetes.com --password "@keychain:AC_PASSWORD" --asc-provider ZetesSa --file $(PROGRAM).dmg
+#	xcrun altool --notarize-app --primary-bundle-id $(APPIDENTIFIER) --username christophe.peerens@bosa.fgov.be --password "@keychain:AC_PASSWORD" --asc-provider 7682K6YL8X --file $(DMGFILE)
+	xcrun notarytool submit $(DMGFILE) --keychain-profile "AC_PASSWORD" --wait
 
 staple: 
-	xcrun stapler staple $(PROGRAM).dmg
+	xcrun stapler staple $(DMGFILE)
 
 
 

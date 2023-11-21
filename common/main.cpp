@@ -26,17 +26,13 @@ int main(int argc, const char * argv[]) {
       else if (strcmp(argv[i], "-test") == 0) {
 
          log_init(LOG_FILE, 1, 1);
-         runTest(argc, argv);  //run as test and exit
-         exit(0);
+         return runTest(argc, argv);  //run as test and exit
       }
       else if (strcmp(argv[i], "-setup") == 0) {
-
 	 //generate the necessary json file for use with the Chrome/Firefox
 	 //extensions
          log_init(LOG_FILE, 1, 1);
-         log_info("BeIDConnect setup");
-         runSetup(argc, argv);
-         exit(0);
+         return runSetup(argc, argv);
       }
    }
 

@@ -42,6 +42,8 @@
 			<key>Allowed Domains</key>
 			<array>
 				<string>*.belgium.be</string>
+				<string>*.fgov.be</string>
+				<string>gcloudbelgium.sharepoint.com</string>
 			</array>
 			<key>Level</key>
 			<string>Some</string>

@@ -1,21 +1,15 @@
-//
-//  InfoRequestHandler.cpp
-//  BeIDConnect
-//
-//  Created by Vital Schonkeren on 02/03/2020.
-//
 #ifndef InfoRequestHandler_hpp
 #define InfoRequestHandler_hpp
 
 #include <iostream>
 #include "RequestHandler.hpp"
 
-class InfoRequestHandler: public RequestHandler
+class InfoRequestHandler : public RequestHandler
 {
 public:
-   InfoRequestHandler() {};
-   virtual ~InfoRequestHandler() {};  //without this destructor of derived handler is not called
-   std::string process() override;
+    InfoRequestHandler(const std::shared_ptr<boost::property_tree::ptree>& ptreeRequest) : RequestHandler(ptreeRequest) {};
+    virtual ~InfoRequestHandler(){}; // without this destructor of derived handler is not called
+    std::string process() override;
 };
 
 #endif /* InfoRequestHandler */

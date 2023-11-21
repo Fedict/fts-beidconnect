@@ -7,12 +7,12 @@
 #include "log.hpp"
 #include "memory.h"
 
-char* getCertSubjectName(unsigned char* cert, unsigned int l_cert)
+char* getCertSubjectName(unsigned char* cert, size_t l_cert)
 {
    int ret = 0;
    ASN1_ITEM subject;
    static char dn[256];
-   unsigned int l_dn = 0;
+   size_t l_dn = 0;
    char *p_dn = NULL;
 
    if ((l_cert == 0) || (cert == NULL)) {
@@ -43,7 +43,7 @@ char* getCertSubjectName(unsigned char* cert, unsigned int l_cert)
 }
 
    
-int isEndEntity(char* cert, unsigned int l_cert)
+int isEndEntity(char* cert, size_t l_cert)
 {
    int ret = 0;
    ASN1_ITEM main;
@@ -119,7 +119,7 @@ int isEndEntity(char* cert, unsigned int l_cert)
 }
 
 
-unsigned int getKeyUsage(char* cert, unsigned int l_cert)
+unsigned int getKeyUsage(char* cert, size_t l_cert)
 {
    int ret = 0;
    ASN1_ITEM main;
@@ -175,7 +175,7 @@ unsigned int getKeyUsage(char* cert, unsigned int l_cert)
    return 0;
 }
 
-unsigned int getRSAKeyLength(const char *cert, unsigned int l_cert)
+size_t getRSAKeyLength(const char *cert, size_t l_cert)
 {
    int ret = 0;
    ASN1_ITEM spki, keyalg, key;
@@ -204,7 +204,7 @@ unsigned int getRSAKeyLength(const char *cert, unsigned int l_cert)
    return key.l_data;
 }
 
-char* getValidUntil(char* cert, unsigned int l_cert)
+char* getValidUntil(char* cert, size_t l_cert)
 {
    int ret = 0;
    static char time[LEN_DATE+1];
@@ -241,7 +241,7 @@ char* getValidUntil(char* cert, unsigned int l_cert)
 
 int isTimeBeforeNow (int len, char *p_atime)
 {
-   int fraction_digits = 0;
+   //int fraction_digits = 0;
    int century         = 0;
    int pos             = 0;
    struct tm ts;
@@ -261,7 +261,7 @@ int isTimeBeforeNow (int len, char *p_atime)
             case 14:
                century = 1;  // determine whether century ("20") is given
             case 12:
-               fraction_digits = len - pos - 1; // get length of fraction
+               //fraction_digits = len - pos - 1; // get length of fraction
                break;
                
             default:
@@ -278,7 +278,7 @@ int isTimeBeforeNow (int len, char *p_atime)
             case 14:
                century = 1;
             case 12:
-               fraction_digits = 0;
+               //fraction_digits = 0;
                break;
             default:
                return -2;//E_X509_TIME_WRONG_FORMAT;
@@ -335,7 +335,7 @@ int isTimeBeforeNow (int len, char *p_atime)
    return -1;
 }
 
-int getKeyInfo(unsigned char *cert, unsigned int l_cert, int *keyType, int *keySize)
+int getKeyInfo(const unsigned char *cert, size_t l_cert, int *keyType, size_t *keySize)
 {
    int ret = 0;
    ASN1_ITEM keyinfo, keyalg, key;
@@ -371,7 +371,7 @@ int getKeyInfo(unsigned char *cert, unsigned int l_cert, int *keyType, int *keyS
       if (ret == E_ASN_ITEM_NOT_FOUND) {
          return ret;
       }
-#pragma message "review this since this might not be 100% correct XXXXXX"
+#pragma message ("review this since this might not be 100% correct XXXXXX")
       *keySize = key.l_data - 1; // -1 byte for unused bits in BITSRING
    }
    
