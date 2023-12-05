@@ -54,6 +54,8 @@ using namespace std;
 
    NSMutableDictionary *dd = [[NSMutableDictionary alloc]initWithDictionary:dict];
    [dd setValue:@"background" forKey:@"src"];
+   [dd setValue:@"safari" forKey:@"extensionBrowser"];
+   [dd setValue:@"1.0.0" forKey:@"extensionVersion"];
 
    [page dispatchMessageToScriptWithName:@"message_fromapp" userInfo:dd];
 }
