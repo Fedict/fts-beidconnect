@@ -138,7 +138,7 @@ build:fedora-39-32:
     ARCH: i386
     DIST: fedora
 
-bbuild:fedora-40-64:
+build:fedora-40-64:
   <<: *fedbuild
   variables:
     VERSION: 40
