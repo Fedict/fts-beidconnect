@@ -4,7 +4,7 @@
     "version": "@@VERSION",
     "minimum_chrome_version": "40.0",
     "manifest_version": 2,
-    "description": "Use your Belgian eID on DSS secure platforms (DSS, IDP)",
+    "description": "Software linked to the webservice of the Belgian federal administration for signing a digital file in a reliable manner with your Belgian electronic identity card.",
     "icons": {
         "48": "icon48.png",
         "128": "icon128.png"
