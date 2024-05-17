@@ -110,20 +110,6 @@ srpm:
     when:
       on_success
 
-build:fedora-37-64:
-  <<: *fedbuild
-  variables:
-    VERSION: 37
-    ARCH: x86_64
-    DIST: fedora
-
-build:fedora-37-32:
-  <<: *fedbuild
-  variables:
-    VERSION: 37
-    ARCH: i386
-    DIST: fedora
-
 build:fedora-38-64:
   <<: *fedbuild
   variables:
@@ -152,7 +138,21 @@ build:fedora-39-32:
     ARCH: i386
     DIST: fedora
 
-build:centos-stream-9-64:
+bbuild:fedora-40-64:
+  <<: *fedbuild
+  variables:
+    VERSION: 40
+    ARCH: x86_64
+    DIST: fedora
+
+build:fedora-40-32:
+  <<: *fedbuild
+  variables:
+    VERSION: 40
+    ARCH: i386
+    DIST: fedora
+
+uild:centos-stream-9-64:
   <<: *fedbuild
   variables:
     VERSION: 9
@@ -213,6 +213,24 @@ build:debian-12-64:
     SHORT: deb12
     ARCH: amd64
     MIRROR: http://deb.debian.org/debian
+
+build:ubuntu-2404-64:
+  <<: *ubbuild
+  variables:
+    CODE: noble
+    ARCH: amd64
+    SHORT: u2404
+    MIRROR: http://archive.ubuntu.com/ubuntu
+    SCRIPT: /usr/share/debootstrap/scripts/gutsy
+
+build:ubuntu-2404-32:
+  <<: *ubbuild
+  variables:
+    CODE: noble
+    ARCH: i386
+    SHORT: u2404
+    MIRROR: http://archive.ubuntu.com/ubuntu
+    SCRIPT: /usr/share/debootstrap/scripts/gutsy
 
 build:ubuntu-2204-64:
   <<: *ubbuild
