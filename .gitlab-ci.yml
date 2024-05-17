@@ -152,7 +152,7 @@ build:fedora-40-32:
     ARCH: i386
     DIST: fedora
 
-uild:centos-stream-9-64:
+build:centos-stream-9-64:
   <<: *fedbuild
   variables:
     VERSION: 9
