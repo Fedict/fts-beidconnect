@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -32,6 +32,7 @@
 		E8EE466A242259580074DC2C /* CertChainRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8EE4669242259580074DC2C /* CertChainRequestHandler.cpp */; };
 		E8EE466D24235D6A0074DC2C /* SignRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8EE466C24235D6A0074DC2C /* SignRequestHandler.cpp */; };
 		E8EE4670242360F30074DC2C /* Request.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8EE466E242360F30074DC2C /* Request.cpp */; };
+		F3E3616A2BB5840000C4A4F4 /* debughelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F3E361682BB5840000C4A4F4 /* debughelper.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -115,6 +116,8 @@
 		E8EE466F242360F30074DC2C /* Request.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Request.hpp; sourceTree = "<group>"; };
 		E8F2140923FAFAAC003768CE /* BeIDConnect */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = BeIDConnect; sourceTree = BUILT_PRODUCTS_DIR; };
 		F3C52EF4285A12CD00B4DCEB /* BeIDConnect.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BeIDConnect.entitlements; sourceTree = "<group>"; };
+		F3E361682BB5840000C4A4F4 /* debughelper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = debughelper.cpp; sourceTree = "<group>"; };
+		F3E361692BB5840000C4A4F4 /* debughelper.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = debughelper.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -242,6 +245,8 @@
 				E8AB54D324110F070051D9A2 /* hash.h */,
 				E8AB54BD24110F070051D9A2 /* x509Util.c */,
 				E8AB54D524110F070051D9A2 /* x509Util.h */,
+				F3E361682BB5840000C4A4F4 /* debughelper.cpp */,
+				F3E361692BB5840000C4A4F4 /* debughelper.hpp */,
 			);
 			name = common;
 			path = ../common;
@@ -319,7 +324,8 @@
 		E8F2140123FAFAAC003768CE /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1200;
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1510;
 				ORGANIZATIONNAME = "FOD BOSA";
 				TargetAttributes = {
 					E8F2140823FAFAAC003768CE = {
@@ -373,6 +379,7 @@
 				E8AB54EC24110F070051D9A2 /* VersionRequestHandler.cpp in Sources */,
 				E8AB54E824110F070051D9A2 /* asn1.cpp in Sources */,
 				E8A12CE92465C53F00F6C910 /* test.cpp in Sources */,
+				F3E3616A2BB5840000C4A4F4 /* debughelper.cpp in Sources */,
 				E8EE466D24235D6A0074DC2C /* SignRequestHandler.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -415,10 +422,12 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = 7682K6YL8X;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -477,10 +486,12 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 7682K6YL8X;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -504,6 +515,7 @@
 				CODE_SIGN_ENTITLEMENTS = BeIDConnect.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
 				DEPLOYMENT_LOCATION = YES;
 				DEPLOYMENT_POSTPROCESSING = YES;
 				DEVELOPMENT_TEAM = EU27N85PBZ;
@@ -514,14 +526,19 @@
 					"$(inherited)",
 					"LOG_INFO=1",
 				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=*]" = (
+					"_DEBUG=1",
+					"DEBUG=1",
+					"$(inherited)",
+					"LOG_INFO=1",
+				);
 				HEADER_SEARCH_PATHS = 3P/boost/include;
 				INSTALL_PATH = /Applications;
 				LIBRARY_SEARCH_PATHS = "";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = be.bosa.beidconnect;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				STRIP_INSTALLED_PRODUCT = NO;
 			};
 			name = Debug;
 		};
@@ -532,6 +549,7 @@
 				CODE_SIGN_ENTITLEMENTS = BeIDConnect.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
 				DEPLOYMENT_LOCATION = YES;
 				DEPLOYMENT_POSTPROCESSING = YES;
 				DEVELOPMENT_TEAM = EU27N85PBZ;
@@ -541,11 +559,10 @@
 				HEADER_SEARCH_PATHS = 3P/boost/include;
 				INSTALL_PATH = /Applications;
 				LIBRARY_SEARCH_PATHS = "";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = be.bosa.beidconnect;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				STRIP_INSTALLED_PRODUCT = YES;
 			};
 			name = Release;
 		};

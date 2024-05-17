@@ -7,7 +7,7 @@
 #include "log.hpp"
 #include "memory.h"
 
-char* getCertSubjectName(unsigned char* cert, size_t l_cert)
+/*char* getCertSubjectName(unsigned char* cert, size_t l_cert)
 {
    int ret = 0;
    ASN1_ITEM subject;
@@ -41,9 +41,9 @@ char* getCertSubjectName(unsigned char* cert, size_t l_cert)
 
    return dn;
 }
-
+*/
    
-int isEndEntity(char* cert, size_t l_cert)
+/*int isEndEntity(char* cert, size_t l_cert)
 {
    int ret = 0;
    ASN1_ITEM main;
@@ -117,9 +117,9 @@ int isEndEntity(char* cert, size_t l_cert)
    
    return 0;
 }
+*/
 
-
-unsigned int getKeyUsage(char* cert, size_t l_cert)
+/*unsigned int getKeyUsage(char* cert, size_t l_cert)
 {
    int ret = 0;
    ASN1_ITEM main;
@@ -174,8 +174,9 @@ unsigned int getKeyUsage(char* cert, size_t l_cert)
    
    return 0;
 }
+*/
 
-size_t getRSAKeyLength(const char *cert, size_t l_cert)
+/*size_t getRSAKeyLength(const char *cert, size_t l_cert)
 {
    int ret = 0;
    ASN1_ITEM spki, keyalg, key;
@@ -203,8 +204,9 @@ size_t getRSAKeyLength(const char *cert, size_t l_cert)
    }
    return key.l_data;
 }
+*/
 
-char* getValidUntil(char* cert, size_t l_cert)
+/*char* getValidUntil(char* cert, size_t l_cert)
 {
    int ret = 0;
    static char time[LEN_DATE+1];
@@ -220,7 +222,7 @@ char* getValidUntil(char* cert, size_t l_cert)
    }
 
    if(item.tag == ASN_UTCTIME) {
-      /* if the value is greater than 50 asume the last century acc. to RFC 2459 */
+      // if the value is greater than 50 asume the last century acc. to RFC 2459
       if( (item.p_data[0]-0x30 + item.p_data[1]-0x30) >= 50)
          memcpy(time, "19", 2);
       else
@@ -237,9 +239,9 @@ char* getValidUntil(char* cert, size_t l_cert)
    time[LEN_DATE] = 0;
    return(time);
 }
+*/
 
-
-int isTimeBeforeNow (int len, char *p_atime)
+/*int isTimeBeforeNow (int len, char *p_atime)
 {
    //int fraction_digits = 0;
    int century         = 0;
@@ -296,12 +298,12 @@ int isTimeBeforeNow (int len, char *p_atime)
    
    ts.tm_year += asc2uchar(*p_atime++) * 10;
    ts.tm_year += asc2uchar(*p_atime++);
-   /* tm_year starts from 0 (=1900) */
+   // tm_year starts from 0 (=1900)
    ts.tm_year -= 1900;
    
    ts.tm_mon  = asc2uchar(*p_atime++) * 10;
    ts.tm_mon += asc2uchar(*p_atime++);
-   /* tm_mon starts from 0 */
+   // tm_mon starts from 0
    ts.tm_mon -= 1;
    
    ts.tm_mday  = asc2uchar(*p_atime++) * 10;
@@ -316,7 +318,7 @@ int isTimeBeforeNow (int len, char *p_atime)
    ts.tm_sec  = asc2uchar(*p_atime++) * 10;
    ts.tm_sec += asc2uchar(*p_atime++);
    
-   /* get setting for dst see tm_isdst*/
+   // get setting for dst see tm_isdst
    time(&now);
    p_tNow = localtime(&now);
 
@@ -324,8 +326,8 @@ int isTimeBeforeNow (int len, char *p_atime)
    t = mktime(&ts);
    
    //mktime(gmtime(&t));
-   /* input is utc, since mktime converts from local to gmt, we have to add the difference again */
-   /* to get utc time */
+   // input is utc, since mktime converts from local to gmt, we have to add the difference again
+   // to get utc time
    t +=  mktime(localtime(&t)) - mktime(gmtime(&t));
    
    //compare with now
@@ -334,6 +336,7 @@ int isTimeBeforeNow (int len, char *p_atime)
    }
    return -1;
 }
+*/
 
 int getKeyInfo(const unsigned char *cert, size_t l_cert, int *keyType, size_t *keySize)
 {
@@ -377,3 +380,4 @@ int getKeyInfo(const unsigned char *cert, size_t l_cert, int *keyType, size_t *k
    
    return ret;
 }
+

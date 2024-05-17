@@ -8,7 +8,7 @@
 #endif
 
 #ifdef __cplusplus
-  extern "C" {
+extern "C" {
 #endif
 
 void log_init(const char *pszLogFile, int logStdOut, int logErrorStdOut);
@@ -17,8 +17,7 @@ void log_info(const char *string,... );
 void log_error(const char *string,... );
  
 #ifdef __cplusplus
-  }
+}
 #endif
-
 
 #endif

@@ -4,12 +4,11 @@
 #include <string.h>
 #include <stdarg.h>
 #include "log.hpp"
+#include "general.h"
 
 #if defined(DEBUG) && defined(_WIN32)
 #include <windows.h>
 #endif
-
-#define CLEANUP(x)   { err = (x); goto cleanup; }
 
 /******************************************************************************
  *
@@ -30,6 +29,8 @@ void log_init(const char* pszLogFile, int logStdOut, int logErrorStdOut)
 	strncpy(g_szLogFile, pszLogFile, sizeof(g_szLogFile));
 	g_logStdOut = logStdOut;
 	g_logErrorStdOut = logErrorStdOut;
+    log_info("************* beidconnet " BEIDCONNECT_VERSION " *************");
+
 }
 
 
@@ -178,9 +179,9 @@ void log_error(const char* string, ...)
 	va_end(args);						                    // free arguments
 
 #ifdef _WIN32
-	fprintf(fp, "%s%s \n", timestring, buf);
+	fprintf(fp, "%s %s \n", timestring, buf);
 #else
-	fprintf(fp, "%s%s \n", timestring, buf);
+	fprintf(fp, "%s %s \n", timestring, buf);
 #endif
 	fclose(fp);
 
@@ -193,3 +194,4 @@ cleanup:
 	//LeaveCriticalSection(&g_cs);
 	return;
 }
+

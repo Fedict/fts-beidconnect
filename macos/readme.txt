@@ -21,6 +21,12 @@ Also for existing applications (and installed versions) the notarisation can sti
 	
 	xcrun altool --store-password-in-keychain-item "AC_PASSWORD" -u appleid@iCloud.com -p <password> cdwt-hsrb-gmcf-kvaq
 
+    OR open the keychain access and create "new password item..."
+
+	- 
+
+	xcrun notarytool store-credentials --apple-id "name@example.com" --team-id "7682K6YL8X"
+
 	- use altool to get a table of providers, provider short names, and team IDs associated with a given username and password 
 
 	xcrun altool --list-providers -u appleid@iCloud.Com -p "@keychain:AC_PASSWORD"

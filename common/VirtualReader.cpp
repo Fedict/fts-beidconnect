@@ -26,7 +26,6 @@ VirtualReader::~VirtualReader()
 {
 }
 
-#define WHERE "VirtualReader::listReaders()"
 int VirtualReader::listReaders(std::vector<std::shared_ptr<CardReader>>& readers)
 {
    int ret = 0;
@@ -57,22 +56,13 @@ int VirtualReader::listReaders(std::vector<std::shared_ptr<CardReader>>& readers
    
    return (ret);
 }
-#undef WHERE
 
-
-#define WHERE "VirtualReader::connect()"
 long VirtualReader::connect()
 {
    long ret = 0;
    return (ret);
 }
-#undef WHERE
 
-
-#define WHERE "VirtualReader::disconnect()"
 void VirtualReader::disconnect()
 {
 }
-#undef WHERE
-
-

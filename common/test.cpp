@@ -379,7 +379,12 @@ TestResult TestGetFile(const std::string& DisplayMessage, const std::shared_ptr<
 
 int runTest(int argc, const char* argv[])
 {
-    std::cout << "BeidConnect Version " << BEIDCONNECT_VERSION << " Build on " << __DATE__ << " " << __TIME__ << endl;
+    std::cout << "BeidConnect Version " << BEIDCONNECT_VERSION
+        << " Build on " << __DATE__ << " " << __TIME__
+#ifdef _DEBUG
+        << " (DEBUG build)"
+#endif
+        << endl;
 
     TestDB testDB;
     shared_ptr<stringstream> ssRequest;

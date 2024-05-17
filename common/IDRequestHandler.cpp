@@ -11,9 +11,11 @@
 
 using boost::property_tree::ptree;
 
-#define WHERE "IDRequestHandler::process()"
 std::string IDRequestHandler::process()
 {
+    DECLAREFUNCTIONHEADER;
+    log_info("----- IDRequestHandler -----");
+
     ptree response;
     int countSupportedCards = 0;
     int countUnsupportedCards = 0;
@@ -123,22 +125,22 @@ std::string IDRequestHandler::process()
     }
     catch (SCardException& e)
     {
-        log_error("%s: E: SCardException SCardResult(%08X) code(%08X)", WHERE, e.getSCardResult(), e.getCode());
+        e.log();
         response.put(BeidConnect_JSON_field::result, e.result());
     }
     catch (CardException& e)
     {
-        log_error("%s: E: CardException SW(%04X)", WHERE, e.getSW());
+        e.log();
         response.put(BeidConnect_JSON_field::result, e.result());
     }
     catch (BeidConnectException& e)
     {
-        log_error("%s: E: BeidConnectException code(%08X)", WHERE, e.getCode());
+        e.log();
         response.put(BeidConnect_JSON_field::result, e.result());
     }
     catch (...)
     {
-        log_error("%s: E: Exception", WHERE);
+        log_error("%s: E: Exception", __func__);
         response.put(BeidConnect_JSON_field::result, BeidConnect_Result::general_error);
     }
     post_process(response);
@@ -146,4 +148,3 @@ std::string IDRequestHandler::process()
     boost::property_tree::write_json(streamResponse, response, false);
     return streamResponse.str();
 }
-#undef WHERE

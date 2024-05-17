@@ -77,6 +77,14 @@ private:
         unsigned int mct_universal = 0;
         unsigned int ifd_pin_prop = 0;
         unsigned int abort = 0;
+        unsigned int ste_spe_message = 0;
+        unsigned int verify_pin_direct_app_id = 0;
+        unsigned int modif_pin_direct_app_id = 0;
+        unsigned int write_display = 0;
+        unsigned int get_key = 0;
+        unsigned int ifd_display_properties = 0;
+        unsigned int get_tlv_properties = 0;
+        unsigned int ccid_esc_command = 0;
         void clear()
         {
             verify_pin_start = 0;
@@ -90,6 +98,14 @@ private:
             mct_universal = 0;
             ifd_pin_prop = 0;
             abort = 0;
+            ste_spe_message = 0;
+            verify_pin_direct_app_id = 0;
+            modif_pin_direct_app_id = 0;
+            write_display = 0;
+            get_key = 0;
+            ifd_display_properties = 0;
+            get_tlv_properties = 0;
+            ccid_esc_command = 0;
         }
     } cmds;
     bool FeaturesRetrieved = false;

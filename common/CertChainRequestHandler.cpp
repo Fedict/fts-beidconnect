@@ -11,9 +11,10 @@
 
 using boost::property_tree::ptree;
 
-#define WHERE "CertChainRequestHandler::process()"
 std::string CertChainRequestHandler::process()
 {
+    DECLAREFUNCTIONHEADER;
+    log_info("----- CertChainRequestHandler -----");
     ptree response;
     try
     {
@@ -134,22 +135,22 @@ std::string CertChainRequestHandler::process()
     }
     catch (SCardException& e)
     {
-        log_error("%s: E: SCardException SCardResult(%08X) code(%08X)", WHERE, e.getSCardResult(), e.getCode());
+        e.log();
         response.put(BeidConnect_JSON_field::result, e.result());
     }
     catch (CardException& e)
     {
-        log_error("%s: E: CardException SW(%04X)", WHERE, e.getSW());
+        e.log();
         response.put(BeidConnect_JSON_field::result, e.result());
     }
     catch (BeidConnectException& e)
     {
-        log_error("%s: E: BeidConnectException code(%08X)", WHERE, e.getCode());
+        e.log();
         response.put(BeidConnect_JSON_field::result, e.result());
     }
     catch (...)
     {
-        log_error("%s: E: Exception", WHERE);
+        log_error("%s: E: Exception", __func__);
         response.put(BeidConnect_JSON_field::result, BeidConnect_Result::general_error);
     }
     post_process(response);
@@ -159,4 +160,3 @@ std::string CertChainRequestHandler::process()
     // log_info(streamResponse.str().c_str());
     return streamResponse.str();
 }
-#undef WHERE

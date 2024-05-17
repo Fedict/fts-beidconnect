@@ -20,9 +20,9 @@ char* oid2str(unsigned char* p_data, size_t l_data)
 
     for (size_t i = 0; i < oidLen && strlen(oidstr) < 110; i++) {
         if (i == 0)
-            sprintf(oidstr, "%d", oid[i]);
+            snprintf(oidstr, 128, "%d", oid[i]);
         else
-            sprintf(oidstr, "%s.%d", oidstr, oid[i]);
+            snprintf(oidstr, 128, "%s.%d", oidstr, oid[i]);
     }
     //   strcat(oidstr, "\"");
     return oidstr;

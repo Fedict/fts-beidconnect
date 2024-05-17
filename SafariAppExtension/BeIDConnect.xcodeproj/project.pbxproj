@@ -3,13 +3,13 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		E808DCE8267B9793006CFED0 /* IDRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E808DCE6267B9793006CFED0 /* IDRequestHandler.cpp */; };
 		E808DCEF267B9855006CFED0 /* IDRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E808DCE6267B9793006CFED0 /* IDRequestHandler.cpp */; };
-		E80C8D7F2572FD8300F93C9A /* BeIdConnect Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E868AAE524A3BC450076AA3D /* BeIdConnect Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		E80C8D7F2572FD8300F93C9A /* BeIdConnect Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = E868AAE524A3BC450076AA3D /* BeIdConnect Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E80C8D842572FD8A00F93C9A /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E868AB7824A3D8680076AA3D /* SafariServices.framework */; };
 		E80C8D892572FDE900F93C9A /* PCSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E868AB7524A3D80B0076AA3D /* PCSC.framework */; };
 		E8110A7B24AA1FC300283393 /* SafariExtensionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E868AAF124A3BC450076AA3D /* SafariExtensionViewController.m */; };
@@ -84,15 +84,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		E80C8D822572FD8300F93C9A /* Embed App Extensions */ = {
+		E80C8D822572FD8300F93C9A /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				E80C8D7F2572FD8300F93C9A /* BeIdConnect Extension.appex in Embed App Extensions */,
+				E80C8D7F2572FD8300F93C9A /* BeIdConnect Extension.appex in Embed Foundation Extensions */,
 			);
-			name = "Embed App Extensions";
+			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -347,7 +347,7 @@
 				E868AACA24A3BC430076AA3D /* Sources */,
 				E868AACB24A3BC430076AA3D /* Frameworks */,
 				E868AACC24A3BC430076AA3D /* Resources */,
-				E80C8D822572FD8300F93C9A /* Embed App Extensions */,
+				E80C8D822572FD8300F93C9A /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
@@ -382,7 +382,8 @@
 		E868AAC624A3BC430076AA3D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1340;
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1510;
 				ORGANIZATIONNAME = Bosa;
 				TargetAttributes = {
 					E868AACD24A3BC430076AA3D = {
@@ -567,9 +568,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -626,9 +629,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -652,6 +657,7 @@
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 11;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 7682K6YL8X;
 				ENABLE_HARDENED_RUNTIME = YES;
 				HEADER_SEARCH_PATHS = 3P/boost/include;
@@ -661,7 +667,7 @@
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				MARKETING_VERSION = 2.10;
 				PRODUCT_BUNDLE_IDENTIFIER = "be.bosa.beidconnect.safari-extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -677,6 +683,7 @@
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 11;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 7682K6YL8X;
 				ENABLE_HARDENED_RUNTIME = YES;
 				HEADER_SEARCH_PATHS = 3P/boost/include;
@@ -686,7 +693,7 @@
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				MARKETING_VERSION = 2.10;
 				PRODUCT_BUNDLE_IDENTIFIER = "be.bosa.beidconnect.safari-extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -704,6 +711,7 @@
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 11;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 7682K6YL8X;
 				ENABLE_HARDENED_RUNTIME = YES;
 				HEADER_SEARCH_PATHS = 3P/boost/include;
@@ -712,7 +720,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				MARKETING_VERSION = 2.10;
 				PRODUCT_BUNDLE_IDENTIFIER = be.bosa.beidconnect.safari;
 				PRODUCT_NAME = "BeIDConnect Extension";
@@ -729,6 +737,7 @@
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 11;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 7682K6YL8X;
 				ENABLE_HARDENED_RUNTIME = YES;
 				HEADER_SEARCH_PATHS = 3P/boost/include;
@@ -737,7 +746,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				MARKETING_VERSION = 2.10;
 				PRODUCT_BUNDLE_IDENTIFIER = be.bosa.beidconnect.safari;
 				PRODUCT_NAME = "BeIDConnect Extension";
