@@ -278,6 +278,7 @@
     <ClCompile Include="..\..\common\CardReader.cpp" />
     <ClCompile Include="..\..\common\CertChainRequestHandler.cpp" />
     <ClCompile Include="..\..\common\comm.cpp" />
+    <ClCompile Include="..\..\common\debughelper.cpp" />
     <ClCompile Include="..\..\common\crypto.cpp" />
     <ClCompile Include="..\..\common\hash.cpp" />
     <ClCompile Include="..\..\common\IDRequestHandler.cpp" />

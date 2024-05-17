@@ -12,6 +12,7 @@
 
 #include <stdio.h>
 #include <vector>
+#include <string>
 
 class DebugStackTrace
 {
@@ -25,7 +26,7 @@ public:
     void dump();
 };
 
-//#define DECLAREFUNCTIONHEADER DebugStackTrace debugStackTrace(__func__);
-#define DECLAREFUNCTIONHEADER DebugStackTrace debugStackTrace(__PRETTY_FUNCTION__);
+#define DECLAREFUNCTIONHEADER DebugStackTrace debugStackTrace(__func__);
+//#define DECLAREFUNCTIONHEADER DebugStackTrace debugStackTrace(__PRETTY_FUNCTION__);
 
 #endif /* debughelper_hpp */
