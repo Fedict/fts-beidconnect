@@ -11,6 +11,15 @@ beidconnect: asn1.o BEIDCard.o CardFactory.o CardReader.o CertChainRequestHandle
 install:
 	install -d $(DESTDIR)/usr/bin
 	install -m 755 beidconnect $(DESTDIR)/usr/bin/
+	mkdir -p /etc/chromium/native-messaging-hosts
+	mkdir -p /etc/opt/chrome/native-messaging-hosts
+	mkdir -p /etc/opt/edge/native-messaging-hosts
+	mkdir -p /usr/lib/mozilla/native-messaging-hosts
+	mkdir -p /usr/lib64/mozilla/native-messaging-hosts
+	$(DESTDIR)/usr/bin/beidconnect -setup $(DESTDIR)/usr/bin/ /etc/chromium/native-messaging-hosts/ /usr/lib/mozilla/native-messaging-hosts/
+	cp --update=none /etc/chromium/native-messaging-hosts/be.bosa.beidconnect.json /etc/opt/chrome/native-messaging-hosts/
+	cp --update=none /etc/chromium/native-messaging-hosts/be.bosa.beidconnect.json /etc/opt/edge/native-messaging-hosts/
+	cp --update=none /usr/lib/mozilla/native-messaging-hosts/be.bosa.beidconnect.json /usr/lib64/mozilla/native-messaging-hosts/
 
 clean:
 	rm -f *.o beidconnect
