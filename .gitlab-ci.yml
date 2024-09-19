@@ -267,21 +267,3 @@ build:ubuntu-2004-32:
     SHORT: u2004
     MIRROR: http://archive.ubuntu.com/ubuntu
     SCRIPT: /usr/share/debootstrap/scripts/gutsy
-
-build:ubuntu-1804-64:
-  <<: *debuild
-  variables:
-    CODE: bionic
-    ARCH: amd64
-    SHORT: u1804
-    MIRROR: http://archive.ubuntu.com/ubuntu
-    SCRIPT: /usr/share/debootstrap/scripts/gutsy
-
-build:ubuntu-1804-32:
-  <<: *debuild
-  variables:
-    CODE: bionic
-    ARCH: i386
-    SHORT: u1804
-    MIRROR: http://archive.ubuntu.com/ubuntu
-    SCRIPT: /usr/share/debootstrap/scripts/gutsy

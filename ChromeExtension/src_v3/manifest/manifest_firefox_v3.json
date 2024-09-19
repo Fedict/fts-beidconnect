@@ -1,0 +1,49 @@
+{
+    "name": "BeIDConnect",
+    "version": "0.0.0",
+    "manifest_version": 3,
+    "description": "__MSG_appDesc__",
+    "default_locale": "en",
+    "icons": {
+        "48": "icon48.png",
+        "128": "icon128.png"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "*://*/*",
+                "file:///*"
+            ],
+            "js": [
+                "content.js"
+            ],
+            "run_at": "document_start",
+            "all_frames": true
+        }
+    ],
+    "background": {
+        "scripts": [
+            "background.js"
+        ]
+    },
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "page.js"
+            ],
+            "matches": [
+                "*://*/*",
+                "file:///*"
+            ]
+        }
+    ],
+    "permissions": [
+        "nativeMessaging"
+    ],
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "beidconnect@bosa.be",
+            "strict_min_version": "109.0"
+        }
+    }
+}

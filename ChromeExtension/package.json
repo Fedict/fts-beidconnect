@@ -8,12 +8,15 @@
     "del": "^2.2.2",
     "gulp": "^4.0.2",
     "gulp-jshint": "^2.1.0",
-    "gulp-json-editor": "^2.5.6",
-    "gulp-replace-task": "^2.0.1",
-    "gulp-replace": "^1.1.3",
+    "gulp-json-editor": "^2.6.0",
+    "gulp-rename": "^2.0.0",
+    "gulp-replace": "^1.1.4",
     "gulp-uglify": "^3.0.2",
     "gulp-zip": "^4.2.0",
-    "jshint": "^2.13.4",
+    "jshint": "^2.13.6",
     "yargs": "^17.3.1"
+  },
+  "dependencies": {
+    "beidconnect": "file:"
   }
 }

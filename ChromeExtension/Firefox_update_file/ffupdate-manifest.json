@@ -13,6 +13,10 @@
         {
           "version": "0.0.12",
           "update_link": "https://eid.static.bosa.fgov.be/beidconnect-fx-0.0.12.xpi"
+        },
+        {
+          "version": "0.0.16",
+          "update_link": "https://eid.static.bosa.fgov.be/beidconnect-fx-0.0.16.xpi"
         }
     ]
     }
