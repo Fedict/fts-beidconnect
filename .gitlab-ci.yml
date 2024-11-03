@@ -106,6 +106,111 @@ srpm:
     when:
       on_success
 
+.build-suse-base:
+  dependencies:
+    - srpm
+  stage: binary
+  before_script:
+    - VER=$(cat products/version)
+    - VERSHORT=${VER#*-}
+  script:
+  #https://documentation.suse.com/sbp/systems-management/pdf/SBP-RPM-Packaging_en.pdf
+    - zypper clean -a
+    - zypper -vvv ref -f
+    - zypper --non-interactive up
+    - zypper --non-interactive install -t pattern devel_basis
+    - zypper --non-interactive install -t pattern devel_C_C++
+    - zypper --non-interactive install -t pattern devel_perl
+    - zypper --non-interactive install build perl-XML-XPath perl-libwww-perl perl-LWP-Protocol-https hostname cpio zstd
+    - export HTTPS_PROXY=${https_proxy}
+    - export HTTP_PROXY=${http_proxy}
+    - build --no-checks --clean -debug --dist $DVER --repo $REPO --define "revision $VERSHORT" --define "version $VER" products/srpm/beidconnect-*.src.rpm
+    #rpmbuild --rebuild --define "version 2.10.147.g2c1ad2b" beidconnect-2.10.147.g2c1ad2b-1.fc40.src.rpm
+  after_script:
+    - mkdir -p products/$DIST-$DVER-$ARCH
+    - mv /var/tmp/build-root/home/abuild/rpmbuild/RPMS/*/*rpm products/$DIST-$DVER-$ARCH/
+  allow_failure: true
+  artifacts:
+    paths:
+      - products/$DIST-$DVER-$ARCH
+    when:
+      on_success
+
+# .build-suse-base-arm:
+#   extends: .build-suse-base
+#   variables:
+#     ARCH_TAG: arm
+#   tags:
+#   - docker
+#   - $ARCH_TAG
+#   image: $CI_REGISTRY_IMAGE/suse-build:$CI_COMMIT_REF_SLUG-$ARCH_TAG
+
+.build-suse-base-x86:
+  extends: .build-suse-base
+  variables:
+    ARCH_TAG: x86
+  image: opensuse/tumbleweed:latest
+
+# .build-suse-arm: &build-suse-arm
+#   extends: .build-suse-base-arm
+#   dependencies:
+#     - srpm
+#   stage: binary-package
+#   needs:
+#     - srpm
+
+.build-suse-x86: &build-suse-x86
+  extends: .build-suse-base-x86
+  dependencies:
+    - srpm
+  stage: binary
+  needs:
+    - srpm
+
+build:suse_tumbleweed:
+  <<: *build-suse-x86
+  variables:
+    DIST: opensuse
+    DVER: "tumbleweed"
+    ARCH: x86_64
+    REPO: https://ftp.halifax.rwth-aachen.de/opensuse/tumbleweed/repo/oss/
+
+build:suse_15_5:
+  <<: *build-suse-x86
+  variables:
+    DIST: opensuse
+    DVER: "sl15.5"
+    ARCH: x86_64
+    REPO: https://ftp.halifax.rwth-aachen.de/opensuse/distribution/leap/15.5/repo/oss
+
+# build:suse_15_5_arm:
+#   <<: *build-suse-arm
+#   variables:
+#     DIST: opensuse
+#     DVER: "15.5"
+#     ARCH: aarch64
+#   only:
+#     variables:
+#     - "15.5"
+
+build:suse_15_6:
+  <<: *build-suse-x86
+  variables:
+    DIST: opensuse
+    DVER: "sl15.6"
+    ARCH: x86_64
+    REPO: https://ftp.halifax.rwth-aachen.de/opensuse/distribution/leap/15.6/repo/oss
+
+# build:suse_15_6_arm:
+#   <<: *build-suse-arm
+#   variables:
+#     DIST: opensuse
+#     DVER: "15.6"
+#     ARCH: aarch64
+#   only:
+#     variables:
+#     - "15.6"
+
 build:fedora-39-64:
   <<: *fedbuild
   variables:
@@ -134,6 +239,20 @@ build:fedora-40-32:
     ARCH: i386
     DIST: fedora
 
+build:fedora-41-64:
+  <<: *fedbuild
+  variables:
+    VERSION: 41
+    ARCH: x86_64
+    DIST: fedora
+
+build:fedora-41-32:
+  <<: *fedbuild
+  variables:
+    VERSION: 41
+    ARCH: i386
+    DIST: fedora
+
 build:centos-stream-9-64:
   <<: *fedbuild
   variables:
@@ -141,19 +260,19 @@ build:centos-stream-9-64:
     ARCH: x86_64
     DIST: centos-stream
 
-build:debian-10-32:
+build:debian-12-32:
   <<: *debuild
   variables:
-    CODE: buster
-    SHORT: deb10
+    CODE: bookworm
+    SHORT: deb12
     ARCH: i386
     MIRROR: http://deb.debian.org/debian
 
-build:debian-10-64:
+build:debian-12-64:
   <<: *debuild
   variables:
-    CODE: buster
-    SHORT: deb10
+    CODE: bookworm
+    SHORT: deb12
     ARCH: amd64
     MIRROR: http://deb.debian.org/debian
 
@@ -173,19 +292,19 @@ build:debian-11-64:
     ARCH: amd64
     MIRROR: http://deb.debian.org/debian
 
-build:debian-12-32:
+build:debian-10-32:
   <<: *debuild
   variables:
-    CODE: bookworm
-    SHORT: deb12
+    CODE: buster
+    SHORT: deb10
     ARCH: i386
     MIRROR: http://deb.debian.org/debian
 
-build:debian-12-64:
+build:debian-10-64:
   <<: *debuild
   variables:
-    CODE: bookworm
-    SHORT: deb12
+    CODE: buster
+    SHORT: deb10
     ARCH: amd64
     MIRROR: http://deb.debian.org/debian
 
