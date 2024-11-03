@@ -115,6 +115,7 @@ srpm:
     - VERSHORT=${VER#*-}
   script:
   #https://documentation.suse.com/sbp/systems-management/pdf/SBP-RPM-Packaging_en.pdf
+    - sed -i "s,http://download.opensuse.org,http://ftp.halifax.rwth-aachen.de/opensuse,g" /etc/zypp/repos.d/*.repo
     - zypper clean -a
     - zypper -vvv ref -f
     - zypper --non-interactive up
