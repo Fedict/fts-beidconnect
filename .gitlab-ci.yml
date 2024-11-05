@@ -1,6 +1,7 @@
 stages:
 - source
 - binary
+- allbinaries
 
 srpm:
   stage: source
@@ -26,8 +27,9 @@ srpm:
   artifacts:
     paths:
     - products
-    when:
-      on_success
+    when: on_success
+    expire_in: 1 week
+
 
 .build:fedora: &fedbuild
   stage: binary
@@ -51,8 +53,8 @@ srpm:
     name: "beidconnect-build-$DIST-$VERSION-$ARCH"
     paths:
     - products/$DIST-$VERSION-$ARCH
-    when:
-      on_success
+    when: on_success
+    expire_in: 1 week
 
 .build:deb: &debuild
   stage: binary
@@ -77,8 +79,8 @@ srpm:
     name: "beidconnect-build-$SHORT-$CODE-$ARCH"
     paths:
     - products/deb
-    when:
-      on_success
+    when: on_success
+    expire_in: 1 week
 
 .build:ubuntu: &ubbuild
   stage: binary
@@ -103,8 +105,8 @@ srpm:
     name: "beidconnect-build-$SHORT-$CODE-$ARCH"
     paths:
     - products/deb
-    when:
-      on_success
+    when: on_success
+    expire_in: 1 week
 
 .build-suse-base:
   dependencies:
@@ -134,31 +136,14 @@ srpm:
   artifacts:
     paths:
       - products/$DIST-$DVER-$ARCH
-    when:
-      on_success
-
-# .build-suse-base-arm:
-#   extends: .build-suse-base
-#   variables:
-#     ARCH_TAG: arm
-#   tags:
-#   - docker
-#   - $ARCH_TAG
-#   image: $CI_REGISTRY_IMAGE/suse-build:$CI_COMMIT_REF_SLUG-$ARCH_TAG
+    when: on_success
+    expire_in: 1 week
 
 .build-suse-base-x86:
   extends: .build-suse-base
   variables:
     ARCH_TAG: x86
   image: opensuse/tumbleweed:latest
-
-# .build-suse-arm: &build-suse-arm
-#   extends: .build-suse-base-arm
-#   dependencies:
-#     - srpm
-#   stage: binary-package
-#   needs:
-#     - srpm
 
 .build-suse-x86: &build-suse-x86
   extends: .build-suse-base-x86
@@ -184,16 +169,6 @@ build:suse_15_5:
     ARCH: x86_64
     REPO: https://ftp.halifax.rwth-aachen.de/opensuse/distribution/leap/15.5/repo/oss
 
-# build:suse_15_5_arm:
-#   <<: *build-suse-arm
-#   variables:
-#     DIST: opensuse
-#     DVER: "15.5"
-#     ARCH: aarch64
-#   only:
-#     variables:
-#     - "15.5"
-
 build:suse_15_6:
   <<: *build-suse-x86
   variables:
@@ -201,16 +176,6 @@ build:suse_15_6:
     DVER: "sl15.6"
     ARCH: x86_64
     REPO: https://ftp.halifax.rwth-aachen.de/opensuse/distribution/leap/15.6/repo/oss
-
-# build:suse_15_6_arm:
-#   <<: *build-suse-arm
-#   variables:
-#     DIST: opensuse
-#     DVER: "15.6"
-#     ARCH: aarch64
-#   only:
-#     variables:
-#     - "15.6"
 
 build:fedora-39-64:
   <<: *fedbuild
@@ -362,3 +327,14 @@ build:ubuntu-2004-32:
     SHORT: u2004
     MIRROR: http://archive.ubuntu.com/ubuntu
     SCRIPT: /usr/share/debootstrap/scripts/gutsy
+
+allbinaries:
+  stage: allbinaries
+  image: fedora:40
+  script:
+    - ls -l products
+  artifacts:
+    paths:
+    - products
+    when: on_success
+    expire_in: 1 yrs
