@@ -134,6 +134,7 @@ srpm:
     - mv /var/tmp/build-root/home/abuild/rpmbuild/RPMS/*/*rpm products/$DIST-$DVER-$ARCH/
   allow_failure: true
   artifacts:
+    name: "beidconnect-build-$DIST-$DVER-$ARCH"
     paths:
       - products/$DIST-$DVER-$ARCH
     when: on_success
@@ -332,9 +333,9 @@ allbinaries:
   stage: allbinaries
   image: fedora:40
   script:
-    - ls -l products
+    - echo Gen
   artifacts:
     paths:
     - products
     when: on_success
-    expire_in: 1 yrs
+    expire_in: 3 weeks
