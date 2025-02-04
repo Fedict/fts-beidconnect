@@ -94,6 +94,22 @@ public:
         }
         return BeidConnect_Result::general_error;
     }
+    /// <summary>
+    /// Return error type to the browser extension
+    /// </summary>
+    /// <returns>Error type to return to the browser extension</returns>
+    const char* resultType() const
+    {
+        return "SCard";
+    }
+    /// <summary>
+    /// Map the card SW error to the error string to return to the browser extension
+    /// </summary>
+    /// <returns>Raw Error code to return to the browser extension</returns>
+    const uint32_t resultRaw() const
+    {
+        return SCardResult;
+    }
 };
 
 enum class CardException_Code : uint32_t
@@ -193,6 +209,22 @@ public:
         }
         return BeidConnect_Result::general_error;
     }
+    /// <summary>
+    /// Return error type to the browser extension
+    /// </summary>
+    /// <returns>Error type to return to the browser extension</returns>
+    const char* resultType() const
+    {
+        return "Card";
+    }
+    /// <summary>
+    /// Map the card SW error to the error string to return to the browser extension
+    /// </summary>
+    /// <returns>Raw Error code to return to the browser extension</returns>
+    const uint32_t resultRaw() const
+    {
+        return SW;
+    }
 };
 
 enum class BeidConnectException_Code : uint32_t
@@ -258,6 +290,22 @@ public:
             break;
         }
         return BeidConnect_Result::general_error;
+    }
+    /// <summary>
+    /// Return error type to the browser extension
+    /// </summary>
+    /// <returns>Error type to return to the browser extension</returns>
+    const char* resultType() const
+    {
+        return "BeidConnect";
+    }
+    /// <summary>
+    /// Map the card SW error to the error string to return to the browser extension
+    /// </summary>
+    /// <returns>Raw Error code to return to the browser extension</returns>
+    const uint32_t resultRaw() const
+    {
+        return (uint32_t)code;
     }
 };
 

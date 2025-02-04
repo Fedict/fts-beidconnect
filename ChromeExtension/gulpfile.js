@@ -24,6 +24,7 @@ var EdgeVersion = "1.0.3";
 var FirefoxVersion = "0.0.16";
 // Safari version is coded inside the \SafariAppExtension\SafariAppExtension Extension\SafariExtensionHandler.mm source file
 
+// https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns
 const AllowedDomains = ['https://*.belgium.be/*', 'https://*.fgov.be/*', 'https://gcloudbelgium.sharepoint.com/*'];
 
 //#region clean
@@ -167,7 +168,7 @@ function taskmanifestreleasefirefox() {
     return gulp.src('./src/main/manifest.json')
         .pipe(jeditor(function (manifest) {
             manifest.version = FirefoxVersion;
-            manifest.content_scripts[0].matches = ['https://*.belgium.be/*', 'https://*.fgov.be/*', 'https://gcloudbelgium.sharepoint.com/*'];
+            manifest.content_scripts[0].matches = AllowedDomains;
             manifest.applications = { 'gecko': { 'id': 'beidconnect@bosa.be', 'strict_min_version': '58.0', "update_url": "https://eid.static.bosa.fgov.be/ffupdate-manifest.json" } };
             return manifest;
         }))

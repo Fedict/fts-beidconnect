@@ -83,7 +83,7 @@ BECOM_Code readMessage(std::stringstream &stream)
 
 void sendMessage(const std::string response)
 {
-    std::string response2 = response.substr(0, response.length() - 1);
+    std::string response2 = response.substr(0, response.length() /*- 1*/);
     size_t length = response2.length();
     // include nullterminator here
     uint32_t len = (uint32_t)length /*+ 1*/;

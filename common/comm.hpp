@@ -9,6 +9,8 @@
 namespace BeidConnect_JSON_field
 {
     constexpr char result[] = "result";
+    constexpr char resultType[] = "resultType";
+    constexpr char resultRaw[] = "resultRaw";
     constexpr char report[] = "report";
     constexpr char version[] = "version";
     constexpr char builddate[] = "BuildDate";
@@ -26,6 +28,7 @@ namespace BeidConnect_JSON_field
     constexpr char operation[] = "operation";
     constexpr char correlationId[] = "correlationId";
     constexpr char pin[] = "pin";
+    constexpr char SCardException[] = "SCardException";
     /// <summary>
     /// Digest to sign
     /// </summary>

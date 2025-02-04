@@ -127,21 +127,29 @@ std::string IDRequestHandler::process()
     {
         e.log();
         response.put(BeidConnect_JSON_field::result, e.result());
+        response.put(BeidConnect_JSON_field::resultType, e.resultType());
+        response.put(BeidConnect_JSON_field::resultRaw, e.resultRaw());
     }
     catch (CardException& e)
     {
         e.log();
         response.put(BeidConnect_JSON_field::result, e.result());
+        response.put(BeidConnect_JSON_field::resultType, e.resultType());
+        response.put(BeidConnect_JSON_field::resultRaw, e.resultRaw());
     }
     catch (BeidConnectException& e)
     {
         e.log();
         response.put(BeidConnect_JSON_field::result, e.result());
+        response.put(BeidConnect_JSON_field::resultType, e.resultType());
+        response.put(BeidConnect_JSON_field::resultRaw, e.resultRaw());
     }
     catch (...)
     {
         log_error("%s: E: Exception", __func__);
         response.put(BeidConnect_JSON_field::result, BeidConnect_Result::general_error);
+        response.put(BeidConnect_JSON_field::resultType, BeidConnect_Result::general_error);
+        response.put(BeidConnect_JSON_field::resultRaw, 0xFFFFFFFF);
     }
     post_process(response);
     std::stringstream streamResponse;
