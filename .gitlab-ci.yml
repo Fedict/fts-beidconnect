@@ -178,20 +178,6 @@ build:suse_15_6:
     ARCH: x86_64
     REPO: https://ftp.halifax.rwth-aachen.de/opensuse/distribution/leap/15.6/repo/oss
 
-build:fedora-39-64:
-  <<: *fedbuild
-  variables:
-    VERSION: 39
-    ARCH: x86_64
-    DIST: fedora
-
-build:fedora-39-32:
-  <<: *fedbuild
-  variables:
-    VERSION: 39
-    ARCH: i386
-    DIST: fedora
-
 build:fedora-40-64:
   <<: *fedbuild
   variables:
@@ -217,6 +203,20 @@ build:fedora-41-32:
   <<: *fedbuild
   variables:
     VERSION: 41
+    ARCH: i386
+    DIST: fedora
+
+build:fedora-42-64:
+  <<: *fedbuild
+  variables:
+    VERSION: 42
+    ARCH: x86_64
+    DIST: fedora
+
+build:fedora-42-32:
+  <<: *fedbuild
+  variables:
+    VERSION: 42
     ARCH: i386
     DIST: fedora
 
@@ -274,6 +274,42 @@ build:debian-10-64:
     SHORT: deb10
     ARCH: amd64
     MIRROR: http://deb.debian.org/debian
+
+build:ubuntu-2504-64:
+  <<: *ubbuild
+  variables:
+    CODE: noble
+    ARCH: amd64
+    SHORT: u2504
+    MIRROR: http://archive.ubuntu.com/ubuntu
+    SCRIPT: /usr/share/debootstrap/scripts/gutsy
+
+build:ubuntu-2504-32:
+  <<: *ubbuild
+  variables:
+    CODE: noble
+    ARCH: i386
+    SHORT: u2504
+    MIRROR: http://archive.ubuntu.com/ubuntu
+    SCRIPT: /usr/share/debootstrap/scripts/gutsy
+
+build:ubuntu-2410-64:
+  <<: *ubbuild
+  variables:
+    CODE: noble
+    ARCH: amd64
+    SHORT: u2410
+    MIRROR: http://archive.ubuntu.com/ubuntu
+    SCRIPT: /usr/share/debootstrap/scripts/gutsy
+
+build:ubuntu-2410-32:
+  <<: *ubbuild
+  variables:
+    CODE: noble
+    ARCH: i386
+    SHORT: u2410
+    MIRROR: http://archive.ubuntu.com/ubuntu
+    SCRIPT: /usr/share/debootstrap/scripts/gutsy
 
 build:ubuntu-2404-64:
   <<: *ubbuild

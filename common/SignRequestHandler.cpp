@@ -100,14 +100,18 @@ std::string SignRequestHandler::process()
                     pin = "";
                 }
 
-                signatureDone = true;
+                /*signatureDone = true;*/
 
                 // if we get here, we successfully selected the key or found the signing certificate
                 card->logon((int)pin.size(), (char*)pin.c_str());
 
                 int sw = 0;
                 lasterror = card->sign(hash, algo2str((char*)digestAlgo.c_str()), signature, &l_signature, &sw);
-                if (lasterror)
+                if (lasterror == 0)
+                {
+                    signatureDone = true;
+                }
+                else //if (lasterror)
                 {
                     log_error("%s: E: card->sign returned %08X", __func__, lasterror);
                     try

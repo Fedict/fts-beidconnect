@@ -13,8 +13,7 @@
     "gulp-replace": "^1.1.4",
     "gulp-uglify": "^3.0.2",
     "gulp-zip": "^4.2.0",
-    "jshint": "^2.13.6",
-    "yargs": "^17.3.1"
+    "jshint": "^2.13.6"
   },
   "dependencies": {
     "beidconnect": "file:"

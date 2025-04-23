@@ -87,3 +87,8 @@ https://support.microsoft.com/en-us/topic/what-is-smartscreen-and-how-can-it-hel
 
 
 
+pcsc-lite linux : Controlling access to smart cards by using polkit
+
+https://blog.apdu.fr/index-54.html
+https://github.com/LudovicRousseau/PCSC/blob/master/doc/README.polkit
+https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/8/html/security_hardening/assembly_controlling-access-to-smart-cards-using-polkit_security-hardening#con_smart-card-access-control-through-polkit_assembly_controlling-access-to-smart-cards-using-polkit

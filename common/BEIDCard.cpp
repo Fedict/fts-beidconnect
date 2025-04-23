@@ -327,10 +327,10 @@ long BEIDCard::sign(const std::vector<unsigned char>& in, int hashAlgo, unsigned
         cmdRetrieveSignature.patchAt(4, 0x00);
         break;
     case 0x6401:
+    default:
         log_error("%s: E: Card returns SW(%04X)", __func__, responseGenSign.getSW());
         throw CardException(responseGenSign.getSW());
-    default:
-        return -1;
+        //return -1;
     }
     CardAPDUResponse responseRetrieveSignature = reader->apdu(cmdRetrieveSignature);
     *l_out = responseRetrieveSignature.getDataLen();

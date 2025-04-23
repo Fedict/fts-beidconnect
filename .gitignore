@@ -259,3 +259,6 @@ ChromeExtension/target
 /win32/VS_2019/ReleaseAdmin
 /win32/VS_2022/ReleaseAdmin
 win32/beidconnectlogfile.txt
+/ChromeExtension/targetDebug
+/ChromeExtension/targetRelease
+/ChromeExtension/targetReleaseWithMinFin

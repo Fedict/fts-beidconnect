@@ -296,7 +296,7 @@
     <ClCompile Include="..\..\common\VersionRequestHandler.cpp" />
     <ClCompile Include="..\..\common\VirtualCard.cpp" />
     <ClCompile Include="..\..\common\VirtualReader.cpp" />
-    <ClCompile Include="..\..\common\x509Util.c" />
+    <ClCompile Include="..\..\common\x509Util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc" />

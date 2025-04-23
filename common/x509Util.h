@@ -11,10 +11,6 @@
 #define strnicmp strncasecmp
 #endif
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #define LEN_DATE  14
 
 //X509 asn1 paths for certificate elements
@@ -42,9 +38,5 @@ int getKeyInfo(const unsigned char *cert, size_t l_cert, int *keyType, size_t *k
 //unsigned int getRSAKeyLength(const char* cert, unsigned int l_cert);
 //char* getValidUntil(char* cert, size_t l_cert);
 //int isTimeBeforeNow (int len, char *p_atime);
-
-#ifdef __cplusplus
-   }
-#endif
 
 #endif /* x509Util_h */

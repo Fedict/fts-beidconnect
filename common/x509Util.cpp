@@ -358,8 +358,8 @@ int getKeyInfo(const unsigned char *cert, size_t l_cert, int *keyType, size_t *k
       return E_ASN_ITEM_NOT_FOUND;
    }
  
-   char *oid = oid2str(keyalg.p_data, keyalg.l_data);
-   if (strcmp(oid, "1.2.840.113549.1.1.1") == 0) {
+   std::string oid = oid2str(keyalg.p_data, keyalg.l_data);
+   if (oid=="1.2.840.113549.1.1.1") {
       *keyType = X509_KEYTYPE_RSA;
 
       ret = asn1_get_item(keyinfo.p_data, keyinfo.l_data, "\2\1\1", &key);
@@ -368,7 +368,7 @@ int getKeyInfo(const unsigned char *cert, size_t l_cert, int *keyType, size_t *k
       }
       *keySize = key.l_data;
    }
-   else if (strcmp(oid, "1.2.840.10045.2.1") == 0) {
+   else if (oid=="1.2.840.10045.2.1") {
       *keyType = X509_KEYTYPE_EC;
       ret = asn1_get_item(keyinfo.p_data, keyinfo.l_data, "\2", &key);
       if (ret == E_ASN_ITEM_NOT_FOUND) {
