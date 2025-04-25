@@ -18,7 +18,7 @@
 		E8AB54DA24110F070051D9A2 /* util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8AB54A924110F070051D9A2 /* util.cpp */; };
 		E8AB54DC24110F070051D9A2 /* RequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8AB54AF24110F070051D9A2 /* RequestHandler.cpp */; };
 		E8AB54DE24110F070051D9A2 /* BEIDCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8AB54B124110F070051D9A2 /* BEIDCard.cpp */; };
-		E8AB54E024110F070051D9A2 /* x509Util.c in Sources */ = {isa = PBXBuildFile; fileRef = E8AB54BD24110F070051D9A2 /* x509Util.c */; };
+		E8AB54E024110F070051D9A2 /* x509Util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8AB54BD24110F070051D9A2 /* x509Util.cpp */; };
 		E8AB54E324110F070051D9A2 /* CardReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8AB54C224110F070051D9A2 /* CardReader.cpp */; };
 		E8AB54E424110F070051D9A2 /* CardFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8AB54C424110F070051D9A2 /* CardFactory.cpp */; };
 		E8AB54E524110F070051D9A2 /* SCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8AB54C524110F070051D9A2 /* SCard.cpp */; };
@@ -87,7 +87,7 @@
 		E8AB54BA24110F070051D9A2 /* SCard.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SCard.hpp; sourceTree = "<group>"; };
 		E8AB54BB24110F070051D9A2 /* CardErrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardErrors.h; sourceTree = "<group>"; };
 		E8AB54BC24110F070051D9A2 /* comm.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = comm.hpp; sourceTree = "<group>"; };
-		E8AB54BD24110F070051D9A2 /* x509Util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = x509Util.c; sourceTree = "<group>"; };
+		E8AB54BD24110F070051D9A2 /* x509Util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = x509Util.cpp; sourceTree = "<group>"; };
 		E8AB54BE24110F070051D9A2 /* ReaderList.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ReaderList.hpp; sourceTree = "<group>"; };
 		E8AB54C024110F070051D9A2 /* native.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = native.cpp; sourceTree = "<group>"; };
 		E8AB54C224110F070051D9A2 /* CardReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CardReader.cpp; sourceTree = "<group>"; };
@@ -243,7 +243,7 @@
 				E8AB54C624110F070051D9A2 /* util.h */,
 				E8AB54CA24110F070051D9A2 /* hash.cpp */,
 				E8AB54D324110F070051D9A2 /* hash.h */,
-				E8AB54BD24110F070051D9A2 /* x509Util.c */,
+				E8AB54BD24110F070051D9A2 /* x509Util.cpp */,
 				E8AB54D524110F070051D9A2 /* x509Util.h */,
 				F3E361682BB5840000C4A4F4 /* debughelper.cpp */,
 				F3E361692BB5840000C4A4F4 /* debughelper.hpp */,
@@ -368,7 +368,7 @@
 				E8AB54E524110F070051D9A2 /* SCard.cpp in Sources */,
 				E8AB54E924110F070051D9A2 /* hash.cpp in Sources */,
 				E8AB54EB24110F070051D9A2 /* VirtualCard.cpp in Sources */,
-				E8AB54E024110F070051D9A2 /* x509Util.c in Sources */,
+				E8AB54E024110F070051D9A2 /* x509Util.cpp in Sources */,
 				E808DCC4267256D1006CFED0 /* IDRequestHandler.cpp in Sources */,
 				E85AB66A24166DFB00BE9F0A /* comm.cpp in Sources */,
 				E8AB54E424110F070051D9A2 /* CardFactory.cpp in Sources */,
