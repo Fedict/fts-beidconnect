@@ -29,16 +29,13 @@ int VirtualCard::type() const
     //return CARD_TYPE_PKCS15;
 };
 
-#define WHERE "VirtualCard::readCertificateChain"
 void VirtualCard::readCertificateChain(std::vector<std::shared_ptr<const CardFile>>& subCerts, std::shared_ptr<const CardFile>& rootCert)
 {
     subCerts.push_back(getFile(CardFiles::Cacert));
     rootCert = getFile(CardFiles::Rootcert);
     do_sleep(1000); //virtual read time
 }
-#undef WHERE
 
-#define WHERE "VirtualCard::SelectKey()"
 void VirtualCard::selectKey(CardKeys pintype, const std::vector<unsigned char>& cert)
 {
 #define eaZyID_PROVIDES_SIGNING_CERT    0
@@ -49,7 +46,6 @@ void VirtualCard::selectKey(CardKeys pintype, const std::vector<unsigned char>& 
     if (memcmp(buf, cert, 500) != 0) {
         log_error("I: Virtual card does not contain the key for the requested certificate");
         ret = -1;
-        goto cleanup;
     }
 #endif
 }
@@ -93,17 +89,15 @@ long VirtualCard::sign(const std::vector<unsigned char>& in, int hashAlgo, unsig
 
     if ((in.size() == 0) || (in.size() != hash_length_for_algo(hashAlgo))) {
         log_error("hash input has wrong length for the specified digesting algo");
-        CLEANUP(E_DIGEST_LEN);
+        ret = E_DIGEST_LEN;
     }
+    else{
+        memcpy(out, rand, 256);
+        *l_out = (unsigned int)256;
+        *sw = 0x9000;
 
-    memcpy(out, rand, 256);
-    *l_out = (unsigned int)256;
-    *sw = 0x9000;
-
-    do_sleep(300); //virtual read time
-
-cleanup:
-
+        do_sleep(300); //virtual read time
+    }
     return (ret);
 }
 

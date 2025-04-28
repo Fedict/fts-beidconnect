@@ -32,7 +32,7 @@
                              [alert setMessageText:@"Could not open Safari Preferences"/*error.localizedDescription*/];
                               NSString *text = [NSString stringWithFormat:@"Please try installing again.\n (%@)", error.localizedDescription];
                              [alert setInformativeText:text];
-                             [alert setAlertStyle:NSWarningAlertStyle];
+                   [alert setAlertStyle:NSAlertStyleWarning];
                              if ([alert runModal] == NSAlertFirstButtonReturn) {
                              }
                });

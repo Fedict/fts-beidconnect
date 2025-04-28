@@ -1,16 +1,15 @@
 stages:
 - source
 - binary
+- allbinaries
 
 srpm:
   stage: source
-  image: fedora:38
+  image: fedora:40
   before_script:
   # Fedora decided that restricting mirrors don't exist :-/
   - sed -i -e 's,^metalink=.*repo=fedora-.releasever.arch=.basearch$,baseurl=https://ftp.halifax.rwth-aachen.de/fedora/linux/releases/$releasever/Everything/$basearch/os/,g' /etc/yum.repos.d/fedora.repo; cat /etc/yum.repos.d/fedora.repo
   - sed -i -e 's,^metalink=.*repo=updates-released-f.releasever.arch=.basearch$,baseurl=https://ftp.halifax.rwth-aachen.de/fedora/linux/updates/$releasever/Everything/$basearch/,g' /etc/yum.repos.d/fedora-updates.repo; cat /etc/yum.repos.d/fedora-updates.repo
-  - sed -i -e 's,^metalink=.*repo=fedora-modular-.releasever.arch=.basearch$,baseurl=https://ftp.halifax.rwth-aachen.de/fedora/linux/releases/$releasever/Modular/$basearch/os/,g' /etc/yum.repos.d/fedora-modular.repo; cat /etc/yum.repos.d/fedora-modular.repo
-  - sed -i -e 's,^metalink=.*repo=updates-released-modular-f.releasever.arch=.basearch$,baseurl=https://ftp.halifax.rwth-aachen.de/fedora/linux/updates/$releasever/Modular/$basearch/,g' /etc/yum.repos.d/fedora-updates-modular.repo; cat /etc/yum.repos.d/fedora-updates-modular.repo
   - dnf install -y git rpm-build rpmdevtools
   - rpmdev-setuptree
   - VER=$(git describe --always | sed -e 's/-/./g')
@@ -28,35 +27,34 @@ srpm:
   artifacts:
     paths:
     - products
-    when:
-      on_success
+    when: on_success
+    expire_in: 1 week
+
 
 .build:fedora: &fedbuild
   stage: binary
-  image: fedora:38
+  image: fedora:40
   dependencies:
   - srpm
   before_script:
   # Fedora decided that restricting mirrors don't exist :-/
   - sed -i -e 's,^metalink=.*repo=fedora-.releasever.arch=.basearch$,baseurl=https://ftp.halifax.rwth-aachen.de/fedora/linux/releases/$releasever/Everything/$basearch/os/,g' /etc/yum.repos.d/fedora.repo; cat /etc/yum.repos.d/fedora.repo
   - sed -i -e 's,^metalink=.*repo=updates-released-f.releasever.arch=.basearch$,baseurl=https://ftp.halifax.rwth-aachen.de/fedora/linux/updates/$releasever/Everything/$basearch/,g' /etc/yum.repos.d/fedora-updates.repo; cat /etc/yum.repos.d/fedora-updates.repo
-  - sed -i -e 's,^metalink=.*repo=fedora-modular-.releasever.arch=.basearch$,baseurl=https://ftp.halifax.rwth-aachen.de/fedora/linux/releases/$releasever/Modular/$basearch/os/,g' /etc/yum.repos.d/fedora-modular.repo; cat /etc/yum.repos.d/fedora-modular.repo
-  - sed -i -e 's,^metalink=.*repo=updates-released-modular-f.releasever.arch=.basearch$,baseurl=https://ftp.halifax.rwth-aachen.de/fedora/linux/updates/$releasever/Modular/$basearch/,g' /etc/yum.repos.d/fedora-updates-modular.repo; cat /etc/yum.repos.d/fedora-updates-modular.repo
   - dnf -y install mock git rpm-build rpmdevtools
   - VER=$(cat products/version)
   - sed -i -e 's,^metalink=.*repo=fedora-.releasever.arch=.basearch$,baseurl=https://ftp.halifax.rwth-aachen.de/fedora/linux/releases/$releasever/Everything/$basearch/os/,g' /etc/mock/templates/fedora-branched.tpl
   - sed -i -e 's,^metalink=.*repo=updates-released-f.releasever.arch=.basearch$,baseurl=https://ftp.halifax.rwth-aachen.de/fedora/linux/updates/$releasever/Everything/$basearch/,g' /etc/mock/templates/fedora-branched.tpl; cat /etc/mock/templates/fedora-branched.tpl
-  - sed -i -e 's,^mirrorlist=.*repo=epel-7.arch=.basearch,baseurl=https://ftp.halifax.rwth-aachen.de/fedora-epel/$releasever/$basearch/,g' /etc/mock/templates/epel-7.tpl; cat /etc/mock/templates/epel-7.tpl
   - sed -i -e 's,^mirrorlist=.*repo=epel-8.arch=.basearch,baseurl=https://ftp.halifax.rwth-aachen.de/fedora-epel/$releasever/Everything/$basearch/,g' /etc/mock/templates/epel-8.tpl; cat /etc/mock/templates/epel-8.tpl
-  - sed -i -e 's,^metalink=.*repo=epel-$releasever.arch=.basearch,baseurl=https://ftp.halifax.rwth-aachen.de/fedora-epel/$releasever/Everything/$basearch/,g' /etc/mock/templates/epel-9.tpl; cat /etc/mock/templates/epel-9.tpl
+  - sed -i -e 's,^mirrorlist=.*repo=epel-9.arch=.basearch,baseurl=https://ftp.halifax.rwth-aachen.de/fedora-epel/$releasever/Everything/$basearch/,g' /etc/mock/templates/epel-9.tpl; cat /etc/mock/templates/epel-9.tpl
+  - sed -i -e 's,^mirrorlist=.*repo=epel-10.arch=.basearch,baseurl=https://ftp.halifax.rwth-aachen.de/fedora-epel/$releasever/Everything/$basearch/,g' /etc/mock/templates/epel-10.tpl; cat /etc/mock/templates/epel-10.tpl
   script:
   - mock --old-chroot --verbose -r $DIST-$VERSION-$ARCH --define "version $VER" --rebuild products/srpm/beidconnect-*.src.rpm --resultdir $CI_PROJECT_DIR/products/$DIST-$VERSION-$ARCH
   artifacts:
     name: "beidconnect-build-$DIST-$VERSION-$ARCH"
     paths:
     - products/$DIST-$VERSION-$ARCH
-    when:
-      on_success
+    when: on_success
+    expire_in: 1 week
 
 .build:deb: &debuild
   stage: binary
@@ -81,8 +79,8 @@ srpm:
     name: "beidconnect-build-$SHORT-$CODE-$ARCH"
     paths:
     - products/deb
-    when:
-      on_success
+    when: on_success
+    expire_in: 1 week
 
 .build:ubuntu: &ubbuild
   stage: binary
@@ -107,48 +105,118 @@ srpm:
     name: "beidconnect-build-$SHORT-$CODE-$ARCH"
     paths:
     - products/deb
-    when:
-      on_success
+    when: on_success
+    expire_in: 1 week
 
-build:fedora-37-64:
+.build-suse-base:
+  dependencies:
+    - srpm
+  stage: binary
+  before_script:
+    - VER=$(cat products/version)
+    - VERSHORT=${VER#*-}
+  script:
+  #https://documentation.suse.com/sbp/systems-management/pdf/SBP-RPM-Packaging_en.pdf
+    - sed -i "s,http://download.opensuse.org,http://ftp.halifax.rwth-aachen.de/opensuse,g" /etc/zypp/repos.d/*.repo
+    - zypper clean -a
+    - zypper -vvv ref -f
+    - zypper --non-interactive up
+    - zypper --non-interactive install -t pattern devel_basis
+    - zypper --non-interactive install -t pattern devel_C_C++
+    - zypper --non-interactive install -t pattern devel_perl
+    - zypper --non-interactive install build perl-XML-XPath perl-libwww-perl perl-LWP-Protocol-https hostname cpio zstd
+    - export HTTPS_PROXY=${https_proxy}
+    - export HTTP_PROXY=${http_proxy}
+    - build --no-checks --clean -debug --dist $DVER --repo $REPO --define "revision $VERSHORT" --define "version $VER" products/srpm/beidconnect-*.src.rpm
+    #rpmbuild --rebuild --define "version 2.10.147.g2c1ad2b" beidconnect-2.10.147.g2c1ad2b-1.fc40.src.rpm
+  after_script:
+    - mkdir -p products/$DIST-$DVER-$ARCH
+    - mv /var/tmp/build-root/home/abuild/rpmbuild/RPMS/*/*rpm products/$DIST-$DVER-$ARCH/
+  allow_failure: true
+  artifacts:
+    name: "beidconnect-build-$DIST-$DVER-$ARCH"
+    paths:
+      - products/$DIST-$DVER-$ARCH
+    when: on_success
+    expire_in: 1 week
+
+.build-suse-base-x86:
+  extends: .build-suse-base
+  variables:
+    ARCH_TAG: x86
+  image: opensuse/tumbleweed:latest
+
+.build-suse-x86: &build-suse-x86
+  extends: .build-suse-base-x86
+  dependencies:
+    - srpm
+  stage: binary
+  needs:
+    - srpm
+
+build:suse_tumbleweed:
+  <<: *build-suse-x86
+  variables:
+    DIST: opensuse
+    DVER: "tumbleweed"
+    ARCH: x86_64
+    REPO: https://ftp.halifax.rwth-aachen.de/opensuse/tumbleweed/repo/oss/
+
+build:suse_15_5:
+  <<: *build-suse-x86
+  variables:
+    DIST: opensuse
+    DVER: "sl15.5"
+    ARCH: x86_64
+    REPO: https://ftp.halifax.rwth-aachen.de/opensuse/distribution/leap/15.5/repo/oss
+
+build:suse_15_6:
+  <<: *build-suse-x86
+  variables:
+    DIST: opensuse
+    DVER: "sl15.6"
+    ARCH: x86_64
+    REPO: https://ftp.halifax.rwth-aachen.de/opensuse/distribution/leap/15.6/repo/oss
+
+build:fedora-40-64:
   <<: *fedbuild
   variables:
-    VERSION: 37
+    VERSION: 40
     ARCH: x86_64
     DIST: fedora
 
-build:fedora-37-32:
+build:fedora-40-32:
   <<: *fedbuild
   variables:
-    VERSION: 37
+    VERSION: 40
     ARCH: i386
     DIST: fedora
 
-build:fedora-38-64:
+build:fedora-41-64:
   <<: *fedbuild
   variables:
-    VERSION: 38
+    VERSION: 41
     ARCH: x86_64
     DIST: fedora
 
-build:fedora-38-32:
+build:fedora-41-32:
   <<: *fedbuild
   variables:
-    VERSION: 38
+    VERSION: 41
     ARCH: i386
     DIST: fedora
 
-build:fedora-39-64:
+build:fedora-42-64:
   <<: *fedbuild
   variables:
-    VERSION: 39
+    VERSION: 42
     ARCH: x86_64
     DIST: fedora
 
-build:fedora-39-32:
+build:fedora-42-32:
   <<: *fedbuild
   variables:
-    VERSION: 39
+    VERSION: 42
     ARCH: i386
     DIST: fedora
 
@@ -159,26 +227,19 @@ build:centos-stream-9-64:
     ARCH: x86_64
     DIST: centos-stream
 
-build:centos-7-64:
-  <<: *fedbuild
-  variables:
-    VERSION: 7
-    ARCH: x86_64
-    DIST: centos
-
-build:debian-10-32:
+build:debian-12-32:
   <<: *debuild
   variables:
-    CODE: buster
-    SHORT: deb10
+    CODE: bookworm
+    SHORT: deb12
     ARCH: i386
     MIRROR: http://deb.debian.org/debian
 
-build:debian-10-64:
+build:debian-12-64:
   <<: *debuild
   variables:
-    CODE: buster
-    SHORT: deb10
+    CODE: bookworm
+    SHORT: deb12
     ARCH: amd64
     MIRROR: http://deb.debian.org/debian
 
@@ -198,21 +259,75 @@ build:debian-11-64:
     ARCH: amd64
     MIRROR: http://deb.debian.org/debian
 
-build:debian-12-32:
+build:debian-10-32:
   <<: *debuild
   variables:
-    CODE: bookworm
-    SHORT: deb12
+    CODE: buster
+    SHORT: deb10
     ARCH: i386
     MIRROR: http://deb.debian.org/debian
 
-build:debian-12-64:
+build:debian-10-64:
   <<: *debuild
   variables:
-    CODE: bookworm
-    SHORT: deb12
+    CODE: buster
+    SHORT: deb10
     ARCH: amd64
     MIRROR: http://deb.debian.org/debian
+
+build:ubuntu-2504-64:
+  <<: *ubbuild
+  variables:
+    CODE: noble
+    ARCH: amd64
+    SHORT: u2504
+    MIRROR: http://archive.ubuntu.com/ubuntu
+    SCRIPT: /usr/share/debootstrap/scripts/gutsy
+
+build:ubuntu-2504-32:
+  <<: *ubbuild
+  variables:
+    CODE: noble
+    ARCH: i386
+    SHORT: u2504
+    MIRROR: http://archive.ubuntu.com/ubuntu
+    SCRIPT: /usr/share/debootstrap/scripts/gutsy
+
+build:ubuntu-2410-64:
+  <<: *ubbuild
+  variables:
+    CODE: noble
+    ARCH: amd64
+    SHORT: u2410
+    MIRROR: http://archive.ubuntu.com/ubuntu
+    SCRIPT: /usr/share/debootstrap/scripts/gutsy
+
+build:ubuntu-2410-32:
+  <<: *ubbuild
+  variables:
+    CODE: noble
+    ARCH: i386
+    SHORT: u2410
+    MIRROR: http://archive.ubuntu.com/ubuntu
+    SCRIPT: /usr/share/debootstrap/scripts/gutsy
+
+build:ubuntu-2404-64:
+  <<: *ubbuild
+  variables:
+    CODE: noble
+    ARCH: amd64
+    SHORT: u2404
+    MIRROR: http://archive.ubuntu.com/ubuntu
+    SCRIPT: /usr/share/debootstrap/scripts/gutsy
+
+build:ubuntu-2404-32:
+  <<: *ubbuild
+  variables:
+    CODE: noble
+    ARCH: i386
+    SHORT: u2404
+    MIRROR: http://archive.ubuntu.com/ubuntu
+    SCRIPT: /usr/share/debootstrap/scripts/gutsy
 
 build:ubuntu-2204-64:
   <<: *ubbuild
@@ -250,20 +365,13 @@ build:ubuntu-2004-32:
     MIRROR: http://archive.ubuntu.com/ubuntu
     SCRIPT: /usr/share/debootstrap/scripts/gutsy
 
-build:ubuntu-1804-64:
-  <<: *debuild
-  variables:
-    CODE: bionic
-    ARCH: amd64
-    SHORT: u1804
-    MIRROR: http://archive.ubuntu.com/ubuntu
-    SCRIPT: /usr/share/debootstrap/scripts/gutsy
-
-build:ubuntu-1804-32:
-  <<: *debuild
-  variables:
-    CODE: bionic
-    ARCH: i386
-    SHORT: u1804
-    MIRROR: http://archive.ubuntu.com/ubuntu
-    SCRIPT: /usr/share/debootstrap/scripts/gutsy
+allbinaries:
+  stage: allbinaries
+  image: fedora:40
+  script:
+    - echo Gen
+  artifacts:
+    paths:
+    - products
+    when: on_success
+    expire_in: 3 weeks

@@ -16,7 +16,6 @@
 #include "general.h"
 
 int main(int argc, const char * argv[]) {
-   
    for (int i = 1; i < argc; i++) {
       if (strcmp(argv[i], "-version") == 0) {
 
@@ -37,7 +36,6 @@ int main(int argc, const char * argv[]) {
    }
 
    log_init(LOG_FILE, 0, 0);
-   log_info("**** BeIDConnect native ****");
    runNative(argc, argv);    //run as chrome extension and exit afterwards
    return 0;
 }

@@ -3,13 +3,13 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		E808DCE8267B9793006CFED0 /* IDRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E808DCE6267B9793006CFED0 /* IDRequestHandler.cpp */; };
 		E808DCEF267B9855006CFED0 /* IDRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E808DCE6267B9793006CFED0 /* IDRequestHandler.cpp */; };
-		E80C8D7F2572FD8300F93C9A /* BeIdConnect Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E868AAE524A3BC450076AA3D /* BeIdConnect Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		E80C8D7F2572FD8300F93C9A /* BeIdConnect Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = E868AAE524A3BC450076AA3D /* BeIdConnect Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E80C8D842572FD8A00F93C9A /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E868AB7824A3D8680076AA3D /* SafariServices.framework */; };
 		E80C8D892572FDE900F93C9A /* PCSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E868AB7524A3D80B0076AA3D /* PCSC.framework */; };
 		E8110A7B24AA1FC300283393 /* SafariExtensionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E868AAF124A3BC450076AA3D /* SafariExtensionViewController.m */; };
@@ -41,8 +41,8 @@
 		E868AB4A24A3D1CB0076AA3D /* Request.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB1724A3D1CB0076AA3D /* Request.cpp */; };
 		E868AB4D24A3D1CB0076AA3D /* setup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB1B24A3D1CB0076AA3D /* setup.cpp */; };
 		E868AB4E24A3D1CB0076AA3D /* setup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB1B24A3D1CB0076AA3D /* setup.cpp */; };
-		E868AB4F24A3D1CB0076AA3D /* x509Util.c in Sources */ = {isa = PBXBuildFile; fileRef = E868AB1E24A3D1CB0076AA3D /* x509Util.c */; };
-		E868AB5024A3D1CB0076AA3D /* x509Util.c in Sources */ = {isa = PBXBuildFile; fileRef = E868AB1E24A3D1CB0076AA3D /* x509Util.c */; };
+		E868AB4F24A3D1CB0076AA3D /* x509Util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB1E24A3D1CB0076AA3D /* x509Util.cpp */; };
+		E868AB5024A3D1CB0076AA3D /* x509Util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB1E24A3D1CB0076AA3D /* x509Util.cpp */; };
 		E868AB5124A3D1CB0076AA3D /* native.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB2224A3D1CB0076AA3D /* native.cpp */; };
 		E868AB5224A3D1CB0076AA3D /* native.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB2224A3D1CB0076AA3D /* native.cpp */; };
 		E868AB5324A3D1CB0076AA3D /* UserCertsRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB2324A3D1CB0076AA3D /* UserCertsRequestHandler.cpp */; };
@@ -71,6 +71,8 @@
 		E868AB6E24A3D1CB0076AA3D /* VersionRequestHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E868AB3624A3D1CB0076AA3D /* VersionRequestHandler.cpp */; };
 		E868AB7724A3D8160076AA3D /* PCSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E868AB7524A3D80B0076AA3D /* PCSC.framework */; };
 		E89C811F24A3E05600564BA6 /* page.js in Resources */ = {isa = PBXBuildFile; fileRef = E89C811E24A3E05600564BA6 /* page.js */; };
+		F3DBE4362C9A2405009A216D /* debughelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F3DBE4352C9A2405009A216D /* debughelper.cpp */; };
+		F3DBE4372C9A2405009A216D /* debughelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F3DBE4352C9A2405009A216D /* debughelper.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,15 +86,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		E80C8D822572FD8300F93C9A /* Embed App Extensions */ = {
+		E80C8D822572FD8300F93C9A /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				E80C8D7F2572FD8300F93C9A /* BeIdConnect Extension.appex in Embed App Extensions */,
+				E80C8D7F2572FD8300F93C9A /* BeIdConnect Extension.appex in Embed Foundation Extensions */,
 			);
-			name = "Embed App Extensions";
+			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -143,7 +145,7 @@
 		E868AB1B24A3D1CB0076AA3D /* setup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = setup.cpp; sourceTree = "<group>"; };
 		E868AB1C24A3D1CB0076AA3D /* SCard.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SCard.hpp; sourceTree = "<group>"; };
 		E868AB1D24A3D1CB0076AA3D /* CardErrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardErrors.h; sourceTree = "<group>"; };
-		E868AB1E24A3D1CB0076AA3D /* x509Util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = x509Util.c; sourceTree = "<group>"; };
+		E868AB1E24A3D1CB0076AA3D /* x509Util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = x509Util.cpp; sourceTree = "<group>"; };
 		E868AB1F24A3D1CB0076AA3D /* ReaderList.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ReaderList.hpp; sourceTree = "<group>"; };
 		E868AB2024A3D1CB0076AA3D /* comm.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = comm.hpp; sourceTree = "<group>"; };
 		E868AB2124A3D1CB0076AA3D /* crypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypto.h; sourceTree = "<group>"; };
@@ -174,6 +176,8 @@
 		E868AB7824A3D8680076AA3D /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
 		E89C811E24A3E05600564BA6 /* page.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = page.js; sourceTree = "<group>"; };
 		E89C812024A3E3AC00564BA6 /* CertChainRequestHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CertChainRequestHandler.hpp; sourceTree = "<group>"; };
+		F3DBE4342C9A2405009A216D /* debughelper.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = debughelper.hpp; sourceTree = "<group>"; };
+		F3DBE4352C9A2405009A216D /* debughelper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = debughelper.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -266,6 +270,8 @@
 		E868AB0624A3D1CB0076AA3D /* common */ = {
 			isa = PBXGroup;
 			children = (
+				F3DBE4342C9A2405009A216D /* debughelper.hpp */,
+				F3DBE4352C9A2405009A216D /* debughelper.cpp */,
 				E868AB7424A3D57D0076AA3D /* CardLayer */,
 				E868AB7224A3D2610076AA3D /* RequestHandlers */,
 				E868AB0824A3D1CB0076AA3D /* asn1.hpp */,
@@ -287,7 +293,7 @@
 				E868AB3024A3D1CB0076AA3D /* hash.cpp */,
 				E868AB3424A3D1CB0076AA3D /* log.hpp */,
 				E868AB3B24A3D1CB0076AA3D /* x509Util.h */,
-				E868AB1E24A3D1CB0076AA3D /* x509Util.c */,
+				E868AB1E24A3D1CB0076AA3D /* x509Util.cpp */,
 			);
 			name = common;
 			path = ../common;
@@ -347,7 +353,7 @@
 				E868AACA24A3BC430076AA3D /* Sources */,
 				E868AACB24A3BC430076AA3D /* Frameworks */,
 				E868AACC24A3BC430076AA3D /* Resources */,
-				E80C8D822572FD8300F93C9A /* Embed App Extensions */,
+				E80C8D822572FD8300F93C9A /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
@@ -382,7 +388,8 @@
 		E868AAC624A3BC430076AA3D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1340;
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1630;
 				ORGANIZATIONNAME = Bosa;
 				TargetAttributes = {
 					E868AACD24A3BC430076AA3D = {
@@ -445,13 +452,14 @@
 				E868AB4324A3D1CB0076AA3D /* RequestHandler.cpp in Sources */,
 				E868AB6724A3D1CB0076AA3D /* CertChainRequestHandler.cpp in Sources */,
 				E868AB4924A3D1CB0076AA3D /* Request.cpp in Sources */,
+				F3DBE4372C9A2405009A216D /* debughelper.cpp in Sources */,
 				E868AB5F24A3D1CB0076AA3D /* ReaderList.cpp in Sources */,
 				E868AADB24A3BC430076AA3D /* ViewController.m in Sources */,
 				E868AAE024A3BC450076AA3D /* main.m in Sources */,
 				E868AB6524A3D1CB0076AA3D /* hash.cpp in Sources */,
 				E868AB5924A3D1CB0076AA3D /* CardFactory.cpp in Sources */,
 				E868AB6124A3D1CB0076AA3D /* crypto.cpp in Sources */,
-				E868AB4F24A3D1CB0076AA3D /* x509Util.c in Sources */,
+				E868AB4F24A3D1CB0076AA3D /* x509Util.cpp in Sources */,
 				E868AB3D24A3D1CB0076AA3D /* log.cpp in Sources */,
 				E868AB4524A3D1CB0076AA3D /* VirtualReader.cpp in Sources */,
 				E868AB4D24A3D1CB0076AA3D /* setup.cpp in Sources */,
@@ -480,6 +488,7 @@
 				E868AB3E24A3D1CB0076AA3D /* log.cpp in Sources */,
 				E868AB5424A3D1CB0076AA3D /* UserCertsRequestHandler.cpp in Sources */,
 				E8110A7B24AA1FC300283393 /* SafariExtensionViewController.m in Sources */,
+				F3DBE4362C9A2405009A216D /* debughelper.cpp in Sources */,
 				E868AB4624A3D1CB0076AA3D /* VirtualReader.cpp in Sources */,
 				E868AB6E24A3D1CB0076AA3D /* VersionRequestHandler.cpp in Sources */,
 				E868AB4824A3D1CB0076AA3D /* BEIDCard.cpp in Sources */,
@@ -494,7 +503,7 @@
 				E868AB5824A3D1CB0076AA3D /* CardReader.cpp in Sources */,
 				E868AB6224A3D1CB0076AA3D /* crypto.cpp in Sources */,
 				E868AB4E24A3D1CB0076AA3D /* setup.cpp in Sources */,
-				E868AB5024A3D1CB0076AA3D /* x509Util.c in Sources */,
+				E868AB5024A3D1CB0076AA3D /* x509Util.cpp in Sources */,
 				E868AB6024A3D1CB0076AA3D /* ReaderList.cpp in Sources */,
 				E868AB6824A3D1CB0076AA3D /* CertChainRequestHandler.cpp in Sources */,
 				E868AB6424A3D1CB0076AA3D /* asn1.cpp in Sources */,
@@ -567,9 +576,12 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 7682K6YL8X;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -626,9 +638,12 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 7682K6YL8X;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -652,7 +667,7 @@
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 11;
-				DEVELOPMENT_TEAM = 7682K6YL8X;
+				DEAD_CODE_STRIPPING = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				HEADER_SEARCH_PATHS = 3P/boost/include;
 				INFOPLIST_FILE = "SafariAppExtension Extension/Info.plist";
@@ -661,8 +676,8 @@
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MARKETING_VERSION = 2.10;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 2.11;
 				PRODUCT_BUNDLE_IDENTIFIER = "be.bosa.beidconnect.safari-extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -677,7 +692,7 @@
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 11;
-				DEVELOPMENT_TEAM = 7682K6YL8X;
+				DEAD_CODE_STRIPPING = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				HEADER_SEARCH_PATHS = 3P/boost/include;
 				INFOPLIST_FILE = "SafariAppExtension Extension/Info.plist";
@@ -686,8 +701,8 @@
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MARKETING_VERSION = 2.10;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 2.11;
 				PRODUCT_BUNDLE_IDENTIFIER = "be.bosa.beidconnect.safari-extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -704,7 +719,7 @@
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 11;
-				DEVELOPMENT_TEAM = 7682K6YL8X;
+				DEAD_CODE_STRIPPING = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				HEADER_SEARCH_PATHS = 3P/boost/include;
 				INFOPLIST_FILE = SafariAppExtension/Info.plist;
@@ -712,8 +727,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MARKETING_VERSION = 2.10;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 2.11;
 				PRODUCT_BUNDLE_IDENTIFIER = be.bosa.beidconnect.safari;
 				PRODUCT_NAME = "BeIDConnect Extension";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -729,7 +744,7 @@
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 11;
-				DEVELOPMENT_TEAM = 7682K6YL8X;
+				DEAD_CODE_STRIPPING = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				HEADER_SEARCH_PATHS = 3P/boost/include;
 				INFOPLIST_FILE = SafariAppExtension/Info.plist;
@@ -737,8 +752,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MARKETING_VERSION = 2.10;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 2.11;
 				PRODUCT_BUNDLE_IDENTIFIER = be.bosa.beidconnect.safari;
 				PRODUCT_NAME = "BeIDConnect Extension";
 				PROVISIONING_PROFILE_SPECIFIER = "";

@@ -10,6 +10,7 @@ using boost::property_tree::ptree;
 
 std::string VersionRequestHandler::process()
 {
+    log_info("----- VersionRequestHandler -----");
     ptree response;
     response.put(BeidConnect_JSON_field::result, BeidConnect_Result::OK);
     response.put(BeidConnect_JSON_field::version, BEIDCONNECT_VERSION);

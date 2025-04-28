@@ -15,6 +15,8 @@
 #endif
 #include "x509Util.h"
 #include "comm.hpp"
+#include "debughelper.hpp"
+#include "log.hpp"
 
 enum class SCardException_Code : uint32_t
 {
@@ -31,6 +33,7 @@ class SCardException : public std::exception
 private:
     LONG SCardResult = -1;
     SCardException_Code code = SCardException_Code::Unknown;
+    std::string stack;
 public:
     /// <summary>
     /// Constructor
@@ -39,24 +42,33 @@ public:
     /// <param name="code">Functionnal code</param>
     SCardException(LONG SCardResult, SCardException_Code code = SCardException_Code::Unknown) : SCardResult(SCardResult), code(code)
     {
+        stack = DebugStackTrace::GetStack();
     }
     virtual const char* what() const noexcept
     {
         return "SCard Exception";
     }
-    inline const LONG getSCardResult()
+    inline const LONG getSCardResult() const
     {
         return SCardResult;
     }
-    inline const SCardException_Code getCode()
+    inline const SCardException_Code getCode() const
     {
         return code;
+    }
+    inline const std::string GetStack() const
+    {
+        return stack;
+    }
+    inline void log() const
+    {
+        log_error("SCardException SCardResult(%08X) code(%08X) functions(%s)", SCardResult, code, stack.c_str());
     }
     /// <summary>
     /// Map the card SW error to the error string to return to the browser extension
     /// </summary>
     /// <returns>Error string to return to the browser extension</returns>
-    const char* result()
+    const char* result() const
     {
         if (code == SCardException_Code::TransactionFail)
         {
@@ -82,6 +94,22 @@ public:
         }
         return BeidConnect_Result::general_error;
     }
+    /// <summary>
+    /// Return error type to the browser extension
+    /// </summary>
+    /// <returns>Error type to return to the browser extension</returns>
+    const char* resultType() const
+    {
+        return "SCard";
+    }
+    /// <summary>
+    /// Map the card SW error to the error string to return to the browser extension
+    /// </summary>
+    /// <returns>Raw Error code to return to the browser extension</returns>
+    const uint32_t resultRaw() const
+    {
+        return SCardResult;
+    }
 };
 
 enum class CardException_Code : uint32_t
@@ -99,6 +127,7 @@ class CardException : public std::exception
 private:
     uint16_t SW;
     CardException_Code code = CardException_Code::Unknown;
+    std::string stack;
 public:
     /// <summary>
     /// Constructor
@@ -107,24 +136,33 @@ public:
     /// <param name="code">Functionnal code</param>
     CardException(uint16_t SW, CardException_Code code = CardException_Code::Unknown) : SW(SW), code(code)
     {
+        stack = DebugStackTrace::GetStack();
     }
     virtual const char* what() const noexcept
     {
         return "Card Exception";
     }
-    inline const uint16_t getSW()
+    inline const uint16_t getSW() const
     {
         return SW;
     }
-    inline const CardException_Code getCode()
+    inline const CardException_Code getCode() const
     {
         return code;
+    }
+    inline const std::string GetStack() const
+    {
+        return stack;
+    }
+    inline void log() const
+    {
+        log_error("CardException SW(%04X) functions(%s)", SW, stack.c_str());
     }
     /// <summary>
     /// Map the card SW error to the error string to return to the browser extension
     /// </summary>
     /// <returns>Error string to return to the browser extension</returns>
-    const char* result()
+    const char* result() const
     {
         switch (code)
         {
@@ -171,6 +209,22 @@ public:
         }
         return BeidConnect_Result::general_error;
     }
+    /// <summary>
+    /// Return error type to the browser extension
+    /// </summary>
+    /// <returns>Error type to return to the browser extension</returns>
+    const char* resultType() const
+    {
+        return "Card";
+    }
+    /// <summary>
+    /// Map the card SW error to the error string to return to the browser extension
+    /// </summary>
+    /// <returns>Raw Error code to return to the browser extension</returns>
+    const uint32_t resultRaw() const
+    {
+        return SW;
+    }
 };
 
 enum class BeidConnectException_Code : uint32_t
@@ -192,23 +246,33 @@ class BeidConnectException : public std::exception
 {
 private:
     BeidConnectException_Code code = BeidConnectException_Code::Unknown;
+    std::string stack;
 public:
     BeidConnectException(BeidConnectException_Code code) : code(code)
     {
+        stack = DebugStackTrace::GetStack();
     }
     virtual const char* what() const noexcept
     {
         return "BeidConnect Exception";
     }
-    const BeidConnectException_Code getCode()
+    const BeidConnectException_Code getCode() const
     {
         return code;
+    }
+    inline const std::string GetStack() const
+    {
+        return stack;
+    }
+    inline void log() const
+    {
+        log_error("BeidConnectException code(%08X) functions(%s)", code, stack.c_str());
     }
     /// <summary>
     /// Map the card SW error to the error string to return to the browser extension
     /// </summary>
     /// <returns>Error string to return to the browser extension</returns>
-    const char* result()
+    const char* result() const
     {
         switch (code)
         {
@@ -226,6 +290,22 @@ public:
             break;
         }
         return BeidConnect_Result::general_error;
+    }
+    /// <summary>
+    /// Return error type to the browser extension
+    /// </summary>
+    /// <returns>Error type to return to the browser extension</returns>
+    const char* resultType() const
+    {
+        return "BeidConnect";
+    }
+    /// <summary>
+    /// Map the card SW error to the error string to return to the browser extension
+    /// </summary>
+    /// <returns>Raw Error code to return to the browser extension</returns>
+    const uint32_t resultRaw() const
+    {
+        return (uint32_t)code;
     }
 };
 

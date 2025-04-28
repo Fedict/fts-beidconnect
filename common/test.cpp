@@ -45,6 +45,7 @@ constexpr char message_Get_Card_Info_ID_Only[] = "{\"operation\":\"ID\",\"idflag
 constexpr char message_Get_Card_Info[] = "{\"operation\":\"ID\",\"idflags\":\"511\",\"language\":\"en\",\"mac\":\"0123456789ABCDEF0123456789ABCDEF\",\"correlationId\":\"07386ce7-f73e-4e99-dfc3-8d69b6adf33d\",\"origin\":\"https://sign.belgium.be\"}";
 constexpr char message_Get_User_Certificates[] = "{\"operation\":\"USERCERTS\",\"language\":\"en\",\"mac\":\"0123456789ABCDEF0123456789ABCDEF\",\"correlationId\":\"07386ce7-f73e-4e99-dfc3-8d69b6adf33d\",\"origin\":\"https://sign.belgium.be\"}";
 constexpr char message_Get_Certificates_Chain[] = "{\"operation\":\"CERTCHAIN\",\"cert\":\"%%CERT%%\",\"language\":\"en\",\"mac\":\"0123456789ABCDEF0123456789ABCDEF\",\"correlationId\":\"07386ce7-f73e-4e99-dfc3-8d69b6adf33d\",\"origin\":\"https://sign.belgium.be\"}";
+constexpr char message_Get_Version[] = "{\"operation\":\"VERSION\",\"correlationId\":\"07386ce7-f73e-4e99-dfc3-8d69b6adf33d\",\"origin\":\"https://sign.belgium.be\"}";
 
 void dumpCert(const std::shared_ptr<const CardFile>& Cert) {
     std::cout << "------------------------------ Certificate ------------------------------" << endl;
@@ -379,7 +380,12 @@ TestResult TestGetFile(const std::string& DisplayMessage, const std::shared_ptr<
 
 int runTest(int argc, const char* argv[])
 {
-    std::cout << "BeidConnect Version " << BEIDCONNECT_VERSION << " Build on " << __DATE__ << " " << __TIME__ << endl;
+    std::cout << "BeidConnect Version " << BEIDCONNECT_VERSION
+        << " Build on " << __DATE__ << " " << __TIME__
+#ifdef _DEBUG
+        << " (DEBUG build)"
+#endif
+        << endl;
 
     TestDB testDB;
     shared_ptr<stringstream> ssRequest;
@@ -415,6 +421,15 @@ int runTest(int argc, const char* argv[])
             TestCard tc;
             std::shared_ptr<const CardFile> signCert;
 
+            // Test the browser extension message to retrieve version
+            testResults.push_back(TestOp("Get version Browser Extension command", message_Get_Version,
+                [cr](const std::string& Response) {
+                    std::string r = ExpectResultInResponse(Response, BeidConnect_Result::OK);
+                    if (r != "OK") {
+                        return r;
+                    }
+                    return GetResultFromResponse(Response, cr->name);
+                }));
             // Test the getFile function to retrieve the sign cert
             testResults.push_back(TestGetFile("Retrieve Sign certificate (getFile)", card, CardFiles::Signcert,
                 [&signCert, &testDB, &tc](const std::shared_ptr<const CardFile>& File) {

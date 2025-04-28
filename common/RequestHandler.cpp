@@ -2,7 +2,6 @@
 #include "RequestHandler.hpp"
 #include "VersionRequestHandler.hpp"
 #include "IDRequestHandler.hpp"
-#include "InfoRequestHandler.hpp"
 #include "UserCertsRequestHandler.hpp"
 #include "CertChainRequestHandler.hpp"
 #include "SignRequestHandler.hpp"

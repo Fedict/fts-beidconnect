@@ -8,8 +8,9 @@ if (typeof EIDChromeExt !== 'function') {
 		var pendingPromises = {};
 
 		var ExtensionError = function (eventData) {
+            Object.assign(this, eventData);
+            // message is there for backward compatibility. Use result instead.
 			this.message = eventData.result;
-			this.report = eventData.report;
 		};
 
 		ExtensionError.prototype.toString = function () {

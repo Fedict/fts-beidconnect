@@ -9,7 +9,7 @@ BUILD_NUMBER=0
 !ENDIF
 
 MAJOR_VERSION=2
-MINOR_VERSION=10
+MINOR_VERSION=11
 VERSION=$(MAJOR_VERSION).$(MINOR_VERSION)
 
 #SIGN = signtool sign /v /n "Federale Overheidsdienst Beleid en Ondersteuning" /fd SHA256 /tr http://rfc3161timestamp.globalsign.com/advanced /td SHA256

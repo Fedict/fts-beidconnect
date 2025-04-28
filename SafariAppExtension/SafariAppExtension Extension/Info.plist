@@ -43,6 +43,7 @@
 			<array>
 				<string>*.belgium.be</string>
 				<string>*.fgov.be</string>
+				<string>*.finbel.intra</string>
 				<string>gcloudbelgium.sharepoint.com</string>
 			</array>
 			<key>Level</key>
@@ -52,6 +53,6 @@
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2020 Bosa. All rights reserved.</string>
 	<key>NSHumanReadableDescription</key>
-	<string>This Safari extension enables your eID card in BOSA applications.</string>
+	<string>Safari extension linked to the webservice of the Belgian federal administration for signing a digital file in a reliable manner with your Belgian electronic identity card.</string>
 </dict>
 </plist>

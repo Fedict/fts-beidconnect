@@ -3,24 +3,165 @@
 #  postinstall
 #  beidconnect
 #
+
 APPLICATIONPATH="$HOME/Applications"
+APPLICATIONSUPPORTPATH="$HOME/Library/Application Support"
 BEIDCONNECT="$APPLICATIONPATH/BeIDConnect"
 
-CHROME_EXTENSION_PATH="$HOME/Library/Application Support/Google/Chrome/NativeMessagingHosts"
-CHROME_BETA_EXTENSION_PATH="$HOME/Library/Application Support/Google/Chrome Beta/NativeMessagingHosts"
-CHROMIUM_EXTENSION_PATH="$HOME/Library/Application Support/Chromium/NativeMessagingHosts"
-FIREFOX_EXTENSION_PATH="$HOME/Library/Application Support/Mozilla/NativeMessagingHosts"
-EDGE_EXTENSION_PATH="$HOME/Library/Application Support/Microsoft Edge/NativeMessagingHosts"
+# check the Appplications folder (probaly not necessary but in cas of :-)
+if [ ! -w "$APPLICATIONPATH" ]; then
+    echo "no write access to $APPLICATIONPATH folder"
+    exit -1;
+fi
+echo "$APPLICATIONPATH folder OK"
 
-test -e "$HOME/Library/Application Support/Google/Chrome" && mkdir "$CHROME_EXTENSION_PATH"
-test -e "$HOME/Library/Application Support/Google/Chrome Beta" && mkdir "$CHROME_BETA_EXTENSION_PATH"
-test -e "$HOME/Library/Application Support/Chromium" && mkdir "$CHROMIUM_EXTENSION_PATH"
-test -e "$HOME/Library/Application Support/Mozilla" && mkdir "$FIREFOX_EXTENSION_PATH"
-test -e "$HOME/Library/Application Support/Microsoft Edge" && mkdir "$EDGE_EXTENSION_PATH"
+# check the Appplication Support folder
+if [ ! -w "$APPLICATIONSUPPORTPATH" ]; then
+    echo "no write access to $APPLICATIONSUPPORTPATH folder"
+    exit -1;
+fi
+echo "$APPLICATIONSUPPORTPATH folder OK"
 
+# check the google chrome folders
+GOOGLE_PATH="$APPLICATIONSUPPORTPATH/Google"
+GOOGLECHROME_PATH="$GOOGLE_PATH/Chrome"
+CHROME_EXTENSION_PATH="$GOOGLECHROME_PATH/NativeMessagingHosts"
+GOOGLECHROME_BETA_PATH="$GOOGLE_PATH/Chrome Beta"
+CHROME_BETA_EXTENSION_PATH="$GOOGLECHROME_BETA_PATH/NativeMessagingHosts"
+
+if [ ! -e "$GOOGLE_PATH" ]; then
+    echo "Creating $GOOGLE_PATH folder"
+    mkdir "$GOOGLE_PATH"
+fi
+if [ ! -w "$GOOGLE_PATH" ]; then
+    echo "no write access to $GOOGLE_PATH folder"
+    exit -1
+fi
+echo "$GOOGLE_PATH folder OK"
+if [ ! -e "$GOOGLECHROME_PATH" ]; then
+    echo "Creating $GOOGLECHROME_PATH folder"
+    mkdir "$GOOGLECHROME_PATH"
+fi
+if [ ! -w "$GOOGLECHROME_PATH" ]; then
+    echo "no write access to $GOOGLECHROME_PATH folder"
+    exit -1
+fi
+echo "$GOOGLECHROME_PATH folder OK"
+if [ ! -e "$CHROME_EXTENSION_PATH" ]; then
+    echo "Creating $CHROME_EXTENSION_PATH folder"
+    mkdir "$CHROME_EXTENSION_PATH"
+fi
+if [ ! -w "$CHROME_EXTENSION_PATH" ]; then
+    echo "no write access to $CHROME_EXTENSION_PATH folder"
+    exit -1
+fi
+echo "$CHROME_EXTENSION_PATH folder OK"
+
+# handle Google Chrome Beta, but do not report an error if no access
+if [ ! -e "$GOOGLECHROME_BETA_PATH" ]; then
+    echo "Creating $GOOGLECHROME_BETA_PATH folder"
+    mkdir "$GOOGLECHROME_BETA_PATH"
+fi
+if [ ! -w "$GOOGLECHROME_BETA_PATH" ]; then
+    echo "no write access to $GOOGLECHROME_BETA_PATH folder"
+else
+    if [ ! -e "$CHROME_BETA_EXTENSION_PATH" ]; then
+        echo "Creating $CHROME_BETA_EXTENSION_PATH folder"
+        mkdir "$CHROME_BETA_EXTENSION_PATH"
+    fi
+fi
+
+# check the chromium folders
+CHROMIUM_PATH="$APPLICATIONSUPPORTPATH/Chromium"
+CHROMIUM_EXTENSION_PATH="$CHROMIUM_PATH/NativeMessagingHosts"
+
+if [ ! -e "$CHROMIUM_PATH" ]; then
+    echo "Creating $CHROMIUM_PATH folder"
+    mkdir "$CHROMIUM_PATH"
+fi
+if [ ! -w "$CHROMIUM_PATH" ];
+then
+    echo "no write access to $CHROMIUM_PATH folder"
+    exit -1
+fi
+echo "$CHROMIUM_PATH folder OK"
+if [ ! -e "$CHROMIUM_EXTENSION_PATH" ]; then
+    echo "Creating $CHROMIUM_EXTENSION_PATH folder"
+    mkdir "$CHROMIUM_EXTENSION_PATH"
+fi
+if [ ! -w "$CHROMIUM_EXTENSION_PATH" ]; then
+    echo "no write access to $CHROMIUM_EXTENSION_PATH folder"
+    exit -1
+fi
+echo "$CHROMIUM_EXTENSION_PATH folder OK"
+
+# check the Firefox folders
+FIREFOX_PATH="$APPLICATIONSUPPORTPATH/Mozilla"
+FIREFOX_EXTENSION_PATH="$FIREFOX_PATH/NativeMessagingHosts"
+
+if [ ! -e "$FIREFOX_PATH" ]; then
+    echo "Creating $FIREFOX_PATH folder"
+    mkdir "$FIREFOX_PATH"
+fi
+if [ ! -w "$FIREFOX_PATH" ]; then
+    echo "no write access to $FIREFOX_PATH folder"
+    exit -1;
+fi
+echo "$FIREFOX_PATH folder OK"
+if [ ! -e "$FIREFOX_EXTENSION_PATH" ]; then
+    echo "Creating $FIREFOX_EXTENSION_PATH folder"
+    mkdir "$FIREFOX_EXTENSION_PATH"
+fi
+if [ ! -w "$FIREFOX_EXTENSION_PATH" ]; then
+    echo "no write access to $FIREFOX_EXTENSION_PATH folder"
+    exit -1;
+fi
+echo "$FIREFOX_EXTENSION_PATH folder OK"
+
+# check the Microsoft Edge folders
+EDGE_PATH="$APPLICATIONSUPPORTPATH/Microsoft Edge"
+EDGE_EXTENSION_PATH="$EDGE_PATH/NativeMessagingHosts"
+
+if [ ! -e "$EDGE_PATH" ]; then
+    echo "Creating $EDGE_PATH folder"
+    mkdir "$EDGE_PATH"
+fi
+if [ ! -w "$EDGE_PATH" ]; then
+    echo "no write access to $EDGE_PATH folder"
+    exit -1
+fi
+echo "$EDGE_PATH folder OK"
+if [ ! -e "$EDGE_EXTENSION_PATH" ]; then
+    echo "Creating $EDGE_EXTENSION_PATH folder"
+    mkdir "$EDGE_EXTENSION_PATH"
+fi
+if [ ! -w "$EDGE_EXTENSION_PATH" ]; then
+    echo "no write access to $EDGE_EXTENSION_PATH folder"
+    exit -1
+fi
+echo "$EDGE_EXTENSION_PATH folder OK"
+
+# All folder should exist, and we should have write access to them
+
+# Run BeidConnect to generate the be.bosa.beidconnect.json files
 test -e $BEIDCONNECT && $BEIDCONNECT -setup "$APPLICATIONPATH" "$CHROME_EXTENSION_PATH" "$FIREFOX_EXTENSION_PATH"
-test -e "$CHROMIUM_EXTENSION_PATH" && test -e "$CHROME_EXTENSION_PATH/be.bosa.beidconnect.json" && cp "$CHROME_EXTENSION_PATH/be.bosa.beidconnect.json" "$CHROMIUM_EXTENSION_PATH/"
-test -e "$CHROME_BETA_EXTENSION_PATH" && test -e "$CHROME_EXTENSION_PATH/be.bosa.beidconnect.json" && cp "$CHROME_EXTENSION_PATH/be.bosa.beidconnect.json" "$CHROME_BETA_EXTENSION_PATH/"
-test -e "$EDGE_EXTENSION_PATH" && test -e "$CHROME_EXTENSION_PATH/be.bosa.beidconnect.json" && cp "$CHROME_EXTENSION_PATH/be.bosa.beidconnect.json" "$EDGE_EXTENSION_PATH/"
+
+CHROME_CONFIG_FILE="$CHROME_EXTENSION_PATH/be.bosa.beidconnect.json"
+FIREFOX_CONFIG_FILE="$FIREFOX_EXTENSION_PATH/be.bosa.beidconnect.json"
+if [ ! -e "$CHROME_CONFIG_FILE" ]; then
+    echo "$CHROME_CONFIG_FILE Chrome configuration file not found!"
+    exit -1
+fi
+echo "$CHROME_CONFIG_FILE file OK"
+if [ ! -e "$FIREFOX_CONFIG_FILE" ]; then
+    echo "$FIREFOX_CONFIG_FILE Firefox configuration file not found!"
+    exit -1
+fi
+echo "$FIREFOX_CONFIG_FILE file OK"
+
+# Copy configuration files for compatible browsers
+cp "$CHROME_CONFIG_FILE" "$CHROMIUM_EXTENSION_PATH/"
+test -e "$CHROME_BETA_EXTENSION_PATH" && cp "$CHROME_CONFIG_FILE" "$CHROME_BETA_EXTENSION_PATH/"
+cp "$CHROME_CONFIG_FILE" "$EDGE_EXTENSION_PATH/"
 
 exit 0

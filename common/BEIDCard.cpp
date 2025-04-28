@@ -8,6 +8,7 @@
 #include "x509Util.h"
 #ifdef _DEBUG
 #include "test.hpp"
+#include "debughelper.hpp"
 #endif
 
 #define BEID_READ_BINARY_MAX_LEN     250			 /*maximum length to read with single card command*/
@@ -77,9 +78,9 @@ constexpr unsigned char signcert[6] = { 0x3F, 0x00, 0xDF, 0x00, 0x50, 0x39 };
 constexpr unsigned char cacert[6] = { 0x3F, 0x00, 0xDF, 0x00, 0x50, 0x3A };
 constexpr unsigned char rootcert[6] = { 0x3F, 0x00, 0xDF, 0x00, 0x50, 0x3B };
 
-#define WHERE "BEIDCard::readCertificateChain"
 void BEIDCard::readCertificateChain(std::vector<std::shared_ptr<const CardFile>>& subCerts, std::shared_ptr<const CardFile>& rootCert)
 {
+    DECLAREFUNCTIONHEADER;
 //    long ret;
 //#define X509_ISSUER           "\1\1\4"
 //#define X509_SUBJECT          "\1\1\6"
@@ -91,19 +92,19 @@ void BEIDCard::readCertificateChain(std::vector<std::shared_ptr<const CardFile>>
     //std::shared_ptr<const CardFile> cacert = getFile(CardFiles::Cacert);
     //ret = asn1_get_item(cacert->getRaw().data(), cacert->getRaw().size(), X509_SUBJECT, &subject);
     //if (ret) {
-    //    log_error("%s: Could not get subject name from certificate", WHERE);
+    //    log_error("%s: Could not get subject name from certificate", __func__);
     //    goto cleanup;
     //}
 
     //ret = asn1_get_item(cert, l_cert, X509_ISSUER, &issuer);
     //if (ret) {
-    //    log_error("%s: Could not get issuer name from certificate", WHERE);
+    //    log_error("%s: Could not get issuer name from certificate", __func__);
     //    goto cleanup;
     //}
 
     //if (asn_compare_items(&subject, &issuer) != 0) {
     //    //this is not the issuer we are looking for
-    //    log_error("%s E: card does not contain the requested issuer certificate", WHERE);
+    //    log_error("%s E: card does not contain the requested issuer certificate", __func__);
     //    ret = -1;
     //    goto cleanup;
     //}
@@ -119,11 +120,10 @@ void BEIDCard::readCertificateChain(std::vector<std::shared_ptr<const CardFile>>
 //
 //    return (ret);
 }
-#undef WHERE
 
-#define WHERE "BEIDCard::SelectKey()"
 void BEIDCard::selectKey(CardKeys pintype, const std::vector<unsigned char>& cert)
 {
+    DECLAREFUNCTIONHEADER;
     long ret = 0;
 
     std::shared_ptr<const CardFile> cardcert;
@@ -176,7 +176,6 @@ void BEIDCard::selectKey(CardKeys pintype, const std::vector<unsigned char>& cer
 
     if (cr.getSW() != 0x9000) throw CardException(cr.getSW());
 }
-#undef WHERE
 
 // SizeOfPINLengthInAPDU (bits 7-4) bit size of PIN length in APDU
 // PINBlockSize          (bits 3-0) PIN block size in bytes after justification and formatting
@@ -191,9 +190,9 @@ void BEIDCard::selectKey(CardKeys pintype, const std::vector<unsigned char>& cer
 // PINFormat             (bits 1-0) PIN Format type: 0=binary, 1=BCD, 2=ASCII
 #define MAKE_FormatString(SystemUnits, PINPosition, PINJustification, PINFormat) (((SystemUnits&0x1)<<7)|((PINPosition&0xf)<<3)|((PINJustification&0x1)<<2)|(PINFormat&0x3))
 
-#define WHERE "BEIDCard::logon()"
 void BEIDCard::logon(int l_pin, char* pin)
 {
+    DECLAREFUNCTIONHEADER;
     uint16_t sw = 0;
 
 #ifdef _DEBUG
@@ -269,25 +268,23 @@ void BEIDCard::logon(int l_pin, char* pin)
     case 0x63C1: // E_PIN_1_ATTEMPT;
     case 0x6983: // E_PIN_BLOCKED;
     case 0x6985: // E_SRC_COMMAND_NOT_ALLOWED;
-        log_error("%s: E: Card returns SW(%04X)", WHERE, resp.getSW());
+        log_error("%s: E: Card returns SW(%04X)", __func__, resp.getSW());
         throw CardException(resp.getSW());
     default:
         throw CardException(resp.getSW(), CardException_Code::PIN_Incorrect);
     }
 }
-#undef WHERE
 
-#define WHERE "BEIDCard::logoff()"
 void BEIDCard::logoff()
 {
+    DECLAREFUNCTIONHEADER;
     ScopedCardTransaction trans(reader);  //begin transaction
     reader->apdu(CardAPDU(&logoutApdu[0], sizeof(logoutApdu)));
 }
-#undef WHERE
 
-#define WHERE "BEIDCard::sign()"
 long BEIDCard::sign(const std::vector<unsigned char>& in, int hashAlgo, unsigned char* out, size_t* l_out, int* sw)
 {
+    DECLAREFUNCTIONHEADER;
     long ret = 0;
     size_t sign_lg = currentSelectedKeyLength;
 
@@ -330,10 +327,10 @@ long BEIDCard::sign(const std::vector<unsigned char>& in, int hashAlgo, unsigned
         cmdRetrieveSignature.patchAt(4, 0x00);
         break;
     case 0x6401:
-        log_error("%s: E: Card returns SW(%04X)", WHERE, responseGenSign.getSW());
-        throw CardException(responseGenSign.getSW());
     default:
-        return -1;
+        log_error("%s: E: Card returns SW(%04X)", __func__, responseGenSign.getSW());
+        throw CardException(responseGenSign.getSW());
+        //return -1;
     }
     CardAPDUResponse responseRetrieveSignature = reader->apdu(cmdRetrieveSignature);
     *l_out = responseRetrieveSignature.getDataLen();
@@ -385,11 +382,10 @@ long BEIDCard::sign(const std::vector<unsigned char>& in, int hashAlgo, unsigned
 
     return (ret);
 }
-#undef WHERE
 
-#define WHERE "BEIDCard::selectFile"
 void BEIDCard::selectFile(const unsigned char* file, size_t l_file)
 {
+    DECLAREFUNCTIONHEADER;
     CardAPDU apdu({ 0x00,0xA4,0x02,0x0C,0x00 }, 7);
     apdu.patchAt(4, 2);
     for (size_t i = 0; i < (l_file / 2); i++) {
@@ -399,16 +395,15 @@ void BEIDCard::selectFile(const unsigned char* file, size_t l_file)
         CardAPDUResponse cr = reader->apdu(apdu);
         if (cr.getSW() != 0x9000)
         {
-            log_error("%s: E: Card returns SW(%04X)", WHERE, cr.getSW());
+            log_error("%s: E: Card returns SW(%04X)", __func__, cr.getSW());
             throw CardException(cr.getSW());
         }
     }
 }
-#undef WHERE
 
-#define WHERE "BEIDCard::readFile()"
 std::shared_ptr<const CardFile> BEIDCard::readFile(CardFileReadOptimization optimization)
 {
+    DECLAREFUNCTIONHEADER;
     std::vector<unsigned char> result;
     size_t p_maxReadlen = 1024 * 1024; // Max file size to read (define upper limite 1MB)
     size_t l_req;
@@ -480,10 +475,10 @@ std::shared_ptr<const CardFile> BEIDCard::readFile(CardFileReadOptimization opti
 
     return std::make_shared<CardFile>(result);
 }
-#undef WHERE
 
 std::shared_ptr<const CardFile> BEIDCard::getFile(CardFiles fileType)
 {
+    DECLAREFUNCTIONHEADER;
     std::vector<unsigned char> idFile;
     CardFileReadOptimization optimization = CardFileReadOptimization::None;
 
@@ -562,6 +557,7 @@ std::shared_ptr<const CardFile> BEIDCard::getFile(CardFiles fileType)
 
 const std::map<std::string, std::string> BEIDCard::getCardData()
 {
+    DECLAREFUNCTIONHEADER;
     if (!cacheCardDataLoaded)
     {
         try

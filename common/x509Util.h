@@ -11,10 +11,6 @@
 #define strnicmp strncasecmp
 #endif
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #define LEN_DATE  14
 
 //X509 asn1 paths for certificate elements
@@ -35,16 +31,12 @@ enum X509_KEYTYPE {
    X509_KEYTYPE_EC
 };
 
-char* getCertSubjectName(unsigned char* cert, size_t l_cert);
-int isEndEntity(char* cert, size_t l_cert);
-unsigned int getKeyUsage(char* cert, size_t l_cert);
+//char* getCertSubjectName(unsigned char* cert, size_t l_cert);
+//int isEndEntity(char* cert, size_t l_cert);
+//unsigned int getKeyUsage(char* cert, size_t l_cert);
 int getKeyInfo(const unsigned char *cert, size_t l_cert, int *keyType, size_t *keySize);
 //unsigned int getRSAKeyLength(const char* cert, unsigned int l_cert);
-char* getValidUntil(char* cert, size_t l_cert);
-int isTimeBeforeNow (int len, char *p_atime);
-
-#ifdef __cplusplus
-   }
-#endif
+//char* getValidUntil(char* cert, size_t l_cert);
+//int isTimeBeforeNow (int len, char *p_atime);
 
 #endif /* x509Util_h */

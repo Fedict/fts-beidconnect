@@ -10,7 +10,6 @@
 
 using namespace std;
 
-#define WHERE "readMessage()"
 BECOM_Code readMessage(std::stringstream &stream)
 {
     int length = 0;
@@ -41,19 +40,19 @@ BECOM_Code readMessage(std::stringstream &stream)
     // NB: official doc does not mention this.
     if (length == 0)
     {
-        log_info("%s: Resquest Len (%i)", WHERE, length);
+        log_info("%s: Resquest Len (%i)", __func__, length);
         return BECOM_Code::E_COMM_ENDREQUEST;
     }
     else if (length < 0)
     {
-        log_info("%s: Resquest Len (%i)", WHERE, length);
+        log_info("%s: Resquest Len (%i)", __func__, length);
         return BECOM_Code::E_COMM_PARAM;
     }
 
     // sanity check
     if (length > 10000)
     {
-        log_error("%s: message length exceeds max size (%d > 10000)", WHERE, length);
+        log_error("%s: message length exceeds max size (%d > 10000)", __func__, length);
         return BECOM_Code::E_COMM_PARAM;
     }
 
@@ -77,24 +76,21 @@ BECOM_Code readMessage(std::stringstream &stream)
             pos++;
         }
     }
-    log_info("%s: Resquest (%i): '%s'", WHERE, length, dumpstr.c_str());
+    log_info("%s: Resquest (%i): '%s'", __func__, length, dumpstr.c_str());
 
     return BECOM_Code::OK;
 }
-#undef WHERE
 
-#define WHERE "sendMessage()"
 void sendMessage(const std::string response)
 {
-    std::string response2 = response.substr(0, response.length() - 1);
+    std::string response2 = response.substr(0, response.length() /*- 1*/);
     size_t length = response2.length();
     // include nullterminator here
     uint32_t len = (uint32_t)length /*+ 1*/;
 
     fwrite(&len, 1, 4, stdout);
 
-    log_info("%s: Response (%i): '%s'", WHERE, len, response2.c_str());
+    log_info("%s: Response (%i): '%s'", __func__, len, response2.c_str());
 
     cout << response2 << std::flush;
 }
-#undef WHERE

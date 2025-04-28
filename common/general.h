@@ -14,10 +14,10 @@
  *
  ******************************************************************************/
 
-#define BEIDCONNECT_VERSION	"2.10"
+#define BEIDCONNECT_VERSION	"2.11"
 
 #define CLEANUP(a) { ret = a; goto cleanup; }
-     
+  
 #ifdef _WIN32
 #define CONFIG_FILE "c:\\tmp\\virtualdevice.cfg"
 #define LOG_FILE  "C:\\tmp\\beidconnect.log"

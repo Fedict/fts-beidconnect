@@ -15,9 +15,10 @@
 
 using boost::property_tree::ptree;
 
-#define WHERE "SignRequestHandler::process()"
 std::string SignRequestHandler::process()
 {
+    DECLAREFUNCTIONHEADER;
+    log_info("----- SignRequestHandler -----");
     ptree response;
     try
     {
@@ -89,7 +90,7 @@ std::string SignRequestHandler::process()
 
                 if (lasterror)
                 {
-                    log_error("%s: E: card->selectKey returned %d (0x%0X)", WHERE, lasterror, lasterror);
+                    log_error("%s: E: card->selectKey returned %d (0x%0X)", __func__, lasterror, lasterror);
                     reader->disconnect();
                     continue; // try next reader to find chain
                 }
@@ -99,16 +100,20 @@ std::string SignRequestHandler::process()
                     pin = "";
                 }
 
-                signatureDone = true;
+                /*signatureDone = true;*/
 
                 // if we get here, we successfully selected the key or found the signing certificate
                 card->logon((int)pin.size(), (char*)pin.c_str());
 
                 int sw = 0;
                 lasterror = card->sign(hash, algo2str((char*)digestAlgo.c_str()), signature, &l_signature, &sw);
-                if (lasterror)
+                if (lasterror == 0)
                 {
-                    log_error("%s: E: card->sign returned %08X", WHERE, lasterror);
+                    signatureDone = true;
+                }
+                else //if (lasterror)
+                {
+                    log_error("%s: E: card->sign returned %08X", __func__, lasterror);
                     try
                     {
                         card->logoff();
@@ -167,23 +172,31 @@ std::string SignRequestHandler::process()
     }
     catch (SCardException& e)
     {
-        log_error("%s: E: SCardException SCardResult(%08X) code(%08X)", WHERE, e.getSCardResult(), e.getCode());
+        e.log();
         response.put(BeidConnect_JSON_field::result, e.result());
+        response.put(BeidConnect_JSON_field::resultType, e.resultType());
+        response.put(BeidConnect_JSON_field::resultRaw, e.resultRaw());
     }
     catch (CardException& e)
     {
-        log_error("%s: E: CardException SW(%04X)", WHERE, e.getSW());
+        e.log();
         response.put(BeidConnect_JSON_field::result, e.result());
+        response.put(BeidConnect_JSON_field::resultType, e.resultType());
+        response.put(BeidConnect_JSON_field::resultRaw, e.resultRaw());
     }
     catch (BeidConnectException& e)
     {
-        log_error("%s: E: BeidConnectException code(%08X)", WHERE, e.getCode());
+        e.log();
         response.put(BeidConnect_JSON_field::result, e.result());
+        response.put(BeidConnect_JSON_field::resultType, e.resultType());
+        response.put(BeidConnect_JSON_field::resultRaw, e.resultRaw());
     }
     catch (...)
     {
-        log_error("%s: E: Exception", WHERE);
+        log_error("%s: E: Exception", __func__);
         response.put(BeidConnect_JSON_field::result, BeidConnect_Result::general_error);
+        response.put(BeidConnect_JSON_field::resultType, BeidConnect_Result::general_error);
+        response.put(BeidConnect_JSON_field::resultRaw, 0xFFFFFFFF);
     }
     post_process(response);
     std::stringstream streamResponse;
@@ -192,4 +205,3 @@ std::string SignRequestHandler::process()
     // log_info(streamResponse.str().c_str());
     return streamResponse.str();
 }
-#undef WHERE

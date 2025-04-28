@@ -4,13 +4,17 @@
 #define CardReader_hpp
 
 #include <iostream>
-//#include "general.h"
+#include "general.h"
 #include "Card.hpp"
 #include <vector>
 #include <memory>
 #include <fstream>
 #include "log.hpp"
 #include "CardErrors.h"
+#include "debughelper.hpp"
+#ifdef _DEBUG
+#include "assert.h"
+#endif
 
 #define MAX_ATR_LENGTH			128
 #define MAX_LABEL_LENGTH		32
@@ -153,19 +157,31 @@ public:
 /// </summary>
 class ScopedCardTransaction
 {
+    DebugStackTrace debugStackTrace;
     std::shared_ptr<CardReader> reader;
     bool TransactionInProgress = false;
+#ifdef _DEBUG
+    static int Counter;
+#endif
 public:
-    ScopedCardTransaction(const std::shared_ptr<CardReader>& reader)
+    ScopedCardTransaction(const std::shared_ptr<CardReader>& reader) : debugStackTrace("T")
     {
         this->reader = reader;
         reader->beginTransaction();
         TransactionInProgress = true;
+#ifdef _DEBUG
+        ++Counter;
+        assert(Counter == 1);
+#endif
     }
     ~ScopedCardTransaction()
     {
-        if (TransactionInProgress)
+        if (TransactionInProgress) {
             reader->endTransaction();
+#ifdef _DEBUG
+            Counter--;
+#endif
+        }
     }
 };
 

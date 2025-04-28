@@ -3,11 +3,9 @@
 #ifndef __ASN1_H__
 #define __ASN1_H__
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include <string>
 
-	/* return codes for ASN1 parsing */
+/* return codes for ASN1 parsing */
 #define E_ASN_BAD_TAG           -1           /* tag not expected or unknown */
 #define E_ASN_TAG_LEN           -2           /* tag has length > 4 bytes */
 #define E_ASN_BAD_LEN           -3           /* length encoding error */
@@ -105,7 +103,8 @@ extern "C" {
 	int asn1_find_item(const unsigned char* content, size_t len, unsigned int findtag, ASN1_ITEM* item);
 	int asn1_find_item_simple(const unsigned char* content, size_t len, unsigned int findtag, ASN1_ITEM* item);
 	int asn1_dec_oid(unsigned char* p_data, size_t l_data, unsigned int* oid, size_t* l_oid);
-	char* oid2str(unsigned char* p_data, size_t l_data);
+	//char* oid2str(unsigned char* p_data, size_t l_data);
+	std::string oid2str(unsigned char* p_data, size_t l_data);
 
 	/* ASN1 encoding functions */
 	/* !!!! asn1_add_item adds the pointer to a list of elements to encode, but does not copy the data */
@@ -129,9 +128,5 @@ extern "C" {
 
 	/* Helper functions: encode uint as ASN_INTEGER */
 	void encode_uint(unsigned int in, unsigned char* out, unsigned int* l_out);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif
