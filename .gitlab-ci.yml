@@ -278,7 +278,7 @@ build:debian-10-64:
 build:ubuntu-2504-64:
   <<: *ubbuild
   variables:
-    CODE: noble
+    CODE: plucky
     ARCH: amd64
     SHORT: u2504
     MIRROR: http://archive.ubuntu.com/ubuntu
@@ -287,7 +287,7 @@ build:ubuntu-2504-64:
 build:ubuntu-2504-32:
   <<: *ubbuild
   variables:
-    CODE: noble
+    CODE: plucky
     ARCH: i386
     SHORT: u2504
     MIRROR: http://archive.ubuntu.com/ubuntu
@@ -296,7 +296,7 @@ build:ubuntu-2504-32:
 build:ubuntu-2410-64:
   <<: *ubbuild
   variables:
-    CODE: noble
+    CODE: oracular
     ARCH: amd64
     SHORT: u2410
     MIRROR: http://archive.ubuntu.com/ubuntu
@@ -305,7 +305,7 @@ build:ubuntu-2410-64:
 build:ubuntu-2410-32:
   <<: *ubbuild
   variables:
-    CODE: noble
+    CODE: oracular
     ARCH: i386
     SHORT: u2410
     MIRROR: http://archive.ubuntu.com/ubuntu
