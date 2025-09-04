@@ -177,20 +177,6 @@ build:suse_15_6:
     ARCH: x86_64
     REPO: https://ftp.halifax.rwth-aachen.de/opensuse/distribution/leap/15.6/repo/oss
 
-build:fedora-40-64:
-  <<: *fedbuild
-  variables:
-    VERSION: 40
-    ARCH: x86_64
-    DIST: fedora
-
-build:fedora-40-32:
-  <<: *fedbuild
-  variables:
-    VERSION: 40
-    ARCH: i386
-    DIST: fedora
-
 build:fedora-41-64:
   <<: *fedbuild
   variables:
