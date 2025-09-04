@@ -26,7 +26,7 @@ const FirefoxVersion = "0.0.17";
 // Safari version is coded inside the \SafariAppExtension\SafariAppExtension Extension\SafariExtensionHandler.mm source file
 
 // https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns
-const AllowedDomains = ['https://*.belgium.be/*', 'https://*.fgov.be/*', 'https://gcloudbelgium.sharepoint.com/*'];
+const AllowedDomains = ['https://*.belgium.be/*', 'https://*.fgov.be/*', 'https://gcloudbelgium.sharepoint.com/*', 'https://*.fed.be/*', 'https://*.yourict.be/*'];
 const AllowedDomainsWithMinFin = ['https://*.belgium.be/*', 'https://*.fgov.be/*', 'https://gcloudbelgium.sharepoint.com/*', "https://*.finbel.intra/*", 'https://*.fed.be/*', 'https://*.yourict.be/*'];
 
 var DestDirectory = "./targetDebug";
