@@ -69,6 +69,7 @@ srpm:
     - export DASHA
     - if [ ! -z "$http_proxy" ]; then echo "Acquire::http::Proxy \"$http_proxy\";" > /srv/chroot/$CODE/etc/apt/apt.conf.d/99proxy; fi
     - ./linux/deb-cl.pl "$VER" "$CODE" "$SHORT"
+    - apt-get -y install libboost-dev libpcsclite-dev pkg-config
   script:
     - sbuild -n $DASHA -c $CODE-$ARCH-sbuild --arch=$ARCH
   after_script:
