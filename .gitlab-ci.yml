@@ -213,21 +213,21 @@ srpm:
 #     ARCH: x86_64
 #     DIST: centos-stream
 
-# build:debian-13-32:
-#   <<: *debuild
-#   variables:
-#     CODE: trixie
-#     SHORT: deb13
-#     ARCH: i386
-#     MIRROR: http://deb.debian.org/debian
+build:debian-13-32:
+  <<: *debuild
+  variables:
+    CODE: trixie
+    SHORT: deb13
+    ARCH: i386
+    MIRROR: http://deb.debian.org/debian
 
-# build:debian-13-64:
-#   <<: *debuild
-#   variables:
-#     CODE: trixie
-#     SHORT: deb13
-#     ARCH: amd64
-#     MIRROR: http://deb.debian.org/debian
+build:debian-13-64:
+  <<: *debuild
+  variables:
+    CODE: trixie
+    SHORT: deb13
+    ARCH: amd64
+    MIRROR: http://deb.debian.org/debian
 
 build:debian-12-32:
   <<: *debuild
@@ -244,31 +244,31 @@ build:debian-12-64:
     SHORT: deb12
     ARCH: amd64
     MIRROR: http://deb.debian.org/debian
-# build:debian-11-32:
-#   <<: *debuild
-#   variables:
-#     CODE: bullseye
-#     SHORT: deb11
-#     ARCH: i386
-#     MIRROR: http://deb.debian.org/debian
 
-# build:debian-11-64:
-#   <<: *debuild
-#   variables:
-#     CODE: bullseye
-#     SHORT: deb11
-#     ARCH: amd64
-#     MIRROR: http://deb.debian.org/debian
+build:debian-11-32:
+  <<: *debuild
+  variables:
+    CODE: bullseye
+    SHORT: deb11
+    ARCH: i386
+    MIRROR: http://deb.debian.org/debian
 
-# build:ubuntu-2504-64:
-#   <<: *ubbuild
-#   variables:
-#     CODE: plucky
-#     ARCH: amd64
-#     SHORT: u2504
-#     MIRROR: http://archive.ubuntu.com/ubuntu
-#     SCRIPT: /usr/share/debootstrap/scripts/gutsy
+build:debian-11-64:
+  <<: *debuild
+  variables:
+    CODE: bullseye
+    SHORT: deb11
+    ARCH: amd64
+    MIRROR: http://deb.debian.org/debian
 
+build:ubuntu-2504-64:
+  <<: *ubbuild
+  variables:
+    CODE: plucky
+    ARCH: amd64
+    SHORT: u2504
+    MIRROR: http://archive.ubuntu.com/ubuntu
+    SCRIPT: /usr/share/debootstrap/scripts/gutsy
 # build:ubuntu-2504-32:
 #   <<: *ubbuild
 #   variables:
