@@ -350,13 +350,13 @@ build:ubuntu-2504-64:
 #     MIRROR: http://archive.ubuntu.com/ubuntu
 #     SCRIPT: /usr/share/debootstrap/scripts/gutsy
 
-# allbinaries:
-#   stage: allbinaries
-#   image: fedora:40
-#   script:
-#     - echo Gen
-#   artifacts:
-#     paths:
-#       - products
-#     when: on_success
-#     expire_in: 3 weeks
+allbinaries:
+  stage: allbinaries
+  image: fedora:40
+  script:
+    - echo Gen
+  artifacts:
+    paths:
+      - products
+    when: on_success
+    expire_in: 3 weeks
