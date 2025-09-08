@@ -62,7 +62,7 @@ srpm:
     # We don't actually need the srpms, but we do need the version file. Although that could be done in a separate job, having them together seems easier.
     - srpm
   before_script:
-    - apt-get update; apt-get -y install devscripts dpkg-dev git debhelper
+    - apt-get update; apt-get -y install devscripts dpkg-dev git debhelper sbuild zstd schroot debootstrap
     - sbuild-createchroot --arch=$ARCH $CODE /srv/chroot/$CODE $MIRROR $SCRIPT
     - VER=$(cat products/version)
     - if [ $ARCH = "i386" ]; then DASHA="-A -s"; else DASHA="--no-arch-all --no-source"; fi
@@ -212,21 +212,21 @@ srpm:
 #     ARCH: x86_64
 #     DIST: centos-stream
 
-build:debian-13-32:
-  <<: *debuild
-  variables:
-    CODE: trixie
-    SHORT: deb13
-    ARCH: i386
-    MIRROR: http://deb.debian.org/debian
+# build:debian-13-32:
+#   <<: *debuild
+#   variables:
+#     CODE: trixie
+#     SHORT: deb13
+#     ARCH: i386
+#     MIRROR: http://deb.debian.org/debian
 
-build:debian-13-64:
-  <<: *debuild
-  variables:
-    CODE: trixie
-    SHORT: deb13
-    ARCH: amd64
-    MIRROR: http://deb.debian.org/debian
+# build:debian-13-64:
+#   <<: *debuild
+#   variables:
+#     CODE: trixie
+#     SHORT: deb13
+#     ARCH: amd64
+#     MIRROR: http://deb.debian.org/debian
 
 build:debian-12-32:
   <<: *debuild
@@ -243,22 +243,22 @@ build:debian-12-64:
     SHORT: deb12
     ARCH: amd64
     MIRROR: http://deb.debian.org/debian
+# build:debian-11-32:
+#   <<: *debuild
+#   variables:
+#     CODE: bullseye
+#     SHORT: deb11
+#     ARCH: i386
+#     MIRROR: http://deb.debian.org/debian
 
-build:debian-11-32:
-  <<: *debuild
-  variables:
-    CODE: bullseye
-    SHORT: deb11
-    ARCH: i386
-    MIRROR: http://deb.debian.org/debian
+# build:debian-11-64:
+#   <<: *debuild
+#   variables:
+#     CODE: bullseye
+#     SHORT: deb11
+#     ARCH: amd64
+#     MIRROR: http://deb.debian.org/debian
 
-build:debian-11-64:
-  <<: *debuild
-  variables:
-    CODE: bullseye
-    SHORT: deb11
-    ARCH: amd64
-    MIRROR: http://deb.debian.org/debian
 # build:ubuntu-2504-64:
 #   <<: *ubbuild
 #   variables:
