@@ -162,14 +162,6 @@ build:suse_tumbleweed:
     ARCH: x86_64
     REPO: https://ftp.halifax.rwth-aachen.de/opensuse/tumbleweed/repo/oss/
 
-build:suse_15_5:
-  <<: *build-suse-x86
-  variables:
-    DIST: opensuse
-    DVER: "sl15.5"
-    ARCH: x86_64
-    REPO: https://ftp.halifax.rwth-aachen.de/opensuse/distribution/leap/15.5/repo/oss
-
 build:suse_15_6:
   <<: *build-suse-x86
   variables:
