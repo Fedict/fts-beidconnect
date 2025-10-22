@@ -20,9 +20,9 @@ var gulp = require('gulp'),
     jeditor = require('gulp-json-editor'),
     rename = require('gulp-rename');
 
-const ChromeVersion = "1.0.4";
-const EdgeVersion = "1.0.4";
-const FirefoxVersion = "0.0.17";
+const ChromeVersion = "1.0.5";
+const EdgeVersion = "1.0.5";
+const FirefoxVersion = "0.0.18";
 // Safari version is coded inside the \SafariAppExtension\SafariAppExtension Extension\SafariExtensionHandler.mm source file
 
 // https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns
