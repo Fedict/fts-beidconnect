@@ -154,6 +154,7 @@ srpm:
   needs:
     - srpm
 
+# openSUSE
 build:suse_tumbleweed:
   <<: *build-suse-x86
   variables:
@@ -170,7 +171,17 @@ build:suse_15_6:
     ARCH: x86_64
     REPO: https://ftp.halifax.rwth-aachen.de/opensuse/distribution/leap/15.6/repo/oss
 
+build:suse_16_0:
+  <<: *build-suse-x86
+  variables:
+    DIST: opensuse
+    DVER: "sl16.0"
+    ARCH: x86_64
+    REPO: https://ftp.halifax.rwth-aachen.de/opensuse/distribution/leap/16.0/repo/oss
+
+# Fedora
 build:fedora-41-64:
+# 41 EOL 19/11/25
   <<: *fedbuild
   variables:
     VERSION: 41
@@ -178,6 +189,7 @@ build:fedora-41-64:
     DIST: fedora
 
 build:fedora-41-32:
+# 41 EOL 19/11/25
   <<: *fedbuild
   variables:
     VERSION: 41
@@ -198,6 +210,21 @@ build:fedora-42-32:
     ARCH: i386
     DIST: fedora
 
+build:fedora-43-64:
+  <<: *fedbuild
+  variables:
+    VERSION: 43
+    ARCH: x86_64
+    DIST: fedora
+
+build:fedora-43-32:
+  <<: *fedbuild
+  variables:
+    VERSION: 43
+    ARCH: i386
+    DIST: fedora
+
+# centos
 build:centos-stream-9-64:
   <<: *fedbuild
   variables:
@@ -205,6 +232,7 @@ build:centos-stream-9-64:
     ARCH: x86_64
     DIST: centos-stream
 
+# debian
 build:debian-13-32:
   <<: *debuild
   variables:
@@ -253,6 +281,25 @@ build:debian-11-64:
     ARCH: amd64
     MIRROR: http://deb.debian.org/debian
 
+# ubuntu
+build:ubuntu-2510-64:
+  <<: *ubbuild
+  variables:
+    CODE: questing
+    ARCH: amd64
+    SHORT: u2510
+    MIRROR: http://archive.ubuntu.com/ubuntu
+    SCRIPT: /usr/share/debootstrap/scripts/gutsy
+
+build:ubuntu-2510-32:
+  <<: *ubbuild
+  variables:
+    CODE: questing
+    ARCH: i386
+    SHORT: u2510
+    MIRROR: http://archive.ubuntu.com/ubuntu
+    SCRIPT: /usr/share/debootstrap/scripts/gutsy
+
 build:ubuntu-2504-64:
   <<: *ubbuild
   variables:
@@ -268,24 +315,6 @@ build:ubuntu-2504-32:
     CODE: plucky
     ARCH: i386
     SHORT: u2504
-    MIRROR: http://archive.ubuntu.com/ubuntu
-    SCRIPT: /usr/share/debootstrap/scripts/gutsy
-
-build:ubuntu-2410-64:
-  <<: *ubbuild
-  variables:
-    CODE: oracular
-    ARCH: amd64
-    SHORT: u2410
-    MIRROR: http://archive.ubuntu.com/ubuntu
-    SCRIPT: /usr/share/debootstrap/scripts/gutsy
-
-build:ubuntu-2410-32:
-  <<: *ubbuild
-  variables:
-    CODE: oracular
-    ARCH: i386
-    SHORT: u2410
     MIRROR: http://archive.ubuntu.com/ubuntu
     SCRIPT: /usr/share/debootstrap/scripts/gutsy
 
@@ -322,24 +351,6 @@ build:ubuntu-2204-32:
     CODE: jammy
     ARCH: i386
     SHORT: u2204
-    MIRROR: http://archive.ubuntu.com/ubuntu
-    SCRIPT: /usr/share/debootstrap/scripts/gutsy
-
-build:ubuntu-2004-64:
-  <<: *debuild
-  variables:
-    CODE: focal
-    ARCH: amd64
-    SHORT: u2004
-    MIRROR: http://archive.ubuntu.com/ubuntu
-    SCRIPT: /usr/share/debootstrap/scripts/gutsy
-
-build:ubuntu-2004-32:
-  <<: *debuild
-  variables:
-    CODE: focal
-    ARCH: i386
-    SHORT: u2004
     MIRROR: http://archive.ubuntu.com/ubuntu
     SCRIPT: /usr/share/debootstrap/scripts/gutsy
 
