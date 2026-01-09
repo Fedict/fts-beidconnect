@@ -1,5 +1,5 @@
-#if !defined(__GENERAL_INC__)
-#define __GENERAL_INC__
+#ifndef COMMON_GENERAL_INC_H
+#define COMMON_GENERAL_INC_H
 
 #define RET_OK						0
 #define E_ALLOC_ERR             ((unsigned int)0xB0010003)
@@ -61,4 +61,4 @@
   }
 #endif
 
-#endif
+#endif // COMMON_GENERAL_INC_H

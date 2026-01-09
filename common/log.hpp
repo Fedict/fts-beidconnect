@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef __LOG_H
-#define __LOG_H
+#ifndef Log_hpp
+#define Log_hpp
 
 #ifndef MAX_PATH
 #define MAX_PATH          260
@@ -20,4 +20,4 @@ void log_error(const char *string,... );
 }
 #endif
 
-#endif
+#endif // Log_hpp

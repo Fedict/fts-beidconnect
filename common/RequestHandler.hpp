@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef __REQUEST_HANDLER__
-#define __REQUEST_HANDLER__
+#ifndef RequestHandler_hpp
+#define RequestHandler_hpp
 
 #include <iostream>
 #include <memory>
@@ -24,4 +24,4 @@ protected:
 	void post_process(boost::property_tree::ptree& response);
 };
 
-#endif //__REQUEST_HANDLER__
+#endif //RequestHandler_hpp

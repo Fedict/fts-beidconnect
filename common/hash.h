@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef __hash_h
-#define __hash_h
+#ifndef COMMON_HASH_H
+#define COMMON_HASH_H
 
 #include <cstddef>
 
@@ -28,4 +28,4 @@ const unsigned char* hash_header_for_algo(int hashAlgo);
 size_t hash_length_for_algoheader(int hashAlgo);
 unsigned int algo2str(const char *hash_algo);
 
-#endif
+#endif // COMMON_HASH_H

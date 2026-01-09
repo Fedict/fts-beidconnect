@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef __RUN_TEST_H__
-#define __RUN_TEST_H__
+#ifndef COMMON_RUN_TEST_H
+#define COMMON_RUN_TEST_H
                                          
 int runTest(int argc, const char * argv[]);
 
@@ -22,5 +22,5 @@ extern bool unittest_Generate_Exception_PIN_TOO_LONG;
 extern bool unittest_Generate_Exception_PIN_Incorrect;
 #endif
 
-#endif //__RUN_TEST_H__
+#endif //COMMON_RUN_TEST_H
 

@@ -1,9 +1,9 @@
 #pragma once
 
-#ifndef __RUN_NATIVE_H__
-#define __RUN_NATIVE_H__
+#ifndef Run_native_hpp
+#define Run_native_hpp
                                          
 int runNative(int argc, const char * argv[]);
 
-#endif //__RUN_NATIVE_H__
+#endif //Run_native_hpp
 
