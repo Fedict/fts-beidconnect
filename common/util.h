@@ -29,5 +29,6 @@ size_t base64encode(const unsigned char *string, size_t len, unsigned char *enco
 
 std::string rawToBase64(const std::vector<unsigned char>& raw);
 const std::vector<unsigned char> base64ToRaw(const std::string& bufcoded);
+const std::vector<unsigned char> hex_to_bytes(const std::string& hex);
 
 #endif //

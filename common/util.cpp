@@ -268,3 +268,47 @@ const std::vector<unsigned char> base64ToRaw(const std::string& bufcoded)
 
     return bufout;
 }
+
+static int hex_value(char c) {
+    if (c >= '0' && c <= '9') return c - '0';
+    if (c >= 'a' && c <= 'f') return 10 + (c - 'a');
+    if (c >= 'A' && c <= 'F') return 10 + (c - 'A');
+    return -1;
+}
+
+const std::vector<unsigned char> hex_to_bytes(const std::string& hex) {
+    // Remove whitespace and common separators
+    std::string cleaned;
+    cleaned.reserve(hex.size());
+    for (char c : hex) {
+        if (std::isspace(static_cast<unsigned char>(c)) ||
+            c == ':' || c == '-') {
+            continue;
+        }
+        cleaned.push_back(c);
+    }
+
+    if (cleaned.empty()) return {};
+
+    // Handle odd number of hex digits
+    if (cleaned.size() % 2 == 1) {
+        cleaned.insert(cleaned.begin(), '0');
+    }
+
+    std::vector<unsigned char> out;
+    out.reserve(cleaned.size() / 2);
+
+    for (size_t i = 0; i < cleaned.size(); i += 2) {
+        int hi = hex_value(cleaned[i]);
+        int lo = hex_value(cleaned[i + 1]);
+        if (hi < 0 || lo < 0) {
+            throw std::invalid_argument("Invalid hex character");
+        }
+
+        out.push_back(
+            static_cast<unsigned char>((hi << 4) | lo)
+        );
+    }
+
+    return out;
+}
