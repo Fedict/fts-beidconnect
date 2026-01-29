@@ -9,12 +9,12 @@ BUILD_NUMBER=0
 !ENDIF
 
 MAJOR_VERSION=2
-MINOR_VERSION=11
+MINOR_VERSION=12
 VERSION=$(MAJOR_VERSION).$(MINOR_VERSION)
 
 #SIGN = signtool sign /v /n "Federale Overheidsdienst Beleid en Ondersteuning" /fd SHA256 /tr http://rfc3161timestamp.globalsign.com/advanced /td SHA256
 SIGN = signtool sign /fd SHA256 /a /f D:\cpe\BoSa\bosa_self_signed_test_cert.pfx /p bosa
-WIX = C:\Program Files (x86)\WiX Toolset v3.11
+WIX = C:\Program Files (x86)\WiX Toolset v3.14
 
 HEAT_OUPUT_WXS = heat_output.wxs
 HEAT_OUPUT_ADMIN_WXS = heat_output_admin.wxs

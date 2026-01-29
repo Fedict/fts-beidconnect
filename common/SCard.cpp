@@ -248,6 +248,79 @@ void SCard::listReaders(std::vector<std::shared_ptr<CardReader>>& readers)
    delete[] szReaders;
 #endif
 }
+int getProtocol(const unsigned char* in, int size) {
+    if (!in || size <= 0) return SCARD_PROTOCOL_T0;
+
+    const unsigned char* p = in + 1; // skip 3B TS byte
+    int protocol = SCARD_PROTOCOL_T0;
+
+    // second byte of ATR = T0; if no further TDx present => T=0
+    if (((*p) & 0x80) == 0) {
+        return SCARD_PROTOCOL_T0;
+    }
+
+    //get last TDx  (if TDx&0X08 => there is a another TD, following TAx, TBx, TCx depending on the bits in the first nibble of T0 or following TDx bytes
+    while (p < in + size) {
+        unsigned char y = (*p) & 0xF0; // Yx in high nibble
+
+        if ((y & 0x80) == 0) { // no TD(x) follows
+            break;
+        }
+
+        // Skip to the next TD: advance past TA/TB/TC/TD indicated by Yx bits.
+        // Yx bits: 0x10(TA), 0x20(TB), 0x40(TC), 0x80(TD)
+        int skip =
+            ((y & 0x10) ? 1 : 0) +
+            ((y & 0x20) ? 1 : 0) +
+            ((y & 0x40) ? 1 : 0) +
+            ((y & 0x80) ? 1 : 0);
+
+        // p currently points at T0 or TDx; the indicated interface bytes follow *after* it
+        // so move p forward by that many bytes to land on the next TD (or go out of bounds).
+        if (p + skip >= in + size) {
+            // Not enough bytes; bail out safely with default T=0
+            return SCARD_PROTOCOL_T0;
+        }
+        p += skip;
+        // Now p points at the next TD (because skip includes TD itself).
+        // Loop continues; it will examine this TD's Y nibble.
+    }
+
+    // If p points at a TD, the low nibble indicates protocol T=0,1,15 etc.
+    // Your original code checked bit 0x01 -> treat as T=1
+    if (p < in + size) {
+        if ((*p & 0x0F) == 0x01) { // protocol number == 1
+            protocol = SCARD_PROTOCOL_T1;
+        }
+    }
+
+    return protocol;
+}
+
+inline uint8_t hexNibble(char c)
+{
+    if (c >= '0' && c <= '9') return c - '0';
+    if (c >= 'A' && c <= 'F') return c - 'A' + 10;
+    if (c >= 'a' && c <= 'f') return c - 'a' + 10;
+    throw std::invalid_argument("Invalid hex digit");
+}
+
+std::vector<uint8_t> hexToBytesUltra(const std::string& hex)
+{
+    if (hex.size() % 2 != 0)
+    {
+        throw std::invalid_argument("Hex string must have even length");
+    }
+    std::vector<uint8_t> out;
+    out.reserve(hex.size() / 2);
+    for (size_t i = 0; i < hex.size(); i += 2)
+    {
+        uint8_t hi = hexNibble(hex[i]);
+        uint8_t lo = hexNibble(hex[i + 1]);
+        out.push_back((hi << 4) | lo);
+    }
+    return out;
+}
 
 long SCard::connect()
 {
@@ -258,7 +331,11 @@ long SCard::connect()
    }
    
    DWORD ActiveProtocol = SCARD_PROTOCOL_UNDEFINED;
-   ret = SCardConnect(*context, name.c_str(), SCARD_SHARE_SHARED, SCARD_PROTOCOL_T1| SCARD_PROTOCOL_T0, &hCard, &ActiveProtocol);
+
+   std::vector<uint8_t> atr_ba = hexToBytesUltra(atr);
+   DWORD dwPreferredProtocols = getProtocol(&atr_ba[0], atr_ba.size());
+   ret = SCardConnect(*context, name.c_str(), SCARD_SHARE_SHARED, dwPreferredProtocols/*SCARD_PROTOCOL_T1| SCARD_PROTOCOL_T0*/, &hCard, &ActiveProtocol);
+
    if (ret != SCARD_S_SUCCESS) {
        log_error("%s: E: SCardConnect(%s) returned %08X", __func__, name.c_str(), ret);
        return (ret);
