@@ -248,7 +248,7 @@ void SCard::listReaders(std::vector<std::shared_ptr<CardReader>>& readers)
    delete[] szReaders;
 #endif
 }
-int getProtocol(const unsigned char* in, int size) {
+int getProtocol(const unsigned char* in, const size_t size) {
     if (!in || size <= 0) return SCARD_PROTOCOL_T0;
 
     const unsigned char* p = in + 1; // skip 3B TS byte

@@ -40,12 +40,12 @@ BECOM_Code readMessage(std::stringstream &stream)
     // NB: official doc does not mention this.
     if (length == 0)
     {
-        log_info("%s: Resquest Len (%i)", __func__, length);
+        log_info("%s: Request Len (%i)", __func__, length);
         return BECOM_Code::E_COMM_ENDREQUEST;
     }
     else if (length < 0)
     {
-        log_info("%s: Resquest Len (%i)", __func__, length);
+        log_info("%s: Request Len (%i)", __func__, length);
         return BECOM_Code::E_COMM_PARAM;
     }
 
@@ -76,7 +76,7 @@ BECOM_Code readMessage(std::stringstream &stream)
             pos++;
         }
     }
-    log_info("%s: Resquest (%i): '%s'", __func__, length, dumpstr.c_str());
+    log_info("%s: Request (%i): '%s'", __func__, length, dumpstr.c_str());
 
     return BECOM_Code::OK;
 }

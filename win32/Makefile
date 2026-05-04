@@ -12,17 +12,21 @@ MAJOR_VERSION=2
 MINOR_VERSION=12
 VERSION=$(MAJOR_VERSION).$(MINOR_VERSION)
 
-#SIGN = signtool sign /v /n "Federale Overheidsdienst Beleid en Ondersteuning" /fd SHA256 /tr http://rfc3161timestamp.globalsign.com/advanced /td SHA256
-SIGN = signtool sign /fd SHA256 /a /f D:\cpe\BoSa\bosa_self_signed_test_cert.pfx /p bosa
+SIGN = signtool sign /v /n "Federale Overheidsdienst Beleid en Ondersteuning" /fd SHA256 /tr http://rfc3161timestamp.globalsign.com/advanced /td SHA256
+#SIGN = signtool sign /fd SHA256 /a /f D:\cpe\BoSa\bosa_self_signed_test_cert.pfx /p bosa
 WIX = C:\Program Files (x86)\WiX Toolset v3.14
 
 HEAT_OUPUT_WXS = heat_output.wxs
 HEAT_OUPUT_ADMIN_WXS = heat_output_admin.wxs
 
-SOLUTION = VS_2019\BeIDConnect.sln
-PROGRAM = VS_2019\Release\beidconnect.exe
-PROGRAM_X64 = VS_2019\x64\Release\beidconnect.exe
-BINARIES = VS_2019\Release
+!IF !DEFINED(BEIDCONNECT_VS_PROJECTPATH)
+BEIDCONNECT_VS_PROJECTPATH=VS_2019
+!ENDIF
+
+SOLUTION = $(BEIDCONNECT_VS_PROJECTPATH)\BeIDConnect.sln
+PROGRAM = $(BEIDCONNECT_VS_PROJECTPATH)\Release\beidconnect.exe
+PROGRAM_X64 = $(BEIDCONNECT_VS_PROJECTPATH)\x64\Release\beidconnect.exe
+BINARIES = $(BEIDCONNECT_VS_PROJECTPATH)\Release
 INSTALL_PRODUCT = beidconnect_$(VERSION).msi
 INSTALL_PRODUCT_NL = beidconnect_$(VERSION)_nl.msi
 INSTALL_PRODUCT_FR = beidconnect_$(VERSION)_fr.msi
@@ -42,17 +46,17 @@ binaries:
 	msbuild -m /p:Configuration=Release;Platform=x64 /property:MAJOR_VERSION=$(MAJOR_VERSION) /property:MINOR_VERSION=$(MINOR_VERSION) /property:RELEASE_VERSION=0 /property:BUILD_NUMBER=$(BUILD_NUMBER) /t:Rebuild $(SOLUTION)
    
 virtualcards:
-	msbuild /p:Configuration=virtual_cards;Platform=x86 /property:MAJOR_VERSION=$(MAJOR_VERSION) /property:MINOR_VERSION=$(MINOR_VERSION) /property:RELEASE_VERSION=$(RELEASE_VERSION) /property:BUILD_NUMBER=$(BUILD_NUMBER) /t:Rebuild VS_2019\beidconnect.sln
+	msbuild /p:Configuration=virtual_cards;Platform=x86 /property:MAJOR_VERSION=$(MAJOR_VERSION) /property:MINOR_VERSION=$(MINOR_VERSION) /property:RELEASE_VERSION=$(RELEASE_VERSION) /property:BUILD_NUMBER=$(BUILD_NUMBER) /t:Rebuild $(BEIDCONNECT_VS_PROJECTPATH)\beidconnect.sln
    
 pkg: binaries
 	$(SIGN) $(PROGRAM)
 	$(SIGN) $(PROGRAM_X64)
-	"$(WIX)\bin\candle.exe" beidconnect.wxs -dPlatform=win32 -dVERSION=$(VERSION) -ext WixUtilExtension
+	"$(WIX)\bin\candle.exe" beidconnect.wxs -dPlatform=win32 -dVERSION=$(VERSION) -dBEIDCONNECT_VS_PROJECTPATH=$(BEIDCONNECT_VS_PROJECTPATH) -ext WixUtilExtension
 	"$(WIX)\bin\light.exe" -out $(INSTALL_PRODUCT) beidconnect.wixobj -v -ext WixUtilExtension -ext WixUIExtension -cultures:en-us -dWixUILicenseRtf=install/LICENSE.rtf -dWixUIDialogBmp=install/install_dlg.bmp
 	"$(WIX)\bin\light.exe" -out $(INSTALL_PRODUCT_NL) beidconnect.wixobj -v -ext WixUtilExtension -ext WixUIExtension -cultures:nl-nl; -dWixUILicenseRtf=install/LICENSE_NL.rtf -dWixUIDialogBmp=install/install_dlg.bmp
 	"$(WIX)\bin\light.exe" -out $(INSTALL_PRODUCT_FR) beidconnect.wixobj -v -ext WixUtilExtension -ext WixUIExtension -cultures:fr-fr; -dWixUILicenseRtf=install/LICENSE_FR.rtf -dWixUIDialogBmp=install/install_dlg.bmp
 	"$(WIX)\bin\light.exe" -out $(INSTALL_PRODUCT_DE) beidconnect.wixobj -v -ext WixUtilExtension -ext WixUIExtension -cultures:de-de -dWixUILicenseRtf=install/LICENSE_DE.rtf -dWixUIDialogBmp=install/install_dlg.bmp
-	"$(WIX)\bin\candle.exe" beidconnect.wxs -dPlatform=x64 -dVERSION=$(VERSION) -ext WixUtilExtension -arch x64
+	"$(WIX)\bin\candle.exe" beidconnect.wxs -dPlatform=x64 -dVERSION=$(VERSION) -dBEIDCONNECT_VS_PROJECTPATH=$(BEIDCONNECT_VS_PROJECTPATH) -ext WixUtilExtension -arch x64
 	"$(WIX)\bin\light.exe" -out $(INSTALL_PRODUCT_x64) beidconnect.wixobj -v -ext WixUtilExtension -ext WixUIExtension -cultures:en-us -dWixUILicenseRtf=install/LICENSE.rtf -dWixUIDialogBmp=install/install_dlg.bmp
 	"$(WIX)\bin\light.exe" -out $(INSTALL_PRODUCT_x64_NL) beidconnect.wixobj -v -ext WixUtilExtension -ext WixUIExtension -cultures:nl-nl; -dWixUILicenseRtf=install/LICENSE_NL.rtf -dWixUIDialogBmp=install/install_dlg.bmp
 	"$(WIX)\bin\light.exe" -out $(INSTALL_PRODUCT_x64_FR) beidconnect.wixobj -v -ext WixUtilExtension -ext WixUIExtension -cultures:fr-fr; -dWixUILicenseRtf=install/LICENSE_FR.rtf -dWixUIDialogBmp=install/install_dlg.bmp
@@ -68,12 +72,12 @@ pkg: binaries
    
 pkgadmin: binaries
 #$(SIGN) $(PROGRAM)
-	"$(WIX)\bin\candle.exe" beidconnect_admin.wxs -dVERSION=$(VERSION) -ext WixUtilExtension
+	"$(WIX)\bin\candle.exe" beidconnect_admin.wxs -dVERSION=$(VERSION) -dBEIDCONNECT_VS_PROJECTPATH=$(BEIDCONNECT_VS_PROJECTPATH) -ext WixUtilExtension
 	"$(WIX)\bin\light.exe" -out $(INSTALL_ADMIN_PRODUCT) beidconnect_admin.wixobj -v -ext WixUtilExtension -ext WixUIExtension -dWixUILicenseRtf=install/LICENSE.rtf -dWixUIDialogBmp=install/install_dlg.bmp
 	$(SIGN) $(INSTALL_ADMIN_PRODUCT)
    
 pkg-unsigned: binaries
-	"$(WIX)\bin\candle.exe" beidconnect.wxs -dVERSION=$(VERSION) -ext WixUtilExtension
+	"$(WIX)\bin\candle.exe" beidconnect.wxs -dVERSION=$(VERSION) -dBEIDCONNECT_VS_PROJECTPATH=$(BEIDCONNECT_VS_PROJECTPATH) -ext WixUtilExtension
 	"$(WIX)\bin\light.exe" -out $(INSTALL_PRODUCT) beidconnect.wixobj -ext WixUtilExtension -ext WixUIExtension -dWixUILicenseRtf=install/LICENSE.rtf -dWixUIDialogBmp=install/install_dlg.bmp
 	
 #the heat command (wix toolset bin folder) generates a wixtoolset install file that can be included in the main installer
