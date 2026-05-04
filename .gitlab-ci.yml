@@ -179,23 +179,15 @@ build:suse_16_0:
     ARCH: x86_64
     REPO: https://ftp.halifax.rwth-aachen.de/opensuse/distribution/leap/16.0/repo/oss
 
-# Fedora
-build:fedora-41-64:
-# 41 EOL 19/11/25
-  <<: *fedbuild
+build:suse_16_1:
+  <<: *build-suse-x86
   variables:
-    VERSION: 41
+    DIST: opensuse
+    DVER: "sl16.1"
     ARCH: x86_64
-    DIST: fedora
+    REPO: https://ftp.halifax.rwth-aachen.de/opensuse/distribution/leap/16.1/repo/oss
 
-build:fedora-41-32:
-# 41 EOL 19/11/25
-  <<: *fedbuild
-  variables:
-    VERSION: 41
-    ARCH: i386
-    DIST: fedora
-
+# Fedora
 build:fedora-42-64:
   <<: *fedbuild
   variables:
@@ -221,6 +213,20 @@ build:fedora-43-32:
   <<: *fedbuild
   variables:
     VERSION: 43
+    ARCH: i386
+    DIST: fedora
+
+build:fedora-44-64:
+  <<: *fedbuild
+  variables:
+    VERSION: 44
+    ARCH: x86_64
+    DIST: fedora
+
+build:fedora-44-32:
+  <<: *fedbuild
+  variables:
+    VERSION: 44
     ARCH: i386
     DIST: fedora
 
@@ -289,6 +295,24 @@ build:debian-11-64:
     MIRROR: http://deb.debian.org/debian
 
 # ubuntu
+build:ubuntu-2604-64:
+  <<: *ubbuild
+  variables:
+    CODE: resolute
+    ARCH: amd64
+    SHORT: u2604
+    MIRROR: http://archive.ubuntu.com/ubuntu
+    SCRIPT: /usr/share/debootstrap/scripts/gutsy
+
+build:ubuntu-2604-32:
+  <<: *ubbuild
+  variables:
+    CODE: resolute
+    ARCH: i386
+    SHORT: u2604
+    MIRROR: http://archive.ubuntu.com/ubuntu
+    SCRIPT: /usr/share/debootstrap/scripts/gutsy
+
 build:ubuntu-2510-64:
   <<: *ubbuild
   variables:

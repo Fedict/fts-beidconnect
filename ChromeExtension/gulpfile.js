@@ -34,38 +34,35 @@ var DestDomains = AllowedDomains;
 
 //#region clean && parameters
 
-function taskStartDebugSeq(cb) {
+function taskStartDebugSeq() {
     console.log('--- Start Generating Debug Version ---');
     DestDirectory = "./targetDebug";
-    del(['targetDebug']);
     DestDomains = AllowedDomains;
-    cb();
+    return del(['targetDebug']);
 }
 
-function taskStartReleaseSeq(cb) {
+function taskStartReleaseSeq() {
     console.log('--- Start Generating Release Version ---');
     DestDirectory = "./targetRelease";
-    del(['targetRealease']);
     DestDomains = AllowedDomains;
-    cb();
+    return del(['targetRelease']);
 }
 
-function taskStartReleaseWithMinFinSeq(cb) {
+function taskStartReleaseWithMinFinSeq() {
     console.log('--- Start Generating Release Version (with MinFin) ---');
     DestDirectory = "./targetReleaseWithMinFin";
-    del(['targetReleaseWithMinFin']);
     DestDomains = AllowedDomainsWithMinFin;
-    cb();
+    return del(['targetReleaseWithMinFin']);
 }
 
 //#region jshint
 
-function tasklint(cb) {
+function tasklint() {
     return gulp.src(['./src/main/*.js'])
         .pipe(jshint())
         .pipe(jshint.reporter());
 }
-function tasklintV3(cb) {
+function tasklintV3() {
     return gulp.src(['./src_v3/main/*.js'])
         .pipe(jshint())
         .pipe(jshint.reporter());
@@ -73,81 +70,75 @@ function tasklintV3(cb) {
 
 //#region Minify & copy
 
-function taskMinifyjs(cb) {
+function taskMinifyjs() {
     return gulp.src('./src/main/*.js')
         //.pipe(uglify())
         .pipe(replace('EXTENSIONPLATFORM', 'firefox'))
         .pipe(gulp.dest(DestDirectory + '/firefox'))
 };
-function taskMinifyjsV3Chrome(cb) {
+function taskMinifyjsV3Chrome() {
     return gulp.src('./src_v3/main/*.js')
         .pipe(replace('EXTENSIONPLATFORM', 'chrome'))
+        .pipe(replace('beidconnect.page', 'beidconnectchrome.page'))
+        .pipe(replace('beidconnect.background', 'beidconnectchrome.background'))
         .pipe(uglify())
         .pipe(gulp.dest(DestDirectory + '/chrome_v3'))
 };
-function taskMinifyjsV3Edge(cb) {
+function taskMinifyjsV3Edge() {
     return gulp.src('./src_v3/main/*.js')
         .pipe(replace('EXTENSIONPLATFORM', 'edge'))
+        .pipe(replace('beidconnect.page', 'beidconnectedge.page'))
+        .pipe(replace('beidconnect.background', 'beidconnectedge.background'))
         .pipe(uglify())
         .pipe(gulp.dest(DestDirectory + '/edge_v3'));
 };
-function taskjsV3Firefox(cb) {
+function taskjsV3Firefox() {
     return gulp.src('./src_v3/main/*.js')
         .pipe(replace('EXTENSIONPLATFORM', 'firefox'))
+        .pipe(replace('beidconnect.page', 'beidconnectfirefox.page'))
+        .pipe(replace('beidconnect.background', 'beidconnectfirefox.background'))
         .pipe(gulp.dest(DestDirectory + '/firefox_v3'));
 };
 
-function taskcopypng(cb) {
+function taskcopypng() {
     return gulp.src(['./src/main/*.png'])
         .pipe(gulp.dest(DestDirectory + '/firefox'));
 };
 
-function taskcopypngV3(cb) {
+function taskcopypngV3() {
     return gulp.src(['./src_v3/main/*.png'])
         .pipe(gulp.dest(DestDirectory + '/chrome_v3'))
         .pipe(gulp.dest(DestDirectory + '/firefox_v3'))
         .pipe(gulp.dest(DestDirectory + '/edge_v3'));
 };
 
-function taskcopyallV2FireFox(cb) {
+function taskcopyallV2FireFox() {
     return gulp.src(['./src/main/*.js', './src/main/*.png', './src/main/*.html'])
         .pipe(replace('EXTENSIONPLATFORM', 'firefox'))
         .pipe(gulp.dest(DestDirectory + '/firefox'));
 };
-function taskcopyallV3Chrome(cb) {
+function taskcopyallV3Chrome() {
     return gulp.src(['./src_v3/main/*.js', './src_v3/main/*.png', './src_v3/main/*.html'])
         .pipe(replace('EXTENSIONPLATFORM', 'chrome'))
+        .pipe(replace('beidconnect.page', 'beidconnectchrome.page'))
+        .pipe(replace('beidconnect.background', 'beidconnectchrome.background'))
         .pipe(gulp.dest(DestDirectory + '/chrome_v3'))
 };
-function taskcopyallV3FireFox(cb) {
+function taskcopyallV3FireFox() {
     return gulp.src(['./src_v3/main/*.js', './src_v3/main/*.png', './src_v3/main/*.html'])
         .pipe(replace('EXTENSIONPLATFORM', 'firefox'))
+        .pipe(replace('beidconnect.page', 'beidconnectfirefox.page'))
+        .pipe(replace('beidconnect.background', 'beidconnectfirefox.background'))
         .pipe(gulp.dest(DestDirectory + '/firefox_v3'))
 };
-function taskcopyallV3Edge1(cb) {
-    return gulp.src(['./src_v3/main/*.png', './src_v3/main/*.html'])
-        .pipe(gulp.dest(DestDirectory + '/edge_v3'));
-};
-function taskcopyallV3Edge2(cb) {
-    return gulp.src(['./src_v3/main/content.js',])
-        .pipe(replace('beidconnect.page', 'beidconnectedge.page'))
-        .pipe(gulp.dest(DestDirectory + '/edge_v3'));
-};
-function taskcopyallV3Edge3(cb) {
-    return gulp.src('./src_v3/main/background.js')
+function taskcopyallV3Edge() {
+    return gulp.src(['./src_v3/main/*.js', './src_v3/main/*.png', './src_v3/main/*.html'])
+        .pipe(replace('EXTENSIONPLATFORM', 'edge'))
         .pipe(replace('beidconnect.page', 'beidconnectedge.page'))
         .pipe(replace('beidconnect.background', 'beidconnectedge.background'))
-        .pipe(replace('EXTENSIONPLATFORM', 'chrome'))
-        .pipe(gulp.dest(DestDirectory + '/edge_v3'));
+        .pipe(gulp.dest(DestDirectory + '/edge_v3'))
 };
-function taskcopyallV3Edge4(cb) {
-    return gulp.src('./src_v3/main/page.js')
-        .pipe(replace('beidconnect.page', 'beidconnectedge.page'))
-        .pipe(replace('beidconnect.background', 'beidconnectedge.background'))
-        .pipe(gulp.dest(DestDirectory + '/edge_v3'));
-};
-
-function taskcopylocales(cb) {
+function taskcopylocales() {
     return gulp.src(['./src_v3/main/_locales/**/*'])
         .pipe(gulp.dest(DestDirectory + '/chrome_v3/_locales'))
         .pipe(gulp.dest(DestDirectory + '/edge_v3/_locales'))
@@ -156,7 +147,7 @@ function taskcopylocales(cb) {
 
 //#region manifest
 
-function taskmanifestdevchromeV3(cb) {
+function taskmanifestdevchromeV3() {
     return gulp.src('./src_v3/manifest/manifest_chrome_v3.json')
         .pipe(rename('manifest.json'))
         .pipe(jeditor(function (manifest) {
@@ -178,7 +169,7 @@ function taskmanifestreleasechromeV3() {
         .pipe(gulp.dest(DestDirectory + '/chrome_v3'));
 };
 
-function taskmanifestdevfirefox(cb) {
+function taskmanifestdevfirefox() {
     return gulp.src('./src/main/manifest.json')
         .pipe(jeditor(function (manifest) {
             manifest.version = FirefoxVersion;
@@ -198,7 +189,7 @@ function taskmanifestreleasefirefox() {
         .pipe(gulp.dest(DestDirectory + '/firefox'));
 };
 
-function taskmanifestdevfirefoxV3(cb) {
+function taskmanifestdevfirefoxV3() {
     return gulp.src('./src_v3/manifest/manifest_firefox_v3.json')
         .pipe(rename('manifest.json'))
         .pipe(jeditor(function (manifest) {
@@ -207,7 +198,7 @@ function taskmanifestdevfirefoxV3(cb) {
         }))
         .pipe(gulp.dest(DestDirectory + '/firefox_v3'));
 };
-function taskmanifestreleasefirefoxV3(cb) {
+function taskmanifestreleasefirefoxV3() {
     return gulp.src('./src_v3/manifest/manifest_firefox_v3.json')
         .pipe(rename('manifest.json'))
         .pipe(jeditor(function (manifest) {
@@ -220,7 +211,7 @@ function taskmanifestreleasefirefoxV3(cb) {
         .pipe(gulp.dest(DestDirectory + '/firefox_v3'));
 };
 
-function taskmanifestdevedgeV3(cb) {
+function taskmanifestdevedgeV3() {
     return gulp.src('./src_v3/manifest/manifest_edge_v3.json')
         .pipe(rename('manifest.json'))
         .pipe(jeditor(function (manifest) {
@@ -286,10 +277,7 @@ exports.default =
                     tasklintV3,
                     taskcopyallV3Chrome,
                     taskcopyallV3FireFox,
-                    taskcopyallV3Edge1,
-                    taskcopyallV3Edge2,
-                    taskcopyallV3Edge3,
-                    taskcopyallV3Edge4,
+                    taskcopyallV3Edge,
                     taskcopylocales,
                     gulp.parallel(
                         gulp.series(
