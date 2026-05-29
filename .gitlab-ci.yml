@@ -57,18 +57,19 @@ srpm:
 
 .build:deb: &debuild
   stage: binary
-  image: tianon/sbuild:latest
+  image: debian/buildd:stable
   dependencies:
     # We don't actually need the srpms, but we do need the version file. Although that could be done in a separate job, having them together seems easier.
     - srpm
   before_script:
-    - apt-get update; apt-get -y install devscripts dpkg-dev git debhelper
+    - apt-get update; apt-get -y install devscripts dpkg-dev git debhelper sbuild zstd schroot debootstrap
     - sbuild-createchroot --arch=$ARCH $CODE /srv/chroot/$CODE $MIRROR $SCRIPT
     - VER=$(cat products/version)
     - if [ $ARCH = "i386" ]; then DASHA="-A -s"; else DASHA="--no-arch-all --no-source"; fi
     - export DASHA
     - if [ ! -z "$http_proxy" ]; then echo "Acquire::http::Proxy \"$http_proxy\";" > /srv/chroot/$CODE/etc/apt/apt.conf.d/99proxy; fi
     - ./linux/deb-cl.pl "$VER" "$CODE" "$SHORT"
+    - apt-get -y install libboost-dev libpcsclite-dev pkg-config
   script:
     - sbuild -n $DASHA -c $CODE-$ARCH-sbuild --arch=$ARCH
   after_script:
@@ -153,21 +154,14 @@ srpm:
   needs:
     - srpm
 
-build:suse_tumbleweed:
-  <<: *build-suse-x86
-  variables:
-    DIST: opensuse
-    DVER: "tumbleweed"
-    ARCH: x86_64
-    REPO: https://ftp.halifax.rwth-aachen.de/opensuse/tumbleweed/repo/oss/
-
-build:suse_15_5:
-  <<: *build-suse-x86
-  variables:
-    DIST: opensuse
-    DVER: "sl15.5"
-    ARCH: x86_64
-    REPO: https://ftp.halifax.rwth-aachen.de/opensuse/distribution/leap/15.5/repo/oss
+# openSUSE
+# build:suse_tumbleweed:
+#   <<: *build-suse-x86
+#   variables:
+#     DIST: opensuse
+#     DVER: "tumbleweed"
+#     ARCH: x86_64
+#     REPO: https://ftp.halifax.rwth-aachen.de/opensuse/tumbleweed/repo/oss/
 
 build:suse_15_6:
   <<: *build-suse-x86
@@ -177,20 +171,23 @@ build:suse_15_6:
     ARCH: x86_64
     REPO: https://ftp.halifax.rwth-aachen.de/opensuse/distribution/leap/15.6/repo/oss
 
-build:fedora-41-64:
-  <<: *fedbuild
+build:suse_16_0:
+  <<: *build-suse-x86
   variables:
-    VERSION: 41
+    DIST: opensuse
+    DVER: "sl16.0"
     ARCH: x86_64
-    DIST: fedora
+    REPO: https://ftp.halifax.rwth-aachen.de/opensuse/distribution/leap/16.0/repo/oss
 
-build:fedora-41-32:
-  <<: *fedbuild
-  variables:
-    VERSION: 41
-    ARCH: i386
-    DIST: fedora
+#build:suse_16_1:
+#  <<: *build-suse-x86
+#  variables:
+#    DIST: opensuse
+#    DVER: "sl16.1"
+#    ARCH: x86_64
+#    REPO: https://ftp.halifax.rwth-aachen.de/opensuse/distribution/leap/16.1/repo/oss
 
+# Fedora
 build:fedora-42-64:
   <<: *fedbuild
   variables:
@@ -205,6 +202,35 @@ build:fedora-42-32:
     ARCH: i386
     DIST: fedora
 
+build:fedora-43-64:
+  <<: *fedbuild
+  variables:
+    VERSION: 43
+    ARCH: x86_64
+    DIST: fedora
+
+build:fedora-43-32:
+  <<: *fedbuild
+  variables:
+    VERSION: 43
+    ARCH: i386
+    DIST: fedora
+
+build:fedora-44-64:
+  <<: *fedbuild
+  variables:
+    VERSION: 44
+    ARCH: x86_64
+    DIST: fedora
+
+build:fedora-44-32:
+  <<: *fedbuild
+  variables:
+    VERSION: 44
+    ARCH: i386
+    DIST: fedora
+
+# centos
 build:centos-stream-9-64:
   <<: *fedbuild
   variables:
@@ -212,6 +238,14 @@ build:centos-stream-9-64:
     ARCH: x86_64
     DIST: centos-stream
 
+build:centos-stream-10-64:
+  <<: *fedbuild
+  variables:
+    VERSION: 10
+    ARCH: x86_64
+    DIST: centos-stream
+
+# debian
 build:debian-13-32:
   <<: *debuild
   variables:
@@ -260,6 +294,43 @@ build:debian-11-64:
     ARCH: amd64
     MIRROR: http://deb.debian.org/debian
 
+# ubuntu
+build:ubuntu-2604-64:
+  <<: *ubbuild
+  variables:
+    CODE: resolute
+    ARCH: amd64
+    SHORT: u2604
+    MIRROR: http://archive.ubuntu.com/ubuntu
+    SCRIPT: /usr/share/debootstrap/scripts/gutsy
+
+build:ubuntu-2604-32:
+  <<: *ubbuild
+  variables:
+    CODE: resolute
+    ARCH: i386
+    SHORT: u2604
+    MIRROR: http://archive.ubuntu.com/ubuntu
+    SCRIPT: /usr/share/debootstrap/scripts/gutsy
+
+build:ubuntu-2510-64:
+  <<: *ubbuild
+  variables:
+    CODE: questing
+    ARCH: amd64
+    SHORT: u2510
+    MIRROR: http://archive.ubuntu.com/ubuntu
+    SCRIPT: /usr/share/debootstrap/scripts/gutsy
+
+build:ubuntu-2510-32:
+  <<: *ubbuild
+  variables:
+    CODE: questing
+    ARCH: i386
+    SHORT: u2510
+    MIRROR: http://archive.ubuntu.com/ubuntu
+    SCRIPT: /usr/share/debootstrap/scripts/gutsy
+
 build:ubuntu-2504-64:
   <<: *ubbuild
   variables:
@@ -275,24 +346,6 @@ build:ubuntu-2504-32:
     CODE: plucky
     ARCH: i386
     SHORT: u2504
-    MIRROR: http://archive.ubuntu.com/ubuntu
-    SCRIPT: /usr/share/debootstrap/scripts/gutsy
-
-build:ubuntu-2410-64:
-  <<: *ubbuild
-  variables:
-    CODE: oracular
-    ARCH: amd64
-    SHORT: u2410
-    MIRROR: http://archive.ubuntu.com/ubuntu
-    SCRIPT: /usr/share/debootstrap/scripts/gutsy
-
-build:ubuntu-2410-32:
-  <<: *ubbuild
-  variables:
-    CODE: oracular
-    ARCH: i386
-    SHORT: u2410
     MIRROR: http://archive.ubuntu.com/ubuntu
     SCRIPT: /usr/share/debootstrap/scripts/gutsy
 
@@ -329,24 +382,6 @@ build:ubuntu-2204-32:
     CODE: jammy
     ARCH: i386
     SHORT: u2204
-    MIRROR: http://archive.ubuntu.com/ubuntu
-    SCRIPT: /usr/share/debootstrap/scripts/gutsy
-
-build:ubuntu-2004-64:
-  <<: *debuild
-  variables:
-    CODE: focal
-    ARCH: amd64
-    SHORT: u2004
-    MIRROR: http://archive.ubuntu.com/ubuntu
-    SCRIPT: /usr/share/debootstrap/scripts/gutsy
-
-build:ubuntu-2004-32:
-  <<: *debuild
-  variables:
-    CODE: focal
-    ARCH: i386
-    SHORT: u2004
     MIRROR: http://archive.ubuntu.com/ubuntu
     SCRIPT: /usr/share/debootstrap/scripts/gutsy
 

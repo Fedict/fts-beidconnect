@@ -19,5 +19,10 @@ var s = document.createElement('script');
 s.src = chrome.runtime.getURL('page.js');
 
 // remove script tag after script itself has loaded
-s.onload = function () { this.parentNode.removeChild(this); };
+s.onload = function () {
+    if (this.parentNode) {
+        this.parentNode.removeChild(this);
+    }
+    s.remove();
+};
 (document.head || document.documentElement).appendChild(s);
