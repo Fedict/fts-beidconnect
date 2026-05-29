@@ -179,13 +179,13 @@ build:suse_16_0:
     ARCH: x86_64
     REPO: https://ftp.halifax.rwth-aachen.de/opensuse/distribution/leap/16.0/repo/oss
 
-build:suse_16_1:
-  <<: *build-suse-x86
-  variables:
-    DIST: opensuse
-    DVER: "sl16.1"
-    ARCH: x86_64
-    REPO: https://ftp.halifax.rwth-aachen.de/opensuse/distribution/leap/16.1/repo/oss
+#build:suse_16_1:
+#  <<: *build-suse-x86
+#  variables:
+#    DIST: opensuse
+#    DVER: "sl16.1"
+#    ARCH: x86_64
+#    REPO: https://ftp.halifax.rwth-aachen.de/opensuse/distribution/leap/16.1/repo/oss
 
 # Fedora
 build:fedora-42-64:
