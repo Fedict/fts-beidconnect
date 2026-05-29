@@ -262,3 +262,5 @@ win32/beidconnectlogfile.txt
 /ChromeExtension/targetDebug
 /ChromeExtension/targetRelease
 /ChromeExtension/targetReleaseWithMinFin
+/win32/VS_2026/BeIDConnect
+/win32/VS_2026/ReleaseAdmin

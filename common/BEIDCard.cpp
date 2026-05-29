@@ -309,7 +309,9 @@ long BEIDCard::sign(const std::vector<unsigned char>& in, int hashAlgo, unsigned
         cmdGenSign.append(in.data(), in.size());
     }
     else {
-        //EC
+        // EC
+        // WARNING : if T0 then it's OK
+        // but for the T1, need to add a extra 0 byte at the end
         cmdGenSign.append((unsigned char)in.size());
         cmdGenSign.append(in.data(), in.size());
     }

@@ -22,14 +22,15 @@ using namespace std;
 #ifdef _WIN32
 bool writeFile(wstring file, wstring exePath, bool isChrome) {
     wofstream myfile;
+    std::locale defaultLocale;
     if (isChrome)
     {
-        myfile.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t, 0x10ffff, std::generate_header>));
+        myfile.imbue(std::locale(defaultLocale, new std::codecvt_utf8<wchar_t, 0x10ffff, std::generate_header>));
     }
     else
     {
         // Since firefox generate an error when parsing the BOM
-        myfile.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t, 0x10ffff>));
+        myfile.imbue(std::locale(defaultLocale, new std::codecvt_utf8<wchar_t, 0x10ffff>));
     }
 #else
 bool writeFile(string file, string exePath, bool isChrome) {
