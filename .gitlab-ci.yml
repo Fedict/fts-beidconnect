@@ -14,7 +14,7 @@ srpm:
     - rpmdev-setuptree
     - VER=$(git describe --tag | sed -e 's/-/./g')
     - mkdir -p products/tar
-    - git archive --prefix=beidconnect-$VER/ -o products/tar/beidconnect-$VER.tar.gz origin/$CI_COMMIT_REF_NAME
+    - git archive --prefix=beidconnect-$VER/ -o products/tar/beidconnect-$VER.tar.gz $CI_COMMIT_SHA
     - cp products/tar/beidconnect-$VER.tar.gz ~/rpmbuild/SOURCES/
     - echo $VER > products/version
     - COMMIT_DATE=$(git log --date=rfc HEAD^..HEAD|grep ^Date|cut -d ' ' -f 2-|sed -e 's/^\s*//')
