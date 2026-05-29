@@ -331,24 +331,6 @@ build:ubuntu-2510-32:
     MIRROR: http://archive.ubuntu.com/ubuntu
     SCRIPT: /usr/share/debootstrap/scripts/gutsy
 
-build:ubuntu-2504-64:
-  <<: *ubbuild
-  variables:
-    CODE: plucky
-    ARCH: amd64
-    SHORT: u2504
-    MIRROR: http://archive.ubuntu.com/ubuntu
-    SCRIPT: /usr/share/debootstrap/scripts/gutsy
-
-build:ubuntu-2504-32:
-  <<: *ubbuild
-  variables:
-    CODE: plucky
-    ARCH: i386
-    SHORT: u2504
-    MIRROR: http://archive.ubuntu.com/ubuntu
-    SCRIPT: /usr/share/debootstrap/scripts/gutsy
-
 build:ubuntu-2404-64:
   <<: *ubbuild
   variables:
