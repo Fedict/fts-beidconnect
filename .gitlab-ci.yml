@@ -84,7 +84,8 @@ srpm:
 
 .build:ubuntu: &ubbuild
   stage: binary
-  image: ubuntu:latest
+  #image: ubuntu:latest
+  image: ubuntu:noble-20260217
   dependencies:
     # We don't actually need the srpms, but we do need the version file. Although that could be done in a separate job, having them together seems easier.
     - srpm
