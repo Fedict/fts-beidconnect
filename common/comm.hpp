@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef __COMM_H
-#define __COMM_H
+#ifndef COMMON_COMM_HPP
+#define COMMON_COMM_HPP
 
 #include <cstdint>
 
@@ -93,5 +93,5 @@ enum class BECOM_Code : uint32_t
 BECOM_Code readMessage(std::stringstream &stream);
 void sendMessage(const std::string response);
 
-#endif //__COMM_H
+#endif //COMMON_COMM_HPP
 

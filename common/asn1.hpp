@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef __ASN1_H__
-#define __ASN1_H__
+#ifndef COMMON_ASN1_HPP
+#define COMMON_ASN1_HPP
 
 #include <string>
 

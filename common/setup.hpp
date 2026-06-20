@@ -1,11 +1,11 @@
 #pragma once
 
-#ifndef __RUN_SETUP_H__
-#define __RUN_SETUP_H__
+#ifndef COMMON_RUN_SETUP_H
+#define COMMON_RUN_SETUP_H
 
 
 int runSetup(int argc, const char * argv[]);
 
 
-#endif //__RUN_SETUP_H__
+#endif //COMMON_RUN_SETUP_H
 

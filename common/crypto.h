@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef ___crypto_h____
-#define ___crypto_h____
+#ifndef COMMON_CRYPTO_H
+#define COMMON_CRYPTO_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -13,4 +13,4 @@ extern "C" {
    }
 #endif
 
-#endif
+#endif // COMMON_CRYPTO_H

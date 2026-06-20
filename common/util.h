@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef __UTIL_H
-#define __UTIL_H
+#ifndef COMMON_UTIL_H
+#define COMMON_UTIL_H
 
 #include <stdio.h>
 #include <string.h>
@@ -30,4 +30,4 @@ size_t base64encode(const unsigned char *string, size_t len, unsigned char *enco
 std::string rawToBase64(const std::vector<unsigned char>& raw);
 const std::vector<unsigned char> base64ToRaw(const std::string& bufcoded);
 
-#endif //
+#endif // COMMON_UTIL_H
